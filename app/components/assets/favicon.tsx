@@ -1,4 +1,3 @@
-import * as React from "react"
 import { SVGProps } from "react"
 
 // Favicon is a component-ized version of app/assets/favicon.svg. This being a component

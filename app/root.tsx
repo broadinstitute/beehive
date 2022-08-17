@@ -10,6 +10,7 @@ import {
 import Header from "./components/header";
 import styles from "./tailwind.css";
 import favicon from "./assets/favicon.svg"
+import { FunctionComponent } from "react";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -22,20 +23,19 @@ export const links: LinksFunction = () => [
   { rel: "icon", href: favicon, type: "image/svg+xml" }
 ]
 
-export default function App() {
-  return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body className="bg-zinc-100 flex flex-col h-screen w-screen">
-        <Header />
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
-  );
-}
+const App: FunctionComponent = () =>
+  <html lang="en">
+    <head>
+      <Meta />
+      <Links />
+    </head>
+    <body className="bg-zinc-100 flex flex-col h-screen w-screen">
+      <Header />
+      <Outlet />
+      <ScrollRestoration />
+      <Scripts />
+      <LiveReload />
+    </body>
+  </html>
+
+export default App
