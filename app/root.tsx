@@ -29,7 +29,7 @@ const App: FunctionComponent = () =>
       <Meta />
       <Links />
     </head>
-    <body className="bg-zinc-100 flex flex-col h-screen w-screen">
+    <body className="bg-zinc-100 flex flex-col h-screen max-h-full w-screen max-w-full">
       <Header />
       <Outlet />
       <ScrollRestoration />
