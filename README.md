@@ -61,4 +61,15 @@ If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwi
 
 ## Finding docs
 
-[Remix](https://remix.run/docs), [Tailwind](https://tailwindcss.com/docs/editor-setup) ([Colors](https://tailwindcss.com/docs/customizing-colors))
+[Remix](https://remix.run/docs), [Tailwind](https://tailwindcss.com/docs/editor-setup)
+
+## Colors
+
+[The colors come from Tailwind](https://tailwindcss.com/docs/customizing-colors):
+- Neutrals: Zinc
+- Beehive logo and environment: Amber-300
+- Cluster: Emerald-300
+- Chart: Blue-300
+- Chart Release: Rose-300
+
+[Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%2393C5FD-%236EE7B7-%23FDA4AF)

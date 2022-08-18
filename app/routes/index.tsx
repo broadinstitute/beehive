@@ -51,7 +51,7 @@ const IndexRoute: FunctionComponent = () =>
       <BigIndexNavButton to="/charts" title="Charts and Apps" className="border-blue-300">
         Browse applications and the Helm Charts that deploy them
       </BigIndexNavButton>
-      <SmallIndexNavButton to="/chart-releases" title="Chart Releases" className="border-zinc-300">
+      <SmallIndexNavButton to="/chart-releases" title="Chart Releases" className="border-rose-300">
         Browse chart deployments in bulk
       </SmallIndexNavButton>
       <SmallIndexNavButton to="/misc" title="Misc" className="border-zinc-300">
