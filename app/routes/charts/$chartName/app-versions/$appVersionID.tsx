@@ -2,7 +2,7 @@ import { LoaderFunction } from "@remix-run/node";
 import { NavLink, useLoaderData, useParams } from "@remix-run/react";
 import { AppVersionsApi, V2controllersAppVersion } from "@sherlock-js-client/sherlock";
 import { FunctionComponent, useEffect, useRef } from "react";
-import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/boundaries";
+import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/remix/boundaries";
 import { forwardIAP, SherlockConfiguration, throwErrorResponses } from "~/helpers/sherlock.server";
 
 export const handle = {

@@ -2,8 +2,8 @@ import { LoaderFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { FunctionComponent } from "react";
-import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/boundaries";
-import LineNavButton from "~/components/line-nav-button";
+import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/remix/boundaries";
+import LineNavButton from "~/components/common/line-nav-button";
 import { forwardIAP, SherlockConfiguration, throwErrorResponses } from "~/helpers/sherlock.server";
 
 export const handle = {
@@ -42,7 +42,7 @@ const ChartsChartNameRoute: FunctionComponent = () => {
                             <h2 className="text-2xl font-medium decoration-blue-500 underline">{chart.appImageGitRepo}</h2>
                         </a>
                         {chart.appImageGitMainBranch && (
-                            <p className="mt-2">The app's stable branch is <a href={`https://github.com/${chart.appImageGitRepo}/tree/${chart.appImageGitMainBranch}`} className="font-mono decoration-blue-500 underline">{chart.appImageGitMainBranch}</a>.</p>
+                            <p className="my-2">The app's stable branch is <a href={`https://github.com/${chart.appImageGitRepo}/tree/${chart.appImageGitMainBranch}`} className="font-mono decoration-blue-500 underline">{chart.appImageGitMainBranch}</a>.</p>
                         )}
                         <LineNavButton
                             to={`/charts/${chart.name}/app-versions`}

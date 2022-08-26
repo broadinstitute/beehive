@@ -2,8 +2,8 @@ import { LoaderFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { FunctionComponent } from "react";
-import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/boundaries";
-import LineNavButton from "~/components/line-nav-button";
+import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/remix/boundaries";
+import LineNavButton from "~/components/common/line-nav-button";
 import { forwardIAP, SherlockConfiguration, throwErrorResponses } from "~/helpers/sherlock.server";
 
 export const handle = {
