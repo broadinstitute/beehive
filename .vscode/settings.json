@@ -1,0 +1,12 @@
+{
+    "workbench.tree.indent": 20,
+    "workbench.tree.renderIndentGuides": "always",
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "tailwindCSS.classAttributes": [
+        "className",
+        "sizeClassName",
+        "colorClassName"
+    ]
+}

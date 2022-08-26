@@ -67,9 +67,11 @@ If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwi
 
 [The colors come from Tailwind](https://tailwindcss.com/docs/customizing-colors):
 - Neutrals: Zinc
-- Beehive logo and environment: Amber-300
-- Cluster: Emerald-300
-- Chart: Blue-300
-- Chart Release: Rose-300
+- Beehive logo and environment: amber-300
+- Cluster: green-300
+- Chart: sky-300
+- Chart Versions: violet-300 (low contrast with sky-300 for protanopia/deuteranopia but it is very closely related to Charts anyway)
+- App Versions: rose-300
 
-[Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%2393C5FD-%236EE7B7-%23FDA4AF)
+[Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%237DD3FC-%2386EFAC-%23FDA4AF-%23C4B5FD)
+
