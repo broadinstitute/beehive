@@ -2,9 +2,10 @@ import { LoaderFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { FunctionComponent } from "react";
-import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/remix/boundaries";
+import { catchBoundary, errorBoundary } from "~/components/remix/boundaries";
 import LineNavButton from "~/components/common/line-nav-button";
 import { forwardIAP, SherlockConfiguration, throwErrorResponses } from "~/helpers/sherlock.server";
+import ViewPanel from "~/components/panels/view";
 
 export const handle = {
     breadcrumb: () => {
@@ -19,20 +20,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         .catch(throwErrorResponses)
 }
 
-export const CatchBoundary = catchBoundaryForErrorResponses
+export const CatchBoundary = catchBoundary
 export const ErrorBoundary = errorBoundary
 
 const ChartsChartNameRoute: FunctionComponent = () => {
     const chart: V2controllersChart = useLoaderData()
     return (
-        <div className="flex flex-row h-full">
-            <div className="w-[33vw] shrink-0 bg-white shadow-lg p-8 h-full border-l-4 border-sky-300">
-                <h2 className="text-xl font-light">Helm Chart from {chart.chartRepo}:</h2>
-                <h1 className="text-4xl font-medium mb-4">{chart.name}</h1>
+        <div className="flex flex-row h-full grow">
+            <ViewPanel
+                title={chart.name}
+                subtitle={`Helm Chart from ${chart.chartRepo}`}
+                borderClassName="border-sky-300">
                 <LineNavButton
                     to={`/charts/${chart.name}/chart-versions`}
-                    sizeClassName="w-[29vw]"
-                    colorClassName="border-violet-300">
+                    borderClassName="border-violet-300">
                     <h2 className="font-medium">View Chart Versions</h2>
                 </LineNavButton>
                 {chart.appImageGitRepo && (
@@ -46,14 +47,24 @@ const ChartsChartNameRoute: FunctionComponent = () => {
                         )}
                         <LineNavButton
                             to={`/charts/${chart.name}/app-versions`}
-                            sizeClassName="w-[29vw]"
-                            colorClassName="border-rose-300">
+                            borderClassName="border-rose-300">
                             <h2 className="font-medium">View App Versions</h2>
                         </LineNavButton>
                     </div>
                 )}
-            </div>
-            <Outlet />
+                <h2 className="text-2xl font-light">Change {chart.name}:</h2>
+                <LineNavButton
+                    to={`/charts/${chart.name}/edit`}
+                    borderClassName="border-sky-300">
+                    <h2 className="font-medium">Edit</h2>
+                </LineNavButton>
+                <LineNavButton
+                    to={`/charts/${chart.name}/delete`}
+                    borderClassName="border-sky-300">
+                    <h2 className="font-medium">Delete</h2>
+                </LineNavButton>
+            </ViewPanel>
+            <Outlet context={{ chart }} />
         </div>
     )
 }

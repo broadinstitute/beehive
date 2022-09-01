@@ -2,7 +2,8 @@ import { LoaderFunction } from "@remix-run/node";
 import { NavLink, useLoaderData, useParams } from "@remix-run/react";
 import { ChartVersionsApi, V2controllersChartVersion } from "@sherlock-js-client/sherlock";
 import { FunctionComponent, useEffect, useRef } from "react";
-import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/remix/boundaries";
+import ViewPanel from "~/components/panels/view";
+import { catchBoundary, errorBoundary } from "~/components/remix/boundaries";
 import { forwardIAP, SherlockConfiguration, throwErrorResponses } from "~/helpers/sherlock.server";
 
 export const handle = {
@@ -18,7 +19,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         .catch(throwErrorResponses)
 }
 
-export const CatchBoundary = catchBoundaryForErrorResponses
+export const CatchBoundary = catchBoundary
 export const ErrorBoundary = errorBoundary
 
 const ChartsChartNameChartVersionsChartVersionIDRoute: FunctionComponent = () => {
@@ -28,13 +29,14 @@ const ChartsChartNameChartVersionsChartVersionIDRoute: FunctionComponent = () =>
         (ref.current as Element | null)?.scrollIntoView()
     }, [chartVersion])
     return (
-        <div className="flex flex-row h-full">
-            <div className="w-[33vw] shrink-0 bg-white shadow-lg p-8 h-full border-l-4 border-violet-300" ref={ref}>
-                <h2 className="text-xl font-light">Chart Version of {chartVersion.chart}:</h2>
-                <h1 className="text-4xl font-medium mb-4">{chartVersion.chartVersion}</h1>
+        <div className="flex flex-row h-full" ref={ref}>
+            <ViewPanel
+                title={chartVersion.chartVersion}
+                subtitle={`Chart Version of ${chartVersion.chart}`}
+                borderClassName="border-violet-300">
                 <p>Created at {chartVersion.createdAt}</p>
-            </div>
-        </div>
+            </ViewPanel>
+        </div >
     )
 }
 

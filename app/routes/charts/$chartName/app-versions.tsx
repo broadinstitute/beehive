@@ -1,10 +1,10 @@
 import { LoaderFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
-import { AppVersionsApi, ChartVersionsApi, V2controllersAppVersion, V2controllersChartVersion } from "@sherlock-js-client/sherlock";
+import { AppVersionsApi, V2controllersAppVersion } from "@sherlock-js-client/sherlock";
 import { FunctionComponent } from "react";
-import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/remix/boundaries";
-import LineNavButton from "~/components/common/line-nav-button";
+import { catchBoundary, errorBoundary } from "~/components/remix/boundaries";
 import { forwardIAP, SherlockConfiguration, throwErrorResponses } from "~/helpers/sherlock.server";
+import ListPanel from "~/components/panels/list";
 
 export const handle = {
     breadcrumb: () => {
@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         .catch(throwErrorResponses)
 }
 
-export const CatchBoundary = catchBoundaryForErrorResponses
+export const CatchBoundary = catchBoundary
 export const ErrorBoundary = errorBoundary
 
 const ChartsChartNameAppVersionsRoute: FunctionComponent = () => {
@@ -27,20 +27,16 @@ const ChartsChartNameAppVersionsRoute: FunctionComponent = () => {
     const appVersions: Array<V2controllersAppVersion> = useLoaderData()
     return (
         <div className="flex flex-row h-full">
-            <div className="w-[33vw] shrink-0 overflow-auto flex flex-col items-center space-y-4 py-4">
-                {appVersions.map((appVersion, index) =>
-                    <LineNavButton
-                        to={`/charts/${params.chartName}/app-versions/${appVersion.id}`}
-                        id={index.toString()}
-                        sizeClassName="w-[30vw]"
-                        colorClassName="border-rose-300">
-                        <h2 className="font-light">{params.chartName}</h2>
-                        <h2 className="font-light mx-1">App @</h2>
-                        <h2 className="font-medium">{appVersion.appVersion}</h2>
-                    </LineNavButton>
+            <ListPanel
+                title={`App Versions for ${params.chartName}`}
+                entries={appVersions}
+                to={(appVersion) => `/charts/${params.chartName}/app-versions/${appVersion.id}`}
+                filter={(appVersion, filter) => appVersion.appVersion?.includes(filter) || appVersion.gitCommit?.includes(filter) || appVersion.gitBranch?.includes(filter)}
+                borderClassName="border-rose-300">
+                {(appVersion) => (
+                    <h2 className="font-light">{`${params.chartName} App @ `}{<span className="font-medium">{appVersion.appVersion}</span>}</h2>
                 )}
-                {appVersions.length == 0 && <p>{"(There's no App Versions here)"}</p>}
-            </div>
+            </ListPanel>
             <Outlet />
         </div>
     )

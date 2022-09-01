@@ -39,11 +39,13 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=80
 
-COPY --from=production-deps /app/node_modules /app/node_modules
+COPY --chown=node:node --from=production-deps /app/node_modules /app/node_modules
 
-COPY --from=build /app/build /app/build
-COPY --from=build /app/public /app/public
-ADD . .
+COPY --chown=node:node --from=build /app/build /app/build
+COPY --chown=node:node --from=build /app/public /app/public
+ADD --chown=node:node . .
+
+USER node
 
 EXPOSE 80/tcp
 

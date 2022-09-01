@@ -1,8 +1,8 @@
 import { LoaderFunction } from "@remix-run/node";
 import { NavLink, useLoaderData } from "@remix-run/react";
-import { MiscApi, MiscVersionResponse } from "@sherlock-js-client/sherlock";
+import { MiscApi, MiscMyUserResponse, MiscVersionResponse } from "@sherlock-js-client/sherlock";
 import { FunctionComponent } from "react";
-import { catchBoundaryForErrorResponses, errorBoundary } from "~/components/remix/boundaries";
+import { catchBoundary, errorBoundary } from "~/components/remix/boundaries";
 import { forwardIAP, SherlockConfiguration, throwErrorResponses } from "~/helpers/sherlock.server";
 
 export const handle = {
@@ -10,22 +10,32 @@ export const handle = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-    return new MiscApi(SherlockConfiguration)
-        .versionGet(forwardIAP(request))
-        .catch(throwErrorResponses)
+    const api = new MiscApi(SherlockConfiguration)
+    return [
+        await api
+            .versionGet(forwardIAP(request))
+            .catch(throwErrorResponses),
+        await api
+            .myUserGet(forwardIAP(request))
+            .catch(throwErrorResponses)
+    ]
 }
 
-export const CatchBoundary = catchBoundaryForErrorResponses
+export const CatchBoundary = catchBoundary
 export const ErrorBoundary = errorBoundary
 
 const MiscRoute: FunctionComponent = () => {
-    const version: MiscVersionResponse = useLoaderData()
+    const [version, myUser]: [MiscVersionResponse, MiscMyUserResponse] = useLoaderData()
     return (
-        <div className="m-auto">
+        <div className="m-auto text-center">
             <p title={JSON.stringify(version.buildInfo, null, 2)}>
-                Sherlock Version <span className="font-mono">{version.version}</span> built on <span className="font-mono">{version.goVersion}</span>
+                Sherlock version <span className="font-mono"> {version.version}</span> built on <span className="font-mono"> {version.goVersion}</span>
             </p>
-        </div>
+            <br />
+            <p title={JSON.stringify(myUser.rawInfo, null, 2)}>
+                You are <span className="font-mono"> {myUser.email}</span>; {myUser.suitability}
+            </p>
+        </div >
     )
 }
 
