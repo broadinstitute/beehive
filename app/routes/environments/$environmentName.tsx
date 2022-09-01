@@ -48,7 +48,7 @@ const EnvironmentsEnvironmentNameRoute: FunctionComponent = () => {
                 <div className="pt-4">
                     <h2 className="text-2xl font-light">Helm Rendering</h2>
                     <p>Charts in this environment are rendered from the <span className="font-mono">{environment.base}</span> values base in <a href="https://github.com/broadinstitute/terra-helmfile" className="decoration-blue-500 underline">terra-helmfile</a>.</p>
-                    <p>This is a {environment.lifecycle} envirionment, so within the <span className="font-mono">{environment.base}</span> base, chart values are further derived from the {environment.lifecycle !== "dynamic" ? "individual name of this environment." : <span><i>name of the template,</i> <Link to={`/environments/{environment.templateEnvironment}`} className="font-mono underline decoration-blue-500">{environment.templateEnvironment}</Link>.</span>}</p>
+                    <p>This is a {environment.lifecycle} envirionment, so within the <span className="font-mono">{environment.base}</span> base, chart values are further derived from the {environment.lifecycle !== "dynamic" ? "individual name of this environment." : <span><i>name of the template,</i> <Link to={`/environments/${environment.templateEnvironment}`} className="font-mono underline decoration-blue-500">{environment.templateEnvironment}</Link>.</span>}</p>
                 </div>
                 <div className="pt-4">
                     <h2 className="text-2xl font-light">Default Cluster</h2>
