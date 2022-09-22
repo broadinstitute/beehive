@@ -66,6 +66,7 @@ If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwi
 ## Colors
 
 [The colors come from Tailwind](https://tailwindcss.com/docs/customizing-colors):
+
 - Neutrals: Zinc
 - Beehive logo and environment: amber-300
 - Cluster: green-300
@@ -74,4 +75,3 @@ If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwi
 - App Versions: rose-300
 
 [Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%237DD3FC-%2386EFAC-%23FDA4AF-%23C4B5FD)
-

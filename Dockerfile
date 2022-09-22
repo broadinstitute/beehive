@@ -36,6 +36,8 @@ RUN npm run build
 FROM us.gcr.io/broad-dsp-gcr-public/base/nodejs:${NODE_VERSION}-${DISTRO}
 WORKDIR /app
 
+RUN apk --no-cache -U upgrade
+
 ENV NODE_ENV=production
 ENV PORT=80
 

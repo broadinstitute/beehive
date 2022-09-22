@@ -1,13 +1,14 @@
 {
-    "workbench.tree.indent": 20,
-    "workbench.tree.renderIndentGuides": "always",
-    "editor.quickSuggestions": {
-        "strings": true
-    },
-    "tailwindCSS.classAttributes": [
-        "className",
-        "sizeClassName",
-        "borderClassName",
-        "backgroundClassName",
-    ]
+  "workbench.tree.indent": 20,
+  "workbench.tree.renderIndentGuides": "always",
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "tailwindCSS.classAttributes": [
+    "className",
+    "sizeClassName",
+    "borderClassName",
+    "backgroundClassName"
+  ]
 }

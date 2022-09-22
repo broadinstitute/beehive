@@ -1,4 +1,9 @@
-import { MetaFunction, LinksFunction, LoaderFunction, json } from "@remix-run/node";
+import {
+  MetaFunction,
+  LinksFunction,
+  LoaderFunction,
+  json,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -8,12 +13,16 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import Header from "./components/header";
 import styles from "./tailwind.css";
-import favicon from "./assets/favicon.svg"
+import favicon from "./assets/favicon.svg";
 import { FunctionComponent } from "react";
 import { commitSession, getSession } from "./sessions.server";
-import { AuthenticityTokenProvider, createAuthenticityToken } from "remix-utils";
+import {
+  AuthenticityTokenProvider,
+  createAuthenticityToken,
+} from "remix-utils";
+import { Header } from "./components/layout/header";
+import { LoadScroller } from "./routes/__scroll-control";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -23,24 +32,24 @@ export const meta: MetaFunction = () => ({
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
-  { rel: "icon", href: favicon, type: "image/svg+xml" }
-]
+  { rel: "icon", href: favicon, type: "image/svg+xml" },
+];
 
-interface LoaderData {
-  csrf: string
+interface RootLoaderData {
+  csrf: string;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"))
-  const token = createAuthenticityToken(session)
-  return json<LoaderData>(
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = createAuthenticityToken(session);
+  return json<RootLoaderData>(
     { csrf: token },
     { headers: { "Set-Cookie": await commitSession(session) } }
-  )
-}
+  );
+};
 
 const App: FunctionComponent = () => {
-  const { csrf } = useLoaderData<LoaderData>()
+  const { csrf } = useLoaderData<RootLoaderData>();
   return (
     <AuthenticityTokenProvider token={csrf}>
       <html lang="en">
@@ -48,17 +57,17 @@ const App: FunctionComponent = () => {
           <Meta />
           <Links />
         </head>
-        <body className="bg-zinc-100 flex flex-col h-screen w-screen max-w-full">
+        <body className="bg-zinc-100 flex flex-col min-w-screen h-screen w-full -z-20">
           <Header />
           <Outlet />
+          <LoadScroller />
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
         </body>
       </html>
     </AuthenticityTokenProvider>
-  )
-}
+  );
+};
 
-
-export default App
+export default App;
