@@ -72,6 +72,6 @@ If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwi
 - Cluster: green-300
 - Chart: sky-300
 - Chart Versions: violet-300 (low contrast with sky-300 for protanopia/deuteranopia but it is very closely related to Charts anyway)
-- App Versions: rose-300
+- App Versions: rose-300 (we use this for errors too but we label errors as such and use different styling)
 
 [Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%237DD3FC-%2386EFAC-%23FDA4AF-%23C4B5FD)
