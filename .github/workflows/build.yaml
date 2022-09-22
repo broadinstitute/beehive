@@ -71,7 +71,7 @@ jobs:
         id: image-name
         shell: bash
         run: |
-          NAME="${GOOGLE_DOCKER_REPOSITORY}/${GOOGLE_PROJECT}/${REPOSITORY_NAME}/${IMAGE_NAME}"
+          NAME="${GOOGLE_DOCKER_REPOSITORY}/${GOOGLE_PROJECT}/${REPOSITORY_NAME}/${{ github.event.repository.name }}"
           DOCKER_TAG="${{ steps.tag.outputs.tag }}"
           TAGGED="${NAME}:${DOCKER_TAG}"
           echo "NAME: ${NAME}"
