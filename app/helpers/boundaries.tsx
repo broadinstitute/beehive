@@ -8,7 +8,7 @@ export function catchBoundary() {
     caught.data
   );
   return (
-    <div className="bg-rose-50 border-rose-400 border-2 rounded-lg p-1 border-dashed grow">
+    <div className="bg-rose-50 border-rose-400 border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
       <p className="font-semibold">{title}</p>
       {(reloadRequired && (
         <button
@@ -32,7 +32,7 @@ export function catchBoundary() {
 
 export function errorBoundary({ error }: { error: Error }) {
   return (
-    <div className="bg-rose-50 border-rose-400 border-2 rounded-lg p-1 border-dashed grow">
+    <div className="bg-rose-50 border-rose-400 border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
       <p className="font-semibold">Beehive UI Error: {error.message}</p>
       <button
         onClick={() => window.location.reload()}

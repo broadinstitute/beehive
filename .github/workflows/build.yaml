@@ -23,10 +23,17 @@ on:
     paths-ignore:
       - "README.md"
 env:
+  # The project we'll be pushing artifacts to.
   GOOGLE_PROJECT: dsp-artifact-registry
-  # Name of the app-specific Docker repository configured in GOOGLE_PROJECT
+  # Name of the app-specific Docker repository configured in GOOGLE_PROJECT.
+  # This is typically equal to the GitHub repository name.
   REPOSITORY_NAME: ${{ github.event.repository.name }}
-  # Region-specific Google Docker repository where GOOGLE_PROJECT/REPOSITORY_NAME can be found
+  # Name of the image we'll be uploading into the Docker repository.
+  # This is often equal to the GitHub repository name, but it might also be the
+  # name of the Helm Chart if that's different.
+  IMAGE_NAME: ${{ github.event.repository.name }}
+  # This is the region-specific top-level Google-managed domain where our
+  # GOOGLE_PROJECT/REPOSITORY_NAME can be found.
   GOOGLE_DOCKER_REPOSITORY: us-central1-docker.pkg.dev
 jobs:
   tag-publish-job:
@@ -79,7 +86,8 @@ jobs:
           echo ::set-output "name=name::${NAME}"
           echo ::set-output "name=tagged::${TAGGED}"
       - name: Build image
-        run: "docker build -t ${{ steps.image-name.outputs.tagged }} ."
+        run: |
+          docker build --build-arg BUILD_VERSION='${{ steps.tag.outputs.tag }}' -t ${{ steps.image-name.outputs.tagged }} .
 
       # Publish images
       - name: Run Trivy vulnerability scanner
@@ -88,7 +96,17 @@ jobs:
         with:
           image: ${{ steps.image-name.outputs.tagged }}
       - name: Push image
-        run: "docker push ${{ steps.image-name.outputs.tagged }}"
+        run: |
+          docker push ${{ steps.image-name.outputs.tagged }}
+      - name: Add latest tag to Docker image
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          gcloud artifacts docker tags add \
+            "${{ steps.image-name.outputs.tagged }}" \
+            "${{ steps.image-name.outputs.name }}:latest"
+
+      # (Optional) Comment pushed image
       - name: Comment pushed image
         uses: actions/github-script@0.3.0
         if: github.event_name == 'pull_request'
@@ -97,12 +115,3 @@ jobs:
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
             github.issues.createComment({ issue_number, owner, repo, body: 'Pushed image: ${{ steps.image-name.outputs.tagged }}' });
-
-      # Add latest tag to image
-      - name: Add latest tag to Docker image
-        if: github.event_name != 'pull_request'
-        shell: bash
-        run: |
-          gcloud artifacts docker tags add \
-            "${{ steps.image-name.outputs.tagged }}" \
-            "${{ steps.image-name.outputs.name }}:latest"

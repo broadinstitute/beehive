@@ -33,13 +33,16 @@ RUN npm run build
 #     https://remix.run/docs/en/v1/other-api/serve#remix-app-server
 #   - Use blessed image from DSP AppSec
 #     https://github.com/broadinstitute/dsp-appsec-blessed-images
-FROM us.gcr.io/broad-dsp-gcr-public/base/nodejs:${NODE_VERSION}-${DISTRO}
+FROM us.gcr.io/broad-dsp-gcr-public/base/nodejs:${NODE_VERSION}-${DISTRO} as runtime
 WORKDIR /app
+
+ARG BUILD_VERSION
 
 RUN apk --no-cache -U upgrade
 
 ENV NODE_ENV=production
 ENV PORT=80
+ENV BUILD_VERSION=${BUILD_VERSION:-unknown}
 
 COPY --chown=node:node --from=production-deps /app/node_modules /app/node_modules
 

@@ -5,12 +5,14 @@ import {
   MiscMyUserResponse,
   MiscVersionResponse,
 } from "@sherlock-js-client/sherlock";
-import { FunctionComponent } from "react";
+import { FunctionComponent, version } from "react";
 import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   forwardIAP,
   SherlockConfiguration,
   errorResponseThrower,
+  errorResponseReturner,
 } from "~/helpers/sherlock.server";
 
 export const handle = {
@@ -20,8 +22,13 @@ export const handle = {
 export const loader: LoaderFunction = async ({ request }) => {
   const api = new MiscApi(SherlockConfiguration);
   return [
-    await api.versionGet(forwardIAP(request)).catch(errorResponseThrower),
-    await api.myUserGet(forwardIAP(request)).catch(errorResponseThrower),
+    process.env.BUILD_VERSION || "development",
+    await api
+      .versionGet(forwardIAP(request))
+      .then((versionResponse) => versionResponse, errorResponseReturner),
+    await api
+      .myUserGet(forwardIAP(request))
+      .then((myUserResponse) => myUserResponse, errorResponseReturner),
   ];
 };
 
@@ -29,19 +36,60 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const MiscRoute: FunctionComponent = () => {
-  const [version, myUser] =
-    useLoaderData<[MiscVersionResponse, MiscMyUserResponse]>();
+  const [beehiveVersion, sherlockVersion, mySherlockUser] =
+    useLoaderData<
+      [
+        string,
+        MiscVersionResponse | DerivedErrorInfo,
+        MiscMyUserResponse | DerivedErrorInfo
+      ]
+    >();
   return (
     <div className="m-auto text-center">
-      <p title={JSON.stringify(version.buildInfo, null, 2)}>
-        Sherlock version <span className="font-mono"> {version.version}</span>{" "}
-        built on <span className="font-mono"> {version.goVersion}</span>
+      <p>
+        Beehive version <span className="font-mono">{beehiveVersion}</span>
       </p>
+      {sherlockVersion.hasOwnProperty("title") ? (
+        displayErrorInfo(sherlockVersion as DerivedErrorInfo)
+      ) : (
+        <p
+          title={JSON.stringify(
+            (sherlockVersion as MiscVersionResponse).buildInfo,
+            null,
+            2
+          )}
+        >
+          Sherlock version{" "}
+          <span className="font-mono">
+            {" "}
+            {(sherlockVersion as MiscVersionResponse).version}
+          </span>{" "}
+          built on{" "}
+          <span className="font-mono">
+            {" "}
+            {(sherlockVersion as MiscVersionResponse).goVersion}
+          </span>
+        </p>
+      )}
       <br />
-      <p title={JSON.stringify(myUser.rawInfo, null, 2)}>
-        You are <span className="font-mono"> {myUser.email}</span>;{" "}
-        {myUser.suitability}
-      </p>
+      {mySherlockUser.hasOwnProperty("title") ? (
+        displayErrorInfo(sherlockVersion as DerivedErrorInfo)
+      ) : (
+        <p
+          title={JSON.stringify(
+            (mySherlockUser as MiscMyUserResponse).rawInfo,
+            null,
+            2
+          )}
+        >
+          You are{" "}
+          <span className="font-mono">
+            {" "}
+            {(mySherlockUser as MiscMyUserResponse).email}
+          </span>
+          ; {(mySherlockUser as MiscMyUserResponse).suitability}
+        </p>
+      )}
     </div>
   );
 };
