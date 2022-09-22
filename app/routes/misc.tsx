@@ -29,8 +29,8 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const MiscRoute: FunctionComponent = () => {
-  const [version, myUser]: [MiscVersionResponse, MiscMyUserResponse] =
-    useLoaderData();
+  const [version, myUser] =
+    useLoaderData<[MiscVersionResponse, MiscMyUserResponse]>();
   return (
     <div className="m-auto text-center">
       <p title={JSON.stringify(version.buildInfo, null, 2)}>
