@@ -24,7 +24,7 @@ export const handle = {
     const params = useParams();
     return (
       <NavLink
-        to={`/environments/${params.environmentName}/chart-releases/${params.chartReleaseName}`}
+        to={`/clusters/${params.clusterName}/chart-releases/${params.chartReleaseName}`}
       >
         {params.chartReleaseName}
       </NavLink>
@@ -50,7 +50,7 @@ const ChartReleaseRoute: React.FunctionComponent = () => {
     <Branch>
       <OutsetPanel {...ChartReleaseColors}>
         <ItemDetails
-          subtitle={`Instance of ${chartRelease.chart}`}
+          subtitle={`Instance of ${chartRelease.chart} in the ${chartRelease.namespace} namespace`}
           title={chartRelease.name || ""}
         >
           <ChartReleaseDetails

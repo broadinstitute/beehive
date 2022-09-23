@@ -6,7 +6,8 @@ import {
 } from "@sherlock-js-client/sherlock";
 import { FunctionComponent, useEffect, useRef } from "react";
 import ViewPanel from "~/components/OLD panels/view";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   forwardIAP,
   SherlockConfiguration,

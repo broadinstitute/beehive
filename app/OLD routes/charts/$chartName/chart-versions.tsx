@@ -5,7 +5,8 @@ import {
   V2controllersChartVersion,
 } from "@sherlock-js-client/sherlock";
 import { FunctionComponent } from "react";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   forwardIAP,
   SherlockConfiguration,

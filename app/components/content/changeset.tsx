@@ -3,7 +3,7 @@ import {
   V2controllersChangeset,
 } from "@sherlock-js-client/sherlock";
 import { VersionSummary } from "~/components/logic/version-summary";
-import { DataTypeColors } from "./interfaces";
+import { DataTypeColors } from "./helpers";
 
 export const ChangesetColors: DataTypeColors = {
   borderClassName: "border-zinc-400",

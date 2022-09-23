@@ -12,7 +12,8 @@ import {
 import { FunctionComponent } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
 import DeletePanel from "~/components/OLD panels/delete";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   forwardIAP,

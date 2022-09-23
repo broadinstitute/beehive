@@ -13,7 +13,8 @@ import {
   EnvironmentCreatableFields,
   EnvironmentEditableFields,
 } from "~/components/OLD sherlock/environment";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   formDataToObject,

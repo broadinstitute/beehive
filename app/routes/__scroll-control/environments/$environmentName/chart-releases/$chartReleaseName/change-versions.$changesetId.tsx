@@ -15,8 +15,12 @@ import { verifyAuthenticityToken } from "remix-utils";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
-import { ChangesetApplyDetails, ChangesetColors } from "~/content/changeset";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import {
+  ChangesetApplyDetails,
+  ChangesetColors,
+} from "~/components/content/changeset";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   errorResponseReturner,

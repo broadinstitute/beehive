@@ -3,7 +3,7 @@ import React from "react";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { AppVersionColors } from "./app-version";
 import { ChartVersionColors } from "./chart-version";
-import { DataTypeColors } from "./interfaces";
+import { DataTypeColors, MutateControls } from "./helpers";
 
 export const ChartColors: DataTypeColors = {
   borderClassName: "border-sky-300",
@@ -93,19 +93,12 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
       )}
     </div>
     {(toEdit || toDelete) && (
-      <div className="flex flex-col space-y-4">
-        <h2 className="text-2xl font-light">Change {chart.name}:</h2>
-        {toEdit && (
-          <NavButton to={toEdit} sizeClassName="w-[29vw]" {...ChartColors}>
-            Edit
-          </NavButton>
-        )}
-        {toDelete && (
-          <NavButton to={toDelete} sizeClassName="w-[29vw]" {...ChartColors}>
-            Delete
-          </NavButton>
-        )}
-      </div>
+      <MutateControls
+        name={chart.name || ""}
+        colors={ChartColors}
+        toEdit={toEdit}
+        toDelete={toDelete}
+      />
     )}
   </div>
 );

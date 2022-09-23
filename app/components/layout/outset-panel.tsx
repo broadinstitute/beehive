@@ -11,7 +11,7 @@ export const OutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({
   borderClassName,
 }) => (
   <div
-    className={`w-[33vw] h-full relative bg-white ${
+    className={`w-[33vw] shrink-0 h-full relative bg-white ${
       borderClassName ? `border-l-4 ${borderClassName}` : ""
     }`}
   >
@@ -25,7 +25,7 @@ export const DoubleOutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({
   borderClassName,
 }) => (
   <div
-    className={`w-[66vw] h-full bg-white ${
+    className={`w-[66vw] shrink-0 h-full bg-white ${
       borderClassName ? `border-l-4 ${borderClassName}` : ""
     }`}
   >

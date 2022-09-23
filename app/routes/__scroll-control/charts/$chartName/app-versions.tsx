@@ -11,8 +11,9 @@ import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { AppVersionColors } from "~/content/app-version";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { AppVersionColors } from "~/components/content/app-version";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   SherlockConfiguration,
   forwardIAP,

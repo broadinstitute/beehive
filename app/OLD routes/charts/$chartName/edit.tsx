@@ -4,7 +4,8 @@ import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { FunctionComponent } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
 import EditPanel from "~/components/OLD panels/edit";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChartEditableFields } from "~/components/OLD sherlock/chart";
 import {
   formDataToObject,

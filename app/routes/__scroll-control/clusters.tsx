@@ -1,16 +1,19 @@
 import { LoaderFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
-import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
+import {
+  ClustersApi,
+  V2controllersCluster,
+} from "@sherlock-js-client/sherlock";
 import { useState } from "react";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { ChartColors } from "~/components/content/chart";
-import { catchBoundary } from "~/components/boundaries/catch-boundary";
-import { errorBoundary } from "~/components/boundaries/error-boundary";
+import { ClusterColors } from "~/components/content/cluster";
 import {
   errorResponseThrower,
   forwardIAP,
@@ -18,47 +21,47 @@ import {
 } from "~/helpers/sherlock.server";
 
 export const handle = {
-  breadcrumb: () => <NavLink to="/charts">Charts</NavLink>,
+  breadcrumb: () => <NavLink to="/clusters">Clusters</NavLink>,
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsGet({}, forwardIAP(request))
+  return new ClustersApi(SherlockConfiguration)
+    .apiV2ClustersGet({}, forwardIAP(request))
     .catch(errorResponseThrower);
 };
 
 export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
-const ChartsRoute: React.FunctionComponent = () => {
-  const charts = useLoaderData<Array<V2controllersChart>>();
+const ClustersRoute: React.FunctionComponent = () => {
+  const clusters = useLoaderData<Array<V2controllersCluster>>();
   const [filterText, setFilterText] = useState("");
   return (
     <Branch>
       <InsetPanel>
-        <InteractiveList title="Charts" {...ChartColors}>
+        <InteractiveList title="Clusters" {...ClusterColors}>
           <ListControls
             setFilterText={setFilterText}
             // toCreate="./new"
-            {...ChartColors}
+            {...ClusterColors}
           />
           <MemoryFilteredList
-            entries={charts}
+            entries={clusters}
             filterText={filterText}
-            filter={(chart, filterText) =>
-              chart.name?.includes(filterText) ||
-              chart.chartRepo?.includes(filterText)
+            filter={(cluster, filterText) =>
+              cluster.name?.includes(filterText) ||
+              cluster.base?.includes(filterText)
             }
           >
-            {(chart, index) => (
+            {(cluster, index) => (
               <NavButton
-                to={`./${chart.name}`}
+                to={`./${cluster.name}`}
                 key={index.toString()}
-                {...ChartColors}
+                {...ClusterColors}
               >
                 <h2 className="font-light">
-                  {`${chart.chartRepo} / `}
-                  {<span className="font-medium">{chart.name}</span>}
+                  {`${cluster.base} / `}
+                  <span className="font-medium">{cluster.name}</span>
                 </h2>
               </NavButton>
             )}
@@ -70,4 +73,4 @@ const ChartsRoute: React.FunctionComponent = () => {
   );
 };
 
-export default ChartsRoute;
+export default ClustersRoute;

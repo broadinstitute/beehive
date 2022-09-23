@@ -8,7 +8,8 @@ import { FunctionComponent } from "react";
 import { NavLink } from "react-router-dom";
 import LineNavButton from "~/components/common/line-nav-button";
 import ViewPanel from "~/components/OLD panels/view";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   forwardIAP,
   SherlockConfiguration,

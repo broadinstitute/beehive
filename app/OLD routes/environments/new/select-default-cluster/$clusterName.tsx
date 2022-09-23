@@ -8,7 +8,8 @@ import { FunctionComponent, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import ActionButton from "~/components/components/interactivity/action-button";
 import ViewPanel from "~/components/OLD panels/view";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   errorResponseThrower,
   forwardIAP,

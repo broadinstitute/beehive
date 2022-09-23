@@ -7,8 +7,12 @@ import {
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Branch } from "~/components/route-tree/branch";
-import { EnvironmentColors, EnvironmentDetails } from "~/content/environment";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import {
+  EnvironmentColors,
+  EnvironmentDetails,
+} from "~/components/content/environment";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   SherlockConfiguration,
   forwardIAP,
@@ -55,8 +59,8 @@ const EnvironmentNameRoute: React.FunctionComponent = () => {
           <EnvironmentDetails
             environment={environment}
             toChartReleases="./chart-releases"
-            toEdit="./edit"
-            toDelete={environment.lifecycle != "static" ? "./delete" : ""}
+            // toEdit="./edit"
+            // toDelete={environment.lifecycle != "static" ? "./delete" : ""}
           />
         </ItemDetails>
       </OutsetPanel>

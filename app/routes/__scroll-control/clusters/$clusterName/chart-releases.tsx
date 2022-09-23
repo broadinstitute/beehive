@@ -1,40 +1,40 @@
 import { LoaderFunction } from "@remix-run/node";
-import { useParams, NavLink, useLoaderData, Outlet } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import {
-  ChartVersionsApi,
-  V2controllersChartVersion,
+  ChartReleasesApi,
+  V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
+import { ChartReleaseColors } from "~/components/content/chart-release";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { ChartVersionColors } from "~/components/content/chart-version";
-import { catchBoundary } from "~/components/boundaries/catch-boundary";
-import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
-  SherlockConfiguration,
-  forwardIAP,
   errorResponseThrower,
+  forwardIAP,
+  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 
 export const handle = {
   breadcrumb: () => {
     const params = useParams();
     return (
-      <NavLink to={`/charts/${params.chartName}/chart-versions`}>
-        Chart Versions
+      <NavLink to={`/clusters/${params.clusterName}/chart-releases`}>
+        Charts
       </NavLink>
     );
   },
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  return new ChartVersionsApi(SherlockConfiguration)
-    .apiV2ChartVersionsGet(
-      { chart: params.chartName || "" },
+  return new ChartReleasesApi(SherlockConfiguration)
+    .apiV2ChartReleasesGet(
+      { cluster: params.clusterName || "" },
       forwardIAP(request)
     )
     .catch(errorResponseThrower);
@@ -43,38 +43,39 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
-const ChartVersionsRoute: React.FunctionComponent = () => {
+const ChartReleasesRoute: React.FunctionComponent = () => {
   const params = useParams();
-  const chartVersions = useLoaderData<Array<V2controllersChartVersion>>();
+  const chartReleases = useLoaderData<Array<V2controllersChartRelease>>();
   const [filterText, setFilterText] = useState("");
   return (
     <Branch>
       <InsetPanel>
         <InteractiveList
-          title={`Chart Versions for ${params.chartName}`}
-          {...ChartVersionColors}
+          title={`Charts in ${params.clusterName}`}
+          {...ChartReleaseColors}
         >
-          <ListControls setFilterText={setFilterText} {...ChartVersionColors} />
+          <ListControls
+            setFilterText={setFilterText}
+            // toCreate="./new"
+            {...ChartReleaseColors}
+          />
           <MemoryFilteredList
-            entries={chartVersions}
+            entries={chartReleases}
             filterText={filterText}
-            filter={(chartVersion, filterText) =>
-              chartVersion.chartVersion?.includes(filterText)
+            filter={(chartRelease, filterText) =>
+              chartRelease.name?.includes(filterText) ||
+              chartRelease.namespace?.includes(filterText)
             }
           >
-            {(chartVersion, index) => (
+            {(chartRelease, index) => (
               <NavButton
-                to={`./${chartVersion.chartVersion}`}
+                to={`./${chartRelease.name}`}
                 key={index.toString()}
-                {...ChartVersionColors}
+                {...ChartReleaseColors}
               >
                 <h2 className="font-light">
-                  {`${params.chartName} Chart @ `}
-                  {
-                    <span className="font-medium">
-                      {chartVersion.chartVersion}
-                    </span>
-                  }
+                  {`${chartRelease.namespace} / `}
+                  <span className="font-medium">{chartRelease.chart}</span>
                 </h2>
               </NavButton>
             )}
@@ -86,4 +87,4 @@ const ChartVersionsRoute: React.FunctionComponent = () => {
   );
 };
 
-export default ChartVersionsRoute;
+export default ChartReleasesRoute;

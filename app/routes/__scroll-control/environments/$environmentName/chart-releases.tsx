@@ -4,15 +4,16 @@ import {
   ChartReleasesApi,
   V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
-import { FunctionComponent, useState } from "react";
+import { useState } from "react";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { ChartReleaseColors } from "~/content/chart-release";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { ChartReleaseColors } from "~/components/content/chart-release";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   SherlockConfiguration,
   forwardIAP,
@@ -42,7 +43,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
-const ChartReleasesRoute: FunctionComponent = () => {
+const ChartReleasesRoute: React.FunctionComponent = () => {
   const params = useParams();
   const chartReleases = useLoaderData<Array<V2controllersChartRelease>>();
   const [filterText, setFilterText] = useState("");
@@ -55,7 +56,7 @@ const ChartReleasesRoute: FunctionComponent = () => {
         >
           <ListControls
             setFilterText={setFilterText}
-            toCreate="./new"
+            // toCreate="./new"
             {...ChartReleaseColors}
           />
           <MemoryFilteredList

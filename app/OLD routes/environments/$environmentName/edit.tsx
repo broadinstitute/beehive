@@ -15,7 +15,8 @@ import { FunctionComponent, useState } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
 import EditPanel from "~/components/OLD panels/edit";
 import { EnvironmentEditableFields } from "~/components/OLD sherlock/environment";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   formDataToObject,

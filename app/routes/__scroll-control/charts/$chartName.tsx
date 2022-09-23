@@ -4,8 +4,9 @@ import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Branch } from "~/components/route-tree/branch";
-import { ChartColors, ChartDetails } from "~/content/chart";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { ChartColors, ChartDetails } from "~/components/content/chart";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
   SherlockConfiguration,
   forwardIAP,
@@ -46,8 +47,8 @@ const ChartNameRoute: React.FunctionComponent = () => {
             chart={chart}
             toChartVersions="./chart-versions"
             toAppVersions="./app-versions"
-            toEdit="./edit"
-            toDelete="./delete"
+            // toEdit="./edit"
+            // toDelete="./delete"
           />
         </ItemDetails>
       </OutsetPanel>

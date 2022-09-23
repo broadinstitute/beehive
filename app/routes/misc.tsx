@@ -6,7 +6,8 @@ import {
   MiscVersionResponse,
 } from "@sherlock-js-client/sherlock";
 import { FunctionComponent, version } from "react";
-import { catchBoundary, errorBoundary } from "~/helpers/boundaries";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   forwardIAP,

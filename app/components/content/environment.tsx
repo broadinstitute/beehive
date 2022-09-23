@@ -2,7 +2,7 @@ import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartReleaseColors } from "./chart-release";
 import { ClusterColors } from "./cluster";
-import { DataTypeColors } from "./interfaces";
+import { DataTypeColors, MutateControls } from "./helpers";
 
 export const EnvironmentColors: DataTypeColors = {
   borderClassName: "border-amber-300",
@@ -54,27 +54,12 @@ export const EnvironmentDetails: React.FunctionComponent<
       </div>
     )}
     {(toEdit || toDelete) && (
-      <div className="flex flex-col space-y-4">
-        <h2 className="text-2xl font-light">Change {environment.name}:</h2>
-        {toEdit && (
-          <NavButton
-            to={toEdit}
-            sizeClassName="w-[29vw]"
-            {...EnvironmentColors}
-          >
-            Edit
-          </NavButton>
-        )}
-        {toDelete && (
-          <NavButton
-            to={toDelete}
-            sizeClassName="w-[29vw]"
-            {...EnvironmentColors}
-          >
-            Delete
-          </NavButton>
-        )}
-      </div>
+      <MutateControls
+        name={environment.name || ""}
+        colors={EnvironmentColors}
+        toEdit={toEdit}
+        toDelete={toDelete}
+      />
     )}
   </div>
 );
