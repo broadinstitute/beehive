@@ -37,6 +37,13 @@ Here's the overview:
    dodging React's protections and warnings to do so. This means that the
    scroll happens before anything is shown to the user while still
    doing server-side rendering.
+
+ - An alternative implementation would be to put code like this in the
+   entry.client.tsx file, but I personally think co-locating it here with
+   the rest of the scroll-controlling makes it more obvious what goes on
+   (even if the javascript does have to be in a string). The entrypoint
+   is pretty deep into Remix-land while this here is just an odd React
+   component.
 */
 export const LoadScroller: React.FunctionComponent = () => {
   return (
@@ -45,7 +52,9 @@ export const LoadScroller: React.FunctionComponent = () => {
       dangerouslySetInnerHTML={{
         __html: `
         var scrollControlDiv = document.getElementById("${scrollDivID}");
-        scrollControlDiv.scrollLeft = scrollControlDiv.scrollWidth;
+        if (scrollControlDiv !== null) {
+          scrollControlDiv.scrollLeft = scrollControlDiv.scrollWidth;
+        }
         `,
       }}
     ></script>
