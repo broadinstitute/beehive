@@ -57,6 +57,8 @@ Tailwind
 
 3. Run `npm install` to download dependencies and `npm run dev` to spin up the development server.
 
+You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up.
+
 If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwindcss.com/docs/editor-setup#intelli-sense-for-vs-code) that provides really good autocomplete.
 
 ## Finding docs
