@@ -56,9 +56,9 @@ jobs:
         uses: databiosphere/github-actions/actions/bumper@bumper-0.0.6
         id: tag
         env:
-          DEFAULT_BUMP: patch
+          DEFAULT_BUMP: minor
           GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
-          RELEASE_BRANCHES: main
+          RELEASE_BRANCHES: ${{ github.event.repository.default_branch }}
           WITH_V: true
 
       # GCP config

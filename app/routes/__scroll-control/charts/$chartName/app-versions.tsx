@@ -68,7 +68,7 @@ const AppVersionsRoute: React.FunctionComponent = () => {
                 {...AppVersionColors}
               >
                 <h2 className="font-light">
-                  {`${params.chartName} App @ `}
+                  {`${params.chartName} app @ `}
                   {<span className="font-medium">{appVersion.appVersion}</span>}
                 </h2>
               </NavButton>

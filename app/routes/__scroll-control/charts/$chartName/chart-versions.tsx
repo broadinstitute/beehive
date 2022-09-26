@@ -69,7 +69,7 @@ const ChartVersionsRoute: React.FunctionComponent = () => {
                 {...ChartVersionColors}
               >
                 <h2 className="font-light">
-                  {`${params.chartName} Chart @ `}
+                  {`${params.chartName} chart @ `}
                   {
                     <span className="font-medium">
                       {chartVersion.chartVersion}

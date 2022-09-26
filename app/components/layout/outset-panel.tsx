@@ -15,7 +15,7 @@ export const OutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({
       borderClassName ? `border-l-4 ${borderClassName}` : ""
     }`}
   >
-    <div className="w-full h-full absolute shadow-xl -z-10"></div>
+    <div className="w-full h-full absolute shadow-lg -z-10"></div>
     <div className="overflow-y-auto overflow-x-clip">{children}</div>
   </div>
 );
@@ -29,7 +29,7 @@ export const DoubleOutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({
       borderClassName ? `border-l-4 ${borderClassName}` : ""
     }`}
   >
-    <div className="w-full h-full absolute shadow-xl -z-10"></div>
+    <div className="w-full h-full absolute shadow-lg -z-10"></div>
     <div className="overflow-y-auto overflow-x-clip">{children}</div>
   </div>
 );
