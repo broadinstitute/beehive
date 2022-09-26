@@ -36,6 +36,8 @@ Remix
 
 [Remix](https://remix.run/) is a data loading and rendering framework for React. There's two older, larger competitors, [Gatsby](https://www.gatsbyjs.com/) (which I've used) and [Next](https://nextjs.org/), but they both have gigantic feature sets far beyond what we need. Remix positions itself as a thin layer that just does your site's data loading and rendering [from the server](https://remix.run/docs/en/v1/guides/data-loading), making it super easy to [bring your own actual backend](https://remix.run/docs/en/v1/guides/bff)--exactly what we're doing with [Sherlock](https://github.com/broadinstitute/sherlock).
 
+Another point in favor of Remix over Next is that Remix is essentially [React Router](https://reactrouter.com/en/main) (it's made by the same people) except it loads your data too. This makes a ton of sense for Sherlock specifically because Sherlock's data model is very hierarchical, so hierarchical routes and data-loading from Remix make for very idiomatic source code. [Next plans to add similar functionality in the future](https://nextjs.org/blog/layouts-rfc), but we're building Beehive now, and Remix offers this now.
+
 (We're glossing over a lot here, but the bottom line is that we'll probably use 90%+ of Remix versus maybe 25% of its competitors, and the competitors have more lock-in. Remix saves us from reinventing wheels that we already have from Sherlock or [Identity-Aware Proxy](https://docs.google.com/document/d/1FCVPfCjJMF_ljBTeG6bJwbMUCe52kSsbKWTXCqdO7Nw/edit#heading=h.f25rkrrigwm) while still letting us write, well, React.)
 
 </details>
