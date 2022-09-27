@@ -2,7 +2,6 @@ import {
   V2controllersChartRelease,
   V2controllersChangeset,
 } from "@sherlock-js-client/sherlock";
-import { VersionSummary } from "~/components/logic/version-summary";
 import { DataTypeColors } from "./helpers";
 
 export const ChangesetColors: DataTypeColors = {
@@ -21,7 +20,6 @@ export const ChangesetApplyDetails: React.FunctionComponent<
   <div>
     <div className="flex flex-col space-y-4">
       <h2 className="text-2xl font-light">Version Changes:</h2>
-      <VersionSummary currentVersions={chartRelease} newVersions={changeset} />
     </div>
   </div>
 );

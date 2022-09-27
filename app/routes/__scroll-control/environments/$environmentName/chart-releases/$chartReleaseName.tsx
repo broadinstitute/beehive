@@ -56,8 +56,8 @@ const ChartReleaseRoute: React.FunctionComponent = () => {
           <ChartReleaseDetails
             chartRelease={chartRelease}
             // toChangesets="./change-versions"
-            // toEdit="./edit"
-            // toDelete="./delete"
+            toEdit="./edit"
+            toDelete="./delete"
           />
         </ItemDetails>
       </OutsetPanel>

@@ -11,5 +11,5 @@ interface BranchProps {
 }
 
 export const Branch: React.FunctionComponent<BranchProps> = ({ children }) => (
-  <div className="flex flex-row h-full min-w-min">{children}</div>
+  <div className="flex flex-row h-full grow">{children}</div>
 );

@@ -39,7 +39,7 @@ const ChartsRoute: React.FunctionComponent = () => {
         <InteractiveList title="Charts" {...ChartColors}>
           <ListControls
             setFilterText={setFilterText}
-            // toCreate="./new"
+            toCreate="./new"
             {...ChartColors}
           />
           <MemoryFilteredList

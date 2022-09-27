@@ -27,6 +27,7 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
       className={`w-[30vw] flex flex-col space-y-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
     >
       {children}
+      <br />
       <ActionButton borderClassName={borderClassName} type="submit">
         <h2 className="font-medium">{submitText}</h2>
       </ActionButton>

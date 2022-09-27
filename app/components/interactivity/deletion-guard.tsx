@@ -1,18 +1,35 @@
+import { useState } from "react";
 import { TextField } from "./text-field";
 
 export interface DeletionGuardProps {
-  name: string;
+  name?: string | undefined;
 }
 
 export const DeletionGuard: React.FunctionComponent<DeletionGuardProps> = ({
   name,
-}) => (
-  <label>
-    Type "delete {name}" below to confirm:
-    <TextField
-      placeholder={`delete ${name}`}
-      required
-      pattern={`delete ${name}`}
-    />
-  </label>
-);
+}) => {
+  const [userTriedPasting, setUserTriedPasting] = useState(false);
+  return (
+    <label>
+      <p>Type "delete {name || "this"}" below to confirm:</p>
+      <TextField
+        placeholder={
+          userTriedPasting
+            ? `are you sure? (pasting now allowed)`
+            : `delete ${name || "this"}`
+        }
+        required
+        pattern={`delete ${name || "this"}`}
+        onPasteCapture={
+          userTriedPasting
+            ? undefined
+            : (e) => {
+                setUserTriedPasting(true);
+                e.preventDefault();
+                e.stopPropagation();
+              }
+        }
+      />
+    </label>
+  );
+};
