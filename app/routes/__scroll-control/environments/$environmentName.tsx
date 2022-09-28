@@ -59,8 +59,8 @@ const EnvironmentNameRoute: React.FunctionComponent = () => {
           <EnvironmentDetails
             environment={environment}
             toChartReleases="./chart-releases"
-            // toEdit="./edit"
-            // toDelete={environment.lifecycle != "static" ? "./delete" : ""}
+            toEdit="./edit"
+            toDelete={environment.lifecycle != "static" ? "./delete" : ""}
           />
         </ItemDetails>
       </OutsetPanel>

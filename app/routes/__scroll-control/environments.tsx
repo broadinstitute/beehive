@@ -43,7 +43,7 @@ const EnvironmentsRoute: React.FunctionComponent = () => {
         <InteractiveList title="Environments" {...EnvironmentColors}>
           <ListControls
             setFilterText={setFilterText}
-            // toCreate="./new"
+            toCreate="./new"
             {...EnvironmentColors}
           />
           <MemoryFilteredList
@@ -73,7 +73,7 @@ const EnvironmentsRoute: React.FunctionComponent = () => {
           </MemoryFilteredList>
         </InteractiveList>
       </InsetPanel>
-      <Outlet />
+      <Outlet context={{ environments }} />
     </Branch>
   );
 };

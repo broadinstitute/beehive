@@ -63,7 +63,7 @@ const NewRoute: React.FunctionComponent = () => {
           submitText="Click to Create"
           {...ChartColors}
         >
-          <ChartCreatableFields />
+          <ChartCreatableFields chart={actionData?.faultyRequest} />
           <p className="py-4">Fields below this point can be edited later.</p>
           <ChartEditableFields chart={actionData?.faultyRequest} />
           {actionData && displayErrorInfo(actionData)}

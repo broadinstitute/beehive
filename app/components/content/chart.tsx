@@ -12,6 +12,23 @@ export const ChartColors: DataTypeColors = {
   backgroundClassName: "bg-sky-50",
 };
 
+export const ChartHelpCopy: React.FunctionComponent = () => (
+  <>
+    <p>
+      Helm Charts are how we deploy different applications or infrastructure
+      components to Kubernetes.
+    </p>
+    <p>
+      Charts themselves always have a Chart Version, and ones that deploy
+      applications will have a configurable App Version too.
+    </p>
+    <p>
+      Head over to an Environment or Cluster to work with actual configurable
+      instances of Charts, sometimes called Chart Releases.
+    </p>
+  </>
+);
+
 export interface ChartDetailsProps {
   chart: V2controllersChart;
   toChartVersions?: string | undefined;
@@ -135,7 +152,13 @@ export const ChartDeleteDescription: React.FunctionComponent = () => (
   </div>
 );
 
-export const ChartCreatableFields: React.FunctionComponent = () => (
+export interface ChartCreatableFieldsProps {
+  chart?: V2controllersChart | undefined;
+}
+
+export const ChartCreatableFields: React.FunctionComponent<
+  ChartCreatableFieldsProps
+> = ({ chart }) => (
   <div>
     <label>
       <h3 className="font-light text-2xl">Chart Name</h3>
@@ -143,13 +166,19 @@ export const ChartCreatableFields: React.FunctionComponent = () => (
         This is the name of the Helm Chart. Chart names should be short and
         lowercase—digits and hyphens are also allowed.
       </p>
-      <TextField name="name" required pattern="[a-z][a-z\-0-9]*[a-z0-9]" />
+      <TextField
+        name="name"
+        required
+        pattern="[a-z][a-z\-0-9]*[a-z0-9]"
+        placeholder="(required)"
+        defaultValue={chart?.name}
+      />
     </label>
   </div>
 );
 
 export interface ChartEditableFieldsProps {
-  chart?: V2controllersChart;
+  chart?: V2controllersChart | undefined;
 }
 
 export const ChartEditableFields: React.FunctionComponent<
@@ -159,7 +188,7 @@ export const ChartEditableFields: React.FunctionComponent<
     chart?.appImageGitRepo && chart.appImageGitRepo.length > 0
   );
   const [chartExposesEndpoint, setChartExposesEndpoint] = useState(
-    chart?.chartExposesEndpoint ? "true" : "false"
+    chart?.chartExposesEndpoint === true ? "true" : "false"
   );
   return (
     <div className="flex flex-col space-y-4">

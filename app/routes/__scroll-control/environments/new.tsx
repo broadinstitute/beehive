@@ -1,0 +1,236 @@
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import {
+  NavLink,
+  useActionData,
+  useFetcher,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
+import {
+  EnvironmentsApi,
+  V2controllersCluster,
+  V2controllersEnvironment,
+} from "@sherlock-js-client/sherlock";
+import { useEffect, useState } from "react";
+import { verifyAuthenticityToken } from "remix-utils";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
+import { ClusterColors } from "~/components/content/cluster";
+import {
+  EnvironmentColors,
+  EnvironmentCreatableFields,
+  EnvironmentEditableFields,
+  EnvironmentHelpCopy,
+} from "~/components/content/environment";
+import ActionButton from "~/components/interactivity/action-button";
+import { InsetPanel } from "~/components/layout/inset-panel";
+import { OutsetPanel } from "~/components/layout/outset-panel";
+import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
+import { ActionBox } from "~/components/panel-structures/action-box";
+import {
+  FillerText,
+  FillerTextProps,
+} from "~/components/panel-structures/filler-text";
+import {
+  InteractiveList,
+  InteractiveListProps,
+} from "~/components/panel-structures/interactive-list";
+import { Branch } from "~/components/route-tree/branch";
+import { Leaf } from "~/components/route-tree/leaf";
+import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
+import {
+  formDataToObject,
+  forwardIAP,
+  makeErrorResponserReturner,
+  SherlockConfiguration,
+} from "~/helpers/sherlock.server";
+import { getSession } from "~/sessions.server";
+
+export const handle = {
+  breadcrumb: () => <NavLink to={`/environments/new`}>New</NavLink>,
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  return (
+    // https://cloud.google.com/iap/docs/identity-howto#getting_the_users_identity_with_signed_headers
+    request.headers.get("X-Goog-Authenticated-User-Email")?.split(":").at(-1) ||
+    null
+  );
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  await verifyAuthenticityToken(request, session);
+
+  const formData = await request.formData();
+  const environmentRequest: V2controllersEnvironment = {
+    ...formDataToObject(formData, true),
+    chartReleasesFromTemplate:
+      formData.get("chartReleasesFromTemplate") === "true",
+    requiresSuitability: formData.get("requiresSuitability") === "true",
+    namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
+  };
+
+  return new EnvironmentsApi(SherlockConfiguration)
+    .apiV2EnvironmentsPost(
+      { environment: environmentRequest },
+      forwardIAP(request)
+    )
+    .then(
+      (environment) => redirect(`/environments/${environment.name}`),
+      makeErrorResponserReturner(environmentRequest)
+    );
+};
+
+export const CatchBoundary = catchBoundary;
+export const ErrorBoundary = errorBoundary;
+
+const NewRoute: React.FunctionComponent = () => {
+  const userEmail = useLoaderData<string | null>();
+  const actionData = useActionData<ActionErrorInfo<V2controllersEnvironment>>();
+
+  const [lifecycle, setLifecycle] = useState(
+    actionData?.faultyRequest.lifecycle || "dynamic"
+  );
+  const [templateEnvironment, setTemplateEnvironment] = useState(
+    actionData?.faultyRequest.templateEnvironment || ""
+  );
+  const [showTemplateEnvironmentPicker, setShowTemplateEnvironmentPicker] =
+    useState(false);
+  const [defaultCluster, setDefaultCluster] = useState(
+    actionData?.faultyRequest.defaultCluster || ""
+  );
+  const [showDefaultClusterPicker, setShowDefaultClusterPicker] =
+    useState(false);
+
+  // Just so happens that our parent route already loaded environments, so no need
+  // to do it again to get the list of possible templates
+  const { environments } = useOutletContext<{
+    environments: Array<V2controllersEnvironment>;
+  }>();
+
+  // Get the clusters manually for the list of possible default clusters
+  const defaultClusterFetcher = useFetcher();
+  useEffect(() => {
+    if (defaultClusterFetcher.type == "init") {
+      defaultClusterFetcher.load("/clusters");
+    }
+  }, [defaultClusterFetcher]);
+
+  let sidebar: React.ReactElement<InteractiveListProps | FillerTextProps>;
+  if (showTemplateEnvironmentPicker) {
+    sidebar = (
+      <InteractiveList
+        title="Select Template Environment"
+        {...EnvironmentColors}
+      >
+        <MemoryFilteredList
+          entries={environments.filter(
+            (environment) => environment.lifecycle === "template"
+          )}
+          filterText={templateEnvironment}
+          filter={(environment, filterText) =>
+            environment.base?.includes(filterText) ||
+            environment.name?.includes(filterText)
+          }
+        >
+          {(environment, index) => (
+            <ActionButton
+              key={index.toString()}
+              onClick={() => {
+                setTemplateEnvironment(environment.name || "");
+                setShowTemplateEnvironmentPicker(false);
+              }}
+              isActive={environment.name === templateEnvironment}
+              {...EnvironmentColors}
+            >
+              <h2 className="font-light">
+                {`template: ${environment.base} / `}
+                <span className="font-medium">{environment.name}</span>
+              </h2>
+            </ActionButton>
+          )}
+        </MemoryFilteredList>
+      </InteractiveList>
+    );
+  } else if (showDefaultClusterPicker && defaultClusterFetcher.type == "done") {
+    sidebar = (
+      <InteractiveList title="Select Default Cluster" {...ClusterColors}>
+        <MemoryFilteredList
+          entries={defaultClusterFetcher.data as Array<V2controllersCluster>}
+          filterText={defaultCluster}
+          filter={(cluster, filterText) =>
+            cluster.base?.includes(filterText) ||
+            cluster.name?.includes(filterText)
+          }
+        >
+          {(cluster, index) => (
+            <ActionButton
+              key={index.toString()}
+              onClick={() => {
+                setDefaultCluster(cluster.name || "");
+                setShowDefaultClusterPicker(false);
+              }}
+              isActive={cluster.name === defaultCluster}
+              {...ClusterColors}
+            >
+              <h2 className="font-light">
+                {`${cluster.base} / `}
+                <span className="font-medium">{cluster.name}</span>
+              </h2>
+            </ActionButton>
+          )}
+        </MemoryFilteredList>
+      </InteractiveList>
+    );
+  } else {
+    sidebar = (
+      <FillerText>
+        <EnvironmentHelpCopy />
+      </FillerText>
+    );
+  }
+
+  return (
+    <Branch>
+      <OutsetPanel {...EnvironmentColors}>
+        <ActionBox
+          title="Now Creating New Environment"
+          submitText="Click to Create"
+          {...EnvironmentColors}
+        >
+          <EnvironmentCreatableFields
+            environment={actionData?.faultyRequest}
+            lifecycle={lifecycle}
+            setLifecycle={setLifecycle}
+            templateEnvironment={templateEnvironment}
+            setTemplateEnvironment={setTemplateEnvironment}
+            setShowTemplateEnvironmentPicker={setShowTemplateEnvironmentPicker}
+            setShowDefaultClusterPicker={setShowDefaultClusterPicker}
+          />
+          <p className="py-4">{`Fields below this point can be edited later. ${
+            lifecycle === "dynamic"
+              ? "Your template will be used as the default values for these fields."
+              : ""
+          }`}</p>
+          <EnvironmentEditableFields
+            environment={actionData?.faultyRequest}
+            creating={true}
+            templateInUse={lifecycle === "dynamic"}
+            defaultCluster={defaultCluster}
+            setDefaultCluster={setDefaultCluster}
+            setShowDefaultClusterPicker={setShowDefaultClusterPicker}
+            setShowTemplateEnvironmentPicker={setShowTemplateEnvironmentPicker}
+            userEmail={userEmail}
+          />
+          {actionData && displayErrorInfo(actionData)}
+        </ActionBox>
+      </OutsetPanel>
+      <Leaf>
+        <InsetPanel>{sidebar}</InsetPanel>
+      </Leaf>
+    </Branch>
+  );
+};
+
+export default NewRoute;

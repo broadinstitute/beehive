@@ -28,7 +28,11 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
     >
       {children}
       <br />
-      <ActionButton borderClassName={borderClassName} type="submit">
+      <ActionButton
+        sizeClassName="w-full"
+        borderClassName={borderClassName}
+        type="submit"
+      >
         <h2 className="font-medium">{submitText}</h2>
       </ActionButton>
       <AuthenticityTokenInput />
