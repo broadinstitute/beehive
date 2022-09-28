@@ -333,6 +333,98 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       ? ""
       : "true"
   );
+  const extraFields = (
+    <>
+      <label>
+        <h2 className="font-light text-2xl">Default Namespace</h2>
+        <p>
+          The default Kubernetes namespace that charts will be deployed to. If
+          left empty, will default to the name of the environment. Existing
+          charts won't move if this is ever changed.{" "}
+        </p>
+        <TextField
+          name="defaultNamespace"
+          placeholder="(can be left blank)"
+          defaultValue={environment?.defaultNamespace}
+        />
+      </label>
+      <div>
+        <h2 className="font-light text-2xl">Require Suitability?</h2>
+        <p>
+          DevOps's systems can require production-suitability to <b>modify</b>{" "}
+          this environment (doesn't affect access).
+        </p>
+        <EnumSelect
+          name="requiresSuitability"
+          className="grid grid-cols-2"
+          fieldValue={requiresSuitability}
+          setFieldValue={(value) => setRequiresSuitability(value)}
+          enums={[
+            ["Yes", "true"],
+            ["No", "false"],
+          ]}
+          {...EnvironmentColors}
+        />
+      </div>
+      <label>
+        <h2 className="font-light text-2xl">Owner</h2>
+        <p>
+          The email of the user who is responsible for this environment. If left
+          empty, it will be set to your email.
+        </p>
+        <TextField
+          name="owner"
+          placeholder={
+            userEmail ||
+            (creating ? "(defaults to your email)" : "(can be left blank)")
+          }
+          defaultValue={environment?.owner}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl">Base Domain</h2>
+        <p>The base domain for charts deployed in this environment.</p>
+        <TextField
+          name="baseDomain"
+          placeholder={
+            templateInUse ? "(defaults to template's value)" : undefined
+          }
+          defaultValue={
+            environment?.baseDomain || templateInUse
+              ? undefined
+              : "bee.envs-terra.bio"
+          }
+        />
+      </label>
+      <div>
+        <h2 className="font-light text-2xl">Name Prefixes Domain?</h2>
+        <p>
+          When multiple environments exist on the same base domain, the name of
+          this environment can go in between the base domain and the subdomain
+          of each chart.
+        </p>
+        <EnumSelect
+          name="namePrefixesDomain"
+          className={templateInUse ? "grid grid-cols-3" : "grid grid-cols-2"}
+          fieldValue={namePrefixesDomain}
+          setFieldValue={(value) => setNamePrefixesDomain(value)}
+          enums={
+            templateInUse
+              ? [
+                  ["Yes", "true"],
+                  ["No", "false"],
+                  ["Use Template", ""],
+                ]
+              : [
+                  ["Yes", "true"],
+                  ["No", "false"],
+                ]
+          }
+          {...EnvironmentColors}
+        />
+      </div>
+    </>
+  );
   return (
     <div className="flex flex-col space-y-4">
       <label>
@@ -356,101 +448,16 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           }}
         />
       </label>
-      <details className="pt-2">
-        <summary className="cursor-pointer font-medium">Extra Fields</summary>
-        <div className="pl-6 border-l-2 border-zinc-400 mt-4 flex flex-col space-y-4">
-          <label>
-            <h2 className="font-light text-2xl">Default Namespace</h2>
-            <p>
-              The default Kubernetes namespace that charts will be deployed to.
-              If left empty, will default to the name of the environment.
-              Existing charts won't move if this is ever changed.{" "}
-            </p>
-            <TextField
-              name="defaultNamespace"
-              placeholder="(can be left blank)"
-              defaultValue={environment?.defaultNamespace}
-            />
-          </label>
-          <div>
-            <h2 className="font-light text-2xl">Require Suitability?</h2>
-            <p>
-              DevOps's systems can require production-suitability to{" "}
-              <b>modify</b> this environment (doesn't affect access).
-            </p>
-            <EnumSelect
-              name="requiresSuitability"
-              className="grid grid-cols-2"
-              fieldValue={requiresSuitability}
-              setFieldValue={(value) => setRequiresSuitability(value)}
-              enums={[
-                ["Yes", "true"],
-                ["No", "false"],
-              ]}
-              {...EnvironmentColors}
-            />
+      {creating ? (
+        <details className="pt-2">
+          <summary className="cursor-pointer font-medium">Extra Fields</summary>
+          <div className="pl-6 border-l-2 border-zinc-400 mt-4 flex flex-col space-y-4">
+            {extraFields}
           </div>
-          <label>
-            <h2 className="font-light text-2xl">Owner</h2>
-            <p>
-              The email of the user who is responsible for this environment. If
-              left empty, it will be set to your email.
-            </p>
-            <TextField
-              name="owner"
-              placeholder={
-                userEmail ||
-                (creating ? "(defaults to your email)" : "(can be left blank)")
-              }
-              defaultValue={environment?.owner}
-            />
-          </label>
-          <label>
-            <h2 className="font-light text-2xl">Base Domain</h2>
-            <p>The base domain for charts deployed in this environment.</p>
-            <TextField
-              name="baseDomain"
-              placeholder={
-                templateInUse ? "(defaults to template's value)" : undefined
-              }
-              defaultValue={
-                environment?.baseDomain || templateInUse
-                  ? undefined
-                  : "bee.envs-terra.bio"
-              }
-            />
-          </label>
-          <div>
-            <h2 className="font-light text-2xl">Name Prefixes Domain?</h2>
-            <p>
-              When multiple environments exist on the same base domain, the name
-              of this environment can go in between the base domain and the
-              subdomain of each chart.
-            </p>
-            <EnumSelect
-              name="namePrefixesDomain"
-              className={
-                templateInUse ? "grid grid-cols-3" : "grid grid-cols-2"
-              }
-              fieldValue={namePrefixesDomain}
-              setFieldValue={(value) => setNamePrefixesDomain(value)}
-              enums={
-                templateInUse
-                  ? [
-                      ["Yes", "true"],
-                      ["No", "false"],
-                      ["Use Template", ""],
-                    ]
-                  : [
-                      ["Yes", "true"],
-                      ["No", "false"],
-                    ]
-              }
-              {...EnvironmentColors}
-            />
-          </div>
-        </div>
-      </details>
+        </details>
+      ) : (
+        extraFields
+      )}
     </div>
   );
 };
