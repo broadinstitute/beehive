@@ -329,8 +329,6 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   const [namePrefixesDomain, setNamePrefixesDomain] = useState(
     environment?.namePrefixesDomain != null
       ? environment.namePrefixesDomain.toString()
-      : templateInUse
-      ? ""
       : "true"
   );
   const extraFields = (
@@ -405,21 +403,13 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         </p>
         <EnumSelect
           name="namePrefixesDomain"
-          className={templateInUse ? "grid grid-cols-3" : "grid grid-cols-2"}
+          className="grid grid-cols-2"
           fieldValue={namePrefixesDomain}
           setFieldValue={(value) => setNamePrefixesDomain(value)}
-          enums={
-            templateInUse
-              ? [
-                  ["Yes", "true"],
-                  ["No", "false"],
-                  ["Use Template", ""],
-                ]
-              : [
-                  ["Yes", "true"],
-                  ["No", "false"],
-                ]
-          }
+          enums={[
+            ["Yes", "true"],
+            ["No", "false"],
+          ]}
           {...EnvironmentColors}
         />
       </div>
