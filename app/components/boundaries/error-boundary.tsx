@@ -1,4 +1,5 @@
 export function errorBoundary({ error }: { error: Error }) {
+  console.log(error);
   return (
     <div className="bg-rose-50 border-rose-400 border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
       <p className="font-semibold">Beehive UI Error: {error.message}</p>

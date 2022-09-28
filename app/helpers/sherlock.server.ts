@@ -9,6 +9,19 @@ import https from "https";
 
 export const SherlockConfiguration = new Configuration({
   basePath: process.env.SHERLOCK_BASE_URL || "http://localhost:8080",
+  middleware: [
+    {
+      pre: async (context) => {
+        if (context.init.body) {
+          context.init.headers = {
+            "Content-Type": "application/json",
+            ...context.init.headers,
+          };
+        }
+        return context;
+      },
+    },
+  ],
   fetchApi: (
     input: RequestInfo | URL,
     init?: RequestInit | undefined
