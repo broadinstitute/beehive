@@ -16,7 +16,7 @@ const IndexRoute: React.FunctionComponent = () => (
         </p>
         <p>
           Head over to an Environment or Cluster to work with actual
-          configurable instances of Charts, called Chart Releases.
+          configurable instances of Charts, sometimes called Chart Releases.
         </p>
       </FillerText>
     </DoubleInsetPanel>
