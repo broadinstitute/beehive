@@ -388,9 +388,8 @@ export const EnvironmentEditableFields: React.FunctionComponent<
             templateInUse ? "(defaults to template's value)" : undefined
           }
           defaultValue={
-            environment?.baseDomain || templateInUse
-              ? undefined
-              : "bee.envs-terra.bio"
+            environment?.baseDomain ||
+            (templateInUse ? undefined : "bee.envs-terra.bio")
           }
         />
       </label>
