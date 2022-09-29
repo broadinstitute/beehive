@@ -208,11 +208,7 @@ const NewRoute: React.FunctionComponent = () => {
             setShowTemplateEnvironmentPicker={setShowTemplateEnvironmentPicker}
             setShowDefaultClusterPicker={setShowDefaultClusterPicker}
           />
-          <p className="py-4">{`Fields below this point can be edited later. ${
-            lifecycle === "dynamic"
-              ? "Your template will be used as the default values for these fields."
-              : ""
-          }`}</p>
+          <p className="py-4">Fields below this point can be edited later.</p>
           <EnvironmentEditableFields
             environment={actionData?.faultyRequest}
             creating={true}
