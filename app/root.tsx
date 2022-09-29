@@ -57,7 +57,7 @@ const App: FunctionComponent = () => {
           <Meta />
           <Links />
         </head>
-        <body className="bg-zinc-100 flex flex-col min-w-screen h-screen w-full -z-20">
+        <body className="bg-zinc-100 flex flex-col min-w-screen h-screen w-full">
           <Header />
           <Outlet />
           <LoadScroller />
