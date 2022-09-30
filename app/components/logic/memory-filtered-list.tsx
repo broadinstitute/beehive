@@ -33,7 +33,11 @@ export const MemoryFilteredList = <T extends unknown>({
     .filter((value) => value !== false);
   if (entryButtons.length > 0) {
     return <div className="flex flex-col space-y-4">{entryButtons}</div>;
-  } else if (filterText === "") {
+  } else if (
+    filterText === undefined ||
+    filter === undefined ||
+    filterText === ""
+  ) {
     return <div>{`(There's nothing here)`}</div>;
   } else {
     return <div>{`(There's nothing here matching ${filterText})`}</div>;
