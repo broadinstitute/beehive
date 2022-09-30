@@ -1,19 +1,17 @@
 import { ActionFunction, redirect } from "@remix-run/node";
 import {
-  NavLink,
-  useActionData,
-  useOutletContext,
   useParams,
+  NavLink,
+  useOutletContext,
+  useActionData,
 } from "@remix-run/react";
 import {
-  EnvironmentsApi,
-  V2controllersEnvironment,
+  ChartReleasesApi,
+  V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";
-import { catchBoundary } from "~/components/boundaries/catch-boundary";
-import { errorBoundary } from "~/components/boundaries/error-boundary";
-import { EnvironmentColors } from "~/components/content/environment/environment-colors";
-import { EnvironmentDeleteDescription } from "~/components/content/environment/environment-delete-description";
+import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
+import { ChartReleaseDeleteDescription } from "~/components/content/chart-release/chart-release-delete-description";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -30,7 +28,9 @@ export const handle = {
   breadcrumb: () => {
     const params = useParams();
     return (
-      <NavLink to={`/environments/${params.environmentName}/delete`}>
+      <NavLink
+        to={`/environments/${params.environmentName}/chart-releases/${params.chartReleaseName}/delete`}
+      >
         Delete
       </NavLink>
     );
@@ -41,34 +41,32 @@ export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
   await verifyAuthenticityToken(request, session);
 
-  return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsSelectorDelete(
-      { selector: params.environmentName || "" },
+  return new ChartReleasesApi(SherlockConfiguration)
+    .apiV2ChartReleasesSelectorDelete(
+      { selector: params.chartReleaseName || "" },
       forwardIAP(request)
     )
-    .then(() => redirect("/environments"), errorResponseReturner);
+    .then(
+      () => redirect(`/environments/${params.environmentName}/chart-releases`),
+      errorResponseReturner
+    );
 };
 
-export const CatchBoundary = catchBoundary;
-export const ErrorBoundary = errorBoundary;
-
 const DeleteRoute: React.FunctionComponent = () => {
-  const { environment } = useOutletContext<{
-    environment: V2controllersEnvironment;
+  const { chartRelease } = useOutletContext<{
+    chartRelease: V2controllersChartRelease;
   }>();
   const actionData = useActionData<DerivedErrorInfo>();
   return (
     <Leaf>
       <OutsetPanel>
         <ActionBox
-          title={`Now Deleting ${environment.name}`}
-          submitText={`Click to Delete`}
-          {...EnvironmentColors}
+          title={`Now Deleting ${chartRelease.name}`}
+          submitText="Click to Delete"
+          {...ChartReleaseColors}
         >
-          <EnvironmentDeleteDescription environment={environment} />
-          {environment.lifecycle !== "dynamic" && (
-            <DeletionGuard name={environment.name} />
-          )}
+          <ChartReleaseDeleteDescription />
+          <DeletionGuard name={chartRelease.name} />
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>

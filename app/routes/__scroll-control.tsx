@@ -62,18 +62,24 @@ export const LoadScroller: React.FunctionComponent = () => {
 };
 
 const ScrollControlRoute: React.FunctionComponent = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  useResizeObserver(ref, (entry) => {
-    if (entry.contentBoxSize?.length > 0) {
-      entry.target.scrollTo({
-        behavior: "smooth",
-        left: entry.contentBoxSize[0].inlineSize,
-      });
-    }
+  const scrollControlRef = useRef<HTMLDivElement>(null);
+  const scrolledRef = useRef<HTMLDivElement>(null);
+  useResizeObserver(scrolledRef, (entry) => {
+    console.log(entry.contentBoxSize[0].inlineSize);
+    scrollControlRef.current?.scrollTo({
+      behavior: "smooth",
+      left: entry.contentBoxSize[0].inlineSize,
+    });
   });
   return (
-    <div id={scrollDivID} className="h-full overflow-x-auto" ref={ref}>
-      <Outlet />
+    <div
+      id={scrollDivID}
+      className="h-full overflow-x-auto"
+      ref={scrollControlRef}
+    >
+      <div className="h-full w-min" ref={scrolledRef}>
+        <Outlet />
+      </div>
     </div>
   );
 };

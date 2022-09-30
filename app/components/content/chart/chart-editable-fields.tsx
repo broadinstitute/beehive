@@ -42,7 +42,7 @@ export const ChartEditableFields: React.FunctionComponent<
           defaultValue={chart?.appImageGitRepo}
           pattern="(.+/.+)?"
           placeholder="(can be left empty if there's no app)"
-          onBlur={(e) => {
+          onChange={(e) => {
             setShowMainBranchBox(e.currentTarget.value.length > 0);
           }}
         />

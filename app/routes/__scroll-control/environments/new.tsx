@@ -7,6 +7,7 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import {
+  ClustersApi,
   EnvironmentsApi,
   V2controllersCluster,
   V2controllersEnvironment,
@@ -21,6 +22,7 @@ import { EnvironmentCreatableFields } from "~/components/content/environment/env
 import { EnvironmentEditableFields } from "~/components/content/environment/environment-editable-fields";
 import { EnvironmentHelpCopy } from "~/components/content/environment/environment-help-copy";
 import ActionButton from "~/components/interactivity/action-button";
+import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
@@ -37,6 +39,7 @@ import { Branch } from "~/components/route-tree/branch";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
+  errorResponseThrower,
   formDataToObject,
   forwardIAP,
   makeErrorResponserReturner,
@@ -49,11 +52,14 @@ export const handle = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  return (
+  return Promise.all([
     // https://cloud.google.com/iap/docs/identity-howto#getting_the_users_identity_with_signed_headers
     request.headers.get("X-Goog-Authenticated-User-Email")?.split(":").at(-1) ||
-    null
-  );
+      null,
+    new ClustersApi(SherlockConfiguration)
+      .apiV2ClustersGet({}, forwardIAP(request))
+      .catch(errorResponseThrower),
+  ]);
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -84,8 +90,12 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const NewRoute: React.FunctionComponent = () => {
-  const userEmail = useLoaderData<string | null>();
+  const [userEmail, clusters] =
+    useLoaderData<[string | null, Array<V2controllersCluster>]>();
   const actionData = useActionData<ActionErrorInfo<V2controllersEnvironment>>();
+  const { environments } = useOutletContext<{
+    environments: Array<V2controllersEnvironment>;
+  }>();
 
   const [lifecycle, setLifecycle] = useState(
     actionData?.faultyRequest.lifecycle || "dynamic"
@@ -101,20 +111,6 @@ const NewRoute: React.FunctionComponent = () => {
   const [showDefaultClusterPicker, setShowDefaultClusterPicker] =
     useState(false);
 
-  // Just so happens that our parent route already loaded environments, so no need
-  // to do it again to get the list of possible templates
-  const { environments } = useOutletContext<{
-    environments: Array<V2controllersEnvironment>;
-  }>();
-
-  // Get the clusters manually for the list of possible default clusters
-  const defaultClusterFetcher = useFetcher();
-  useEffect(() => {
-    if (defaultClusterFetcher.type == "init") {
-      defaultClusterFetcher.load("/clusters");
-    }
-  }, [defaultClusterFetcher]);
-
   let sidebar: React.ReactElement<InteractiveListProps | FillerTextProps>;
   if (showTemplateEnvironmentPicker) {
     sidebar = (
@@ -122,6 +118,7 @@ const NewRoute: React.FunctionComponent = () => {
         title="Select Template Environment"
         {...EnvironmentColors}
       >
+        <ListFilterInfo filterText={templateEnvironment} />
         <MemoryFilteredList
           entries={environments.filter(
             (environment) => environment.lifecycle === "template"
@@ -151,11 +148,12 @@ const NewRoute: React.FunctionComponent = () => {
         </MemoryFilteredList>
       </InteractiveList>
     );
-  } else if (showDefaultClusterPicker && defaultClusterFetcher.type == "done") {
+  } else if (showDefaultClusterPicker) {
     sidebar = (
       <InteractiveList title="Select Default Cluster" {...ClusterColors}>
+        <ListFilterInfo filterText={defaultCluster} />
         <MemoryFilteredList
-          entries={defaultClusterFetcher.data as Array<V2controllersCluster>}
+          entries={clusters}
           filterText={defaultCluster}
           filter={(cluster, filterText) =>
             cluster.base?.includes(filterText) ||

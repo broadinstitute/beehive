@@ -3,12 +3,14 @@ import { NavButton } from "./nav-button";
 export interface ListControlsProps {
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
   borderClassName: string;
+  toCreateText?: string | undefined;
   toCreate?: string | undefined;
 }
 
 export const ListControls: React.FunctionComponent<ListControlsProps> = ({
   setFilterText,
   borderClassName,
+  toCreateText = "Create New",
   toCreate,
 }) => (
   <div className="w-[30vw] flex flex-row-reverse">
@@ -18,7 +20,7 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
         borderClassName={borderClassName}
         sizeClassName="w-[12vw] ml-4"
       >
-        <h2 className="font-medium">Create New</h2>
+        <h2 className="font-medium">{toCreateText}</h2>
       </NavButton>
     )}
     <input

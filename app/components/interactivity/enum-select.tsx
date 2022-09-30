@@ -25,7 +25,7 @@ export const EnumSelect: React.FunctionComponent<EnumSelectProps> = ({
           } ${
             valueToSet === fieldValue
               ? "bg-white border-4 font-medium"
-              : "bg-white/30 border-2 hover:border-4"
+              : "bg-white/50 border-2 hover:border-4"
           }`}
           key={valueToSet}
           onClickCapture={(e) => {

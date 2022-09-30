@@ -1,8 +1,15 @@
 import { LoaderFunction } from "@remix-run/node";
-import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
+import {
+  NavLink,
+  Outlet,
+  useLoaderData,
+  useOutletContext,
+  useParams,
+} from "@remix-run/react";
 import {
   ChartReleasesApi,
   V2controllersChartRelease,
+  V2controllersCluster,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
@@ -46,6 +53,7 @@ export const ErrorBoundary = errorBoundary;
 const ChartReleasesRoute: React.FunctionComponent = () => {
   const params = useParams();
   const chartReleases = useLoaderData<Array<V2controllersChartRelease>>();
+  const { cluster } = useOutletContext<{ cluster: V2controllersCluster }>();
   const [filterText, setFilterText] = useState("");
   return (
     <Branch>
@@ -56,7 +64,8 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
         >
           <ListControls
             setFilterText={setFilterText}
-            // toCreate="./new"
+            toCreate="./add"
+            toCreateText="Add New"
             {...ChartReleaseColors}
           />
           <MemoryFilteredList
@@ -82,7 +91,7 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
           </MemoryFilteredList>
         </InteractiveList>
       </InsetPanel>
-      <Outlet />
+      <Outlet context={{ cluster }} />
     </Branch>
   );
 };

@@ -3,8 +3,8 @@ import { NavButtonProps } from "../interactivity/nav-button";
 
 export interface MemoryFilteredListProps<T> {
   entries: Array<T>;
-  filterText: string;
-  filter: (entry: T, filterText: string) => Boolean | undefined;
+  filterText?: string | undefined;
+  filter?: ((entry: T, filterText: string) => Boolean | undefined) | undefined;
   children: (
     entry: T,
     index: number
@@ -20,7 +20,11 @@ export const MemoryFilteredList = <T extends unknown>({
   const entryButtons = entries
     .map(
       (entry, index) =>
-        (filterText === "" || filter(entry, filterText) || false) &&
+        (filterText === undefined ||
+          filter === undefined ||
+          filterText === "" ||
+          filter(entry, filterText) ||
+          false) &&
         children(entry, index)
     )
     // We actually *do* the filtering in the map so that the indexes stay constant--this avoids

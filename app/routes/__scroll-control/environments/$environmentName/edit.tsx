@@ -1,8 +1,9 @@
-import { ActionFunction, redirect } from "@remix-run/node";
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
   useActionData,
   useFetcher,
+  useLoaderData,
   useOutletContext,
   useParams,
 } from "@remix-run/react";
@@ -10,6 +11,7 @@ import {
   V2controllersEnvironment,
   EnvironmentsApi,
   V2controllersCluster,
+  ClustersApi,
 } from "@sherlock-js-client/sherlock";
 import { useState, useEffect } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
@@ -20,6 +22,7 @@ import { EnvironmentColors } from "~/components/content/environment/environment-
 import { EnvironmentEditableFields } from "~/components/content/environment/environment-editable-fields";
 import { EnvironmentHelpCopy } from "~/components/content/environment/environment-help-copy";
 import ActionButton from "~/components/interactivity/action-button";
+import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
@@ -40,6 +43,7 @@ import {
   SherlockConfiguration,
   forwardIAP,
   makeErrorResponserReturner,
+  errorResponseThrower,
 } from "~/helpers/sherlock.server";
 import { getSession } from "~/sessions.server";
 
@@ -52,6 +56,12 @@ export const handle = {
       </NavLink>
     );
   },
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  return new ClustersApi(SherlockConfiguration)
+    .apiV2ClustersGet({}, forwardIAP(request))
+    .catch(errorResponseThrower);
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -85,6 +95,7 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const EditRoute: React.FunctionComponent = () => {
+  const clusters = useLoaderData<Array<V2controllersCluster>>();
   const { environment } = useOutletContext<{
     environment: V2controllersEnvironment;
   }>();
@@ -96,20 +107,13 @@ const EditRoute: React.FunctionComponent = () => {
   const [showDefaultClusterPicker, setShowDefaultClusterPicker] =
     useState(false);
 
-  // Get the clusters manually for the list of possible default clusters
-  const defaultClusterFetcher = useFetcher();
-  useEffect(() => {
-    if (defaultClusterFetcher.type == "init") {
-      defaultClusterFetcher.load("/clusters");
-    }
-  }, [defaultClusterFetcher]);
-
   let sidebar: React.ReactElement<InteractiveListProps | FillerTextProps>;
-  if (showDefaultClusterPicker && defaultClusterFetcher.type == "done") {
+  if (showDefaultClusterPicker) {
     sidebar = (
       <InteractiveList title="Select Default Cluster" {...ClusterColors}>
+        <ListFilterInfo filterText={defaultCluster} />
         <MemoryFilteredList
-          entries={defaultClusterFetcher.data as Array<V2controllersCluster>}
+          entries={clusters}
           filterText={defaultCluster}
           filter={(cluster, filterText) =>
             cluster.base?.includes(filterText) ||
