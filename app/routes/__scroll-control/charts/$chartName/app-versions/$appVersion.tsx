@@ -6,10 +6,8 @@ import {
 } from "@sherlock-js-client/sherlock";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
-import {
-  AppVersionColors,
-  AppVersionDetails,
-} from "~/components/content/app-version";
+import { AppVersionColors } from "~/components/content/app-version/app-version-colors";
+import { AppVersionDetails } from "~/components/content/app-version/app-version-details";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Leaf } from "~/components/route-tree/leaf";

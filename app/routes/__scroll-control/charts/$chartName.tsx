@@ -4,7 +4,6 @@ import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Branch } from "~/components/route-tree/branch";
-import { ChartColors, ChartDetails } from "~/components/content/chart";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
@@ -12,6 +11,8 @@ import {
   forwardIAP,
   errorResponseThrower,
 } from "~/helpers/sherlock.server";
+import { ChartColors } from "~/components/content/chart/chart-colors";
+import { ChartDetails } from "~/components/content/chart/chart-details";
 
 export const handle = {
   breadcrumb: () => {

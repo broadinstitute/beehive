@@ -15,10 +15,6 @@ import { verifyAuthenticityToken } from "remix-utils";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
-import {
-  ChangesetApplyDetails,
-  ChangesetColors,
-} from "~/components/content/changeset";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
@@ -81,19 +77,7 @@ const ChangeVersionsChangesetIDRoute: React.FunctionComponent = () => {
   const changeset = useLoaderData<V2controllersChangeset>();
   return (
     <Leaf>
-      <OutsetPanel>
-        <ActionBox
-          title="Apply Version Changes"
-          submitText="Apply Version Changes"
-          {...ChangesetColors}
-        >
-          <ChangesetApplyDetails
-            chartRelease={chartRelease}
-            changeset={changeset}
-          />
-          {actionData && displayErrorInfo(actionData)}
-        </ActionBox>
-      </OutsetPanel>
+      <OutsetPanel></OutsetPanel>
     </Leaf>
   );
 };

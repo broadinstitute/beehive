@@ -1,9 +1,8 @@
-import { LoaderFunction, ActionFunction, redirect } from "@remix-run/node";
+import { ActionFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
   useActionData,
   useFetcher,
-  useLoaderData,
   useOutletContext,
   useParams,
 } from "@remix-run/react";
@@ -16,12 +15,10 @@ import { useState, useEffect } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
-import { ClusterColors } from "~/components/content/cluster";
-import {
-  EnvironmentColors,
-  EnvironmentEditableFields,
-  EnvironmentHelpCopy,
-} from "~/components/content/environment";
+import { ClusterColors } from "~/components/content/cluster/cluster-colors";
+import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import { EnvironmentEditableFields } from "~/components/content/environment/environment-editable-fields";
+import { EnvironmentHelpCopy } from "~/components/content/environment/environment-help-copy";
 import ActionButton from "~/components/interactivity/action-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -55,14 +52,6 @@ export const handle = {
       </NavLink>
     );
   },
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
-  return (
-    // https://cloud.google.com/iap/docs/identity-howto#getting_the_users_identity_with_signed_headers
-    request.headers.get("X-Goog-Authenticated-User-Email")?.split(":").at(-1) ||
-    null
-  );
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -99,7 +88,6 @@ const EditRoute: React.FunctionComponent = () => {
   const { environment } = useOutletContext<{
     environment: V2controllersEnvironment;
   }>();
-  const userEmail = useLoaderData<string | null>();
   const actionData = useActionData<ActionErrorInfo<V2controllersEnvironment>>();
 
   const [defaultCluster, setDefaultCluster] = useState(
@@ -168,7 +156,6 @@ const EditRoute: React.FunctionComponent = () => {
             defaultCluster={defaultCluster}
             setDefaultCluster={setDefaultCluster}
             setShowDefaultClusterPicker={setShowDefaultClusterPicker}
-            userEmail={userEmail}
           />
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>

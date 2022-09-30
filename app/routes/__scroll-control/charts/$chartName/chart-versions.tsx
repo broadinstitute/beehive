@@ -11,7 +11,6 @@ import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { ChartVersionColors } from "~/components/content/chart-version";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
@@ -19,6 +18,7 @@ import {
   forwardIAP,
   errorResponseThrower,
 } from "~/helpers/sherlock.server";
+import { ChartVersionColors } from "~/components/content/chart-version/chart-version-colors";
 
 export const handle = {
   breadcrumb: () => {

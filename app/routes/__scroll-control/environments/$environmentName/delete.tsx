@@ -12,10 +12,8 @@ import {
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
-import {
-  EnvironmentColors,
-  EnvironmentDeleteDescription,
-} from "~/components/content/environment";
+import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import { EnvironmentDeleteDescription } from "~/components/content/environment/environment-delete-description";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";

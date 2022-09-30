@@ -12,7 +12,6 @@ import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { EnvironmentColors } from "~/components/content/environment";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
@@ -20,6 +19,7 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
+import { EnvironmentColors } from "~/components/content/environment/environment-colors";
 
 export const handle = {
   breadcrumb: () => <NavLink to="/environments">Environments</NavLink>,

@@ -9,10 +9,8 @@ import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
-import {
-  ChartColors,
-  ChartDeleteDescription,
-} from "~/components/content/chart";
+import { ChartColors } from "~/components/content/chart/chart-colors";
+import { ChartDeleteDescription } from "~/components/content/chart/chart-delete-description";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";

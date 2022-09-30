@@ -7,13 +7,13 @@ import {
 import { useState } from "react";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
+import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { ClusterColors } from "~/components/content/cluster";
 import {
   errorResponseThrower,
   forwardIAP,
@@ -42,7 +42,7 @@ const ClustersRoute: React.FunctionComponent = () => {
         <InteractiveList title="Clusters" {...ClusterColors}>
           <ListControls
             setFilterText={setFilterText}
-            // toCreate="./new"
+            toCreate="./new"
             {...ClusterColors}
           />
           <MemoryFilteredList

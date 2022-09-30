@@ -15,13 +15,11 @@ import { useEffect, useState } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
-import { ClusterColors } from "~/components/content/cluster";
-import {
-  EnvironmentColors,
-  EnvironmentCreatableFields,
-  EnvironmentEditableFields,
-  EnvironmentHelpCopy,
-} from "~/components/content/environment";
+import { ClusterColors } from "~/components/content/cluster/cluster-colors";
+import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import { EnvironmentCreatableFields } from "~/components/content/environment/environment-creatable-fields";
+import { EnvironmentEditableFields } from "~/components/content/environment/environment-editable-fields";
+import { EnvironmentHelpCopy } from "~/components/content/environment/environment-help-copy";
 import ActionButton from "~/components/interactivity/action-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -47,7 +45,7 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => <NavLink to={`/environments/new`}>New</NavLink>,
+  breadcrumb: () => <NavLink to="/environments/new">New</NavLink>,
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -206,7 +204,7 @@ const NewRoute: React.FunctionComponent = () => {
             templateEnvironment={templateEnvironment}
             setTemplateEnvironment={setTemplateEnvironment}
             setShowTemplateEnvironmentPicker={setShowTemplateEnvironmentPicker}
-            setShowDefaultClusterPicker={setShowDefaultClusterPicker}
+            hideOtherPickers={() => setShowDefaultClusterPicker(false)}
           />
           <p className="py-4">Fields below this point can be edited later.</p>
           <EnvironmentEditableFields
@@ -216,7 +214,7 @@ const NewRoute: React.FunctionComponent = () => {
             defaultCluster={defaultCluster}
             setDefaultCluster={setDefaultCluster}
             setShowDefaultClusterPicker={setShowDefaultClusterPicker}
-            setShowTemplateEnvironmentPicker={setShowTemplateEnvironmentPicker}
+            hideOtherPickers={() => setShowTemplateEnvironmentPicker(false)}
             userEmail={userEmail}
           />
           {actionData && displayErrorInfo(actionData)}

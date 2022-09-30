@@ -1,4 +1,4 @@
-import { EnvironmentHelpCopy } from "~/components/content/environment";
+import { EnvironmentHelpCopy } from "~/components/content/environment/environment-help-copy";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { FillerText } from "~/components/panel-structures/filler-text";
 import { Leaf } from "~/components/route-tree/leaf";

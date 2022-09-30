@@ -7,10 +7,6 @@ import {
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Branch } from "~/components/route-tree/branch";
-import {
-  EnvironmentColors,
-  EnvironmentDetails,
-} from "~/components/content/environment";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
@@ -19,6 +15,8 @@ import {
   errorResponseThrower,
 } from "~/helpers/sherlock.server";
 import { toTitleCase } from "~/helpers/strings";
+import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import { EnvironmentDetails } from "~/components/content/environment/environment-details";
 
 export const handle = {
   breadcrumb: () => {

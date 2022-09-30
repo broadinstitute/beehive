@@ -6,10 +6,11 @@ import {
 } from "@sherlock-js-client/sherlock";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
+import { ClusterColors } from "~/components/content/cluster/cluster-colors";
+import { ClusterDetails } from "~/components/content/cluster/cluster-details";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Branch } from "~/components/route-tree/branch";
-import { ClusterColors, ClusterDetails } from "~/components/content/cluster";
 import {
   errorResponseThrower,
   forwardIAP,
@@ -48,7 +49,7 @@ const ClusterNameRoute: React.FunctionComponent = () => {
           <ClusterDetails
             cluster={cluster}
             toChartReleases="./chart-releases"
-            // toEdit="./edit"
+            toEdit="./edit"
           />
         </ItemDetails>
       </OutsetPanel>

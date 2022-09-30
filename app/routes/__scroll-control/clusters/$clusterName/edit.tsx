@@ -5,28 +5,31 @@ import {
   useOutletContext,
   useParams,
 } from "@remix-run/react";
-import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
+import {
+  V2controllersCluster,
+  ClustersApi,
+} from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
-import { ChartColors } from "~/components/content/chart/chart-colors";
-import { ChartEditableFields } from "~/components/content/chart/chart-editable-fields";
+import { ClusterColors } from "~/components/content/cluster/cluster-colors";
+import { ClusterEditableFields } from "~/components/content/cluster/cluster-editable-fields";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   formDataToObject,
+  SherlockConfiguration,
   forwardIAP,
   makeErrorResponserReturner,
-  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 import { getSession } from "~/sessions.server";
 
 export const handle = {
   breadcrumb: () => {
     const params = useParams();
-    return <NavLink to={`/charts/${params.chartName}/edit`}>Edit</NavLink>;
+    return <NavLink to={`/clusters/${params.clusterName}/edit`}>Edit</NavLink>;
   },
 };
 
@@ -35,25 +38,19 @@ export const action: ActionFunction = async ({ request, params }) => {
   await verifyAuthenticityToken(request, session);
 
   const formData = await request.formData();
-  const chartRequest: V2controllersChart = {
+  const clusterRequest: V2controllersCluster = {
     ...formDataToObject(formData, false),
-    chartExposesEndpoint: formData.get("chartExposesEndpoint") === "true",
-    defaultPort: ((defaultPort) =>
-      typeof defaultPort === "string" && defaultPort !== ""
-        ? parseInt(defaultPort)
-        : undefined)(formData.get("defaultPort")),
+    requiresSuitability: formData.get("requiresSuitability") === "true",
   };
-  return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsSelectorPatch(
-      {
-        selector: params.chartName || "",
-        chart: chartRequest,
-      },
+
+  return new ClustersApi(SherlockConfiguration)
+    .apiV2ClustersSelectorPatch(
+      { selector: params.clusterName || "", cluster: clusterRequest },
       forwardIAP(request)
     )
     .then(
-      (chart) => redirect(`/charts/${chart.name}`),
-      makeErrorResponserReturner(chartRequest)
+      (cluster) => redirect(`/clusters/${cluster.name}`),
+      makeErrorResponserReturner(clusterRequest)
     );
 };
 
@@ -61,17 +58,19 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const EditRoute: React.FunctionComponent = () => {
-  const { chart } = useOutletContext<{ chart: V2controllersChart }>();
-  const actionData = useActionData<ActionErrorInfo<V2controllersChart>>();
+  const { cluster } = useOutletContext<{ cluster: V2controllersCluster }>();
+  const actionData = useActionData<ActionErrorInfo<V2controllersCluster>>();
   return (
     <Leaf>
       <OutsetPanel>
         <ActionBox
-          title={`Now Editing ${chart.name}`}
+          title={`Now Editing ${cluster.name}`}
           submitText="Click to Save Edits"
-          {...ChartColors}
+          {...ClusterColors}
         >
-          <ChartEditableFields chart={actionData?.faultyRequest ?? chart} />
+          <ClusterEditableFields
+            cluster={actionData?.faultyRequest || cluster}
+          />
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>

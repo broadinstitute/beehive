@@ -5,14 +5,13 @@ import {
   MiscMyUserResponse,
   MiscVersionResponse,
 } from "@sherlock-js-client/sherlock";
-import { FunctionComponent, version } from "react";
+import { FunctionComponent } from "react";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   forwardIAP,
   SherlockConfiguration,
-  errorResponseThrower,
   errorResponseReturner,
 } from "~/helpers/sherlock.server";
 

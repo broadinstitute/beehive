@@ -1,13 +1,8 @@
 import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
-import { NavButton } from "~/components/interactivity/nav-button";
-import { VersionSummary } from "~/components/logic/version-summary";
-import { AppVersionSummary } from "./app-version";
-import { ChangesetColors } from "./changeset";
-import { ChartColors } from "./chart";
-import { ChartVersionSummary } from "./chart-version";
-import { MutateControls } from "./helpers";
-
-export const ChartReleaseColors = ChartColors;
+import { AppVersionSummary } from "../app-version/app-version-summary";
+import { ChartVersionSummary } from "../chart-version/chart-version-summary";
+import { MutateControls } from "../helpers";
+import { ChartReleaseColors } from "./chart-release-colors";
 
 export interface ChartReleaseDetailsProps {
   chartRelease: V2controllersChartRelease;
@@ -18,7 +13,7 @@ export interface ChartReleaseDetailsProps {
 
 export const ChartReleaseDetails: React.FunctionComponent<
   ChartReleaseDetailsProps
-> = ({ chartRelease, toChangesets, toEdit, toDelete }) => (
+> = ({ chartRelease, toEdit, toDelete }) => (
   <div className="flex flex-col space-y-10">
     {chartRelease.appVersionResolver &&
       chartRelease.appVersionResolver != "none" && (
