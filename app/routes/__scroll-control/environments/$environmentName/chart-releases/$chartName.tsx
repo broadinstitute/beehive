@@ -1,5 +1,11 @@
 import { LoaderFunction } from "@remix-run/node";
-import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
+import {
+  NavLink,
+  Outlet,
+  Params,
+  useLoaderData,
+  useParams,
+} from "@remix-run/react";
 import {
   ChartReleasesApi,
   V2controllersChartRelease,
@@ -18,22 +24,19 @@ import { ChartReleaseColors } from "~/components/content/chart-release/chart-rel
 import { ChartReleaseDetails } from "~/components/content/chart-release/chart-release-details";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink
-        to={`/clusters/${params.clusterName}/chart-releases/${params.chartReleaseName}`}
-      >
-        {params.chartReleaseName}
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink
+      to={`/environments/${params.environmentName}/chart-releases/${params.chartName}`}
+    >
+      {params.chartName}
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorGet(
-      { selector: params.chartReleaseName || "" },
+      { selector: `${params.environmentName}/${params.chartName}` },
       forwardIAP(request)
     )
     .catch(errorResponseThrower);
@@ -48,11 +51,12 @@ const ChartReleaseRoute: React.FunctionComponent = () => {
     <Branch>
       <OutsetPanel {...ChartReleaseColors}>
         <ItemDetails
-          subtitle={`Instance of ${chartRelease.chart} in the ${chartRelease.namespace} namespace`}
+          subtitle={`Instance of ${chartRelease.chart}`}
           title={chartRelease.name || ""}
         >
           <ChartReleaseDetails
             chartRelease={chartRelease}
+            toChangeVersions="./change-versions"
             toEdit="./edit"
             toDelete="./delete"
           />

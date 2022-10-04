@@ -1,5 +1,5 @@
 import { LoaderFunction } from "@remix-run/node";
-import { NavLink, useLoaderData, useParams } from "@remix-run/react";
+import { NavLink, Params, useLoaderData, useParams } from "@remix-run/react";
 import {
   AppVersionsApi,
   V2controllersAppVersion,
@@ -18,16 +18,13 @@ import {
 } from "~/helpers/sherlock.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink
-        to={`/charts/${params.chartName}/app-versions/${params.appVersion}`}
-      >
-        {params.appVersion}
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink
+      to={`/charts/${params.chartName}/app-versions/${params.appVersion}`}
+    >
+      {params.appVersion}
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

@@ -1,6 +1,7 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
+  Params,
   useActionData,
   useLoaderData,
   useOutletContext,
@@ -57,16 +58,13 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink
-        to={`/environments/${params.environmentName}/chart-releases/add/${params.chartName}`}
-      >
-        {params.chartName}
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink
+      to={`/environments/${params.environmentName}/chart-releases/add/${params.chartName}`}
+    >
+      {params.chartName}
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -113,9 +111,9 @@ export const action: ActionFunction = async ({ request, params }) => {
       forwardIAP(request)
     )
     .then(
-      (chartRelease) =>
+      () =>
         redirect(
-          `/environments/${params.environmentName}/chart-releases/${chartRelease.name}`
+          `/environments/${params.environmentName}/chart-releases/${params.chartName}`
         ),
       makeErrorResponserReturner(chartReleaseRequest)
     );
@@ -350,6 +348,7 @@ const NewRoute: React.FunctionComponent = () => {
             chartVersionExact={chartVersionExact}
             setChartVersionExact={setChartVersionExact}
             setShowChartVersionExactPicker={setShowChartVersionExactPicker}
+            defaultHelmfileRef={actionData?.faultyRequest.helmfileRef || "HEAD"}
             hideOtherPickers={() => {
               setShowAppVersionExactPicker(false);
               setShowAppVersionBranchPicker(false);

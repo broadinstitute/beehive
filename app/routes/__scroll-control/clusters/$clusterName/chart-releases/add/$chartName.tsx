@@ -5,6 +5,7 @@ import {
   useLoaderData,
   useOutletContext,
   useActionData,
+  Params,
 } from "@remix-run/react";
 import {
   ChartsApi,
@@ -57,16 +58,13 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink
-        to={`/clusters/${params.clusterName}/chart-releases/add/${params.chartName}`}
-      >
-        {params.chartName}
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink
+      to={`/clusters/${params.clusterName}/chart-releases/add/${params.chartName}`}
+    >
+      {params.chartName}
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -115,7 +113,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     .then(
       (chartRelease) =>
         redirect(
-          `/clusters/${params.environmentName}/chart-releases/${chartRelease.name}`
+          `/clusters/${params.clusterName}/chart-releases/${chartRelease.namespace}/${chartRelease.chart}`
         ),
       makeErrorResponserReturner(chartReleaseRequest)
     );
@@ -346,6 +344,7 @@ const NewRoute: React.FunctionComponent = () => {
             chartVersionExact={chartVersionExact}
             setChartVersionExact={setChartVersionExact}
             setShowChartVersionExactPicker={setShowChartVersionExactPicker}
+            defaultHelmfileRef={actionData?.faultyRequest.helmfileRef || "HEAD"}
             hideOtherPickers={() => {
               setShowAppVersionExactPicker(false);
               setShowAppVersionBranchPicker(false);

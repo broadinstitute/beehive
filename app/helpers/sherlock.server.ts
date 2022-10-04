@@ -60,7 +60,7 @@ export function forwardIAP(request: Request): RequestInit {
 // Intended for usage in LoaderFunctions, this function can `catch`
 // a promise and throw ResponseErrors to the nearest CatchBoundary
 // and everything else to the nearest ErrorBoundary.
-export function errorResponseThrower(reason: any): void {
+export function errorResponseThrower(reason: any): never {
   if (reason instanceof ResponseError) {
     throw reason.response;
   }

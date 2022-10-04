@@ -1,5 +1,11 @@
 import { LoaderFunction } from "@remix-run/node";
-import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
+import {
+  NavLink,
+  Outlet,
+  Params,
+  useLoaderData,
+  useParams,
+} from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
@@ -15,12 +21,9 @@ import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ChartDetails } from "~/components/content/chart/chart-details";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/charts/${params.chartName}`}>{params.chartName}</NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/charts/${params.chartName}`}>{params.chartName}</NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

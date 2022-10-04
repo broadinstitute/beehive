@@ -1,5 +1,11 @@
 import { LoaderFunction } from "@remix-run/node";
-import { useParams, NavLink, useLoaderData, Outlet } from "@remix-run/react";
+import {
+  useParams,
+  NavLink,
+  useLoaderData,
+  Outlet,
+  Params,
+} from "@remix-run/react";
 import {
   EnvironmentsApi,
   V2controllersEnvironment,
@@ -19,14 +25,11 @@ import { EnvironmentColors } from "~/components/content/environment/environment-
 import { EnvironmentDetails } from "~/components/content/environment/environment-details";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/environments/${params.environmentName}`}>
-        {params.environmentName}
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/environments/${params.environmentName}`}>
+      {params.environmentName}
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

@@ -6,14 +6,14 @@ import { ChartReleaseColors } from "./chart-release-colors";
 
 export interface ChartReleaseDetailsProps {
   chartRelease: V2controllersChartRelease;
-  toChangesets?: string | undefined;
+  toChangeVersions?: string | undefined;
   toEdit?: string | undefined;
   toDelete?: string | undefined;
 }
 
 export const ChartReleaseDetails: React.FunctionComponent<
   ChartReleaseDetailsProps
-> = ({ chartRelease, toEdit, toDelete }) => (
+> = ({ chartRelease, toChangeVersions, toEdit, toDelete }) => (
   <div className="flex flex-col space-y-10">
     {chartRelease.appVersionResolver &&
       chartRelease.appVersionResolver != "none" && (
@@ -38,6 +38,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
       <MutateControls
         name={chartRelease.name || ""}
         colors={ChartReleaseColors}
+        toChangeVersions={toChangeVersions}
         toEdit={toEdit}
         toDelete={toDelete}
       />

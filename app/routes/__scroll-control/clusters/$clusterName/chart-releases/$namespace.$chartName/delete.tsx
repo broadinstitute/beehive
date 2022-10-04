@@ -4,6 +4,7 @@ import {
   NavLink,
   useOutletContext,
   useActionData,
+  Params,
 } from "@remix-run/react";
 import {
   ChartReleasesApi,
@@ -25,16 +26,13 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink
-        to={`/clusters/${params.clusterName}/chart-releases/${params.chartReleaseName}/delete`}
-      >
-        Delete
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink
+      to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}/delete`}
+    >
+      Delete
+    </NavLink>
+  ),
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -43,7 +41,9 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorDelete(
-      { selector: params.chartReleaseName || "" },
+      {
+        selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
+      },
       forwardIAP(request)
     )
     .then(
@@ -65,7 +65,9 @@ const DeleteRoute: React.FunctionComponent = () => {
           submitText="Click to Delete"
           {...ChartReleaseColors}
         >
-          <ChartReleaseDeleteDescription />
+          <ChartReleaseDeleteDescription
+            environment={chartRelease.environmentInfo}
+          />
           <DeletionGuard name={chartRelease.name} />
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>

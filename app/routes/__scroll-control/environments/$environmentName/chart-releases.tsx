@@ -5,6 +5,7 @@ import {
   useLoaderData,
   Outlet,
   useOutletContext,
+  Params,
 } from "@remix-run/react";
 import {
   ChartReleasesApi,
@@ -28,14 +29,11 @@ import {
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/environments/${params.environmentName}/chart-releases`}>
-        Charts
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/environments/${params.environmentName}/chart-releases`}>
+      Charts
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -79,11 +77,15 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
           >
             {(chartRelease, index) => (
               <NavButton
-                to={`./${chartRelease.name}`}
+                to={`./${chartRelease.chart}`}
                 key={index.toString()}
                 {...ChartReleaseColors}
               >
-                <h2>{chartRelease.chart}</h2>
+                <h2 className="font-light">
+                  <span className="font-medium">{chartRelease.chart}</span>
+                  {chartRelease.appVersionResolver !== "none" &&
+                    ` (app @ ${chartRelease.appVersionExact})`}
+                </h2>
               </NavButton>
             )}
           </MemoryFilteredList>

@@ -1,6 +1,7 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
+  Params,
   useActionData,
   useFetcher,
   useLoaderData,
@@ -48,14 +49,9 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/environments/${params.environmentName}/edit`}>
-        Edit
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/environments/${params.environmentName}/edit`}>Edit</NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request }) => {

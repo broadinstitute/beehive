@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { EnumSelect } from "~/components/interactivity/enum-select";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { AppVersionColors } from "./app-version-colors";
 
 export interface AppVersionPickerProps {
+  isTargetingChangeset?: boolean | undefined;
   defaultAppVersionResolver: string;
   appVersionExact: string;
   setAppVersionExact: (value: string) => void;
@@ -18,6 +19,7 @@ export interface AppVersionPickerProps {
 export const AppVersionPicker: React.FunctionComponent<
   AppVersionPickerProps
 > = ({
+  isTargetingChangeset,
   defaultAppVersionResolver,
   appVersionExact,
   setAppVersionExact,
@@ -42,9 +44,11 @@ export const AppVersionPicker: React.FunctionComponent<
           Choose one option below, our systems will handle the others when you
           save. You can change versions later.
         </p>
-        <EnumSelect
-          name="appVersionResolver"
-          className="grid grid-cols-4"
+        <EnumInputSelect
+          name={
+            isTargetingChangeset ? "toAppVersionResolver" : "appVersionResolver"
+          }
+          className="grid grid-cols-4 mt-2"
           fieldValue={appVersionResolver}
           setFieldValue={(value) => {
             setShowAppVersionExactPicker(value === "exact");
@@ -69,7 +73,9 @@ export const AppVersionPicker: React.FunctionComponent<
                 won't be affected by refreshes.
               </p>
               <TextField
-                name="appVersionExact"
+                name={
+                  isTargetingChangeset ? "toAppVersionExact" : "appVersionExact"
+                }
                 value={appVersionExact}
                 onChange={(e) => setAppVersionExact(e.currentTarget.value)}
                 onFocus={() => {
@@ -95,7 +101,11 @@ export const AppVersionPicker: React.FunctionComponent<
                 can't find a match.
               </p>
               <TextField
-                name="appVersionCommit"
+                name={
+                  isTargetingChangeset
+                    ? "toAppVersionCommit"
+                    : "appVersionCommit"
+                }
                 value={appVersionCommit}
                 onChange={(e) => setAppVersionCommit(e.currentTarget.value)}
                 onFocus={() => {
@@ -118,7 +128,11 @@ export const AppVersionPicker: React.FunctionComponent<
               </p>
               <p>When you save you'll get an error if we can't find a match.</p>
               <TextField
-                name="appVersionBranch"
+                name={
+                  isTargetingChangeset
+                    ? "toAppVersionBranch"
+                    : "appVersionBranch"
+                }
                 value={appVersionBranch}
                 onChange={(e) => setAppVersionBranch(e.currentTarget.value)}
                 onFocus={() => {

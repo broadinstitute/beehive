@@ -65,7 +65,6 @@ const ScrollControlRoute: React.FunctionComponent = () => {
   const scrollControlRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef<HTMLDivElement>(null);
   useResizeObserver(scrolledRef, (entry) => {
-    console.log(entry.contentBoxSize[0].inlineSize);
     scrollControlRef.current?.scrollTo({
       behavior: "smooth",
       left: entry.contentBoxSize[0].inlineSize,
@@ -77,7 +76,7 @@ const ScrollControlRoute: React.FunctionComponent = () => {
       className="h-full overflow-x-auto"
       ref={scrollControlRef}
     >
-      <div className="h-full w-min" ref={scrolledRef}>
+      <div className="h-full min-w-min" ref={scrolledRef}>
         <Outlet />
       </div>
     </div>

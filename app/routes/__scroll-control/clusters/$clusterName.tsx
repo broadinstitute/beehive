@@ -1,5 +1,11 @@
 import { LoaderFunction } from "@remix-run/node";
-import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
+import {
+  NavLink,
+  Outlet,
+  Params,
+  useLoaderData,
+  useParams,
+} from "@remix-run/react";
 import {
   ClustersApi,
   V2controllersCluster,
@@ -18,14 +24,11 @@ import {
 } from "~/helpers/sherlock.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/clusters/${params.clusterName}`}>
-        {params.clusterName}
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/clusters/${params.clusterName}`}>
+      {params.clusterName}
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

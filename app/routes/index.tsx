@@ -47,7 +47,7 @@ const IndexRoute: React.FunctionComponent = () => (
         title="Environments"
         className="border-amber-300 h-52"
       >
-        Browse live environments or BEE templates and instances
+        Browse live environments, BEEs, and BEE templates
       </IndexNavButton>
       <IndexNavButton
         to="/charts"

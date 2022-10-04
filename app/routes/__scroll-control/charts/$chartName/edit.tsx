@@ -24,8 +24,7 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
+  breadcrumb: (params: Readonly<Params<string>>) => {
     return <NavLink to={`/charts/${params.chartName}/edit`}>Edit</NavLink>;
   },
 };

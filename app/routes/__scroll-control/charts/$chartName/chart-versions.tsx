@@ -1,5 +1,11 @@
 import { LoaderFunction } from "@remix-run/node";
-import { useParams, NavLink, useLoaderData, Outlet } from "@remix-run/react";
+import {
+  useParams,
+  NavLink,
+  useLoaderData,
+  Outlet,
+  Params,
+} from "@remix-run/react";
 import {
   ChartVersionsApi,
   V2controllersChartVersion,
@@ -21,14 +27,11 @@ import {
 import { ChartVersionColors } from "~/components/content/chart-version/chart-version-colors";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/charts/${params.chartName}/chart-versions`}>
-        Chart Versions
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/charts/${params.chartName}/chart-versions`}>
+      Chart Versions
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

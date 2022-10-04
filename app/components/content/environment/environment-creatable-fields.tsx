@@ -1,6 +1,6 @@
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { EnumSelect } from "~/components/interactivity/enum-select";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { EnvironmentColors } from "./environment-colors";
 
@@ -35,9 +35,9 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
     <div className="flex flex-col space-y-4">
       <div>
         <h2 className="font-light text-2xl">Type</h2>
-        <EnumSelect
+        <EnumInputSelect
           name="lifecycle"
-          className="grid grid-cols-3"
+          className="grid grid-cols-3 mt-2"
           fieldValue={lifecycle}
           setFieldValue={(value) => {
             if (value === "dynamic") {
@@ -121,9 +121,9 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             When this is enabled, creating this new BEE will also immediately
             create instances of all the charts that the template has.
           </p>
-          <EnumSelect
+          <EnumInputSelect
             name="chartReleasesFromTemplate"
-            className="grid grid-cols-2"
+            className="grid grid-cols-2 mt-2"
             fieldValue={chartReleasesFromTemplate}
             setFieldValue={setChartReleasesFromTemplate}
             enums={[

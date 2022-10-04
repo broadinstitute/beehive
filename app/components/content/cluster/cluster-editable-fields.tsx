@@ -1,6 +1,6 @@
 import { V2controllersCluster } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { EnumSelect } from "~/components/interactivity/enum-select";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { ClusterColors } from "./cluster-colors";
 
@@ -68,9 +68,9 @@ export const ClusterEditableFields: React.FunctionComponent<
           DevOps's systems can require production-suitability to <b>modify</b>{" "}
           this cluster (doesn't affect access or cloud provider permissions).
         </p>
-        <EnumSelect
+        <EnumInputSelect
           name="requiresSuitability"
-          className="grid grid-cols-2"
+          className="grid grid-cols-2 mt-2"
           fieldValue={requiresSuitability}
           setFieldValue={setRequiresSuitability}
           enums={[

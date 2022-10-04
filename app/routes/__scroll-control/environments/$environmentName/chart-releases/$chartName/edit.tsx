@@ -1,6 +1,7 @@
 import { ActionFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
+  Params,
   useActionData,
   useOutletContext,
   useParams,
@@ -27,16 +28,13 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink
-        to={`/environments/${params.environmentName}/chart-releases/${params.chartReleaseName}/edit`}
-      >
-        Edit
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink
+      to={`/environments/${params.environmentName}/chart-releases/${params.chartName}/edit`}
+    >
+      Edit
+    </NavLink>
+  ),
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -55,15 +53,15 @@ export const action: ActionFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorPatch(
       {
-        selector: params.chartReleaseName || "",
+        selector: `${params.environmentName}/${params.chartName}`,
         chartRelease: chartReleaseRequest,
       },
       forwardIAP(request)
     )
     .then(
-      (chartRelease) =>
+      () =>
         redirect(
-          `/environments/${params.environmentName}/chart-releases/${chartRelease.name}`
+          `/environments/${params.environmentName}/chart-releases/${params.chartName}`
         ),
       makeErrorResponserReturner(chartReleaseRequest)
     );

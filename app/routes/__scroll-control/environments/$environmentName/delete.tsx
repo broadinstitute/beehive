@@ -1,6 +1,7 @@
 import { ActionFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
+  Params,
   useActionData,
   useOutletContext,
   useParams,
@@ -27,14 +28,11 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/environments/${params.environmentName}/delete`}>
-        Delete
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/environments/${params.environmentName}/delete`}>
+      Delete
+    </NavLink>
+  ),
 };
 
 export const action: ActionFunction = async ({ request, params }) => {

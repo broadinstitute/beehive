@@ -5,6 +5,7 @@ import {
   useOutletContext,
   Outlet,
   useLoaderData,
+  Params,
 } from "@remix-run/react";
 import {
   ChartsApi,
@@ -32,14 +33,11 @@ import {
 } from "~/helpers/sherlock.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/clusters/${params.clusterName}/chart-releases/add`}>
-        Add
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/clusters/${params.clusterName}/chart-releases/add`}>
+      Add
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request }) => {

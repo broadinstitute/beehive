@@ -1,23 +1,27 @@
 import { useState } from "react";
-import { EnumSelect } from "~/components/interactivity/enum-select";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { ChartVersionColors } from "./chart-version-colors";
 
 export interface ChartVersionPickerProps {
+  isTargetingChangeset?: boolean | undefined;
   defaultChartVersionResolver: string;
   chartVersionExact: string;
   setChartVersionExact: (value: string) => void;
   setShowChartVersionExactPicker: (value: boolean) => void;
+  defaultHelmfileRef: string;
   hideOtherPickers?: () => void;
 }
 
 export const ChartVersionPicker: React.FunctionComponent<
   ChartVersionPickerProps
 > = ({
+  isTargetingChangeset,
   defaultChartVersionResolver,
   chartVersionExact,
   setChartVersionExact,
   setShowChartVersionExactPicker,
+  defaultHelmfileRef,
   hideOtherPickers = () => {},
 }) => {
   const [chartVersionResolver, setChartVersionResolver] = useState(
@@ -28,9 +32,13 @@ export const ChartVersionPicker: React.FunctionComponent<
       <div>
         <h2 className="font-light text-2xl">Specify Chart Version</h2>
         <p>You can change versions later.</p>
-        <EnumSelect
-          name="chartVersionResolver"
-          className="grid grid-cols-2"
+        <EnumInputSelect
+          name={
+            isTargetingChangeset
+              ? "toChartVersionResolver"
+              : "chartVersionResolver"
+          }
+          className="grid grid-cols-2 mt-2"
           fieldValue={chartVersionResolver}
           setFieldValue={(value) => {
             setShowChartVersionExactPicker(value === "exact");
@@ -44,7 +52,7 @@ export const ChartVersionPicker: React.FunctionComponent<
           {...ChartVersionColors}
         />
       </div>
-      <div className="pl-6 border-l-2 border-zinc-400 mt-4">
+      <div className="pl-6 border-l-2 border-zinc-400 mt-4 flex flex-col space-y-4">
         {chartVersionResolver === "exact" && (
           <label>
             <h2 className="font-light text-2xl">Set Exact Version</h2>
@@ -53,7 +61,11 @@ export const ChartVersionPicker: React.FunctionComponent<
               won't be affected by refreshes.
             </p>
             <TextField
-              name="chartVersionExact"
+              name={
+                isTargetingChangeset
+                  ? "toChartVersionExact"
+                  : "chartVersionExact"
+              }
               value={chartVersionExact}
               onChange={(e) => setChartVersionExact(e.currentTarget.value)}
               onFocus={() => {
@@ -71,6 +83,26 @@ export const ChartVersionPicker: React.FunctionComponent<
             automatically upon each refresh.
           </p>
         )}
+        <label>
+          <label className="font-light text-2xl">Helmfile Ref</label>
+          <p>
+            This is the Git reference in{" "}
+            <a
+              href="https://github.com/broadinstitute/terra-helmfile"
+              target="_blank"
+              className="underline decoration-blue-500"
+            >
+              terra-helmfile
+            </a>{" "}
+            to use for configuration values.
+          </p>
+          <TextField
+            name={isTargetingChangeset ? "toHelmfileRef" : "helmfileRef"}
+            defaultValue={defaultHelmfileRef}
+            required
+            placeholder="(required)"
+          />
+        </label>
       </div>
     </div>
   );

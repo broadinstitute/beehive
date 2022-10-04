@@ -1,6 +1,6 @@
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { EnumSelect } from "~/components/interactivity/enum-select";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { ChartColors } from "./chart-colors";
 
@@ -73,9 +73,9 @@ export const ChartEditableFields: React.FunctionComponent<
           If this chart hosts some sort of web address, that information can be
           provided here to help automatically generate links.
         </p>
-        <EnumSelect
+        <EnumInputSelect
           name="chartExposesEndpoint"
-          className="grid grid-cols-2"
+          className="grid grid-cols-2 mt-2"
           fieldValue={chartExposesEndpoint}
           setFieldValue={setChartExposesEndpoint}
           enums={[

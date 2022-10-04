@@ -1,6 +1,6 @@
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { EnumSelect } from "~/components/interactivity/enum-select";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { EnvironmentColors } from "./environment-colors";
 
@@ -65,9 +65,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           DevOps's systems can require production-suitability to <b>modify</b>{" "}
           this environment (doesn't affect access).
         </p>
-        <EnumSelect
+        <EnumInputSelect
           name="requiresSuitability"
-          className="grid grid-cols-2"
+          className="grid grid-cols-2 mt-2"
           fieldValue={requiresSuitability}
           setFieldValue={setRequiresSuitability}
           enums={[
@@ -80,8 +80,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       <label>
         <h2 className="font-light text-2xl">Owner</h2>
         <p>
-          The email of the user who is responsible for this environment. If left
-          empty, it will be set to your email.
+          {`The email of the user who is responsible for this environment. ${
+            creating ? "If left empty, it will be set to your email." : ""
+          }`}
         </p>
         <TextField
           name="owner"
@@ -113,9 +114,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           this environment can go in between the base domain and the subdomain
           of each chart.
         </p>
-        <EnumSelect
+        <EnumInputSelect
           name="namePrefixesDomain"
-          className="grid grid-cols-2"
+          className="grid grid-cols-2 mt-2"
           fieldValue={namePrefixesDomain}
           setFieldValue={(value) => setNamePrefixesDomain(value)}
           enums={[

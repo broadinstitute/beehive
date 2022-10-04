@@ -2,6 +2,7 @@ import { LoaderFunction } from "@remix-run/node";
 import {
   NavLink,
   Outlet,
+  Params,
   useLoaderData,
   useOutletContext,
   useParams,
@@ -28,14 +29,11 @@ import {
 } from "~/helpers/sherlock.server";
 
 export const handle = {
-  breadcrumb: () => {
-    const params = useParams();
-    return (
-      <NavLink to={`/clusters/${params.clusterName}/chart-releases`}>
-        Charts
-      </NavLink>
-    );
-  },
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/clusters/${params.clusterName}/chart-releases`}>
+      Charts
+    </NavLink>
+  ),
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -44,7 +42,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       { cluster: params.clusterName || "" },
       forwardIAP(request)
     )
-    .catch(errorResponseThrower);
+    .then(
+      // Sherlock's API doesn't really have a great mechanism for
+      // "chart releases that aren't in a template environment" at
+      // the moment so we just loop over it here.
+      (chartReleases) =>
+        Array.from(
+          chartReleases.filter(
+            (chartRelease) =>
+              chartRelease.environmentInfo?.lifecycle !== "template"
+          )
+        ),
+      errorResponseThrower
+    );
 };
 
 export const CatchBoundary = catchBoundary;
@@ -78,7 +88,7 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
           >
             {(chartRelease, index) => (
               <NavButton
-                to={`./${chartRelease.name}`}
+                to={`./${chartRelease.namespace}/${chartRelease.chart}`}
                 key={index.toString()}
                 {...ChartReleaseColors}
               >

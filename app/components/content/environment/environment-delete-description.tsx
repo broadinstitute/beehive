@@ -8,9 +8,9 @@ export const EnvironmentDeleteDescription: React.FunctionComponent<
   EnvironmentDeleteDescriptionProps
 > = ({ environment }) => (
   <div className="flex flex-col space-y-4">
-    <h3 className="text-2xl font-light">
+    <h2 className="text-2xl font-light">
       Are you sure you want to delete this {environment.lifecycle} environment?
-    </h3>
+    </h2>
     {environment.lifecycle === "dynamic" && (
       <p>
         Since this environment is dynamic, that will cause it to become
