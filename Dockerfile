@@ -15,7 +15,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules /app/node_modules
 
 ADD package.json package-lock.json .npmrc ./
-RUN npm prune --production
+RUN npm prune --omit=dev
 
 # Build with all dependencies
 FROM node:${NODE_VERSION}-${DISTRO} as build
