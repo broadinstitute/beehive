@@ -537,8 +537,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                         {`${changeset.chartReleaseInfo?.chart} chart @ ${changeset.toChartVersionExact}`}
                       </h2>
                       <div>
-                        {(chartVersionChanged &&
-                          changeset.chartReleaseInfo?.chartInfo?.chartRepo ===
+                        {chartVersionChanged &&
+                          ((changeset.chartReleaseInfo?.chartInfo?.chartRepo ===
                             "terra-helm" && (
                             <p>
                               {`From tag ${changeset.fromChartVersionExact} to ${changeset.toChartVersionExact} (`}
@@ -552,11 +552,11 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               {")"}
                             </p>
                           )) || (
-                          <p>
-                            This chart isn't directly managed by DevOps, so our
-                            ability to show changes is limited.
-                          </p>
-                        )}
+                            <p>
+                              This chart isn't directly managed by DevOps, so
+                              our ability to show changes is limited.
+                            </p>
+                          ))}
                         {chartVersionChanged && (
                           <ul className="list-disc pl-5">
                             {changeset.newChartVersions?.map(
