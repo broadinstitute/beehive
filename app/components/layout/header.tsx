@@ -1,6 +1,6 @@
 import { NavLink, useMatches, useParams } from "@remix-run/react";
 import { FunctionComponent } from "react";
-import Favicon from "../assets/favicon";
+import { BeehiveIcon } from "../assets/beehive-icon";
 
 export const Header: FunctionComponent = () => {
   const matches = useMatches();
@@ -8,7 +8,7 @@ export const Header: FunctionComponent = () => {
   return (
     <div className="h-14 bg-white flex space-x-2 shadow-md shrink-0 z-20">
       <NavLink to="/" className="flex items-center space-x-2 ml-2">
-        <Favicon className="h-9 w-9" />
+        <BeehiveIcon className="h-9 w-9" />
         <span className="font-medium text-3xl pb-1 px-1">Beehive</span>
       </NavLink>
       {matches

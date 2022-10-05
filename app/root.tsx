@@ -13,7 +13,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import styles from "./tailwind.css";
+import tailwindStyles from "./styles/tailwind.css";
+import beehiveLoadingStyles from "./styles/beehive-loading.css";
 import favicon from "./assets/favicon.svg";
 import { FunctionComponent } from "react";
 import { commitSession, getSession } from "./sessions.server";
@@ -32,7 +33,8 @@ export const meta: MetaFunction = () => ({
 });
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
+  { rel: "stylesheet", href: tailwindStyles },
+  { rel: "stylesheet", href: beehiveLoadingStyles },
   { rel: "icon", href: favicon, type: "image/svg+xml" },
 ];
 

@@ -1,0 +1,48 @@
+@keyframes beehive-loading-blinking {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.beehive-loading {
+  animation: 0.5s ease beehive-loading-blinking infinite;
+}
+
+.beehive-loading:nth-child(2) {
+  animation-delay: 0.04s;
+}
+
+.beehive-loading:nth-child(3) {
+  animation-delay: 0.08s;
+}
+
+.beehive-loading:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+@media (prefers-reduced-motion) {
+  .beehive-loading {
+    animation-duration: 4s;
+  }
+
+  .beehive-loading:nth-child(2) {
+    animation-delay: 0.5s;
+  }
+
+  .beehive-loading:nth-child(3) {
+    animation-delay: 1s;
+  }
+
+  .beehive-loading:nth-child(4) {
+    animation-delay: 1.5s;
+  }
+}

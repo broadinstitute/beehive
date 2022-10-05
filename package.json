@@ -8,7 +8,7 @@
     "dev": "run-p \"dev:*\"",
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "remix dev",
-    "generate:css": "npx tailwindcss -o ./app/tailwind.css",
+    "generate:css": "npx tailwindcss -o ./app/styles/tailwind.css",
     "start": "remix-serve build",
     "typecheck": "npx tsc -b",
     "prepare": "husky install"

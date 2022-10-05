@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, useTransition } from "@remix-run/react";
 import { AuthenticityTokenInput } from "remix-utils";
 import ActionButton from "../interactivity/action-button";
 
@@ -16,26 +16,31 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
   submitText,
   borderClassName,
   backgroundClassName,
-}) => (
-  <div className="flex flex-col items-center space-y-4 pb-4">
-    <div className="w-[30vw] p-3 pt-4">
-      <h1 className="text-3xl font-medium">{title}</h1>
-    </div>
-    <Form
-      reloadDocument
-      method="post"
-      className={`w-[30vw] flex flex-col space-y-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
-    >
-      {children}
-      <br />
-      <ActionButton
-        sizeClassName="w-full"
-        borderClassName={borderClassName}
-        type="submit"
+}) => {
+  const transition = useTransition();
+  return (
+    <div className="flex flex-col items-center space-y-4 pb-4">
+      <div className="w-[30vw] p-3 pt-4">
+        <h1 className="text-3xl font-medium">{title}</h1>
+      </div>
+      <Form
+        method="post"
+        className={`w-[30vw] flex flex-col space-y-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
       >
-        <h2 className="font-medium">{submitText}</h2>
-      </ActionButton>
-      <AuthenticityTokenInput />
-    </Form>
-  </div>
-);
+        <fieldset disabled={transition.state === "submitting"}>
+          {children}
+        </fieldset>
+        <br />
+        <ActionButton
+          sizeClassName="w-full"
+          borderClassName={borderClassName}
+          type="submit"
+          isLoading={transition.state === "submitting"}
+        >
+          <h2 className="font-medium">{submitText}</h2>
+        </ActionButton>
+        <AuthenticityTokenInput />
+      </Form>
+    </div>
+  );
+};
