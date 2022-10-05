@@ -38,7 +38,7 @@ export function getContentSecurityPolicy(nonce?: string | undefined): string {
     "frame-ancestors 'none'; " +
     "form-action 'self'; " +
     "base-uri 'self'; " +
-    "manifest-src 'self';" +
+    "manifest-src 'self'; " +
     "upgrade-insecure-requests; " +
     "block-all-mixed-content "
   );
