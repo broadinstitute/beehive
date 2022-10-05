@@ -2,8 +2,6 @@ import { Outlet } from "@remix-run/react";
 import { useRef } from "react";
 import useResizeObserver from "@react-hook/resize-observer";
 
-const scrollDivID: string = "scroll-control";
-
 /*
 LoadScroller is some magic informed by the internals of Remix and React.
 
@@ -45,21 +43,31 @@ Here's the overview:
    is pretty deep into Remix-land while this here is just an odd React
    component.
 */
-export const LoadScroller: React.FunctionComponent = () => {
-  return (
-    <script
-      suppressHydrationWarning={true}
-      dangerouslySetInnerHTML={{
-        __html: `
-        var scrollControlDiv = document.getElementById("${scrollDivID}");
-        if (scrollControlDiv !== null) {
-          scrollControlDiv.scrollLeft = scrollControlDiv.scrollWidth;
-        }
-        `,
-      }}
-    ></script>
-  );
-};
+
+const scrollDivID: string = "scroll-control";
+
+const scrollToRightFunctionText = ((scrollDivID: string): void => {
+  var scrollControlDiv = document.getElementById(scrollDivID);
+  if (scrollControlDiv !== null) {
+    scrollControlDiv.scrollLeft = scrollControlDiv.scrollWidth;
+  }
+}).toString();
+
+export interface LoadScrollerProps {
+  nonce?: string | undefined;
+}
+
+export const LoadScroller: React.FunctionComponent<LoadScrollerProps> = ({
+  nonce,
+}) => (
+  <script
+    nonce={nonce}
+    suppressHydrationWarning={true}
+    dangerouslySetInnerHTML={{
+      __html: `(${scrollToRightFunctionText})("${scrollDivID}")`,
+    }}
+  ></script>
+);
 
 const ScrollControlRoute: React.FunctionComponent = () => {
   const scrollControlRef = useRef<HTMLDivElement>(null);

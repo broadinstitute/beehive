@@ -23,6 +23,7 @@ import {
 } from "remix-utils";
 import { Header } from "./components/layout/header";
 import { LoadScroller } from "./routes/__scroll-control";
+import { generateNonce } from "./csp.server";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -35,21 +36,30 @@ export const links: LinksFunction = () => [
   { rel: "icon", href: favicon, type: "image/svg+xml" },
 ];
 
-interface RootLoaderData {
+export interface RootLoaderData {
   csrf: string;
+  cspScriptNonce: string;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  const token = createAuthenticityToken(session);
   return json<RootLoaderData>(
-    { csrf: token },
+    { csrf: createAuthenticityToken(session), cspScriptNonce: generateNonce() },
     { headers: { "Set-Cookie": await commitSession(session) } }
   );
 };
 
+export const unstable_shouldReload = () => false;
+
 const App: FunctionComponent = () => {
-  const { csrf } = useLoaderData<RootLoaderData>();
+  let { csrf, cspScriptNonce } = useLoaderData<RootLoaderData>();
+  if (typeof window !== "undefined") {
+    // https://html.spec.whatwg.org/multipage/urls-and-fetching.html#nonce-attributes
+    // When this code runs in the browser, we want the nonce to be empty because
+    // that's what it will be regardless of what we do. If we have it anything other
+    // than an empty string, React's dev mode will warn us about a
+    cspScriptNonce = "";
+  }
   return (
     <AuthenticityTokenProvider token={csrf}>
       <html lang="en">
@@ -60,10 +70,10 @@ const App: FunctionComponent = () => {
         <body className="bg-zinc-100 flex flex-col min-w-screen h-screen w-full">
           <Header />
           <Outlet />
-          <LoadScroller />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
+          <LoadScroller nonce={cspScriptNonce} />
+          <ScrollRestoration nonce={cspScriptNonce} />
+          <Scripts nonce={cspScriptNonce} />
+          <LiveReload nonce={cspScriptNonce} />
         </body>
       </html>
     </AuthenticityTokenProvider>

@@ -3,6 +3,7 @@ import type { EntryContext } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { renderToPipeableStream } from "react-dom/server";
+import { getContentSecurityPolicy } from "./csp.server";
 
 const ABORT_DELAY = 5000;
 
@@ -20,6 +21,18 @@ export default function handleRequest(
       {
         onShellReady: () => {
           let body = new PassThrough();
+
+          const nonce: string | undefined =
+            remixContext.appState.catchBoundaryRouteId === "root" &&
+            remixContext.appState.error
+              ? // Root boundaries can't have the nonce because they don't
+                // call the loader
+                undefined
+              : remixContext.routeData.root?.cspScriptNonce;
+          responseHeaders.set(
+            "Content-Security-Policy",
+            getContentSecurityPolicy(nonce)
+          );
 
           responseHeaders.set("Content-Type", "text/html");
 
