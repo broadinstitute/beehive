@@ -109,11 +109,14 @@ export const action: ActionFunction = async ({ request, params }) => {
   };
 
   return new ChangesetsApi(SherlockConfiguration)
-    .apiV2ProceduresChangesetsPlanPost({
-      changesetPlanRequest: {
-        chartReleases: [changesetRequest],
+    .apiV2ProceduresChangesetsPlanPost(
+      {
+        changesetPlanRequest: {
+          chartReleases: [changesetRequest],
+        },
       },
-    })
+      forwardIAP(request)
+    )
     .then((changesets) => {
       return changesets.length > 0
         ? redirect(
