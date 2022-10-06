@@ -5,7 +5,6 @@ import {
   useActionData,
   useLoaderData,
   useOutletContext,
-  useParams,
 } from "@remix-run/react";
 import {
   AppVersionsApi,

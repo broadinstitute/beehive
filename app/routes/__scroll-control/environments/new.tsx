@@ -2,7 +2,6 @@ import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
   useActionData,
-  useFetcher,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
@@ -12,7 +11,7 @@ import {
   V2controllersCluster,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";

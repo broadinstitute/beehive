@@ -1,7 +1,7 @@
 export interface PrettyPrintVersionDescriptionProps {
   description: string;
-  repo?: string | undefined;
-  jira?: string | undefined;
+  repo?: string;
+  jira?: string;
 }
 
 export const PrettyPrintVersionDescription: React.FunctionComponent<

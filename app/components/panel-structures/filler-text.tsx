@@ -1,8 +1,8 @@
 import React from "react";
 
 export interface FillerTextProps {
-  children?: React.ReactNode | undefined;
-  title?: string | undefined;
+  children?: React.ReactNode;
+  title?: string;
 }
 
 export const FillerText: React.FunctionComponent<FillerTextProps> = ({

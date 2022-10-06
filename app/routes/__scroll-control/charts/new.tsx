@@ -1,5 +1,5 @@
 import { ActionFunction, redirect } from "@remix-run/node";
-import { NavLink, Outlet, useActionData, useParams } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";

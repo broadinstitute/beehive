@@ -2,12 +2,12 @@ import { NavButton } from "~/components/interactivity/nav-button";
 import { AppVersionColors } from "./app-version-colors";
 
 export interface AppVersionSummaryProps {
-  chartName?: string | undefined;
-  appImageGitRepo?: string | undefined;
-  appVersionResolver?: string | undefined;
-  appVersionExact?: string | undefined;
-  appVersionCommit?: string | undefined;
-  appVersionBranch?: string | undefined;
+  chartName?: string;
+  appImageGitRepo?: string;
+  appVersionResolver?: string;
+  appVersionExact?: string;
+  appVersionCommit?: string;
+  appVersionBranch?: string;
   renderAppVersionLink: boolean;
 }
 

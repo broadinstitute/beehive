@@ -1,11 +1,10 @@
 import { LoaderFunction } from "@remix-run/node";
 import {
-  useParams,
   NavLink,
   Outlet,
+  Params,
   useLoaderData,
   useOutletContext,
-  Params,
 } from "@remix-run/react";
 import {
   ChartsApi,
@@ -26,9 +25,9 @@ import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
 import {
-  SherlockConfiguration,
-  forwardIAP,
   errorResponseThrower,
+  forwardIAP,
+  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 
 export const handle = {

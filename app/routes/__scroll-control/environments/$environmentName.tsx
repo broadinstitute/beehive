@@ -1,28 +1,22 @@
 import { LoaderFunction } from "@remix-run/node";
-import {
-  useParams,
-  NavLink,
-  useLoaderData,
-  Outlet,
-  Params,
-} from "@remix-run/react";
+import { NavLink, Outlet, Params, useLoaderData } from "@remix-run/react";
 import {
   EnvironmentsApi,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
+import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import { EnvironmentDetails } from "~/components/content/environment/environment-details";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Branch } from "~/components/route-tree/branch";
-import { catchBoundary } from "~/components/boundaries/catch-boundary";
-import { errorBoundary } from "~/components/boundaries/error-boundary";
 import {
-  SherlockConfiguration,
-  forwardIAP,
   errorResponseThrower,
+  forwardIAP,
+  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 import { toTitleCase } from "~/helpers/strings";
-import { EnvironmentColors } from "~/components/content/environment/environment-colors";
-import { EnvironmentDetails } from "~/components/content/environment/environment-details";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (

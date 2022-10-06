@@ -1,10 +1,9 @@
 import { ActionFunction, redirect } from "@remix-run/node";
 import {
-  useParams,
   NavLink,
-  useOutletContext,
-  useActionData,
   Params,
+  useActionData,
+  useOutletContext,
 } from "@remix-run/react";
 import {
   ChartReleasesApi,

@@ -1,5 +1,5 @@
 import { LoaderFunction } from "@remix-run/node";
-import { NavLink, Params, useLoaderData, useParams } from "@remix-run/react";
+import { NavLink, Params, useLoaderData } from "@remix-run/react";
 import {
   ChartVersionsApi,
   V2controllersChartVersion,

@@ -1,11 +1,5 @@
 import { LoaderFunction } from "@remix-run/node";
-import {
-  NavLink,
-  Outlet,
-  Params,
-  useLoaderData,
-  useParams,
-} from "@remix-run/react";
+import { NavLink, Outlet, Params, useLoaderData } from "@remix-run/react";
 import {
   ClustersApi,
   V2controllersCluster,

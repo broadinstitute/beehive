@@ -6,8 +6,8 @@
 // https://react-svgr.com/playground/?svgoConfig=%7B%22plugins%22%3A%5B%7B%22name%22%3A%22preset-default%22%2C%22params%22%3A%7B%22overrides%22%3A%7B%22removeTitle%22%3Afalse%2C%22mergePaths%22%3Afalse%2C%22cleanupIDs%22%3Afalse%7D%7D%7D%5D%7D&typescript=true
 
 export interface BeehiveIconProps {
-  loading?: boolean | undefined;
-  className?: string | undefined;
+  loading?: boolean;
+  className?: string;
 }
 
 export const BeehiveIcon: React.FunctionComponent<BeehiveIconProps> = ({

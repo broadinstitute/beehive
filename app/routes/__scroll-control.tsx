@@ -54,7 +54,7 @@ const scrollToRightFunctionText = ((scrollDivID: string): void => {
 }).toString();
 
 export interface LoadScrollerProps {
-  nonce?: string | undefined;
+  nonce?: string;
 }
 
 export const LoadScroller: React.FunctionComponent<LoadScrollerProps> = ({

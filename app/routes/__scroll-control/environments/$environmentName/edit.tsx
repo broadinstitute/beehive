@@ -3,18 +3,16 @@ import {
   NavLink,
   Params,
   useActionData,
-  useFetcher,
   useLoaderData,
   useOutletContext,
-  useParams,
 } from "@remix-run/react";
 import {
-  V2controllersEnvironment,
+  ClustersApi,
   EnvironmentsApi,
   V2controllersCluster,
-  ClustersApi,
+  V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
@@ -29,22 +27,22 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import {
-  FillerTextProps,
   FillerText,
+  FillerTextProps,
 } from "~/components/panel-structures/filler-text";
 import {
-  InteractiveListProps,
   InteractiveList,
+  InteractiveListProps,
 } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
+  errorResponseThrower,
   formDataToObject,
-  SherlockConfiguration,
   forwardIAP,
   makeErrorResponserReturner,
-  errorResponseThrower,
+  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 import { getSession } from "~/sessions.server";
 

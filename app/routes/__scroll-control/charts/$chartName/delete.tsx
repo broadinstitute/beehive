@@ -4,7 +4,6 @@ import {
   Params,
   useActionData,
   useOutletContext,
-  useParams,
 } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";

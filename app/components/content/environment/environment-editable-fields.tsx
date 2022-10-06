@@ -9,17 +9,17 @@ export interface EnvironmentEditableFieldsProps {
   // When we're creating an environment, we don't want to try to replicate Sherlock's
   // advanced template-default behavior, so this flag tells us to let the user pass
   // empty values for fields where we might otherwise block it.
-  creating?: boolean | undefined;
+  creating?: boolean;
   // Further, we can tailor the text we show if we know for certain that a template
   // will get used.
-  templateInUse?: boolean | undefined;
+  templateInUse?: boolean;
   defaultCluster: string;
   setDefaultCluster: (value: string) => void;
   setShowDefaultClusterPicker: (value: boolean) => void;
   hideOtherPickers?: () => void;
   // We don't actually *use* this value but it looks slick if we show it to the user
   // as the placeholder for an empty owner field during creation.
-  userEmail?: string | null | undefined;
+  userEmail?: string | null;
 }
 
 export const EnvironmentEditableFields: React.FunctionComponent<

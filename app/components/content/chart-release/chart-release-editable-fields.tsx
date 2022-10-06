@@ -2,10 +2,10 @@ import { useState } from "react";
 import { TextField } from "~/components/interactivity/text-field";
 
 export interface ChartReleaseEditableFieldsProps {
-  defaultSubdomain?: string | undefined;
-  defaultProtocol?: string | undefined;
-  defaultPort?: string | undefined;
-  baseDomain?: string | undefined;
+  defaultSubdomain?: string;
+  defaultProtocol?: string;
+  defaultPort?: string;
+  baseDomain?: string;
 }
 
 export const ChartReleaseEditableFields: React.FunctionComponent<

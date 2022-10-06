@@ -1,7 +1,7 @@
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 
 export interface ChartReleaseDeleteDescriptionProps {
-  environment?: V2controllersEnvironment | undefined;
+  environment?: V2controllersEnvironment;
 }
 
 export const ChartReleaseDeleteDescription: React.FunctionComponent<

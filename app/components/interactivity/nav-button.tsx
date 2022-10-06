@@ -5,7 +5,7 @@ export interface NavButtonProps {
   sizeClassName?: string | undefined | boolean;
   borderClassName: string;
   children: React.ReactNode;
-  disabled?: boolean | undefined;
+  disabled?: boolean;
 }
 
 export const NavButton: React.FunctionComponent<NavButtonProps> = ({

@@ -3,7 +3,7 @@ import { ItemDetailsProps } from "../panel-structures/item-details";
 
 export interface OutsetPanelProps {
   children: React.ReactElement<ActionBoxProps | ItemDetailsProps>;
-  borderClassName?: string | undefined;
+  borderClassName?: string;
 }
 
 export const OutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({

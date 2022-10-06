@@ -1,13 +1,13 @@
 import { BeehiveIcon } from "../assets/beehive-icon";
 
 export interface ActionButtonProps {
-  type?: "submit" | "reset" | "button" | undefined;
+  type?: "submit" | "reset" | "button";
   sizeClassName?: string;
   borderClassName?: string;
   children: React.ReactNode;
-  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
-  isActive?: boolean | undefined;
-  isLoading?: boolean | undefined;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  isActive?: boolean;
+  isLoading?: boolean;
 }
 
 export const ActionButton: React.FunctionComponent<ActionButtonProps> = ({

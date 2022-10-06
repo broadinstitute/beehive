@@ -5,7 +5,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { ChartColors } from "./chart-colors";
 
 export interface ChartEditableFieldsProps {
-  chart?: V2controllersChart | undefined;
+  chart?: V2controllersChart;
 }
 
 export const ChartEditableFields: React.FunctionComponent<

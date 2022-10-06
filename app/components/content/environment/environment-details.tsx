@@ -7,9 +7,9 @@ import { EnvironmentColors } from "./environment-colors";
 
 export interface EnvironmentDetailsProps {
   environment: V2controllersEnvironment;
-  toChartReleases?: string | undefined;
-  toEdit?: string | undefined;
-  toDelete?: string | undefined;
+  toChartReleases?: string;
+  toEdit?: string;
+  toDelete?: string;
 }
 
 export const EnvironmentDetails: React.FunctionComponent<

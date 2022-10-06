@@ -6,9 +6,9 @@ import { ClusterColors } from "./cluster-colors";
 
 export interface ClusterDetailsProps {
   cluster: V2controllersCluster;
-  toChartReleases?: string | undefined;
-  toEdit?: string | undefined;
-  toDelete?: string | undefined;
+  toChartReleases?: string;
+  toEdit?: string;
+  toDelete?: string;
 }
 
 export const ClusterDetails: React.FunctionComponent<ClusterDetailsProps> = ({

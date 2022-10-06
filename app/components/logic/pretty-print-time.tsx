@@ -1,6 +1,6 @@
 export interface PrettyPrintTimeProps {
-  className?: string | undefined;
-  time?: string | undefined;
+  className?: string;
+  time?: string;
 }
 
 export const PrettyPrintTime: React.FunctionComponent<PrettyPrintTimeProps> = ({

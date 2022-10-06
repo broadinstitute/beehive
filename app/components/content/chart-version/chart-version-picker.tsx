@@ -4,7 +4,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { ChartVersionColors } from "./chart-version-colors";
 
 export interface ChartVersionPickerProps {
-  isTargetingChangeset?: boolean | undefined;
+  isTargetingChangeset?: boolean;
   defaultChartVersionResolver: string;
   chartVersionExact: string;
   setChartVersionExact: (value: string) => void;

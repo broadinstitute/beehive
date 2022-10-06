@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextField } from "./text-field";
 
 export interface DeletionGuardProps {
-  name?: string | undefined;
+  name?: string;
 }
 
 export const DeletionGuard: React.FunctionComponent<DeletionGuardProps> = ({

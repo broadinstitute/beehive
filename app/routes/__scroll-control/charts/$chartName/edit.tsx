@@ -1,9 +1,9 @@
 import { ActionFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
+  Params,
   useActionData,
   useOutletContext,
-  useParams,
 } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";

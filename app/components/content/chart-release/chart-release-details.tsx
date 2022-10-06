@@ -6,9 +6,9 @@ import { ChartReleaseColors } from "./chart-release-colors";
 
 export interface ChartReleaseDetailsProps {
   chartRelease: V2controllersChartRelease;
-  toChangeVersions?: string | undefined;
-  toEdit?: string | undefined;
-  toDelete?: string | undefined;
+  toChangeVersions?: string;
+  toEdit?: string;
+  toDelete?: string;
 }
 
 export const ChartReleaseDetails: React.FunctionComponent<

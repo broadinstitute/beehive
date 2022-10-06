@@ -4,7 +4,6 @@ import {
   Params,
   useActionData,
   useOutletContext,
-  useParams,
 } from "@remix-run/react";
 import {
   EnvironmentsApi,

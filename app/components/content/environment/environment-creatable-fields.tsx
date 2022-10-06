@@ -5,7 +5,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { EnvironmentColors } from "./environment-colors";
 
 export interface EnvironmentCreatableFieldsProps {
-  environment?: V2controllersEnvironment | undefined;
+  environment?: V2controllersEnvironment;
   lifecycle: string;
   setLifecycle: (value: string) => void;
   templateEnvironment: string;

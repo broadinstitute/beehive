@@ -1,20 +1,17 @@
 import { LoaderFunction } from "@remix-run/node";
 import {
-  useParams,
   NavLink,
-  useOutletContext,
   Outlet,
-  useLoaderData,
   Params,
+  useLoaderData,
+  useOutletContext,
 } from "@remix-run/react";
 import {
   ChartsApi,
-  ClustersApi,
+  EnvironmentsApi,
   V2controllersChart,
   V2controllersCluster,
-  V2controllersChartRelease,
   V2controllersEnvironment,
-  EnvironmentsApi,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
@@ -27,9 +24,9 @@ import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
 import {
-  SherlockConfiguration,
-  forwardIAP,
   errorResponseThrower,
+  forwardIAP,
+  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 
 export const handle = {

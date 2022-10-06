@@ -2,10 +2,10 @@ import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartVersionColors } from "./chart-version-colors";
 
 export interface ChartVersionSummaryProps {
-  chartName?: string | undefined;
-  chartVersionResolver?: string | undefined;
-  chartVersionExact?: string | undefined;
-  helmfileRef?: string | undefined;
+  chartName?: string;
+  chartVersionResolver?: string;
+  chartVersionExact?: string;
+  helmfileRef?: string;
   renderChartVersionLink: boolean;
 }
 

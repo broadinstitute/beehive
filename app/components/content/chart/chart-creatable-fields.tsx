@@ -2,7 +2,7 @@ import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { TextField } from "~/components/interactivity/text-field";
 
 export interface ChartCreatableFieldsProps {
-  chart?: V2controllersChart | undefined;
+  chart?: V2controllersChart;
 }
 
 export const ChartCreatableFields: React.FunctionComponent<

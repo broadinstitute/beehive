@@ -4,12 +4,12 @@ import { TextField } from "~/components/interactivity/text-field";
 import { AppVersionColors } from "./app-version-colors";
 
 export interface AppVersionPickerProps {
-  isTargetingChangeset?: boolean | undefined;
+  isTargetingChangeset?: boolean;
   defaultAppVersionResolver: string;
   appVersionExact: string;
   setAppVersionExact: (value: string) => void;
   setShowAppVersionExactPicker: (value: boolean) => void;
-  defaultAppVersionCommit?: string | undefined;
+  defaultAppVersionCommit?: string;
   appVersionBranch: string;
   setAppVersionBranch: (value: string) => void;
   setShowAppVersionBranchPicker: (value: boolean) => void;

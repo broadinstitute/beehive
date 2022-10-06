@@ -5,7 +5,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { ClusterColors } from "./cluster-colors";
 
 export interface ClusterEditableFieldsProps {
-  cluster?: V2controllersCluster | undefined;
+  cluster?: V2controllersCluster;
 }
 
 export const ClusterEditableFields: React.FunctionComponent<

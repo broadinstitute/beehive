@@ -9,9 +9,9 @@ export interface DataTypeColors {
 export interface MutateControlsProps {
   name: string;
   colors: DataTypeColors;
-  toChangeVersions?: string | undefined;
-  toEdit?: string | undefined;
-  toDelete?: string | undefined;
+  toChangeVersions?: string;
+  toEdit?: string;
+  toDelete?: string;
 }
 
 export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({

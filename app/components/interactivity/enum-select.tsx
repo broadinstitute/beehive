@@ -12,12 +12,12 @@ export const EnumInputSelect: React.FunctionComponent<EnumInputSelectProps> = (
 );
 
 export interface EnumSelectProps<T> {
-  className?: string | undefined;
+  className?: string;
   fieldValue: T;
   setFieldValue: (value: T) => void;
   enums: Array<[string, T]>;
   borderClassName: string;
-  bigButtons?: boolean | undefined;
+  bigButtons?: boolean;
 }
 
 export const EnumSelect = <T extends any>({

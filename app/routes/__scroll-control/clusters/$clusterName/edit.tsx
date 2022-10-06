@@ -4,11 +4,10 @@ import {
   Params,
   useActionData,
   useOutletContext,
-  useParams,
 } from "@remix-run/react";
 import {
-  V2controllersCluster,
   ClustersApi,
+  V2controllersCluster,
 } from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
@@ -21,9 +20,9 @@ import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   formDataToObject,
-  SherlockConfiguration,
   forwardIAP,
   makeErrorResponserReturner,
+  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 import { getSession } from "~/sessions.server";
 

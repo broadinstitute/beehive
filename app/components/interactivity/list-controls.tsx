@@ -1,12 +1,12 @@
 import { NavButton } from "./nav-button";
 
 export interface ListControlsProps {
-  filterText?: string | undefined;
+  filterText?: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
   borderClassName: string;
-  toCreateText?: string | undefined;
-  toCreate?: string | undefined;
-  doubleWidth?: boolean | undefined;
+  toCreateText?: string;
+  toCreate?: string;
+  doubleWidth?: boolean;
 }
 
 export const ListControls: React.FunctionComponent<ListControlsProps> = ({

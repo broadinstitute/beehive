@@ -7,10 +7,10 @@ import { ChartColors } from "./chart-colors";
 
 export interface ChartDetailsProps {
   chart: V2controllersChart;
-  toChartVersions?: string | undefined;
-  toAppVersions?: string | undefined;
-  toEdit?: string | undefined;
-  toDelete?: string | undefined;
+  toChartVersions?: string;
+  toAppVersions?: string;
+  toEdit?: string;
+  toDelete?: string;
 }
 
 export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({

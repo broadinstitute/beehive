@@ -2,7 +2,7 @@ export interface InteractiveListProps {
   children: React.ReactNode;
   title: string;
   borderClassName: string;
-  doubleWidth?: boolean | undefined;
+  doubleWidth?: boolean;
 }
 
 export const InteractiveList: React.FunctionComponent<InteractiveListProps> = ({

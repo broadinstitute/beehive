@@ -1,20 +1,19 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import {
-  useParams,
   NavLink,
+  Params,
+  useActionData,
   useLoaderData,
   useOutletContext,
-  useActionData,
-  Params,
 } from "@remix-run/react";
 import {
-  ChartsApi,
   AppVersionsApi,
-  ChartVersionsApi,
   ChartReleasesApi,
-  V2controllersChartRelease,
+  ChartsApi,
+  ChartVersionsApi,
   V2controllersAppVersion,
   V2controllersChart,
+  V2controllersChartRelease,
   V2controllersChartVersion,
   V2controllersCluster,
   V2controllersEnvironment,
@@ -49,11 +48,11 @@ import { Branch } from "~/components/route-tree/branch";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
-  SherlockConfiguration,
-  forwardIAP,
   errorResponseThrower,
   formDataToObject,
+  forwardIAP,
   makeErrorResponserReturner,
+  SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 import { getSession } from "~/sessions.server";
 
