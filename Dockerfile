@@ -1,4 +1,4 @@
-ARG NODE_VERSION='16'
+ARG NODE_VERSION='18'
 ARG DISTRO='alpine'
 
 # Get all dependencies
