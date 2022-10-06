@@ -58,6 +58,7 @@ const ChartReleaseRoute: React.FunctionComponent = () => {
         >
           <ChartReleaseDetails
             chartRelease={chartRelease}
+            toChangeVersions="./change-versions"
             toEdit="./edit"
             toDelete="./delete"
           />
