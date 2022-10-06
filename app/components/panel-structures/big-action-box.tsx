@@ -30,7 +30,10 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
         method="post"
         className={`flex flex-col space-y-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
       >
-        <fieldset disabled={transition.state === "submitting"}>
+        <fieldset
+          disabled={transition.state === "submitting"}
+          className="flex flex-col space-y-4"
+        >
           {children}
         </fieldset>
         {hideButton || (

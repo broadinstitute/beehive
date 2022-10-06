@@ -179,25 +179,24 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
               just the ones visible with your "{filterText}" filter.
             </p>
           )}
-          <p>
+          <div>
             Currently included:
             <ul className="list-disc pl-5">
               {includedList.length > 0 ? (
-                includedList.map((name, index) => (
-                  <>
-                    <li key={index}>{name}</li>
-                    <input
-                      type="hidden"
-                      name="changeset"
-                      value={changesetIdLookup.get(name)}
-                    />
-                  </>
-                ))
+                includedList.map((name, index) => <li key={index}>{name}</li>)
               ) : (
                 <li>None</li>
               )}
             </ul>
-          </p>
+          </div>
+          {includedList.map((name, index) => (
+            <input
+              key={index}
+              type="hidden"
+              name="changeset"
+              value={changesetIdLookup.get(name)}
+            />
+          ))}
           {excludedList.length > 0 && (
             <p>
               Currently excluded:
@@ -664,59 +663,66 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                         )}
                       </p>
                     </div>
-                    <div className="flex flex-col items-center pt-4">
-                      {changeset.supersededAt && (
-                        <h1 className="text-2xl font-light">
-                          These changes are out of date as of{" "}
-                          <PrettyPrintTime time={changeset.supersededAt} />
-                        </h1>
-                      )}
-                      {changeset.appliedAt && (
-                        <h1 className="text-2xl font-light">
-                          These changes were applied at{" "}
-                          <PrettyPrintTime time={changeset.appliedAt} />
-                        </h1>
-                      )}
-                      {appliable && (
-                        <div
-                          className={`${ChartReleaseColors.backgroundClassName} ${ChartReleaseColors.borderClassName} border-2 rounded-2xl p-4 flex flex-row items-center justify-items-center space-x-4`}
-                        >
-                          <h1 className="text-3xl font-light whitespace-nowrap">
-                            Include These Changes?
+                    {(changeset.supersededAt ||
+                      changeset.appliedAt ||
+                      (appliable && changesets.length > 1)) && (
+                      <div className="flex flex-col items-center pt-4">
+                        {changeset.supersededAt && (
+                          <h1 className="text-2xl font-light">
+                            These changes are out of date as of{" "}
+                            <PrettyPrintTime time={changeset.supersededAt} />
                           </h1>
+                        )}
+                        {changeset.appliedAt && (
+                          <h1 className="text-2xl font-light">
+                            These changes were applied at{" "}
+                            <PrettyPrintTime time={changeset.appliedAt} />
+                          </h1>
+                        )}
+                        {appliable && changesets.length > 1 && (
+                          <div
+                            className={`${ChartReleaseColors.backgroundClassName} ${ChartReleaseColors.borderClassName} border-2 rounded-2xl p-4 flex flex-row items-center justify-items-center space-x-4`}
+                          >
+                            <h1 className="text-3xl font-light whitespace-nowrap">
+                              Include These Changes?
+                            </h1>
 
-                          <EnumSelect
-                            className="grid grid-cols-2 w-[25vw]"
-                            bigButtons
-                            fieldValue={
-                              includedChangesets.get(
-                                changeset.chartRelease as string
-                              ) || false
-                            }
-                            setFieldValue={(value) => {
-                              if (
+                            <EnumSelect
+                              className="grid grid-cols-2 w-[25vw]"
+                              bigButtons
+                              fieldValue={
                                 includedChangesets.get(
                                   changeset.chartRelease as string
-                                ) !== value
-                              ) {
-                                setIncludedChangesets(
-                                  (previous) =>
-                                    new Map([
-                                      ...previous,
-                                      [changeset.chartRelease as string, value],
-                                    ])
-                                );
+                                ) || false
                               }
-                            }}
-                            enums={[
-                              ["Not Included", false],
-                              ["Included", true],
-                            ]}
-                            {...ChartReleaseColors}
-                          />
-                        </div>
-                      )}
-                    </div>
+                              setFieldValue={(value) => {
+                                if (
+                                  includedChangesets.get(
+                                    changeset.chartRelease as string
+                                  ) !== value
+                                ) {
+                                  setIncludedChangesets(
+                                    (previous) =>
+                                      new Map([
+                                        ...previous,
+                                        [
+                                          changeset.chartRelease as string,
+                                          value,
+                                        ],
+                                      ])
+                                  );
+                                }
+                              }}
+                              enums={[
+                                ["Not Included", false],
+                                ["Included", true],
+                              ]}
+                              {...ChartReleaseColors}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
               }}
