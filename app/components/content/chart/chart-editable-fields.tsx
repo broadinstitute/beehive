@@ -123,7 +123,7 @@ export const ChartEditableFields: React.FunctionComponent<
           </p>
           <TextField
             name="defaultPort"
-            pattern="[0-9]*"
+            pattern="\d*"
             defaultValue={chart?.defaultPort || "443"}
           />
         </label>

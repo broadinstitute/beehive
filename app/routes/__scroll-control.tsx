@@ -47,7 +47,7 @@ Here's the overview:
 const scrollDivID: string = "scroll-control";
 
 const scrollToRightFunctionText = ((scrollDivID: string): void => {
-  var scrollControlDiv = document.getElementById(scrollDivID);
+  const scrollControlDiv = document.getElementById(scrollDivID);
   if (scrollControlDiv !== null) {
     scrollControlDiv.scrollLeft = scrollControlDiv.scrollWidth;
   }

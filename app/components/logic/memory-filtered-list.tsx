@@ -4,7 +4,7 @@ import { NavButtonProps } from "../interactivity/nav-button";
 export interface MemoryFilteredListProps<T> {
   entries: Array<T>;
   filterText?: string;
-  filter?: (entry: T, filterText: string) => Boolean | undefined;
+  filter?: (entry: T, filterText: string) => boolean | undefined;
   children: (
     entry: T,
     index: number

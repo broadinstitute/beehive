@@ -1,4 +1,3 @@
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
 import { TextField } from "~/components/interactivity/text-field";
 
 export interface ChartReleaseCreatableEnvironmentFieldsProps {

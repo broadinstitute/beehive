@@ -8,20 +8,21 @@ export const PrettyPrintVersionDescription: React.FunctionComponent<
   PrettyPrintVersionDescriptionProps
 > = ({ description, repo, jira = "broadworkbench" }) => {
   const links = [
-    ...Array.from(description.matchAll(/([A-Z]+-[0-9]+)/g), (m) => m[1]).map(
+    ...Array.from(description.matchAll(/([A-Z]+-\d+)/g), (m) => m[1]).map(
       (ticket) => [`https://${jira}.atlassian.net/browse/${ticket}`, ticket]
     ),
     ...(repo
-      ? Array.from(description.matchAll(/#([0-9]+)/g), (m) => m[1]).map(
-          (pr) => [`https://github.com/${repo}/pull/${pr}`, `#${pr}`]
-        )
+      ? Array.from(description.matchAll(/#(\d+)/g), (m) => m[1]).map((pr) => [
+          `https://github.com/${repo}/pull/${pr}`,
+          `#${pr}`,
+        ])
       : []),
   ];
   return (
     <span>
       {description
-        .replace(/[^a-zA-Z]?[A-Z]+-[0-9]+[^a-zA-Z]?/g, "")
-        .replace(/\(#[0-9]+\)/g, "")
+        .replace(/[^a-zA-Z]?[A-Z]+-\d+[^a-zA-Z]?/g, "")
+        .replace(/\(#\d+\)/g, "")
         .trim()
         .replace(/\s+/g, " ")}
       {links && (

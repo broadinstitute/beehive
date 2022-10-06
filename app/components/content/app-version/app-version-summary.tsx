@@ -104,6 +104,7 @@ export const AppVersionSummary: React.FunctionComponent<
           </p>
         );
       }
+      break;
     case "branch":
       explanation = (
         <p>

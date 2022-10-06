@@ -19,10 +19,7 @@ import { ChartVersionColors } from "~/components/content/chart-version/chart-ver
 import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
-import {
-  EnumInputSelect,
-  EnumSelect,
-} from "~/components/interactivity/enum-select";
+import { EnumSelect } from "~/components/interactivity/enum-select";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";

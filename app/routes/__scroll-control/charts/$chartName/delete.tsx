@@ -33,7 +33,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
   await verifyAuthenticityToken(request, session);
 
-  return await new ChartsApi(SherlockConfiguration)
+  return new ChartsApi(SherlockConfiguration)
     .apiV2ChartsSelectorDelete(
       { selector: params.chartName || "" },
       forwardIAP(request)

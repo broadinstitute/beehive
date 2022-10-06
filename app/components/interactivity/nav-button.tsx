@@ -2,7 +2,7 @@ import { NavLink } from "@remix-run/react";
 
 export interface NavButtonProps {
   to: string;
-  sizeClassName?: string | undefined | boolean;
+  sizeClassName?: string | boolean;
   borderClassName: string;
   children: React.ReactNode;
   disabled?: boolean;
