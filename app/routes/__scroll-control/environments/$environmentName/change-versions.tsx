@@ -91,7 +91,8 @@ export const action: ActionFunction = async ({ request, params }) => {
       .getAll("includeChart")
       .filter((value): value is string => typeof value === "string"),
     useExactVersionsFromOtherEnvironment:
-      typeof useExactVersionsFromOtherEnvironment === "string"
+      typeof useExactVersionsFromOtherEnvironment === "string" &&
+      useExactVersionsFromOtherEnvironment.length > 0
         ? useExactVersionsFromOtherEnvironment
         : undefined,
   };
