@@ -450,7 +450,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               </ul>
                             )}
                             {appVersionChanged &&
-                              changeset.newAppVersions?.at(-1)
+                              changeset.newAppVersions?.at(0)
                                 ?.parentAppVersion !==
                                 changeset.fromAppVersionReference && (
                                 <p>
