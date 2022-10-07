@@ -246,10 +246,12 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                 const appVersionResolverChanged =
                   changeset.fromAppVersionResolver !==
                     changeset.toAppVersionResolver ||
-                  changeset.fromAppVersionCommit !==
-                    changeset.toAppVersionCommit ||
-                  changeset.fromAppVersionBranch !==
-                    changeset.toAppVersionBranch;
+                  (changeset.toAppVersionResolver === "commit" &&
+                    changeset.fromAppVersionCommit !==
+                      changeset.toAppVersionCommit) ||
+                  (changeset.toAppVersionResolver === "branch" &&
+                    changeset.fromAppVersionBranch !==
+                      changeset.toAppVersionBranch);
                 const appVersionInSherlockChanged =
                   (changeset.fromAppVersionReference === undefined) !==
                   (changeset.toAppVersionReference === undefined);
