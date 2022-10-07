@@ -5,9 +5,11 @@ import {
   useLoaderData,
   Outlet,
   Params,
+  useOutletContext,
 } from "@remix-run/react";
 import {
   ChartVersionsApi,
+  V2controllersChart,
   V2controllersChartVersion,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -49,6 +51,7 @@ export const ErrorBoundary = errorBoundary;
 const ChartVersionsRoute: React.FunctionComponent = () => {
   const params = useParams();
   const chartVersions = useLoaderData<Array<V2controllersChartVersion>>();
+  const { chart } = useOutletContext<{ chart: V2controllersChart }>();
   const [filterText, setFilterText] = useState("");
   return (
     <Branch>
@@ -84,7 +87,7 @@ const ChartVersionsRoute: React.FunctionComponent = () => {
           </MemoryFilteredList>
         </InteractiveList>
       </InsetPanel>
-      <Outlet />
+      <Outlet context={{ chart }} />
     </Branch>
   );
 };

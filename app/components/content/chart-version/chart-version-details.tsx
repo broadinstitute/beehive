@@ -1,16 +1,34 @@
 import { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
+import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
+import { MutateControls } from "../helpers";
 import { ChartVersionColors } from "./chart-version-colors";
 
 export interface ChartVersionDetailsProps {
   chartVersion: V2controllersChartVersion;
+  toEdit?: string;
 }
 
 export const ChartVersionDetails: React.FunctionComponent<
   ChartVersionDetailsProps
-> = ({ chartVersion }) => (
+> = ({ chartVersion, toEdit }) => (
   <div className="flex flex-col space-y-10">
+    <p>
+      Description:{" "}
+      {chartVersion.description ? (
+        <PrettyPrintVersionDescription
+          description={chartVersion.description}
+          repo={
+            chartVersion.chartInfo?.chartRepo
+              ? "broadinstitute/terra-helmfile"
+              : undefined
+          }
+        />
+      ) : (
+        "None"
+      )}
+    </p>
     {chartVersion.parentChartVersion &&
       chartVersion.parentChartVersionInfo &&
       chartVersion.parentChartVersionInfo.hasOwnProperty("chartVersion") && (
@@ -49,5 +67,12 @@ export const ChartVersionDetails: React.FunctionComponent<
       This Chart Version was first recorded in Sherlock at{" "}
       <PrettyPrintTime time={chartVersion.createdAt} />.
     </p>
+    {toEdit && (
+      <MutateControls
+        name={`${chartVersion.chart}/${chartVersion.chartVersion}`}
+        colors={ChartVersionColors}
+        toEdit={toEdit}
+      />
+    )}
   </div>
 );

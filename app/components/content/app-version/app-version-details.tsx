@@ -1,15 +1,18 @@
 import { V2controllersAppVersion } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
+import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
+import { MutateControls } from "../helpers";
 import { AppVersionColors } from "./app-version-colors";
 
 export interface AppVersionDetailsProps {
   appVersion: V2controllersAppVersion;
+  toEdit?: string;
 }
 
 export const AppVersionDetails: React.FunctionComponent<
   AppVersionDetailsProps
-> = ({ appVersion }) => (
+> = ({ appVersion, toEdit }) => (
   <div className="flex flex-col space-y-10">
     {appVersion.gitCommit && appVersion.gitBranch && (
       <p>
@@ -37,6 +40,17 @@ export const AppVersionDetails: React.FunctionComponent<
         .
       </p>
     )}
+    <p>
+      Description:{" "}
+      {appVersion.description ? (
+        <PrettyPrintVersionDescription
+          description={appVersion.description}
+          repo={appVersion.chartInfo?.appImageGitRepo}
+        />
+      ) : (
+        "None"
+      )}
+    </p>
     {appVersion.parentAppVersion &&
       appVersion.parentAppVersionInfo &&
       appVersion.parentAppVersionInfo.hasOwnProperty("appVersion") && (
@@ -74,5 +88,12 @@ export const AppVersionDetails: React.FunctionComponent<
       This App Version was first recorded in Sherlock at{" "}
       <PrettyPrintTime time={appVersion.createdAt} />.
     </p>
+    {toEdit && (
+      <MutateControls
+        name={`${appVersion.chart}/${appVersion.appVersion}`}
+        colors={AppVersionColors}
+        toEdit={toEdit}
+      />
+    )}
   </div>
 );

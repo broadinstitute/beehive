@@ -7,7 +7,7 @@ export interface PrettyPrintVersionDescriptionProps {
 export const PrettyPrintVersionDescription: React.FunctionComponent<
   PrettyPrintVersionDescriptionProps
 > = ({ description, repo, jira = "broadworkbench" }) => {
-  const links = [
+  const links: string[][] = [
     ...Array.from(description.matchAll(/([A-Z]+-\d+)/g), (m) => m[1]).map(
       (ticket) => [`https://${jira}.atlassian.net/browse/${ticket}`, ticket]
     ),
@@ -19,13 +19,13 @@ export const PrettyPrintVersionDescription: React.FunctionComponent<
       : []),
   ];
   return (
-    <span>
+    <>
       {description
         .replace(/[^a-zA-Z]?[A-Z]+-\d+[^a-zA-Z]?/g, "")
         .replace(/\(#\d+\)/g, "")
         .trim()
-        .replace(/\s+/g, " ")}
-      {links && (
+        .replace(/\s+/g, " ") || "(empty description)"}
+      {links.length > 0 && (
         <>
           {" ("}
           {links.map(([link, text], index) => [
@@ -42,6 +42,6 @@ export const PrettyPrintVersionDescription: React.FunctionComponent<
           {")"}
         </>
       )}
-    </span>
+    </>
   );
 };

@@ -1,7 +1,14 @@
 import { LoaderFunction } from "@remix-run/node";
-import { NavLink, Params, useLoaderData } from "@remix-run/react";
+import {
+  NavLink,
+  Outlet,
+  Params,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
 import {
   ChartVersionsApi,
+  V2controllersChart,
   V2controllersChartVersion,
 } from "@sherlock-js-client/sherlock";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
@@ -10,7 +17,7 @@ import { ChartVersionColors } from "~/components/content/chart-version/chart-ver
 import { ChartVersionDetails } from "~/components/content/chart-version/chart-version-details";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
-import { Leaf } from "~/components/route-tree/leaf";
+import { Branch } from "~/components/route-tree/branch";
 import {
   errorResponseThrower,
   forwardIAP,
@@ -41,17 +48,19 @@ export const ErrorBoundary = errorBoundary;
 
 const ChartVersionRoute: React.FunctionComponent = () => {
   const chartVersion = useLoaderData<V2controllersChartVersion>();
+  const { chart } = useOutletContext<{ chart: V2controllersChart }>();
   return (
-    <Leaf>
+    <Branch>
       <OutsetPanel {...ChartVersionColors}>
         <ItemDetails
           subtitle={`Chart Version of ${chartVersion.chart}`}
           title={chartVersion.chartVersion || ""}
         >
-          <ChartVersionDetails chartVersion={chartVersion} />
+          <ChartVersionDetails chartVersion={chartVersion} toEdit="./edit" />
         </ItemDetails>
       </OutsetPanel>
-    </Leaf>
+      <Outlet context={{ chartVersion, chart }} />
+    </Branch>
   );
 };
 
