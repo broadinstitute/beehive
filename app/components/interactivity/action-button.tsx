@@ -8,6 +8,7 @@ export interface ActionButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isActive?: boolean;
   isLoading?: boolean;
+  activeOnHover?: boolean;
 }
 
 export const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
@@ -18,13 +19,14 @@ export const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
   onClick,
   isActive = false,
   isLoading = false,
+  activeOnHover = false,
 }) => (
   <div className={`relative h-12 shrink-0 ${sizeClassName || ""}`}>
     <button
       type={type}
       className={`h-full w-full flex flex-row items-center rounded-2xl ${
         isActive ? "border-r-[2rem] hover:border-r-[2rem]" : ""
-      } ${
+      } ${activeOnHover ? "hover:border-r-[2rem]" : ""} ${
         isLoading
           ? "border-4 shadow-lg"
           : "shadow-md hover:shadow-lg border-2 hover:border-4"

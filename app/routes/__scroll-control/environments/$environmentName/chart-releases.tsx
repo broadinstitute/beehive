@@ -72,7 +72,8 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
             entries={chartReleases}
             filterText={filterText}
             filter={(chartRelease, filterText) =>
-              chartRelease.name?.includes(filterText)
+              chartRelease.name?.includes(filterText) ||
+              chartRelease.chart?.includes(filterText)
             }
           >
             {(chartRelease, index) => (

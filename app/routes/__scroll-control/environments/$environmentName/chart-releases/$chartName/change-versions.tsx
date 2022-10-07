@@ -116,18 +116,20 @@ export const action: ActionFunction = async ({ request, params }) => {
       },
       forwardIAP(request)
     )
-    .then((changesets) => {
-      return changesets.length > 0
-        ? redirect(
-            `/review-changesets?${[
-              ...changesets.map((c) => `changeset=${c.id}`),
-              `return=${encodeURIComponent(
-                `/environments/${params.environmentName}/chart-releases/${params.chartName}`
-              )}`,
-            ].join("&")}`
-          )
-        : changesetRequest;
-    }, makeErrorResponserReturner(changesetRequest));
+    .then(
+      (changesets) =>
+        changesets.length > 0
+          ? redirect(
+              `/review-changesets?${[
+                ...changesets.map((c) => `changeset=${c.id}`),
+                `return=${encodeURIComponent(
+                  `/environments/${params.environmentName}/chart-releases/${params.chartName}`
+                )}`,
+              ].join("&")}`
+            )
+          : changesetRequest,
+      makeErrorResponserReturner(changesetRequest)
+    );
 };
 
 export const CatchBoundary = catchBoundary;
@@ -227,7 +229,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
         >
           {(chartRelease, index) => (
             <ActionButton
-              key={index.toString()}
+              key={index}
               onClick={() => {
                 setUseExactVersionsFromOtherChartRelease(
                   chartRelease.name || ""

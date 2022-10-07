@@ -54,6 +54,7 @@ const EnvironmentNameRoute: React.FunctionComponent = () => {
           <EnvironmentDetails
             environment={environment}
             toChartReleases="./chart-releases"
+            toChangeVersions="./change-versions"
             toEdit="./edit"
             toDelete={environment.lifecycle != "static" ? "./delete" : ""}
           />

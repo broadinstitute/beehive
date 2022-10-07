@@ -107,7 +107,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
   if (!returnURL) {
     returnURL = "/";
   }
-  const returnColors = returnURL.includes("chart-releases")
+  const returnColors = returnURL.includes("chart-releases/")
     ? ChartReleaseColors
     : returnURL.includes("clusters")
     ? ClusterColors
@@ -198,14 +198,14 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
             />
           ))}
           {excludedList.length > 0 && (
-            <p>
+            <div>
               Currently excluded:
               <ul className="list-disc pl-5">
                 {excludedList.map((name, index) => (
                   <li key={index}>{name}</li>
                 ))}
               </ul>
-            </p>
+            </div>
           )}
           {actionData && displayErrorInfo(actionData)}
         </BigActionBox>
@@ -468,7 +468,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           >
                             {`Specified `}
                             {changeset.fromAppVersionResolver === "exact" &&
-                              `exact app`}
+                              `exact app version`}
                             {changeset.fromAppVersionResolver === "commit" &&
                               `app commit — ${changeset.fromAppVersionCommit}`}
                             {changeset.fromAppVersionResolver === "branch" &&
@@ -485,7 +485,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           >
                             {`Specified `}
                             {changeset.toAppVersionResolver === "exact" &&
-                              `exact app`}
+                              `exact app version`}
                             {changeset.toAppVersionResolver === "commit" &&
                               `app commit — ${changeset.toAppVersionCommit}`}
                             {changeset.toAppVersionResolver === "branch" &&
@@ -597,7 +597,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             : "text-black/40"
                         }
                       >
-                        {`Specified ${changeset.fromChartVersionResolver} chart`}
+                        {`Specified ${changeset.fromChartVersionResolver} chart version`}
                       </p>
                       <p
                         className={
@@ -606,7 +606,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             : "text-black/40"
                         }
                       >
-                        {`Specified ${changeset.toChartVersionResolver} chart`}
+                        {`Specified ${changeset.toChartVersionResolver} chart version`}
                       </p>
                       {(!changeset.fromChartVersionReference ||
                         !changeset.toChartVersionReference) && (

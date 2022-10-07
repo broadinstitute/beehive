@@ -8,13 +8,14 @@ import { EnvironmentColors } from "./environment-colors";
 export interface EnvironmentDetailsProps {
   environment: V2controllersEnvironment;
   toChartReleases?: string;
+  toChangeVersions?: string;
   toEdit?: string;
   toDelete?: string;
 }
 
 export const EnvironmentDetails: React.FunctionComponent<
   EnvironmentDetailsProps
-> = ({ environment, toChartReleases, toEdit, toDelete }) => (
+> = ({ environment, toChartReleases, toChangeVersions, toEdit, toDelete }) => (
   <div className="flex flex-col space-y-10">
     {(toChartReleases ||
       environment.templateEnvironment ||
@@ -53,6 +54,7 @@ export const EnvironmentDetails: React.FunctionComponent<
       <MutateControls
         name={environment.name || ""}
         colors={EnvironmentColors}
+        toChangeVersions={toChangeVersions}
         toEdit={toEdit}
         toDelete={toDelete}
       />
