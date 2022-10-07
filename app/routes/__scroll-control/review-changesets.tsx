@@ -583,7 +583,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           </ul>
                         )}
                         {chartVersionChanged &&
-                          changeset.newChartVersions?.at(-1)
+                          changeset.newChartVersions?.at(0)
                             ?.parentChartVersion !==
                             changeset.fromChartVersionReference && (
                             <p>
