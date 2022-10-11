@@ -1,6 +1,7 @@
 import { Outlet } from "@remix-run/react";
 import { useRef } from "react";
 import useResizeObserver from "@react-hook/resize-observer";
+import { Header } from "~/components/layout/header";
 
 /*
 LoadScroller is some magic informed by the internals of Remix and React.
@@ -79,15 +80,18 @@ const ScrollControlRoute: React.FunctionComponent = () => {
     });
   });
   return (
-    <div
-      id={scrollDivID}
-      className="h-full overflow-x-auto"
-      ref={scrollControlRef}
-    >
-      <div className="h-full min-w-min" ref={scrolledRef}>
-        <Outlet />
+    <>
+      <Header />
+      <div
+        id={scrollDivID}
+        className="h-full overflow-x-auto"
+        ref={scrollControlRef}
+      >
+        <div className="h-full min-w-min" ref={scrolledRef}>
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

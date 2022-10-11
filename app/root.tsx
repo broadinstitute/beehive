@@ -22,8 +22,7 @@ import {
   AuthenticityTokenProvider,
   createAuthenticityToken,
 } from "remix-utils";
-import { Header } from "./components/layout/header";
-import { LoadScroller } from "./routes/__scroll-control";
+import { LoadScroller } from "./routes/__layout";
 import { generateNonce } from "./csp.server";
 
 export const meta: MetaFunction = () => ({
@@ -70,7 +69,6 @@ const App: FunctionComponent = () => {
           <Links />
         </head>
         <body className="bg-zinc-100 flex flex-col min-w-screen h-screen w-full">
-          <Header />
           <Outlet />
           <LoadScroller nonce={cspScriptNonce} />
           <ScrollRestoration nonce={cspScriptNonce} />
