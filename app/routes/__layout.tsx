@@ -70,7 +70,7 @@ export const LoadScroller: React.FunctionComponent<LoadScrollerProps> = ({
   ></script>
 );
 
-const ScrollControlRoute: React.FunctionComponent = () => {
+const LayoutRoute: React.FunctionComponent = () => {
   const scrollControlRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef<HTMLDivElement>(null);
   useResizeObserver(scrolledRef, (entry) => {
@@ -95,4 +95,4 @@ const ScrollControlRoute: React.FunctionComponent = () => {
   );
 };
 
-export default ScrollControlRoute;
+export default LayoutRoute;
