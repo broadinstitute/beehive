@@ -1,5 +1,5 @@
 import { PassThrough } from "stream";
-import type { EntryContext } from "@remix-run/node";
+import type { EntryContext, HandleDataRequestFunction } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { renderToPipeableStream } from "react-dom/server";
@@ -35,6 +35,7 @@ export default function handleRequest(
           );
 
           responseHeaders.set("Content-Type", "text/html");
+          responseHeaders.set("Cache-Control", "no-cache");
 
           resolve(
             new Response(body, {
@@ -59,3 +60,8 @@ export default function handleRequest(
     setTimeout(abort, ABORT_DELAY);
   });
 }
+
+export const handleDataRequest: HandleDataRequestFunction = (response) => {
+  response.headers.set("Cache-Control", "no-cache");
+  return response;
+};
