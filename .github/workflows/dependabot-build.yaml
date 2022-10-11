@@ -1,0 +1,17 @@
+name: Dependabot Build Check
+# The purpose of the workflow is to check that the Docker build succeeds and doesn't have
+# new vulnerabilities. It only runs on Dependabot PRs because for human PRs we want the
+# tag and publish capability of the main build job.
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  dependabot-build:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Checkout current code
+        uses: actions/checkout@v2
+      - name: Run Docker build and Trivy vulnerability scanner
+        uses: broadinstitute/dsp-appsec-trivy-action@v1

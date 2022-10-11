@@ -36,8 +36,10 @@ env:
   # GOOGLE_PROJECT/REPOSITORY_NAME can be found.
   GOOGLE_DOCKER_REPOSITORY: us-central1-docker.pkg.dev
 jobs:
-  tag-publish-job:
+  tag-build-publish:
     runs-on: ubuntu-latest
+    # For Dependabot, see dependabot-build.yaml
+    if: ${{ github.actor != 'dependabot[bot]' }}
     permissions:
       contents: "read"
       id-token: "write"
