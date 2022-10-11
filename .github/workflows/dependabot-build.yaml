@@ -13,5 +13,9 @@ jobs:
     steps:
       - name: Checkout current code
         uses: actions/checkout@v2
-      - name: Run Docker build and Trivy vulnerability scanner
+      - name: Docker Build
+        run: docker build . -t ${{ github.event.repository.name }}
+      - name: Run Trivy vulnerability scanner
         uses: broadinstitute/dsp-appsec-trivy-action@v1
+        with:
+          image: ${{ github.event.repository.name }}
