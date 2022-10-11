@@ -75,20 +75,33 @@ const MiscRoute: FunctionComponent = () => {
       {mySherlockUser.hasOwnProperty("title") ? (
         displayErrorInfo(sherlockVersion as DerivedErrorInfo)
       ) : (
-        <p
-          title={JSON.stringify(
-            (mySherlockUser as MiscMyUserResponse).rawInfo,
-            null,
-            2
-          )}
-        >
-          You are{" "}
-          <span className="font-mono">
-            {" "}
-            {(mySherlockUser as MiscMyUserResponse).email}
-          </span>
-          ; {(mySherlockUser as MiscMyUserResponse).suitability}
-        </p>
+        <>
+          <p
+            title={JSON.stringify(
+              (mySherlockUser as MiscMyUserResponse).rawInfo,
+              null,
+              2
+            )}
+          >
+            You are{" "}
+            <span className="font-mono">
+              {" "}
+              {(mySherlockUser as MiscMyUserResponse).email}
+            </span>
+            ; {(mySherlockUser as MiscMyUserResponse).suitability}
+          </p>
+          <p>
+            Click{" "}
+            <a
+              href="?gcp-iap-mode=CLEAR_LOGIN_COOKIE"
+              className="decoration-blue-500 underline"
+            >
+              here
+            </a>{" "}
+            to log out by forcibly invalidating your IAP cookie (usually
+            unnecessary)
+          </p>
+        </>
       )}
     </div>
   );
