@@ -49,7 +49,7 @@ const MiscRoute: FunctionComponent = () => {
       ]
     >();
   return (
-    <div className="m-auto text-center">
+    <div className="h-full text-center flex flex-col justify-center">
       <p>
         Beehive version <span className="font-mono">{beehiveVersion}</span>
       </p>

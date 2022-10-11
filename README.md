@@ -72,10 +72,15 @@ If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwi
 [The colors come from Tailwind](https://tailwindcss.com/docs/customizing-colors):
 
 - Neutrals: Zinc
-- Beehive logo and environment: amber-300
-- Cluster: green-300
-- Chart: sky-300
-- Chart Versions: violet-300 (low contrast with sky-300 for protanopia/deuteranopia but it is very closely related to Charts anyway)
-- App Versions: rose-300 (we use this for errors too but we label errors as such and use different styling)
+- Beehive logo and environment: Amber
+- Cluster: Green
+- Chart: Sky
+- Chart Versions: Violet (low contrast with Sky for protanopia/deuteranopia but it is very closely related to Charts anyway)
+- App Versions: Rose
+- Errors: Red (labeled as such and with unique styling)
+- Focus: Blue (just continuing browser behavior, not a significant UI element)
+
+Errors use the Red series but are also labeled as such and have different styling from app versions.
+Focused elements may use the Blue
 
 [Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%237DD3FC-%2386EFAC-%23FDA4AF-%23C4B5FD)

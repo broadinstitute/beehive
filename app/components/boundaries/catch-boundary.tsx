@@ -8,19 +8,23 @@ export function catchBoundary() {
     caught.data
   );
   return (
-    <div className="bg-rose-50 border-rose-400 border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
+    <div className="bg-red-50 border-red-500 border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
       <p className="font-semibold">{title}</p>
       {(reloadRequired && (
         <button
-          onClick={() => window.location.reload()}
-          className="m-2 p-1 bg-rose-100 border-rose-400 border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
+          onClick={() =>
+            // https://developer.mozilla.org/en-US/docs/Web/API/Location/reload#parameters
+            // @ts-ignore
+            window.location.reload(true)
+          }
+          className="m-2 p-1 bg-red-100 border-red-500 border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
         >
           Refresh Page
         </button>
       )) || (
         <button
           onClick={() => history.back()}
-          className="m-2 p-1 bg-rose-100 border-rose-400 border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
+          className="m-2 p-1 bg-red-100 border-red-500 border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
         >
           Go Back
         </button>
