@@ -1,4 +1,9 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import {
   NavLink,
   Params,
@@ -56,12 +61,16 @@ import { getSession } from "~/sessions.server";
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink
-      to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}.${params.chartName}/change-versions`}
+      to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}/change-versions`}
     >
       Change Versions
     </NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Release - Change Versions`,
+});
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);

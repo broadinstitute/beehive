@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "@remix-run/node";
+import { ActionFunction, MetaFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
   Params,
@@ -31,6 +31,10 @@ export const handle = {
     <NavLink to={`/clusters/${params.clusterName}/edit`}>Edit</NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.clusterName} - Cluster - Edit`,
+});
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));

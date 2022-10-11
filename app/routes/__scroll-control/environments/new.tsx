@@ -1,4 +1,9 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import {
   NavLink,
   useActionData,
@@ -49,6 +54,10 @@ import { getSession } from "~/sessions.server";
 export const handle = {
   breadcrumb: () => <NavLink to="/environments/new">New</NavLink>,
 };
+
+export const meta: MetaFunction = () => ({
+  title: "New Environment",
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   return Promise.all([

@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -18,7 +18,6 @@ import { AppVersionDetails } from "~/components/content/app-version/app-version-
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { Branch } from "~/components/route-tree/branch";
-import { Leaf } from "~/components/route-tree/leaf";
 import {
   errorResponseThrower,
   forwardIAP,
@@ -34,6 +33,10 @@ export const handle = {
     </NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.chartName}/${params.appVersion} - App Version`,
+});
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new AppVersionsApi(SherlockConfiguration)

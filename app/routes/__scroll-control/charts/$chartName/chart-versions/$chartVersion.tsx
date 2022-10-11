@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -33,6 +33,10 @@ export const handle = {
     </NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.chartName}/${params.chartVersion} - Chart Version`,
+});
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartVersionsApi(SherlockConfiguration)

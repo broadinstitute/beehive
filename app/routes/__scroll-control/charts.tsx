@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -20,6 +20,10 @@ import { ChartColors } from "~/components/content/chart/chart-colors";
 export const handle = {
   breadcrumb: () => <NavLink to="/charts">Charts</NavLink>,
 };
+
+export const meta: MetaFunction = () => ({
+  title: "Charts",
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   return new ChartsApi(SherlockConfiguration)

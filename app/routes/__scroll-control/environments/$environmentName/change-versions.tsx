@@ -1,4 +1,9 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import {
   NavLink,
   Params,
@@ -51,6 +56,10 @@ export const handle = {
     </NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.environmentName} - Environment - Change Versions`,
+});
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);

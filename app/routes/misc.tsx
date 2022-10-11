@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, useLoaderData } from "@remix-run/react";
 import {
   MiscApi,
@@ -18,6 +18,10 @@ import {
 export const handle = {
   breadcrumb: () => <NavLink to="/misc">Misc</NavLink>,
 };
+
+export const meta: MetaFunction = () => ({
+  title: "Misc",
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   const api = new MiscApi(SherlockConfiguration);

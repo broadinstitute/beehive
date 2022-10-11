@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, Params, useLoaderData } from "@remix-run/react";
 import {
   EnvironmentsApi,
@@ -25,6 +25,10 @@ export const handle = {
     </NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.environmentName} - Environment`,
+});
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new EnvironmentsApi(SherlockConfiguration)

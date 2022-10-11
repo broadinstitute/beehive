@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import {
   ClustersApi,
@@ -23,6 +23,10 @@ import {
 export const handle = {
   breadcrumb: () => <NavLink to="/clusters">Clusters</NavLink>,
 };
+
+export const meta: MetaFunction = () => ({
+  title: "Clusters",
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   return new ClustersApi(SherlockConfiguration)

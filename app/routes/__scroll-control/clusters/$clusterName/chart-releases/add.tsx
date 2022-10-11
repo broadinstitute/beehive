@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -36,6 +36,10 @@ export const handle = {
     </NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.clusterName} - Cluster - Add Chart`,
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   return Promise.all([

@@ -1,4 +1,9 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import {
   NavLink,
   Params,
@@ -51,6 +56,10 @@ export const handle = {
     <NavLink to={`/environments/${params.environmentName}/edit`}>Edit</NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.environmentName} - Environment - Edit`,
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   return new ClustersApi(SherlockConfiguration)

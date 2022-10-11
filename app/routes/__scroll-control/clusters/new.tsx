@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "@remix-run/node";
+import { ActionFunction, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
 import {
   ClustersApi,
@@ -28,6 +28,10 @@ import { getSession } from "~/sessions.server";
 export const handle = {
   breadcrumb: () => <NavLink to="/clusters/new">New</NavLink>,
 };
+
+export const meta: MetaFunction = () => ({
+  title: "New Cluster",
+});
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));

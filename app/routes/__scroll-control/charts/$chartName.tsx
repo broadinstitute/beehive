@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, Params, useLoaderData } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
@@ -19,6 +19,10 @@ export const handle = {
     <NavLink to={`/charts/${params.chartName}`}>{params.chartName}</NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.chartName} - Chart`,
+});
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartsApi(SherlockConfiguration)

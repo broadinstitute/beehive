@@ -1,4 +1,9 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import {
   useActionData,
   useLoaderData,
@@ -44,6 +49,10 @@ export const handle = {
     <span className="pointer-events-none">Review Version Changes</span>
   ),
 };
+
+export const meta: MetaFunction = () => ({
+  title: "Review Version Changes",
+});
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);

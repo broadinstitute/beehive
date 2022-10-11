@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "@remix-run/node";
+import { ActionFunction, MetaFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
   Params,
@@ -28,6 +28,10 @@ export const handle = {
     <NavLink to={`/charts/${params.chartName}/delete`}>Delete</NavLink>
   ),
 };
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.chartName} - Chart - Delete`,
+});
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));

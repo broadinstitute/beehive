@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "@remix-run/node";
+import { ActionFunction, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
 import { verifyAuthenticityToken } from "remix-utils";
@@ -23,8 +23,12 @@ import {
 import { getSession } from "~/sessions.server";
 
 export const handle = {
-  breadcrumb: () => <NavLink to={`/charts/new`}>New</NavLink>,
+  breadcrumb: () => <NavLink to="/charts/new">New</NavLink>,
 };
+
+export const meta: MetaFunction = () => ({
+  title: "New Chart",
+});
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
