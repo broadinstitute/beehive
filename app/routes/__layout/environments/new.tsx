@@ -17,7 +17,7 @@ import {
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { verifyAuthenticityToken } from "remix-utils";
+
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
@@ -72,7 +72,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const environmentRequest: V2controllersEnvironment = {

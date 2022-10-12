@@ -9,7 +9,7 @@ import {
   ClustersApi,
   V2controllersCluster,
 } from "@sherlock-js-client/sherlock";
-import { verifyAuthenticityToken } from "remix-utils";
+
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
@@ -38,7 +38,7 @@ export const meta: MetaFunction = ({ params }) => ({
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const clusterRequest: V2controllersCluster = {

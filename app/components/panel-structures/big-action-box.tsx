@@ -1,7 +1,7 @@
 import { Form, useTransition } from "@remix-run/react";
-import { AuthenticityTokenInput } from "remix-utils";
 import ActionButton from "../interactivity/action-button";
 import { NavButton } from "../interactivity/nav-button";
+import { CsrfTokenInput } from "../logic/csrf-token";
 import { ActionBoxProps } from "./action-box";
 
 export interface BigActionBoxProps extends ActionBoxProps {
@@ -47,7 +47,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
             >
               <h2 className="font-medium">{submitText}</h2>
             </ActionButton>
-            <AuthenticityTokenInput />
+            <CsrfTokenInput />
             {returnURL && (
               <input type="hidden" name="return" value={returnURL} />
             )}

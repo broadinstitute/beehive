@@ -6,7 +6,7 @@ const { getSession, commitSession, destroySession } =
       // See Cookie Prefixes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
       name: `${
         process.env.NODE_ENV === "production" ? "__HOST-" : ""
-      }beehive_session`,
+      }beehive_csrf`,
       path: "/",
       secure: process.env.NODE_ENV === "production",
 
@@ -26,3 +26,8 @@ const { getSession, commitSession, destroySession } =
   });
 
 export { getSession, commitSession, destroySession };
+
+export const sessionFields = {
+  csrfToken: "csrfToken",
+  cspScriptNonce: "cspScriptNonce",
+};

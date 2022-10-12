@@ -1,9 +1,3 @@
-import { randomBytes } from "crypto";
-
-export function generateNonce(): string {
-  return randomBytes(32).toString("base64url");
-}
-
 // See discussion at https://github.com/remix-run/remix/issues/183
 export function getContentSecurityPolicy(nonce?: string | undefined): string {
   let scriptSrc: string;

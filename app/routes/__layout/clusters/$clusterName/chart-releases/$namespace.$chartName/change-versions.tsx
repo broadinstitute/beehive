@@ -22,7 +22,6 @@ import {
   V2controllersChartVersion,
 } from "@sherlock-js-client/sherlock";
 import { useMemo, useState } from "react";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { AppVersionColors } from "~/components/content/app-version/app-version-colors";
@@ -36,6 +35,7 @@ import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { TextField } from "~/components/interactivity/text-field";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import {
@@ -109,7 +109,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const changesetRequest: V2controllersChangesetPlanRequestChartReleaseEntry = {

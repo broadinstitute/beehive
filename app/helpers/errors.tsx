@@ -18,7 +18,8 @@ export async function deriveErrorInfoFromResponse(
 
 export function deriveErrorInfo(status: number, data: any): DerivedErrorInfo {
   let subject = "Beehive Backend";
-  let message: string | undefined = (data as ErrorsErrorResponse).message;
+
+  let message: string | undefined = (data as ErrorsErrorResponse)?.message;
 
   if (message !== undefined) {
     subject = "Sherlock";

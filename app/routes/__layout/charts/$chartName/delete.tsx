@@ -6,13 +6,13 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ChartDeleteDescription } from "~/components/content/chart/chart-delete-description";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
@@ -35,7 +35,7 @@ export const meta: MetaFunction = ({ params }) => ({
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   return new ChartsApi(SherlockConfiguration)
     .apiV2ChartsSelectorDelete(

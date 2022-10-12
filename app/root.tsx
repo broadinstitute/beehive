@@ -16,14 +16,19 @@ import {
 import tailwindStyles from "./styles/tailwind.css";
 import beehiveLoadingStyles from "./styles/beehive-loading.css";
 import favicon from "./assets/favicon.svg";
-import { FunctionComponent } from "react";
-import { commitSession, getSession } from "./sessions.server";
 import {
-  AuthenticityTokenProvider,
-  createAuthenticityToken,
-} from "remix-utils";
+  commitSession,
+  getOrSetSessionNonce,
+  getSession,
+  sessionFields,
+} from "./sessions.server";
+import { AuthenticityTokenProvider } from "remix-utils";
 import { LoadScroller } from "./routes/__layout";
-import { generateNonce } from "./csp.server";
+import { generateNonce } from "./helpers/nonce.server";
+import { catchBoundary } from "./components/boundaries/catch-boundary";
+import { errorBoundary } from "./components/boundaries/error-boundary";
+import { createContext } from "react";
+import { CsrfTokenContext } from "./components/logic/csrf-token";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -37,23 +42,36 @@ export const links: LinksFunction = () => [
   { rel: "icon", href: favicon, type: "image/svg+xml" },
 ];
 
-export interface RootLoaderData {
-  csrf: string;
+interface LoaderData {
+  csrfToken: string;
   cspScriptNonce: string;
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  return json<RootLoaderData>(
-    { csrf: createAuthenticityToken(session), cspScriptNonce: generateNonce() },
+
+  if (!session.has(sessionFields.csrfToken)) {
+    session.set(sessionFields.csrfToken, generateNonce());
+  }
+  if (!session.has(sessionFields.cspScriptNonce)) {
+    session.set(sessionFields.cspScriptNonce, generateNonce());
+  }
+  return json<LoaderData>(
+    {
+      csrfToken: session.get(sessionFields.csrfToken),
+      cspScriptNonce: session.get(sessionFields.cspScriptNonce),
+    },
     { headers: { "Set-Cookie": await commitSession(session) } }
   );
 };
 
 export const unstable_shouldReload = () => false;
 
-const App: FunctionComponent = () => {
-  let { csrf, cspScriptNonce } = useLoaderData<RootLoaderData>();
+export const CatchBoundary = catchBoundary;
+export const ErrorBoundary = errorBoundary;
+
+export const App: React.FunctionComponent = () => {
+  let { csrfToken, cspScriptNonce } = useLoaderData<LoaderData>();
   if (typeof window !== "undefined") {
     // https://html.spec.whatwg.org/multipage/urls-and-fetching.html#nonce-attributes
     // When this code runs in the browser, we want the nonce to be empty because
@@ -62,7 +80,7 @@ const App: FunctionComponent = () => {
     cspScriptNonce = "";
   }
   return (
-    <AuthenticityTokenProvider token={csrf}>
+    <CsrfTokenContext.Provider value={csrfToken}>
       <html lang="en">
         <head>
           <Meta />
@@ -76,7 +94,7 @@ const App: FunctionComponent = () => {
           <LiveReload nonce={cspScriptNonce} />
         </body>
       </html>
-    </AuthenticityTokenProvider>
+    </CsrfTokenContext.Provider>
   );
 };
 

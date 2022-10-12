@@ -15,7 +15,6 @@ import {
   V2controllersChangeset,
 } from "@sherlock-js-client/sherlock";
 import { useMemo, useState } from "react";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { AppVersionColors } from "~/components/content/app-version/app-version-colors";
@@ -28,6 +27,7 @@ import { EnumSelect } from "~/components/interactivity/enum-select";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
@@ -81,7 +81,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   return new ChangesetsApi(SherlockConfiguration)

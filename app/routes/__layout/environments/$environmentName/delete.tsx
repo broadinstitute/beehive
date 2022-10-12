@@ -9,13 +9,13 @@ import {
   EnvironmentsApi,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
 import { EnvironmentDeleteDescription } from "~/components/content/environment/environment-delete-description";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
@@ -40,7 +40,7 @@ export const meta: MetaFunction = ({ params }) => ({
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   return new EnvironmentsApi(SherlockConfiguration)
     .apiV2EnvironmentsSelectorDelete(

@@ -20,7 +20,6 @@ import {
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
@@ -31,6 +30,7 @@ import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { TextField } from "~/components/interactivity/text-field";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerTextProps } from "~/components/panel-structures/filler-text";
@@ -88,7 +88,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const useExactVersionsFromOtherEnvironment = formData.get(

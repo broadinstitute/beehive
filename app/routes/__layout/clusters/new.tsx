@@ -4,7 +4,6 @@ import {
   ClustersApi,
   V2controllersCluster,
 } from "@sherlock-js-client/sherlock";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
@@ -12,6 +11,7 @@ import { ClusterCreatableFields } from "~/components/content/cluster/cluster-cre
 import { ClusterEditableFields } from "~/components/content/cluster/cluster-editable-fields";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
 import { Branch } from "~/components/route-tree/branch";
@@ -35,7 +35,7 @@ export const meta: MetaFunction = () => ({
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const clusterRequest: V2controllersCluster = {

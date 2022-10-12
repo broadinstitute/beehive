@@ -1,7 +1,6 @@
 import { ActionFunction, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChartColors } from "~/components/content/chart/chart-colors";
@@ -9,6 +8,7 @@ import { ChartCreatableFields } from "~/components/content/chart/chart-creatable
 import { ChartEditableFields } from "~/components/content/chart/chart-editable-fields";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
 import { Branch } from "~/components/route-tree/branch";
@@ -32,7 +32,7 @@ export const meta: MetaFunction = () => ({
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const chartRequest: V2controllersChart = {

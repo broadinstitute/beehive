@@ -9,12 +9,12 @@ import {
   ChartReleasesApi,
   V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
 import { ChartReleaseEditableFields } from "~/components/content/chart-release/chart-release-editable-fields";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
@@ -42,7 +42,7 @@ export const meta: MetaFunction = ({ params }) => ({
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const chartReleaseRequest: V2controllersChartRelease = {

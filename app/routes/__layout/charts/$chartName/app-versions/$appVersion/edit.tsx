@@ -10,12 +10,12 @@ import {
   V2controllersAppVersion,
   V2controllersChart,
 } from "@sherlock-js-client/sherlock";
-import { verifyAuthenticityToken } from "remix-utils";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { AppVersionColors } from "~/components/content/app-version/app-version-colors";
 import { AppVersionEditableFields } from "~/components/content/app-version/app-version-editable-fields";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
@@ -45,7 +45,7 @@ export const meta: MetaFunction = ({ params }) => ({
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  await verifyAuthenticityToken(request, session);
+  await verifySessionCsrfToken(request, session);
 
   const formData = await request.formData();
   const appVersionRequest: V2controllersAppVersion = {

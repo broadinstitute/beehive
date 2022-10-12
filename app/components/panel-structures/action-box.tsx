@@ -1,6 +1,6 @@
 import { Form, useTransition } from "@remix-run/react";
-import { AuthenticityTokenInput } from "remix-utils";
 import ActionButton from "../interactivity/action-button";
+import { CsrfTokenInput } from "../logic/csrf-token";
 
 export interface ActionBoxProps {
   children: React.ReactNode;
@@ -42,7 +42,7 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
         >
           <h2 className="font-medium">{submitText}</h2>
         </ActionButton>
-        <AuthenticityTokenInput />
+        <CsrfTokenInput />
       </Form>
     </div>
   );
