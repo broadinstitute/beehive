@@ -47,6 +47,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (process.env.SELF_HOST) {
     requestUrl.host = process.env.SELF_HOST;
   }
+  if (process.env.NODE_ENV === "production") {
+    requestUrl.protocol = "https";
+  }
 
   // Handle redirect from GitHub OAuth
   if (requestUrl.searchParams.has("code")) {
