@@ -43,12 +43,18 @@ interface LoaderData {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  const requestUrl = new URL(request.url);
-  if (process.env.SELF_HOST) {
-    requestUrl.host = process.env.SELF_HOST;
-  }
-  if (process.env.NODE_ENV === "production") {
-    requestUrl.protocol = "https";
+  let requestUrl = new URL(request.url);
+  if (
+    request.headers.get("X-Forwarded-Proto") &&
+    request.headers.get("X-Forwarded-Host")
+  ) {
+    requestUrl.href =
+      request.headers.get("X-Forwarded-Proto") +
+      "://" +
+      request.headers.get("X-Forwarded-Host") +
+      requestUrl.pathname +
+      requestUrl.search +
+      requestUrl.hash;
   }
 
   // Handle redirect from GitHub OAuth
