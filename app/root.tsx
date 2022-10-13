@@ -44,6 +44,8 @@ interface LoaderData {
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
   let requestUrl = new URL(request.url);
+
+  // If we're behind a proxy, make our URL whatever the user actually entered
   if (
     request.headers.get("X-Forwarded-Proto") &&
     request.headers.get("X-Forwarded-Host")
