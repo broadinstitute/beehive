@@ -53,11 +53,13 @@ Tailwind
 
 ## Getting set up
 
-1. Grab [Node 16](https://nodejs.org/en/download)
+1. Grab [Node 18](https://nodejs.org/en/download)
 
 2. Clone this repo
 
-3. Run `npm install` to download dependencies and `npm run dev` to spin up the development server.
+3. Run `./setup-env.bash` to pull down the info needed to do local GitHub auth
+
+4. Run `npm install` to download dependencies and `npm run dev` to spin up the development server
 
 You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up.
 

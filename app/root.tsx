@@ -3,6 +3,7 @@ import {
   LinksFunction,
   LoaderFunction,
   json,
+  redirect,
 } from "@remix-run/node";
 import {
   Links,
@@ -16,18 +17,11 @@ import {
 import tailwindStyles from "./styles/tailwind.css";
 import beehiveLoadingStyles from "./styles/beehive-loading.css";
 import favicon from "./assets/favicon.svg";
-import {
-  commitSession,
-  getOrSetSessionNonce,
-  getSession,
-  sessionFields,
-} from "./sessions.server";
-import { AuthenticityTokenProvider } from "remix-utils";
+import { commitSession, getSession, sessionFields } from "./sessions.server";
 import { LoadScroller } from "./routes/__layout";
 import { generateNonce } from "./helpers/nonce.server";
 import { catchBoundary } from "./components/boundaries/catch-boundary";
 import { errorBoundary } from "./components/boundaries/error-boundary";
-import { createContext } from "react";
 import { CsrfTokenContext } from "./components/logic/csrf-token";
 
 export const meta: MetaFunction = () => ({
@@ -49,17 +43,105 @@ interface LoaderData {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
+  const requestUrl = new URL(request.url);
 
-  if (!session.has(sessionFields.csrfToken)) {
-    session.set(sessionFields.csrfToken, generateNonce());
+  // Handle redirect from GitHub OAuth
+  if (requestUrl.searchParams.has("code")) {
+    if (!requestUrl.searchParams.has("state")) {
+      throw new Response(
+        `GitHub OAuth issue; "code" was passed but "state" was not`,
+        { status: 400 }
+      );
+    } else if (!session.has(sessionFields.githubOAuthState)) {
+      throw new Response(
+        `GitHub OAuth issue; "code" was passed but "${sessionFields.githubOAuthState}" was not in the session`,
+        { status: 400 }
+      );
+    } else if (
+      requestUrl.searchParams.get("state") !==
+      session.get(sessionFields.githubOAuthState)
+    ) {
+      throw new Response(
+        `GitHub OAuth issue; "code" was passed but "state" and session "${sessionFields.githubOAuthState}" didn't match`,
+        { status: 400 }
+      );
+    } else {
+      const githubTokenURL = new URL(
+        "https://github.com/login/oauth/access_token"
+      );
+      githubTokenURL.searchParams.append(
+        "client_id",
+        process.env.GITHUB_CLIENT_ID || ""
+      );
+      githubTokenURL.searchParams.append(
+        "client_secret",
+        process.env.GITHUB_CLIENT_SECRET || ""
+      );
+      githubTokenURL.searchParams.append(
+        "code",
+        requestUrl.searchParams.get("code") || ""
+      );
+      return await fetch(githubTokenURL.href, {
+        headers: { Accept: "application/json" },
+      })
+        .then(async (response) => {
+          if (response.status !== 200) {
+            throw new Response(
+              `GitHub OAuth issue; GitHub rejected the code with status ${
+                response.status
+              }: ${await response.text()}`
+            );
+          } else {
+            return await response.json();
+          }
+        })
+        .then(async (data) => {
+          if (!data?.access_token) {
+            throw new Response(
+              `GitHub OAuth issue; GitHub didn't return an access_token: ${JSON.stringify(
+                data
+              )}`
+            );
+          } else {
+            session.set(sessionFields.githubAccessToken, data.access_token);
+            requestUrl.searchParams.delete("code");
+            requestUrl.searchParams.delete("state");
+            return redirect(requestUrl.href, {
+              headers: { "Set-Cookie": await commitSession(session) },
+            });
+          }
+        });
+    }
   }
-  if (!session.has(sessionFields.cspScriptNonce)) {
-    session.set(sessionFields.cspScriptNonce, generateNonce());
+
+  // Start GitHub OAuth
+  session.set(sessionFields.githubOAuthState, generateNonce());
+  if (!session.has(sessionFields.githubAccessToken)) {
+    const githubAuthorizeURL = new URL(
+      "https://github.com/login/oauth/authorize"
+    );
+    githubAuthorizeURL.searchParams.append(
+      "client_id",
+      process.env.GITHUB_CLIENT_ID || ""
+    );
+    githubAuthorizeURL.searchParams.append("redirect_uri", requestUrl.href);
+    githubAuthorizeURL.searchParams.append("scope", "repo");
+    githubAuthorizeURL.searchParams.append(
+      "state",
+      session.get(sessionFields.githubOAuthState)
+    );
+    githubAuthorizeURL.searchParams.append("allow_signup", "false");
+    return redirect(githubAuthorizeURL.href, {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
   }
+
+  // Update CSRF token
+  session.set(sessionFields.csrfToken, generateNonce());
   return json<LoaderData>(
     {
       csrfToken: session.get(sessionFields.csrfToken),
-      cspScriptNonce: session.get(sessionFields.cspScriptNonce),
+      cspScriptNonce: generateNonce(),
     },
     { headers: { "Set-Cookie": await commitSession(session) } }
   );

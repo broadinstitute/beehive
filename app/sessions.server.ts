@@ -6,22 +6,22 @@ const { getSession, commitSession, destroySession } =
       // See Cookie Prefixes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
       name: `${
         process.env.NODE_ENV === "production" ? "__HOST-" : ""
-      }beehive_csrf`,
+      }beehive_session`,
       path: "/",
-      secure: process.env.NODE_ENV === "production",
+
+      // See Secure attribute at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes
+      secure: true,
 
       // See SameSite attribute at https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
-      sameSite: "strict",
+      // We can't use 'strict' because we need to store the GitHub OAuth state client-side in this cookie--we need the
+      //cookie loaded when we handle the redirect from GitHub.
+      sameSite: "lax",
 
       // See HttpOnly attribute at https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#security
       httpOnly: true,
 
-      // Set COOKIE_SIGNING_SECRET when deployed to prevent client-side cookie modification
-      secrets: [
-        process.env.NODE_ENV === "production"
-          ? process.env.COOKIE_SIGNING_SECRET!
-          : "development",
-      ],
+      // COOKIE_SIGNING_SECRET used to protect against cookie tampering
+      secrets: [process.env.COOKIE_SIGNING_SECRET!],
     },
   });
 
@@ -29,5 +29,6 @@ export { getSession, commitSession, destroySession };
 
 export const sessionFields = {
   csrfToken: "csrfToken",
-  cspScriptNonce: "cspScriptNonce",
+  githubOAuthState: "githubOAuthState",
+  githubAccessToken: "githubAccessToken",
 };

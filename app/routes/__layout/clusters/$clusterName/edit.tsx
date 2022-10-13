@@ -15,6 +15,7 @@ import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { ClusterEditableFields } from "~/components/content/cluster/cluster-editable-fields";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";

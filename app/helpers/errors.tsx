@@ -39,11 +39,11 @@ export function deriveErrorInfo(status: number, data: any): DerivedErrorInfo {
   }
   return {
     title: `${subject} Error: ${status} ${
-      (data as ErrorsErrorResponse).type || "Response"
+      (data as ErrorsErrorResponse)?.type || "Response"
     }`,
     message: message,
     reloadRequired:
-      (data as ErrorsErrorResponse).toBlame == "server" ||
+      (data as ErrorsErrorResponse)?.toBlame == "server" ||
       subject === "Beehive Backend",
   };
 }

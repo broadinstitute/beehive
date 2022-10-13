@@ -29,6 +29,7 @@ import ActionButton from "~/components/interactivity/action-button";
 import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import {

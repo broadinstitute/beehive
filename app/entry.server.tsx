@@ -25,8 +25,7 @@ export default function handleRequest(
           const nonce: string | undefined =
             remixContext.appState.catchBoundaryRouteId === "root" &&
             remixContext.appState.error
-              ? // Root boundaries can't have the nonce because they don't
-                // call the loader
+              ? // Root boundaries wouldn't have route data loaded
                 undefined
               : remixContext.routeData.root?.cspScriptNonce;
           responseHeaders.set(

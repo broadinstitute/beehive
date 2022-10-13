@@ -4,7 +4,7 @@ import { sessionFields } from "~/sessions.server";
 
 export const CsrfTokenContext = createContext("");
 
-const csrfTokenInputName = "csrf-token";
+export const csrfTokenInputName = "csrf-token";
 
 export const CsrfTokenInput: React.FunctionComponent = () => (
   <CsrfTokenContext.Consumer>

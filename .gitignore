@@ -1,10 +1,15 @@
+# Development artifacts
 node_modules
 
+# Build artifacts
 /.cache
 /build
 /public/build
+
+# Has secrets, should never be committed
 .env
 
+# Tailwind generates during build
 /app/styles/tailwind.css
 
 # Mac OS nonsense
