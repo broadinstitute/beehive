@@ -44,6 +44,9 @@ interface LoaderData {
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
   const requestUrl = new URL(request.url);
+  if (process.env.SELF_HOST) {
+    requestUrl.host = process.env.SELF_HOST;
+  }
 
   // Handle redirect from GitHub OAuth
   if (requestUrl.searchParams.has("code")) {
