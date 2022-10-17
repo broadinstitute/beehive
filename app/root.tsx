@@ -13,6 +13,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useTransition,
 } from "@remix-run/react";
 import tailwindStyles from "./styles/tailwind.css";
 import beehiveLoadingStyles from "./styles/beehive-loading.css";
@@ -175,6 +176,7 @@ export const App: React.FunctionComponent = () => {
     // than an empty string, React's dev mode will warn us about a
     cspScriptNonce = "";
   }
+  const transition = useTransition();
   return (
     <CsrfTokenContext.Provider value={csrfToken}>
       <html lang="en">
@@ -182,7 +184,11 @@ export const App: React.FunctionComponent = () => {
           <Meta />
           <Links />
         </head>
-        <body className="bg-zinc-100 flex flex-col min-w-screen h-screen w-full">
+        <body
+          className={`bg-zinc-100 flex flex-col min-w-screen h-screen w-full ${
+            transition.state != "idle" ? "cursor-progress" : ""
+          }`}
+        >
           <Outlet />
           <LoadScroller nonce={cspScriptNonce} />
           <ScrollRestoration nonce={cspScriptNonce} />
