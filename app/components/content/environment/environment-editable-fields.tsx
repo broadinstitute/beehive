@@ -126,6 +126,46 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           {...EnvironmentColors}
         />
       </div>
+      <label>
+        <h2 className="font-light text-2xl">Helmfile Ref</h2>
+        <p>
+          The git ref of terra-helmfile that should be used for overall
+          environment configuration. This doesn't directly configure apps or
+          what charts exist; it is used for ArgoCD manifest generation.
+        </p>
+        <TextField
+          name="helmfileRef"
+          placeholder={
+            templateInUse ? "(defaults to template's value)" : "HEAD"
+          }
+          defaultValue={environment?.helmfileRef}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl">Default Firecloud Develop Ref</h2>
+        <p className="mb-2">
+          Legacy configuration from firecloud-develop doesn't work quite like
+          our newer systems. All the legacy configuration in an environment
+          points at the same git ref of firecloud-develop, and during monolith
+          release the contents of those refs change to update the configuration.
+        </p>
+        <p className="mb-2">
+          To make this work in Beehive, when you copy versions from one chart
+          instance or environment to another, the firecloud-develop ref won't
+          actually change. It'll only change if you change it explicitly.
+        </p>
+        <p>
+          This field will set the initial default value for chart instances as
+          they get created. This means that a "prod-like BEE" could specify{" "}
+          <span className="font-mono">prod</span> here, and any legacy
+          configuration inside it would follow that branch by default.
+        </p>
+        <TextField
+          name="defaultFirecloudDevelopRef"
+          placeholder={templateInUse ? "(defaults to template's value)" : "dev"}
+          defaultValue={environment?.defaultFirecloudDevelopRef}
+        />
+      </label>
     </>
   );
   return (
