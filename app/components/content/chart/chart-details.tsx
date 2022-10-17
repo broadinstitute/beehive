@@ -54,6 +54,19 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
       </div>
     )}
 
+    {chart.legacyConfigsEnabled && (
+      <p>
+        This application is flagged as receiving legacy configuration from{" "}
+        <a
+          href="https://github.com/broadinstitute/firecloud-develop"
+          className="decoration-blue-500 underline"
+        >
+          firecloud-develop
+        </a>
+        .
+      </p>
+    )}
+
     <div className="flex flex-col space-y-2">
       {(chart.chartRepo == "terra-helm" && (
         <div className="flex flex-col space-y-2">

@@ -38,6 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
   const chartRequest: V2controllersChart = {
     ...formDataToObject(formData, true),
     chartExposesEndpoint: formData.get("chartExposesEndpoint") === "true",
+    legacyConfigsEnabled: formData.get("legacyConfigsEnabled") === "true",
     defaultPort: ((defaultPort) =>
       typeof defaultPort === "string" && defaultPort !== ""
         ? parseInt(defaultPort)

@@ -17,6 +17,9 @@ export const ChartEditableFields: React.FunctionComponent<
   const [chartExposesEndpoint, setChartExposesEndpoint] = useState(
     chart?.chartExposesEndpoint === true ? "true" : "false"
   );
+  const [legacyConfigsEnabled, setLegacyConfigsEnabled] = useState(
+    chart?.legacyConfigsEnabled === true ? "true" : "false"
+  );
   return (
     <div className="flex flex-col space-y-4">
       <label>
@@ -127,6 +130,24 @@ export const ChartEditableFields: React.FunctionComponent<
             defaultValue={chart?.defaultPort || "443"}
           />
         </label>
+      </div>
+      <div>
+        <h2 className="font-light text-2xl">Legacy Configs?</h2>
+        <p>
+          This flag controls whether or not instances of this chart will have
+          configuration from firecloud-develop.
+        </p>
+        <EnumInputSelect
+          name="legacyConfigsEnabled"
+          className="grid grid-cols-2 mt-2"
+          fieldValue={legacyConfigsEnabled}
+          setFieldValue={setLegacyConfigsEnabled}
+          enums={[
+            ["Yes", "true"],
+            ["No", "false"],
+          ]}
+          {...ChartColors}
+        />
       </div>
     </div>
   );
