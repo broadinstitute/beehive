@@ -86,3 +86,9 @@ Errors use the Red series but are also labeled as such and have different stylin
 Focused elements may use the Blue
 
 [Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%237DD3FC-%2386EFAC-%23FDA4AF-%23C4B5FD)
+
+## Icons
+
+[Lucide](https://lucide.dev/) is set up, [here's how to use it](https://lucide.dev/docs/lucide-react#how-to-use). You can apply Tailwind classes to the imported components like normal to style them.
+
+(If you know [Feather Icons](https://github.com/feathericons/feather), Lucide is a fork of that project with more active leadership and thus more icons)
