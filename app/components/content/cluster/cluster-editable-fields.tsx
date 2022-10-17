@@ -62,6 +62,18 @@ export const ClusterEditableFields: React.FunctionComponent<
           placeholder="(required)"
         />
       </label>
+      <label>
+        <h2 className="font-light text-2xl">Location</h2>
+        <p>
+          Thelma uses the location of the cluster to help specify the proper
+          connection name.
+        </p>
+        <TextField
+          name="location"
+          placeholder="us-central1-a"
+          defaultValue={cluster?.location}
+        />
+      </label>
       <div>
         <h2 className="font-light text-2xl">Require Suitability?</h2>
         <p>
@@ -80,6 +92,19 @@ export const ClusterEditableFields: React.FunctionComponent<
           {...ClusterColors}
         />
       </div>
+      <label>
+        <h2 className="font-light text-2xl">Helmfile Ref</h2>
+        <p>
+          The git ref of terra-helmfile that should be used for overall cluster
+          configuration. This doesn't directly configure apps or what charts
+          exist; it is used for ArgoCD manifest generation.
+        </p>
+        <TextField
+          name="helmfileRef"
+          placeholder="HEAD"
+          defaultValue={cluster?.helmfileRef}
+        />
+      </label>
     </div>
   );
 };
