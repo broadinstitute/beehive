@@ -13,6 +13,8 @@ export interface AppVersionPickerProps {
   appVersionBranch: string;
   setAppVersionBranch: (value: string) => void;
   setShowAppVersionBranchPicker: (value: boolean) => void;
+  showFirecloudDevelopRefField?: boolean;
+  defaultFirecloudDevelopRef: string;
   hideOtherPickers?: () => void;
 }
 
@@ -28,6 +30,8 @@ export const AppVersionPicker: React.FunctionComponent<
   appVersionBranch,
   setAppVersionBranch,
   setShowAppVersionBranchPicker,
+  showFirecloudDevelopRefField,
+  defaultFirecloudDevelopRef,
   hideOtherPickers = () => {},
 }) => {
   const [appVersionResolver, setAppVersionResolver] = useState(
@@ -64,7 +68,7 @@ export const AppVersionPicker: React.FunctionComponent<
           ]}
           {...AppVersionColors}
         />
-        <div className="pl-6 border-l-2 border-zinc-400 mt-4">
+        <div className="pl-6 border-l-2 border-zinc-400 mt-4 flex flex-col space-y-4">
           {appVersionResolver === "exact" && (
             <label>
               <h2 className="font-light text-2xl">Set Exact Version</h2>
@@ -151,6 +155,33 @@ export const AppVersionPicker: React.FunctionComponent<
               this chart instance. This option is most common for third party
               charts or charts we have that don't deploy an app.
             </p>
+          )}
+          {showFirecloudDevelopRefField && (
+            <label>
+              <h2 className="font-light text-2xl">Firecloud Develop Ref</h2>
+              <p>
+                This is the Git reference in{" "}
+                <a
+                  href="https://github.com/broadinstitute/firecloud-develop"
+                  target="_blank"
+                  className="underline decoration-blue-500"
+                >
+                  firecloud-develop
+                </a>{" "}
+                to use for configuration values. This chart is marked as using
+                legacy configuration, so this field is available and required.
+              </p>
+              <TextField
+                name={
+                  isTargetingChangeset
+                    ? "toFirecloudDevelopRef"
+                    : "firecloudDevelopRef"
+                }
+                defaultValue={defaultFirecloudDevelopRef}
+                required
+                placeholder="(required)"
+              />
+            </label>
           )}
         </div>
       </div>

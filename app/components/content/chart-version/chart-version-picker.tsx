@@ -84,7 +84,7 @@ export const ChartVersionPicker: React.FunctionComponent<
           </p>
         )}
         <label>
-          <label className="font-light text-2xl">Helmfile Ref</label>
+          <h2 className="font-light text-2xl">Helmfile Ref</h2>
           <p>
             This is the Git reference in{" "}
             <a

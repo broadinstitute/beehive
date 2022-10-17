@@ -24,6 +24,11 @@ export const ChartReleaseDetails: React.FunctionComponent<
           appVersionExact={chartRelease.appVersionExact}
           appVersionCommit={chartRelease.appVersionCommit}
           appVersionBranch={chartRelease.appVersionBranch}
+          firecloudDevelopRef={
+            chartRelease.chartInfo?.legacyConfigsEnabled
+              ? chartRelease.firecloudDevelopRef
+              : undefined
+          }
           renderAppVersionLink={chartRelease.appVersionReference != null}
         />
       )}

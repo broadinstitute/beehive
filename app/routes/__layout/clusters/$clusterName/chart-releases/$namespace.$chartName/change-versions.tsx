@@ -445,6 +445,14 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 appVersionBranch={appVersionBranch}
                 setAppVersionBranch={setAppVersionBranch}
                 setShowAppVersionBranchPicker={setShowAppVersionBranchPicker}
+                showFirecloudDevelopRefField={
+                  chartRelease.chartInfo?.legacyConfigsEnabled
+                }
+                defaultFirecloudDevelopRef={
+                  chartRelease.firecloudDevelopRef ||
+                  chartRelease.environmentInfo?.defaultFirecloudDevelopRef ||
+                  "dev"
+                }
                 hideOtherPickers={() => {
                   setShowOtherChartReleasePicker(false);
                   setShowChartVersionExactPicker(false);

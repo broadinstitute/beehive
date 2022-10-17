@@ -339,6 +339,10 @@ const NewRoute: React.FunctionComponent = () => {
             appVersionBranch={appVersionBranch}
             setAppVersionBranch={setAppVersionBranch}
             setShowAppVersionBranchPicker={setShowAppVersionBranchPicker}
+            showFirecloudDevelopRefField={chart.legacyConfigsEnabled}
+            defaultFirecloudDevelopRef={
+              actionData?.faultyRequest.firecloudDevelopRef || "dev"
+            }
             hideOtherPickers={() => {
               setShowChartVersionExactPicker(false);
               setShowEnvironmentPicker(false);

@@ -264,6 +264,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                 const appVersionInSherlockChanged =
                   (changeset.fromAppVersionReference === undefined) !==
                   (changeset.toAppVersionReference === undefined);
+                const firecloudDevelopRefChanged =
+                  changeset.fromFirecloudDevelopRef !==
+                  changeset.toFirecloudDevelopRef;
                 const chartVersionChanged =
                   changeset.fromChartVersionExact !==
                   changeset.toChartVersionExact;
@@ -527,6 +530,46 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               } tracked by DevOps`}</p>
                             </>
                           )}
+                        </>
+                      )}
+                      {changeset.chartReleaseInfo?.chartInfo
+                        ?.legacyConfigsEnabled && (
+                        <>
+                          <p
+                            className={`${
+                              firecloudDevelopRefChanged
+                                ? "text-black"
+                                : "text-black/40"
+                            } border-b border-zinc-500 pb-2`}
+                          >{`Legacy configuration from firecloud-develop's ${changeset.fromFirecloudDevelopRef?.substring(
+                            0,
+                            7
+                          )}`}</p>
+                          <p
+                            className={`${
+                              firecloudDevelopRefChanged
+                                ? "text-black"
+                                : "text-black/40"
+                            } border-b border-zinc-500 pb-2`}
+                          >
+                            {`Legacy configuration from firecloud-develop's ${changeset.toFirecloudDevelopRef?.substring(
+                              0,
+                              7
+                            )}`}
+                            {firecloudDevelopRefChanged && (
+                              <>
+                                {" ("}
+                                <a
+                                  href={`https://github.com/broadinstitute/firecloud-develop/compare/${changeset.fromFirecloudDevelopRef}...${changeset.toFirecloudDevelopRef}`}
+                                  target="_blank"
+                                  className="underline decoration-blue-500"
+                                >
+                                  git diff ↗
+                                </a>
+                                {")"}
+                              </>
+                            )}
+                          </p>
                         </>
                       )}
                       <h2
