@@ -1,3 +1,23 @@
+# Beehive
+
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=broadinstitute_beehive&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=broadinstitute_beehive)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=broadinstitute_beehive&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=broadinstitute_beehive)
+[![Bump, Tag, and Publish](https://github.com/broadinstitute/beehive/actions/workflows/build.yaml/badge.svg)](https://github.com/broadinstitute/beehive/actions/workflows/build.yaml)
+
+## Getting set up
+
+1. Grab [Node 18](https://nodejs.org/en/download)
+
+2. Clone this repo
+
+3. Run `./setup-env.bash` to pull down the info needed to do local GitHub auth
+
+4. Run `npm install` to download dependencies and `npm run dev` to spin up the development server
+
+You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up.
+
+If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwindcss.com/docs/editor-setup#intelli-sense-for-vs-code) that provides really good autocomplete.
+
 ## Stack
 
 <details>
@@ -51,25 +71,11 @@ Tailwind
 
 </details>
 
-## Getting set up
+## Documentation
 
-1. Grab [Node 18](https://nodejs.org/en/download)
+[Remix docs](https://remix.run/docs), [Tailwind docs](https://tailwindcss.com/docs/editor-setup)
 
-2. Clone this repo
-
-3. Run `./setup-env.bash` to pull down the info needed to do local GitHub auth
-
-4. Run `npm install` to download dependencies and `npm run dev` to spin up the development server
-
-You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up.
-
-If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwindcss.com/docs/editor-setup#intelli-sense-for-vs-code) that provides really good autocomplete.
-
-## Finding docs
-
-[Remix](https://remix.run/docs), [Tailwind](https://tailwindcss.com/docs/editor-setup)
-
-## Colors
+### Colors
 
 [The colors come from Tailwind](https://tailwindcss.com/docs/customizing-colors):
 
@@ -87,7 +93,7 @@ Focused elements may use the Blue
 
 [Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%237DD3FC-%2386EFAC-%23FDA4AF-%23C4B5FD)
 
-## Icons
+### Icons
 
 [Lucide](https://lucide.dev/) is set up, [here's how to use it](https://lucide.dev/docs/lucide-react#how-to-use). You can apply Tailwind classes to the imported components like normal to style them.
 
