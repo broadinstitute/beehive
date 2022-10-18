@@ -85,8 +85,8 @@ jobs:
           TAGGED="${NAME}:${DOCKER_TAG}"
           echo "NAME: ${NAME}"
           echo "TAGGED: ${TAGGED}"
-          echo ::set-output "name=name::${NAME}"
-          echo ::set-output "name=tagged::${TAGGED}"
+          echo "name=${NAME}" >> $GITHUB_OUTPUT
+          echo "tagged=${TAGGED}" >> $GITHUB_OUTPUT
       - name: Build image
         run: |
           docker build --build-arg BUILD_VERSION='${{ steps.tag.outputs.tag }}' -t ${{ steps.image-name.outputs.tagged }} .
