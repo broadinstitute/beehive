@@ -71,6 +71,8 @@ Tailwind
 
 </details>
 
+The overall architecture of the system is diagrammed [here](https://lucid.app/lucidchart/0b274518-4e5a-449e-b3bc-19714096d5a4/edit?page=0_0#).
+
 ## Documentation
 
 [Remix docs](https://remix.run/docs), [Tailwind docs](https://tailwindcss.com/docs/editor-setup)
