@@ -190,7 +190,7 @@ export const App: React.FunctionComponent = () => {
           }`}
         >
           <Outlet />
-          <LoadScroller nonce={cspScriptNonce} />
+          {/* <LoadScroller nonce={cspScriptNonce} /> */}
           <ScrollRestoration nonce={cspScriptNonce} />
           <Scripts nonce={cspScriptNonce} />
           <LiveReload nonce={cspScriptNonce} />
