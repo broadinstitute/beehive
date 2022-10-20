@@ -60,7 +60,7 @@ const AppVersionRoute: React.FunctionComponent = () => {
           subtitle={`App Version of ${appVersion.chart}`}
           title={appVersion.appVersion || ""}
         >
-          <AppVersionDetails appVersion={appVersion} toEdit="./edit" />
+          {/* <AppVersionDetails appVersion={appVersion} toEdit="./edit" /> */}
         </ItemDetails>
       </OutsetPanel>
       <Outlet context={{ appVersion, chart }} />
