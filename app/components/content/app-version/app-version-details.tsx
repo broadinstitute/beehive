@@ -39,7 +39,7 @@ export const AppVersionDetails: React.FunctionComponent<
         </a>
         .
       </p>
-    )}
+    )} */}
     <p>
       Description:{" "}
       {appVersion.description ? (
@@ -87,7 +87,7 @@ export const AppVersionDetails: React.FunctionComponent<
     <p>
       This App Version was first recorded in Sherlock at{" "}
       <PrettyPrintTime time={appVersion.createdAt} />.
-    </p> */}
+    </p>
     {toEdit && (
       <MutateControls
         name={`${appVersion.chart}/${appVersion.appVersion}`}
