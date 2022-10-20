@@ -40,7 +40,7 @@ export const AppVersionDetails: React.FunctionComponent<
         .
       </p>
     )}
-    {/* <p>
+    <p>
       Description:{" "}
       {appVersion.description ? (
         <PrettyPrintVersionDescription
@@ -50,8 +50,8 @@ export const AppVersionDetails: React.FunctionComponent<
       ) : (
         "None"
       )}
-    </p> */}
-    {appVersion.parentAppVersion &&
+    </p>
+    {/* {appVersion.parentAppVersion &&
       appVersion.parentAppVersionInfo &&
       appVersion.parentAppVersionInfo.hasOwnProperty("appVersion") && (
         <div className="flex flex-col space-y-2">
@@ -83,7 +83,7 @@ export const AppVersionDetails: React.FunctionComponent<
             Jump to Parent
           </NavButton>
         </div>
-      )}
+      )} */}
     <p>
       This App Version was first recorded in Sherlock at{" "}
       <PrettyPrintTime time={appVersion.createdAt} />.
