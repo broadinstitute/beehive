@@ -51,7 +51,7 @@ export const AppVersionDetails: React.FunctionComponent<
         "None"
       )}
     </p>
-    {/* {appVersion.parentAppVersion &&
+    {appVersion.parentAppVersion &&
       appVersion.parentAppVersionInfo &&
       appVersion.parentAppVersionInfo.hasOwnProperty("appVersion") && (
         <div className="flex flex-col space-y-2">
@@ -83,11 +83,11 @@ export const AppVersionDetails: React.FunctionComponent<
             Jump to Parent
           </NavButton>
         </div>
-      )} */}
-    <p>
+      )}
+    {/* <p>
       This App Version was first recorded in Sherlock at{" "}
       <PrettyPrintTime time={appVersion.createdAt} />.
-    </p>
+    </p> */}
     {toEdit && (
       <MutateControls
         name={`${appVersion.chart}/${appVersion.appVersion}`}
