@@ -14,7 +14,7 @@ export const AppVersionDetails: React.FunctionComponent<
   AppVersionDetailsProps
 > = ({ appVersion, toEdit }) => (
   <div className="flex flex-col space-y-10">
-    {appVersion.gitCommit && appVersion.gitBranch && (
+    {/* {appVersion.gitCommit && appVersion.gitBranch && (
       <p>
         This App Version was built from commit{" "}
         <a
@@ -87,7 +87,7 @@ export const AppVersionDetails: React.FunctionComponent<
     <p>
       This App Version was first recorded in Sherlock at{" "}
       <PrettyPrintTime time={appVersion.createdAt} />.
-    </p>
+    </p> */}
     {toEdit && (
       <MutateControls
         name={`${appVersion.chart}/${appVersion.appVersion}`}
