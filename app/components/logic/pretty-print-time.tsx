@@ -9,10 +9,14 @@ export const PrettyPrintTime: React.FunctionComponent<PrettyPrintTimeProps> = ({
   className,
   time,
 }) => {
-  const [timeString, setTimeString] = useState("None");
+  const [timeString, setTimeString] = useState(time || "None");
   useEffect(
     () => setTimeString(time ? new Date(time).toLocaleString() : "None"),
     [time]
   );
-  return <span className={className}>{timeString}</span>;
+  return (
+    <span title={time} className={className}>
+      {timeString}
+    </span>
+  );
 };
