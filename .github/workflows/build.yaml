@@ -125,6 +125,8 @@ jobs:
     with:
       new_version: ${{ needs.tag-build-publish.outputs.tag }}
       chart_name: "beehive"
+      fail_on_prod_failure: false
+      fail_on_dev_failure: true
     permissions:
       contents: "read"
       id-token: "write"
