@@ -14,7 +14,7 @@ export const AppVersionDetails: React.FunctionComponent<
   AppVersionDetailsProps
 > = ({ appVersion, toEdit }) => (
   <div className="flex flex-col space-y-10">
-    {/* {appVersion.gitCommit && appVersion.gitBranch && (
+    {appVersion.gitCommit && appVersion.gitBranch && (
       <p>
         This App Version was built from commit{" "}
         <a
@@ -39,8 +39,8 @@ export const AppVersionDetails: React.FunctionComponent<
         </a>
         .
       </p>
-    )} */}
-    <p>
+    )}
+    {/* <p>
       Description:{" "}
       {appVersion.description ? (
         <PrettyPrintVersionDescription
@@ -50,7 +50,7 @@ export const AppVersionDetails: React.FunctionComponent<
       ) : (
         "None"
       )}
-    </p>
+    </p> */}
     {appVersion.parentAppVersion &&
       appVersion.parentAppVersionInfo &&
       appVersion.parentAppVersionInfo.hasOwnProperty("appVersion") && (
