@@ -173,7 +173,7 @@ export const App: React.FunctionComponent = () => {
     // https://html.spec.whatwg.org/multipage/urls-and-fetching.html#nonce-attributes
     // When this code runs in the browser, we want the nonce to be empty because
     // that's what it will be regardless of what we do. If we have it anything other
-    // than an empty string, React's dev mode will warn us about a
+    // than an empty string, React's dev mode will warn us about about a mismatch.
     cspScriptNonce = "";
   }
   const transition = useTransition();
