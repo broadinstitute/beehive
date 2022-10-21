@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     .then(
       (appVersion) =>
         redirect(
-          `/charts/${appVersion.chart}/chart-versions/${appVersion.appVersion}`
+          `/charts/${appVersion.chart}/app-versions/${appVersion.appVersion}`
         ),
       errorResponseReturner
     );
