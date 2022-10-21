@@ -120,13 +120,13 @@ jobs:
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
             github.issues.createComment({ issue_number, owner, repo, body: 'Pushed image: ${{ steps.image-name.outputs.tagged }}' });
   report-to-sherlock:
-    uses: broadinstitute/sherlock/.github/workflows/client_report_app_version.yaml@main
+    uses: broadinstitute/sherlock/.github/workflows/client-report-app-version.yaml@main
     needs: tag-build-publish
     with:
-      new_version: ${{ needs.tag-build-publish.outputs.tag }}
-      chart_name: "beehive"
-      fail_on_prod_failure: true
-      fail_on_dev_failure: true
+      new-version: ${{ needs.tag-build-publish.outputs.tag }}
+      chart-name: "beehive"
+      fail-on-prod-failure: true
+      fail-on-dev-failure: true
     permissions:
       contents: "read"
       id-token: "write"
