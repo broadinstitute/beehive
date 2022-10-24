@@ -151,12 +151,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
     )
   );
 
-  const includedList = Array.from(includedChangesets)
-    .filter(([_, included]) => included)
-    .map(([name, _]) => name);
-  const excludedList = Array.from(includedChangesets)
-    .filter(([_, included]) => !included)
-    .map(([name, _]) => name);
+  const includedCount = Array.from(includedChangesets).filter(
+    ([_, included]) => included
+  ).length;
 
   return (
     <Branch>
@@ -165,8 +162,10 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
           title="Review Version Changes"
           returnURL={returnURL}
           returnText="Go Back Without Applying"
-          submitText="Apply Changes"
-          hideButton={includedList.length == 0}
+          submitText={`Apply ${includedCount} Change${
+            includedCount == 1 ? "" : "s"
+          }`}
+          hideButton={includedCount == 0}
           {...returnColors}
         >
           <p>
@@ -188,33 +187,42 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
               just the ones visible with your "{filterText}" filter.
             </p>
           )}
-          <div>
-            Currently included:
-            <ul className="list-disc pl-5">
-              {includedList.length > 0 ? (
-                includedList.map((name, index) => <li key={index}>{name}</li>)
-              ) : (
-                <li>None</li>
-              )}
-            </ul>
-          </div>
-          {includedList.map((name, index) => (
-            <input
-              key={index}
-              type="hidden"
-              name="changeset"
-              value={changesetIdLookup.get(name)}
-            />
-          ))}
-          {excludedList.length > 0 && (
-            <div>
-              Currently excluded:
-              <ul className="list-disc pl-5">
-                {excludedList.map((name, index) => (
-                  <li key={index}>{name}</li>
+          {changesets.length > 1 && (
+            <div className="flex flex-col space-y-1">
+              You can click the checkboxes to choose which changes to apply.
+              <ul>
+                {Array.from(includedChangesets).map(([name, included]) => (
+                  <li key={name}>
+                    <label className="inline-block cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={included}
+                        onChange={() => {
+                          setIncludedChangesets(
+                            (previous) =>
+                              new Map([
+                                ...previous,
+                                [name, !(previous.get(name) || false)],
+                              ])
+                          );
+                        }}
+                        name="changeset"
+                        value={changesetIdLookup.get(name)}
+                        className="align-middle mr-3"
+                      />
+                      <span className="align-middle">{name}</span>
+                    </label>
+                  </li>
                 ))}
               </ul>
             </div>
+          )}
+          {changesets.length == 1 && (
+            <input
+              type="hidden"
+              name="changeset"
+              value={changesets.at(0)?.id}
+            />
           )}
           {actionData && displayErrorInfo(actionData)}
         </BigActionBox>
@@ -285,9 +293,42 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                     key={index.toString()}
                     className={`h-fit w-[60vw] bg-white rounded-2xl shadow-md border-2 ${ChartReleaseColors.borderClassName} flex flex-col space-y-2 px-6 pb-5 pt-4`}
                   >
-                    <h1 className="font-light text-4xl">
-                      {changeset.chartReleaseInfo?.name}
-                    </h1>
+                    <div className="flex flex-row space-x-4 pb-2">
+                      {appliable &&
+                        changesets.length > 1 &&
+                        !changeset.supersededAt &&
+                        !changeset.appliedAt && (
+                          <input
+                            type="checkbox"
+                            className="w-9"
+                            title="Include in the changes to apply?"
+                            checked={
+                              includedChangesets.get(
+                                changeset.chartRelease as string
+                              ) || false
+                            }
+                            onChange={() => {
+                              setIncludedChangesets(
+                                (previous) =>
+                                  new Map([
+                                    ...previous,
+                                    [
+                                      changeset.chartRelease as string,
+                                      !(
+                                        previous.get(
+                                          changeset.chartRelease as string
+                                        ) || false
+                                      ),
+                                    ],
+                                  ])
+                              );
+                            }}
+                          />
+                        )}
+                      <h1 className="font-light text-4xl">
+                        {changeset.chartReleaseInfo?.name}
+                      </h1>
+                    </div>
                     <div
                       className={`flex flex-row gap-3 max-h-full flex-wrap ${
                         appliable ? "" : "opacity-50 pointer-events-none"
@@ -717,63 +758,19 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                         )}
                       </p>
                     </div>
-                    {(changeset.supersededAt ||
-                      changeset.appliedAt ||
-                      (appliable && changesets.length > 1)) && (
+                    {(changeset.supersededAt || changeset.appliedAt) && (
                       <div className="flex flex-col items-center pt-4">
                         {changeset.supersededAt && (
                           <h1 className="text-2xl font-light">
-                            These changes are out of date as of{" "}
+                            This proposed change is out of date as of{" "}
                             <PrettyPrintTime time={changeset.supersededAt} />
                           </h1>
                         )}
                         {changeset.appliedAt && (
                           <h1 className="text-2xl font-light">
-                            These changes were applied at{" "}
+                            This change was already applied at{" "}
                             <PrettyPrintTime time={changeset.appliedAt} />
                           </h1>
-                        )}
-                        {appliable && changesets.length > 1 && (
-                          <div
-                            className={`${ChartReleaseColors.backgroundClassName} ${ChartReleaseColors.borderClassName} border-2 rounded-2xl p-4 flex flex-row items-center justify-items-center space-x-4`}
-                          >
-                            <h1 className="text-3xl font-light whitespace-nowrap">
-                              Include These Changes?
-                            </h1>
-
-                            <EnumSelect
-                              className="grid grid-cols-2 w-[25vw]"
-                              bigButtons
-                              fieldValue={
-                                includedChangesets.get(
-                                  changeset.chartRelease as string
-                                ) || false
-                              }
-                              setFieldValue={(value) => {
-                                if (
-                                  includedChangesets.get(
-                                    changeset.chartRelease as string
-                                  ) !== value
-                                ) {
-                                  setIncludedChangesets(
-                                    (previous) =>
-                                      new Map([
-                                        ...previous,
-                                        [
-                                          changeset.chartRelease as string,
-                                          value,
-                                        ],
-                                      ])
-                                  );
-                                }
-                              }}
-                              enums={[
-                                ["Not Included", false],
-                                ["Included", true],
-                              ]}
-                              {...ChartReleaseColors}
-                            />
-                          </div>
                         )}
                       </div>
                     )}
