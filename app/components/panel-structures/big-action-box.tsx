@@ -1,17 +1,18 @@
 import { Form, useTransition } from "@remix-run/react";
+import { safeRedirectPath } from "~/helpers/validate";
 import ActionButton from "../interactivity/action-button";
 import { NavButton } from "../interactivity/nav-button";
 import { CsrfTokenInput } from "../logic/csrf-token";
 import { ActionBoxProps } from "./action-box";
 
 export interface BigActionBoxProps extends ActionBoxProps {
-  returnURL: string;
+  returnPath: string;
   returnText: string;
   hideButton?: boolean;
 }
 
 export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
-  returnURL,
+  returnPath,
   returnText,
   children,
   title,
@@ -20,6 +21,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
   backgroundClassName,
   hideButton,
 }) => {
+  const safeReturnPath = safeRedirectPath(returnPath);
   const transition = useTransition();
   return (
     <div className="w-[33vw] h-full flex flex-col space-y-8 p-8 pt-4">
@@ -48,13 +50,17 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
               <h2 className="font-medium">{submitText}</h2>
             </ActionButton>
             <CsrfTokenInput />
-            {returnURL && (
-              <input type="hidden" name="return" value={returnURL} />
+            {safeReturnPath && (
+              <input type="hidden" name="return" value={safeReturnPath} />
             )}
           </>
         )}
       </Form>
-      <NavButton to={returnURL} borderClassName={borderClassName} sizeClassName>
+      <NavButton
+        to={safeReturnPath}
+        borderClassName={borderClassName}
+        sizeClassName
+      >
         <h2 className="font-light">{returnText}</h2>
       </NavButton>
     </div>

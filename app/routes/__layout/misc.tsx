@@ -17,7 +17,7 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
-import { getSession, sessionFields } from "~/sessions.server";
+import { getSession, sessionFields } from "~/session.server";
 
 export const handle = {
   breadcrumb: () => <NavLink to="/misc">Misc</NavLink>,

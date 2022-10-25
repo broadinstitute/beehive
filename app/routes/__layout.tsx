@@ -1,74 +1,37 @@
-import { Outlet } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { useRef } from "react";
 import useResizeObserver from "@react-hook/resize-observer";
 import { Header } from "~/components/layout/header";
+import { json, LoaderFunction } from "@remix-run/node";
+import { commitSession, getSession, sessionFields } from "~/session.server";
+import {
+  Notification,
+  NotificationComponent,
+  NotificationID as notificationID,
+} from "~/components/logic/notification";
+import { useState } from "react";
+import { useEffect } from "react";
 
-/*
-LoadScroller is some magic informed by the internals of Remix and React.
-
-It is meant to go directly into the root element, before the part that
-hydrates React.
-
-Here's the overview:
-
- - During normal operation, when the ScrollControlRoute size grows, it
-   smooth-scrolls to the right. This is browser control, so it only
-   runs in the browser. This makes sure that when we add content to the
-   right, it comes into view.
-
- - Remix doesn't work like normal React, though--rather than React
-   rendering content that is then shown to the user, Remix server-
-   renders the content, shows that to the user, *then* hydrates React.
-   This really only matters upon initial page load, because afterwards,
-   React Router takes over in the browser and handles client navigation.
-
- - When a user loads a page for the first time, though, if they go to a
-   direct link of a deeply-nested page, the React-powered scroll happens
-   *after content is already visible to them*. This causes "scroll flash"
-   that is visually jarring, actually made worse by how fast Beehive is
-   (if you think about it, you've definitely seen scroll flash before,
-   but not so instantly that it looks like a glitch).
-   
- - Solution? Use raw Javascript, run before React hydration, to do an
-   initial scroll. We grab the div from the server-rendered
-   ScrollControlRoute component and manually scroll it to the right.
-   We do this by rendering a script tag directly onto the page,
-   dodging React's protections and warnings to do so. This means that the
-   scroll happens before anything is shown to the user while still
-   doing server-side rendering.
-
- - An alternative implementation would be to put code like this in the
-   entry.client.tsx file, but I personally think co-locating it here with
-   the rest of the scroll-controlling makes it more obvious what goes on
-   (even if the javascript does have to be in a string). The entrypoint
-   is pretty deep into Remix-land while this here is just an odd React
-   component.
-*/
-
-const scrollDivID: string = "scroll-control";
-
-const scrollToRightFunctionText = ((scrollDivID: string): void => {
-  const scrollControlDiv = document.getElementById(scrollDivID);
-  if (scrollControlDiv !== null) {
-    scrollControlDiv.scrollLeft = scrollControlDiv.scrollWidth;
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const notificationToFlash =
+    session.get(sessionFields.flashNotification) || null;
+  if (notificationToFlash) {
+    return json<Notification | null>(
+      JSON.parse(notificationToFlash) as Notification,
+      {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    );
+  } else {
+    return json<Notification | null>(null);
   }
-}).toString();
+};
 
-export interface LoadScrollerProps {
-  nonce?: string;
-}
-
-export const LoadScroller: React.FunctionComponent<LoadScrollerProps> = ({
-  nonce,
-}) => (
-  <script
-    nonce={nonce}
-    suppressHydrationWarning={true}
-    dangerouslySetInnerHTML={{
-      __html: `(${scrollToRightFunctionText})("${scrollDivID}")`,
-    }}
-  ></script>
-);
+// Extracted so the LoadScroller can reference it
+export const scrollDivID: string = "scroll-control";
 
 const LayoutRoute: React.FunctionComponent = () => {
   const scrollControlRef = useRef<HTMLDivElement>(null);
@@ -79,9 +42,39 @@ const LayoutRoute: React.FunctionComponent = () => {
       left: entry.contentBoxSize[0].inlineSize,
     });
   });
+
+  const notificationToFlash = useLoaderData<Notification | null>();
+  const [notifications, setNotifications] = useState(
+    new Map<string, Notification>([
+      // ["foo", { type: "gha", text: "foo", url: "https://example.com" }],
+    ])
+  );
+  useEffect(() => {
+    if (notificationToFlash !== null) {
+      setNotifications((previous) => {
+        previous.set(notificationID(notificationToFlash), notificationToFlash);
+        return previous;
+      });
+    }
+  }, [notificationToFlash]);
+
   return (
     <>
       <Header />
+      <div className="absolute right-10 bottom-10 z-50">
+        {Array.from(notifications.entries()).map(([key, notification]) => (
+          <NotificationComponent
+            key={key}
+            notification={notification}
+            close={() => {
+              setNotifications((previous) => {
+                previous.delete(key);
+                return previous;
+              });
+            }}
+          />
+        ))}
+      </div>
       <div
         id={scrollDivID}
         className="h-full overflow-x-auto"

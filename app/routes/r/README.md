@@ -5,3 +5,5 @@ The basic construction is like `/r/$type/$selector`, where the selector gets res
 - [`/r/chart/beehive`](/r/chart/beehive)
 - [`/r/cluster/1`](/r/cluster/1)
 - [`/r/chart-release/prod/sam`](/r/chart-release/prod/sam)
+
+There's also a special `/r/git/$selector` that redirects to the app image GitHub repo for a given chart.

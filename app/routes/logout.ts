@@ -1,6 +1,6 @@
 import { ActionFunction, json } from "@remix-run/node";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
-import { destroySession, getSession } from "~/sessions.server";
+import { destroySession, getSession } from "~/session.server";
 
 // Note that while this logs out from Beehive's perspective,
 // from the user's perspective it basically won't. The user

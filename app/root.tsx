@@ -18,12 +18,12 @@ import {
 import tailwindStyles from "./styles/tailwind.css";
 import beehiveLoadingStyles from "./styles/beehive-loading.css";
 import favicon from "./assets/favicon.svg";
-import { commitSession, getSession, sessionFields } from "./sessions.server";
-import { LoadScroller } from "./routes/__layout";
+import { commitSession, getSession, sessionFields } from "./session.server";
 import { generateNonce } from "./helpers/nonce.server";
 import { catchBoundary } from "./components/boundaries/catch-boundary";
 import { errorBoundary } from "./components/boundaries/error-boundary";
 import { CsrfTokenContext } from "./components/logic/csrf-token";
+import { LoadScroller } from "./components/logic/load-scroller";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -112,10 +112,13 @@ export const loader: LoaderFunction = async ({ request }) => {
         })
         .then(async (data) => {
           if (!data?.access_token) {
-            throw new Response(
+            console.log(
               `GitHub OAuth issue; GitHub didn't return an access_token: ${JSON.stringify(
                 data
               )}`
+            );
+            throw new Response(
+              "GitHub OAuth issue; GitHub didn't return an access_token"
             );
           } else {
             session.set(sessionFields.githubAccessToken, data.access_token);

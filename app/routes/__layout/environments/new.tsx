@@ -50,7 +50,7 @@ import {
   makeErrorResponserReturner,
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
-import { getSession } from "~/sessions.server";
+import { getSession } from "~/session.server";
 
 export const handle = {
   breadcrumb: () => <NavLink to="/environments/new">New</NavLink>,

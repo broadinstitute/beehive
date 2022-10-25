@@ -42,7 +42,8 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
-import { getSession } from "~/sessions.server";
+import { safeRedirectPath } from "~/helpers/validate";
+import { getSession } from "~/session.server";
 
 export const handle = {
   breadcrumb: () => (
@@ -94,7 +95,8 @@ export const action: ActionFunction = async ({ request }) => {
       forwardIAP(request)
     )
     .then(
-      () => redirect(formData.get("return")?.toString() || "/"),
+      () =>
+        redirect(safeRedirectPath(formData.get("return")?.toString() || "/")),
       errorResponseReturner
     );
 };
@@ -160,7 +162,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
       <OutsetPanel>
         <BigActionBox
           title="Review Version Changes"
-          returnURL={returnURL}
+          returnPath={returnURL}
           returnText="Go Back Without Applying"
           submitText={`Apply ${includedCount} Change${
             includedCount == 1 ? "" : "s"

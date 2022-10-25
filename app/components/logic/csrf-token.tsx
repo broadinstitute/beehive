@@ -1,6 +1,6 @@
 import { Session } from "@remix-run/node";
 import { createContext } from "react";
-import { sessionFields } from "~/sessions.server";
+import { sessionFields } from "~/session.server";
 
 export const CsrfTokenContext = createContext("");
 

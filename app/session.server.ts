@@ -14,7 +14,7 @@ const { getSession, commitSession, destroySession } =
 
       // See SameSite attribute at https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
       // We can't use 'strict' because we need to store the GitHub OAuth state client-side in this cookie--we need the
-      //cookie loaded when we handle the redirect from GitHub.
+      // cookie loaded when we handle the redirect from GitHub.
       sameSite: "lax",
 
       // See HttpOnly attribute at https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#security
@@ -31,4 +31,5 @@ export const sessionFields = {
   csrfToken: "csrfToken",
   githubOAuthState: "githubOAuthState",
   githubAccessToken: "githubAccessToken",
+  flashNotification: "flashNotification",
 };
