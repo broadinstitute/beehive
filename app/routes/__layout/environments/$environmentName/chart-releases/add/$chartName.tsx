@@ -317,11 +317,6 @@ const NewRoute: React.FunctionComponent = () => {
             setCluster={setCluster}
             requireCluster={environment.lifecycle !== "template"}
             setShowClusterPicker={setShowClusterPicker}
-            defaultNamespace={
-              actionData?.faultyRequest.namespace ||
-              environment.defaultNamespace ||
-              ""
-            }
             hideOtherPickers={() => {
               setShowAppVersionExactPicker(false);
               setShowAppVersionBranchPicker(false);

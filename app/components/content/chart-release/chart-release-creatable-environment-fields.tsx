@@ -6,7 +6,6 @@ export interface ChartReleaseCreatableEnvironmentFieldsProps {
   setCluster: (value: string) => void;
   requireCluster: boolean;
   setShowClusterPicker: (value: boolean) => void;
-  defaultNamespace: string;
   hideOtherPickers?: () => void;
 }
 
@@ -18,7 +17,6 @@ export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<
   setCluster,
   requireCluster,
   setShowClusterPicker,
-  defaultNamespace,
   hideOtherPickers = () => {},
 }) => (
   <div className="flex flex-col space-y-4">
@@ -53,23 +51,5 @@ export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<
         placeholder="Search..."
       />
     </label>
-    {cluster.length > 0 && (
-      <div className="pl-6 border-l-2 border-zinc-400">
-        <label>
-          <h2 className="font-light text-2xl">Namespace</h2>
-          <p>{`The namespace in the above cluster that this chart instance will be deployed to. ${
-            requireCluster
-              ? ""
-              : "This field isn't technically required because this chart instance is in a template."
-          }`}</p>
-          <TextField
-            name="namespace"
-            required
-            placeholder="(required)"
-            defaultValue={defaultNamespace}
-          />
-        </label>
-      </div>
-    )}
   </div>
 );

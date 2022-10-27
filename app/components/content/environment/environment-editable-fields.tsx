@@ -46,19 +46,6 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   );
   const extraFields = (
     <>
-      <label>
-        <h2 className="font-light text-2xl">Default Namespace</h2>
-        <p>
-          The default Kubernetes namespace that charts will be deployed to. If
-          left empty, will default to the name of the environment. Existing
-          charts won't move if this is ever changed.{" "}
-        </p>
-        <TextField
-          name="defaultNamespace"
-          placeholder="(can be left blank)"
-          defaultValue={environment?.defaultNamespace}
-        />
-      </label>
       <div>
         <h2 className="font-light text-2xl">Require Suitability?</h2>
         <p>
