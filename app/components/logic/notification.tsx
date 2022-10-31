@@ -46,7 +46,6 @@ export const NotificationComponent: React.FunctionComponent<{
   close: () => void;
 }> = ({ notification, close }) => {
   let Icon: (props: LucideProps) => ReactElement;
-  let borderColor = "border-black";
   let title: string;
   switch (notification.type) {
     case "gha":
@@ -76,10 +75,10 @@ export const NotificationComponent: React.FunctionComponent<{
       }`}
     >
       <a
-        className={`w-[20vw] bg-white flex flex-col rounded-2xl shadow-2xl drop-shadow-xl motion-safe:transition-all before:block before:absolute before:rounded-2xl before:border-2 ${
+        className={`w-[20vw] bg-white flex flex-col rounded-2xl shadow-2xl drop-shadow-xl motion-safe:transition-all before:block  before:absolute before:rounded-2xl before:border-2 ${
           notification.error
             ? "before:border-rose-400 before:border-dashed"
-            : `before:${borderColor}`
+            : "before:border-black"
         } before:w-full before:h-full before:motion-safe:transition-all before:duration-75 ${
           notification.url
             ? "active:bg-zinc-50 hover:drop-shadow-2xl before:hover:border-4"
