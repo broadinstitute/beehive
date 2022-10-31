@@ -99,16 +99,13 @@ export const action: ActionFunction = async ({ request }) => {
       forwardIAP(request)
     )
     .then(async () => {
-      if (process.env.NODE_ENV == "development") {
-        session.flash(
-          sessionFields.flashNotifications,
-          buildNotifications({
-            type: "gha",
-            text: "A GitHub Action has been started to apply your changes",
-            url: "https://example.com",
-          })
-        );
-      }
+      session.flash(
+        sessionFields.flashNotifications,
+        buildNotifications({
+          type: "announcement",
+          text: "Typically a GitHub Action would've just launched, but that isn't wired up for this dry-run",
+        })
+      );
       return redirect(
         safeRedirectPath(formData.get("return")?.toString() || "/"),
         {
