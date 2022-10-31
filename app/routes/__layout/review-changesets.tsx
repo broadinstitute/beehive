@@ -23,12 +23,16 @@ import { ChartVersionColors } from "~/components/content/chart-version/chart-ver
 import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
-import { EnumSelect } from "~/components/interactivity/enum-select";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
+import {
+  buildNotifications,
+  GitHubActionsNotification,
+  Notification,
+} from "~/components/logic/notification";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
 import { BigActionBox } from "~/components/panel-structures/big-action-box";
@@ -43,7 +47,7 @@ import {
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
-import { getSession } from "~/session.server";
+import { commitSession, getSession, sessionFields } from "~/session.server";
 
 export const handle = {
   breadcrumb: () => (
@@ -94,11 +98,26 @@ export const action: ActionFunction = async ({ request }) => {
       },
       forwardIAP(request)
     )
-    .then(
-      () =>
-        redirect(safeRedirectPath(formData.get("return")?.toString() || "/")),
-      errorResponseReturner
-    );
+    .then(async () => {
+      if (process.env.NODE_ENV == "development") {
+        session.flash(
+          sessionFields.flashNotifications,
+          buildNotifications({
+            type: "gha",
+            text: "A GitHub Action has been started to apply your changes",
+            url: "https://example.com",
+          })
+        );
+      }
+      return redirect(
+        safeRedirectPath(formData.get("return")?.toString() || "/"),
+        {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      );
+    }, errorResponseReturner);
 };
 
 export const CatchBoundary = catchBoundary;
@@ -340,7 +359,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                         onClick={() =>
                           setFilterText(changeset.chartReleaseInfo?.chart || "")
                         }
-                        className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all duration-75 px-2 ${ChartColors.backgroundClassName} ${ChartColors.borderClassName} flex flex-row h-8 items-center`}
+                        className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ChartColors.backgroundClassName} ${ChartColors.borderClassName} flex flex-row h-8 items-center`}
                       >
                         <h2 className="text-xl font-light">{`Chart: ${changeset.chartReleaseInfo?.chart}`}</h2>
                       </button>
@@ -351,7 +370,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               changeset.chartReleaseInfo?.environment || ""
                             )
                           }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all duration-75 px-2 ${EnvironmentColors.backgroundClassName} ${EnvironmentColors.borderClassName} flex flex-row h-8 items-center`}
+                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${EnvironmentColors.backgroundClassName} ${EnvironmentColors.borderClassName} flex flex-row h-8 items-center`}
                         >
                           <h2 className="text-xl font-light">{`Environment: ${changeset.chartReleaseInfo?.environment}`}</h2>
                         </button>
@@ -363,7 +382,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               changeset.chartReleaseInfo?.cluster || ""
                             )
                           }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all duration-75 px-2 ${ClusterColors.backgroundClassName} ${ClusterColors.borderClassName} flex flex-row h-8 items-center`}
+                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ClusterColors.backgroundClassName} ${ClusterColors.borderClassName} flex flex-row h-8 items-center`}
                         >
                           <h2 className="text-xl font-light">{`Cluster: ${changeset.chartReleaseInfo?.cluster}`}</h2>
                         </button>
@@ -375,7 +394,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               changeset.chartReleaseInfo?.namespace || ""
                             )
                           }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all duration-75 px-2 ${ClusterColors.backgroundClassName} ${ClusterColors.borderClassName} flex flex-row h-8 items-center`}
+                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ClusterColors.backgroundClassName} ${ClusterColors.borderClassName} flex flex-row h-8 items-center`}
                         >
                           <h2 className="text-xl font-light">{`Namespace: ${changeset.chartReleaseInfo?.namespace}`}</h2>
                         </button>
@@ -387,7 +406,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               `app:${changeset.chartReleaseInfo?.appVersionReference}`
                             )
                           }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all duration-75 px-2 ${AppVersionColors.backgroundClassName} ${AppVersionColors.borderClassName} flex flex-row h-8 items-center`}
+                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${AppVersionColors.backgroundClassName} ${AppVersionColors.borderClassName} flex flex-row h-8 items-center`}
                         >
                           <h2 className="text-xl font-light">{`App Version: ${changeset.chartReleaseInfo?.appVersionExact}`}</h2>
                         </button>
@@ -399,7 +418,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               `chart:${changeset.chartReleaseInfo?.chartVersionReference}`
                             )
                           }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all duration-75 px-2 ${ChartVersionColors.backgroundClassName} ${ChartVersionColors.borderClassName} flex flex-row h-8 items-center`}
+                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ChartVersionColors.backgroundClassName} ${ChartVersionColors.borderClassName} flex flex-row h-8 items-center`}
                         >
                           <h2 className="text-xl font-light">{`Chart Version: ${changeset.chartReleaseInfo?.chartVersionExact}`}</h2>
                         </button>

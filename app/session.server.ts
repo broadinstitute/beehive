@@ -31,5 +31,5 @@ export const sessionFields = {
   csrfToken: "csrfToken",
   githubOAuthState: "githubOAuthState",
   githubAccessToken: "githubAccessToken",
-  flashNotification: "flashNotification",
+  flashNotifications: "flashNotification",
 };

@@ -31,7 +31,7 @@ export const EnumSelect = <T extends any>({
   <div className={`min-h-[3rem] w-full gap-2 ${className}`}>
     {enums.map(([displayValue, valueToSet], index) => (
       <button
-        className={`first:rounded-l-2xl last:rounded-r-2xl shadow-md hover:shadow-lg motion-safe:transition-all duration-75 ${
+        className={`first:rounded-l-2xl last:rounded-r-2xl shadow-md hover:shadow-lg motion-safe:transition-all  ${
           bigButtons ? "text-xl" : ""
         } ${borderClassName || "border-zinc-300"} ${
           valueToSet === fieldValue

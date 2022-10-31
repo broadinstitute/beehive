@@ -406,9 +406,9 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
           {(!useExactVersionsFromOtherChartRelease && (
             <>
               {(preconfigured && (
-                <p>
+                <p className="font-medium">
                   Here are the current versions, plus the extra preconfiguration
-                  you just selected.
+                  from the link you followed.
                 </p>
               )) || (
                 <>

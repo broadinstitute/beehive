@@ -16,7 +16,7 @@ const IndexNavButton: React.FunctionComponent<IndexNavButtonProps> = ({
   <NavLink
     prefetch="intent"
     to={to}
-    className={`bg-white active:bg-zinc-50 shrink-0 flex items-center justify-center rounded-2xl shadow-lg hover:shadow-xl border-2 hover:border-4 transition-all duration-75 w-80 m-4 md:m-8 ${className}`}
+    className={`bg-white active:bg-zinc-50 shrink-0 flex items-center justify-center rounded-2xl shadow-lg hover:shadow-xl border-2 hover:border-4 transition-all  w-80 m-4 md:m-8 ${className}`}
   >
     <div className="m-1 flex flex-col justify-center items-center text-center w-72">
       <div className="border-b border-zinc-300 border-solid w-full">
@@ -54,7 +54,7 @@ const IndexRoute: React.FunctionComponent = () => (
         title="Charts and Apps"
         className="border-sky-300 h-52"
       >
-        Browse applications and the Helm Charts that deploy them
+        Browse apps and the Helm Charts that deploy them
       </IndexNavButton>
       <IndexNavButton to="/misc" title="Misc" className="border-zinc-300 h-28">
         Debugging info for Beehive itself

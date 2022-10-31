@@ -2,7 +2,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { useRef } from "react";
 import useResizeObserver from "@react-hook/resize-observer";
 import { Header } from "~/components/layout/header";
-import { json, LoaderFunction } from "@remix-run/node";
+import { json, LoaderArgs } from "@remix-run/node";
 import { commitSession, getSession, sessionFields } from "~/session.server";
 import {
   Notification,
@@ -12,23 +12,20 @@ import {
 import { useState } from "react";
 import { useEffect } from "react";
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  const notificationToFlash =
-    session.get(sessionFields.flashNotification) || null;
-  if (notificationToFlash) {
-    return json<Notification | null>(
-      JSON.parse(notificationToFlash) as Notification,
-      {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+  const notificationsToFlash: Array<Notification> | null =
+    session.get(sessionFields.flashNotifications) || null;
+  if (notificationsToFlash) {
+    return json(notificationsToFlash, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   } else {
-    return json<Notification | null>(null);
+    return json(null);
   }
-};
+}
 
 // Extracted so the LoadScroller can reference it
 export const scrollDivID: string = "scroll-control";
@@ -43,37 +40,47 @@ const LayoutRoute: React.FunctionComponent = () => {
     });
   });
 
-  const notificationToFlash = useLoaderData<Notification | null>();
+  const notificationsToFlash = useLoaderData<typeof loader>();
   const [notifications, setNotifications] = useState(
-    new Map<string, Notification>([
-      // ["foo", { type: "gha", text: "foo", url: "https://example.com" }],
-    ])
+    new Map<string, null | Notification>()
   );
   useEffect(() => {
-    if (notificationToFlash !== null) {
-      setNotifications((previous) => {
-        previous.set(notificationID(notificationToFlash), notificationToFlash);
-        return previous;
-      });
+    if (notificationsToFlash !== null) {
+      setNotifications(
+        (previous) =>
+          new Map([
+            ...previous,
+            ...Array.from(
+              notificationsToFlash.map(
+                (notification): [string, Notification] => [
+                  notificationID(notification),
+                  notification,
+                ]
+              )
+            ),
+          ])
+      );
     }
-  }, [notificationToFlash]);
+  }, [notificationsToFlash]);
 
   return (
     <>
       <Header />
-      <div className="absolute right-10 bottom-10 z-50">
-        {Array.from(notifications.entries()).map(([key, notification]) => (
-          <NotificationComponent
-            key={key}
-            notification={notification}
-            close={() => {
-              setNotifications((previous) => {
-                previous.delete(key);
-                return previous;
-              });
-            }}
-          />
-        ))}
+      <div className="absolute right-10 bottom-10 z-50 flex flex-col space-y-6">
+        {Array.from(notifications.entries()).map(
+          ([key, notification]) =>
+            notification && (
+              <NotificationComponent
+                key={key}
+                notification={notification}
+                close={() => {
+                  setNotifications(
+                    (previous) => new Map([...previous, [key, null]])
+                  );
+                }}
+              />
+            )
+        )}
       </div>
       <div
         id={scrollDivID}

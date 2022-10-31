@@ -1,6 +1,6 @@
 import { Octokit } from "@octokit/rest";
 import { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { NavLink, useLoaderData } from "@remix-run/react";
+import { Link, NavLink, useLoaderData } from "@remix-run/react";
 import {
   MiscApi,
   MiscMyUserResponse,
@@ -68,7 +68,13 @@ const MiscRoute: FunctionComponent = () => {
   return (
     <div className="h-full text-center flex flex-col justify-center items-center">
       <p>
-        Beehive version <span className="font-mono">{beehiveVersion}</span>
+        Beehive version{" "}
+        <Link
+          to={`/charts/beehive/app-versions/${beehiveVersion}`}
+          className="font-mono underline decoration-blue-500"
+        >
+          {beehiveVersion}
+        </Link>
       </p>
       {sherlockVersion.hasOwnProperty("title") ? (
         displayErrorInfo(sherlockVersion as DerivedErrorInfo)
@@ -81,10 +87,15 @@ const MiscRoute: FunctionComponent = () => {
           )}
         >
           Sherlock version{" "}
-          <span className="font-mono">
+          <Link
+            to={`/charts/sherlock/app-versions/${
+              (sherlockVersion as MiscVersionResponse).version
+            }`}
+            className="font-mono underline decoration-blue-500"
+          >
             {" "}
             {(sherlockVersion as MiscVersionResponse).version}
-          </span>{" "}
+          </Link>{" "}
           built on{" "}
           <span className="font-mono">
             {" "}

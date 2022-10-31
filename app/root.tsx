@@ -188,7 +188,7 @@ export const App: React.FunctionComponent = () => {
           <Links />
         </head>
         <body
-          className={`bg-zinc-100 flex flex-col min-w-screen h-screen w-full ${
+          className={`bg-zinc-100 overflow-hidden flex flex-col min-w-screen h-screen w-full ${
             transition.state != "idle" ? "cursor-progress" : ""
           }`}
         >

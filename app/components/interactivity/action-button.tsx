@@ -30,7 +30,7 @@ export const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
         isLoading
           ? "border-4 shadow-lg"
           : "shadow-md hover:shadow-lg border-2 hover:border-4"
-      } motion-safe:transition-all duration-75 bg-white active:bg-zinc-50 focus-visible:outline-blue-500 ${borderClassName}`}
+      } motion-safe:transition-all  bg-white active:bg-zinc-50 focus-visible:outline-blue-500 ${borderClassName}`}
       onClick={onClick}
       disabled={isLoading}
     >
