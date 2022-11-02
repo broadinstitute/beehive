@@ -20,6 +20,7 @@ import {
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import { liveEnvironmentSorter } from "~/components/content/environment/environment-sort.server";
 
 export const handle = {
   breadcrumb: () => <NavLink to="/environments">Environments</NavLink>,
@@ -32,7 +33,15 @@ export const meta: MetaFunction = () => ({
 export const loader: LoaderFunction = async ({ request }) => {
   return new EnvironmentsApi(SherlockConfiguration)
     .apiV2EnvironmentsGet({}, forwardIAP(request))
-    .catch(errorResponseThrower);
+    .then(
+      (environments) => [
+        ...environments
+          .filter((environment) => environment.base === "live")
+          .sort(liveEnvironmentSorter),
+        ...environments.filter((environment) => environment.base !== "live"),
+      ],
+      errorResponseThrower
+    );
 };
 
 export const CatchBoundary = catchBoundary;
