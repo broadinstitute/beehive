@@ -24,6 +24,7 @@ import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import { liveEnvironmentSorter } from "~/components/content/environment/environment-sort.server";
 import ActionButton from "~/components/interactivity/action-button";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
@@ -68,12 +69,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     new EnvironmentsApi(SherlockConfiguration)
       .apiV2EnvironmentsGet({}, forwardIAP(request))
       .then(
-        (environments) =>
-          Array.from(
-            environments.filter(
-              (environment) => environment.name !== params.environmentName
+        (environments) => [
+          ...environments
+            .filter(
+              (environment) =>
+                environment.base === "live" &&
+                environment.name !== params.environmentName
             )
+            .sort(liveEnvironmentSorter),
+          ...environments.filter(
+            (environment) =>
+              environment.base !== "live" &&
+              environment.name !== params.environmentName
           ),
+        ],
         errorResponseThrower
       ),
     new ChartReleasesApi(SherlockConfiguration)
