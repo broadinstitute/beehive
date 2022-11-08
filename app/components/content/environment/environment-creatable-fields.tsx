@@ -49,7 +49,8 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             setLifecycle(value);
           }}
           enums={[
-            ["BEE", "dynamic"],
+            // TODO
+            // ["BEE", "dynamic"],
             ["BEE Template", "template"],
             ["Static", "static"],
           ]}

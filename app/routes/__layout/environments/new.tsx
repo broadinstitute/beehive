@@ -107,7 +107,9 @@ const NewRoute: React.FunctionComponent = () => {
   }>();
 
   const [lifecycle, setLifecycle] = useState(
-    actionData?.faultyRequest.lifecycle || "dynamic"
+    actionData?.faultyRequest.lifecycle || "template"
+    // TODO
+    // actionData?.faultyRequest.lifecycle || "dynamic"
   );
   const [templateEnvironment, setTemplateEnvironment] = useState(
     actionData?.faultyRequest.templateEnvironment || ""
