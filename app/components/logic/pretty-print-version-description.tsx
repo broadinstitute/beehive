@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface PrettyPrintVersionDescriptionProps {
   description: string;
   repo?: string;
@@ -6,42 +8,41 @@ export interface PrettyPrintVersionDescriptionProps {
 
 export const PrettyPrintVersionDescription: React.FunctionComponent<
   PrettyPrintVersionDescriptionProps
-> = ({ description, repo, jira = "broadworkbench" }) => {
-  const links: string[][] = [
-    ...Array.from(description.matchAll(/([A-Z]+-\d+)/g), (m) => m[1]).map(
-      (ticket) => [`https://${jira}.atlassian.net/browse/${ticket}`, ticket]
-    ),
-    ...(repo
-      ? Array.from(description.matchAll(/#(\d+)/g), (m) => m[1]).map((pr) => [
-          `https://github.com/${repo}/pull/${pr}`,
-          `#${pr}`,
-        ])
-      : []),
-  ];
-  return (
-    <>
-      {description
-        .replace(/[^a-zA-Z]?[A-Z]+-\d+[^a-zA-Z]?/g, "")
-        .replace(/\(#\d+\)/g, "")
-        .trim()
-        .replace(/\s+/g, " ") || "(empty description)"}
-      {links.length > 0 && (
-        <>
-          {" ("}
-          {links.map(([link, text], index) => [
-            index > 0 && ", ",
+> = ({ description, repo, jira = "broadworkbench" }) => (
+  <span>
+    {description
+      .split(/((?:\[?[A-Z]+-[0-9]+\]?)|(?:\(?#[0-9]+\)?))/g)
+      .map((string): React.ReactNode => {
+        const ticketMatch = /([A-Z]+-[0-9]+)/.exec(string);
+        if (ticketMatch) {
+          return (
             <a
-              key={index}
-              href={link}
+              href={`https://${jira}.atlassian.net/browse/${ticketMatch[1]}`}
               target="_blank"
+              rel="noreferrer"
               className="underline decoration-blue-500"
             >
-              {`${text} ↗`}
-            </a>,
-          ])}
-          {")"}
-        </>
-      )}
-    </>
-  );
-};
+              {string}
+            </a>
+          );
+        }
+        const prMatch = /#([0-9]+)/.exec(string);
+        if (prMatch) {
+          return (
+            <a
+              href={`https://github.com/${repo}/pull/${prMatch[1]}`}
+              target="_blank"
+              rel="noreferrer"
+              className="underline decoration-blue-500"
+            >
+              {string}
+            </a>
+          );
+        }
+        return string;
+      })
+      .map((node, index) => (
+        <React.Fragment key={index}>{node}</React.Fragment>
+      ))}
+  </span>
+);
