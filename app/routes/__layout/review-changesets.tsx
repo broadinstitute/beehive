@@ -103,7 +103,7 @@ export const action: ActionFunction = async ({ request }) => {
         sessionFields.flashNotifications,
         buildNotifications({
           type: "announcement",
-          text: "Typically a GitHub Action would've just launched, but that isn't wired up for this dry-run",
+          text: "Typically a GitHub Action would've just launched, but that isn't wired up right now. You'll need to sync Argo CD yourself.",
         })
       );
       return redirect(
