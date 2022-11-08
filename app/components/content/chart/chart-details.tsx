@@ -72,7 +72,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         <div className="flex flex-col space-y-2">
           <p>This Helm Chart's source code is managed by DevOps:</p>
           <a
-            href={`https://github.com/broadinstitute/terra-helmfile/charts/${chart.name}`}
+            href={`https://github.com/broadinstitute/terra-helmfile/tree/master/charts/${chart.name}`}
             className="font-light text-4xl decoration-blue-500 underline"
           >
             broadinstitute/terra-helmfile
