@@ -132,7 +132,7 @@ export const action: ActionFunction = async ({ request, params }) => {
             `/review-changesets?${[
               ...changesets.map((c) => `changeset=${c.id}`),
               `return=${encodeURIComponent(
-                `/clusters/${params.clusterName}/chart-releases/${params.namespace}.${params.chartName}/change-versions`
+                `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`
               )}`,
             ].join("&")}`
           )
