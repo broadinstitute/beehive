@@ -1,3 +1,4 @@
+import { Octokit } from "@octokit/rest";
 import {
   ActionFunction,
   LoaderFunction,
@@ -98,13 +99,42 @@ export const action: ActionFunction = async ({ request }) => {
       },
       forwardIAP(request)
     )
-    .then(async () => {
+    .then(async (changesets) => {
+      const payload = {
+        owner: "broadinstitute",
+        repo: "terra-github-workflows",
+        workflow_id: ".github/workflows/sync-release.yaml",
+        ref: "main",
+        inputs: {
+          "chart-release-ids": JSON.stringify(
+            changesets.map((changeset) => changeset.chartRelease)
+          ),
+        },
+      };
+      console.log(
+        `review-changesets workflow dispatch: ${JSON.stringify(payload)}`
+      );
+      const notification = await new Octokit({
+        auth: session.get(sessionFields.githubAccessToken),
+      }).actions
+        .createWorkflowDispatch(payload)
+        .then(
+          (): Notification => ({
+            type: "gha",
+            text: "A GitHub Action has been started to sync your changes",
+            url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/sync-release.yaml",
+          }),
+          (rejected): Notification => ({
+            type: "error",
+            text: `There was a problem calling the GitHub Action to sync your changes: ${JSON.stringify(
+              rejected
+            )}`,
+            error: true,
+          })
+        );
       session.flash(
         sessionFields.flashNotifications,
-        buildNotifications({
-          type: "announcement",
-          text: "Typically a GitHub Action would've just launched, but that isn't wired up right now. You'll need to sync Argo CD yourself.",
-        })
+        buildNotifications(notification)
       );
       return redirect(
         safeRedirectPath(formData.get("return")?.toString() || "/"),
