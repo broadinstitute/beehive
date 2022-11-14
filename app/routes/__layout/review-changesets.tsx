@@ -31,7 +31,6 @@ import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import {
   buildNotifications,
-  GitHubActionsNotification,
   Notification,
 } from "~/components/logic/notification";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";

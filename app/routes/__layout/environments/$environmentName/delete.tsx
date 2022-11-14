@@ -1,3 +1,4 @@
+import { Octokit } from "@octokit/rest";
 import { ActionFunction, MetaFunction, redirect } from "@remix-run/node";
 import {
   NavLink,
@@ -16,6 +17,10 @@ import { EnvironmentDeleteDescription } from "~/components/content/environment/e
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
+import {
+  buildNotifications,
+  Notification,
+} from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { Leaf } from "~/components/route-tree/leaf";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
@@ -24,7 +29,7 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
-import { getSession } from "~/session.server";
+import { commitSession, getSession, sessionFields } from "~/session.server";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
@@ -42,12 +47,61 @@ export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
   await verifySessionCsrfToken(request, session);
 
-  return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsSelectorDelete(
+  const environmentsApi = new EnvironmentsApi(SherlockConfiguration);
+
+  return environmentsApi
+    .apiV2EnvironmentsSelectorGet(
       { selector: params.environmentName || "" },
       forwardIAP(request)
     )
-    .then(() => redirect("/environments"), errorResponseReturner);
+    .then(async (environment) => {
+      if (environment.lifecycle === "dynamic") {
+        const payload = {
+          owner: "broadinstitute",
+          repo: "terra-github-workflows",
+          workflow_id: ".github/workflows/bee-destroy.yaml",
+          ref: "main",
+          inputs: {
+            "bee-name": environment.name || "",
+          },
+        };
+        console.log(
+          `environment delete workflow dispatch: ${JSON.stringify(payload)}`
+        );
+        const notification = await new Octokit({
+          auth: session.get(sessionFields.githubAccessToken),
+        }).actions
+          .createWorkflowDispatch(payload)
+          .then(
+            (): Notification => ({
+              type: "gha",
+              text: "A GitHub Action has been started to delete your BEE",
+              url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/bee-destroy.yaml",
+            }),
+            (rejected): Notification => ({
+              type: "error",
+              text: `There was a problem calling the GitHub Action to delete your BEE: ${JSON.stringify(
+                rejected
+              )}`,
+              error: true,
+            })
+          );
+        session.flash(
+          sessionFields.flashNotifications,
+          buildNotifications(notification)
+        );
+        return redirect("/environments", {
+          headers: { "Set-Cookie": await commitSession(session) },
+        });
+      } else {
+        return await environmentsApi
+          .apiV2EnvironmentsSelectorDelete(
+            { selector: params.environmentName || "" },
+            forwardIAP(request)
+          )
+          .then(() => redirect("/environments"), errorResponseReturner);
+      }
+    }, errorResponseReturner);
 };
 
 export const CatchBoundary = catchBoundary;
