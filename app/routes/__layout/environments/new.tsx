@@ -1,3 +1,4 @@
+import { Octokit } from "@octokit/rest";
 import {
   ActionFunction,
   LoaderFunction,
@@ -31,6 +32,10 @@ import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
+import {
+  buildNotifications,
+  Notification,
+} from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import {
   FillerText,
@@ -50,7 +55,7 @@ import {
   makeErrorResponserReturner,
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
-import { getSession } from "~/session.server";
+import { commitSession, getSession, sessionFields } from "~/session.server";
 
 export const handle = {
   breadcrumb: () => <NavLink to="/environments/new">New</NavLink>,
@@ -89,10 +94,49 @@ export const action: ActionFunction = async ({ request }) => {
       { environment: environmentRequest },
       forwardIAP(request)
     )
-    .then(
-      (environment) => redirect(`/environments/${environment.name}`),
-      makeErrorResponserReturner(environmentRequest)
-    );
+    .then(async (environment) => {
+      if (environment.lifecycle === "dynamic") {
+        const payload = {
+          owner: "broadinstitute",
+          repo: "terra-github-workflows",
+          workflow_id: ".github/workflows/bee-provision.yaml",
+          ref: "main",
+          inputs: {
+            "bee-name": environment.name || "",
+          },
+        };
+        console.log(
+          `environment create workflow dispatch: ${JSON.stringify(payload)}`
+        );
+        const notification = await new Octokit({
+          auth: session.get(sessionFields.githubAccessToken),
+        }).actions
+          .createWorkflowDispatch(payload)
+          .then(
+            (): Notification => ({
+              type: "gha",
+              text: "A GitHub Action has been started to provision your BEE",
+              url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/bee-provision.yaml",
+            }),
+            (rejected): Notification => ({
+              type: "error",
+              text: `There was a problem calling the GitHub Action to provision your BEE: ${JSON.stringify(
+                rejected
+              )}`,
+              error: true,
+            })
+          );
+        session.flash(
+          sessionFields.flashNotifications,
+          buildNotifications(notification)
+        );
+      }
+      return redirect(`/environments/${environment.name}`, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }, makeErrorResponserReturner(environmentRequest));
 };
 
 export const CatchBoundary = catchBoundary;
@@ -107,9 +151,7 @@ const NewRoute: React.FunctionComponent = () => {
   }>();
 
   const [lifecycle, setLifecycle] = useState(
-    actionData?.faultyRequest.lifecycle || "template"
-    // TODO
-    // actionData?.faultyRequest.lifecycle || "dynamic"
+    actionData?.faultyRequest.lifecycle || "dynamic"
   );
   const [templateEnvironment, setTemplateEnvironment] = useState(
     actionData?.faultyRequest.templateEnvironment || ""
