@@ -106,9 +106,9 @@ export const action: ActionFunction = async ({ request }) => {
         workflow_id: ".github/workflows/sync-release.yaml",
         ref: "main",
         inputs: {
-          "chart-release-ids": JSON.stringify(
-            changesets.map((changeset) => changeset.chartRelease)
-          ),
+          "chart-release-names": changesets
+            .map((changeset) => changeset.chartRelease)
+            .join(","),
         },
       };
       console.log(
