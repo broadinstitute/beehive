@@ -76,6 +76,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const preconfiguredAppVersionExact = url.searchParams.get("app");
   const preconfiguredChartVersionExact = url.searchParams.get("chart");
+  const preconfiguredOtherEnvironment = url.searchParams.get("from");
   return Promise.all([
     new ChartReleasesApi(SherlockConfiguration)
       .apiV2ChartReleasesGet({ chart: params.chartName }, forwardIAP(request))
@@ -103,6 +104,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       .catch(errorResponseThrower),
     preconfiguredAppVersionExact,
     preconfiguredChartVersionExact,
+    preconfiguredOtherEnvironment,
   ]);
 };
 
@@ -151,6 +153,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
     chartVersions,
     preconfiguredAppVersionExact,
     preconfiguredChartVersionExact,
+    preconfiguredOtherEnvironment,
   ] =
     useLoaderData<
       [
@@ -158,10 +161,11 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
         Array<V2controllersAppVersion>,
         Array<V2controllersChartVersion>,
         string | null,
+        string | null,
         string | null
       ]
     >();
-  const preconfigured = Boolean(
+  const preconfiguredVersions = Boolean(
     preconfiguredAppVersionExact || preconfiguredChartVersionExact
   );
   const branches = useMemo(
@@ -196,7 +200,12 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
   const [
     useExactVersionsFromOtherChartRelease,
     setUseExactVersionsFromOtherChartRelease,
-  ] = useState(existingFormData?.useExactVersionsFromOtherChartRelease || "");
+  ] = useState(
+    existingFormData?.useExactVersionsFromOtherChartRelease ||
+      (preconfiguredOtherEnvironment
+        ? `${preconfiguredOtherEnvironment}/${chartRelease.chart}`
+        : "")
+  );
   const [showOtherChartReleasePicker, setShowOtherChartReleasePicker] =
     useState(false);
   const [appVersionExact, setAppVersionExact] = useState(
@@ -374,7 +383,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
           submitText="Click to Calculate and Preview"
           {...ChartReleaseColors}
         >
-          {preconfigured || (
+          {preconfiguredVersions || (
             <label>
               <h2 className="font-light text-2xl">
                 Use Exact Versions From Another Instance of This Chart
@@ -385,6 +394,12 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 following the other instance's versions or copy other
                 configuration—it is a one-time copy of the current state.
               </p>
+              {preconfiguredOtherEnvironment && (
+                <p className="mt-2 font-medium">
+                  Note that this field was preconfigured from the link you
+                  followed.
+                </p>
+              )}
               <TextField
                 name="useExactVersionsFromOtherChartRelease"
                 value={useExactVersionsFromOtherChartRelease}
@@ -405,7 +420,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
           )}
           {(!useExactVersionsFromOtherChartRelease && (
             <>
-              {(preconfigured && (
+              {(preconfiguredVersions && (
                 <p className="font-medium">
                   Here are the current versions, plus the extra preconfiguration
                   from the link you followed.
