@@ -37,7 +37,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
         <h2 className="font-light text-2xl">Type</h2>
         <EnumInputSelect
           name="lifecycle"
-          className="grid grid-cols-3 mt-2"
+          className="grid grid-cols-2 mt-2"
           fieldValue={lifecycle}
           setFieldValue={(value) => {
             if (value === "dynamic") {
@@ -51,7 +51,8 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
           enums={[
             ["BEE", "dynamic"],
             ["BEE Template", "template"],
-            ["Static", "static"],
+            // Soft-prevent creating a static environment through the UI
+            // ["Static", "static"],
           ]}
           {...EnvironmentColors}
         />
