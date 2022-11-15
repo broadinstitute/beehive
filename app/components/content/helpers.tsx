@@ -21,22 +21,29 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   toEdit,
   toDelete,
 }) => (
-  <div className="flex flex-col space-y-4">
-    <h2 className="text-2xl font-light">Change {name}</h2>
+  <div className="flex flex-col space-y-12">
     {toChangeVersions && (
-      <NavButton to={toChangeVersions} sizeClassName="w-[29vw]" {...colors}>
-        Change Versions
-      </NavButton>
+      <div className="flex flex-col space-y-4">
+        <h2 className="text-2xl font-light">On-Demand Deployment</h2>
+        <NavButton to={toChangeVersions} sizeClassName="w-[29vw]" {...colors}>
+          Change Versions
+        </NavButton>
+      </div>
     )}
-    {toEdit && (
-      <NavButton to={toEdit} sizeClassName="w-[29vw]" {...colors}>
-        Edit
-      </NavButton>
-    )}
-    {toDelete && (
-      <NavButton to={toDelete} sizeClassName="w-[29vw]" {...colors}>
-        Delete
-      </NavButton>
+    {(toEdit || toDelete) && (
+      <div className="flex flex-col space-y-4">
+        <h2 className="text-2xl font-light">Make Changes</h2>
+        {toEdit && (
+          <NavButton to={toEdit} sizeClassName="w-[29vw]" {...colors}>
+            Edit Metadata
+          </NavButton>
+        )}
+        {toDelete && (
+          <NavButton to={toDelete} sizeClassName="w-[29vw]" {...colors}>
+            Delete
+          </NavButton>
+        )}
+      </div>
     )}
   </div>
 );
