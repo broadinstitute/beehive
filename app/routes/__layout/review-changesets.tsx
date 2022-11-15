@@ -25,6 +25,7 @@ import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
 import { ListControls } from "~/components/interactivity/list-controls";
+import { TextField } from "~/components/interactivity/text-field";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
@@ -201,6 +202,55 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
   const includedCount = Array.from(includedChangesets).filter(
     ([_, included]) => included
   ).length;
+
+  const [showProdModal, setShowProdModal] = useState(
+    changesets.filter(
+      (changeset) =>
+        changeset.chartReleaseInfo?.environment === "prod" ||
+        changeset.chartReleaseInfo?.cluster === "terra-prod"
+    ).length > 0
+  );
+  const [userTriedPasting, setUserTriedPasting] = useState(false);
+
+  if (showProdModal) {
+    const text = "Yes I would like to edit prod";
+    return (
+      <div className="absolute w-full h-full bg-black flex flex-col items-center justify-center">
+        <h2 className="text-6xl text-white font-extralight">
+          Hey, these changes affect
+        </h2>
+        <h1 className="text-[12rem] leading-none text-white font-semibold">
+          Production
+        </h1>
+        <h3 className="text-3xl text-white font-extralight">
+          The usual review screen is coming up next, type below to continue
+        </h3>
+        <p className="text-white mt-6">"{text}"</p>
+        <input
+          type="text"
+          placeholder={
+            userTriedPasting ? "are you sure? (pasting now allowed)" : text
+          }
+          pattern={text}
+          onPasteCapture={
+            userTriedPasting
+              ? undefined
+              : (e) => {
+                  setUserTriedPasting(true);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+          }
+          onChange={(e) => {
+            if (e.target.value === text) {
+              setShowProdModal(false);
+            }
+          }}
+          className="rounded-2xl w-1/3 mt-6 h-12 border border-zinc-400 focus-visible:outline-none text-white text-center bg-black placeholder:text-zinc-500 invalid:border-dashed invalid:border-red-500"
+        />
+      </div>
+    );
+  }
 
   return (
     <Branch>

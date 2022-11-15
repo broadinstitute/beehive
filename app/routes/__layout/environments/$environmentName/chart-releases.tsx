@@ -68,7 +68,7 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
         >
           <ListControls
             setFilterText={setFilterText}
-            toCreate="./add"
+            toCreate={outletContext.environment.name != "prod" ? "./add" : ""}
             toCreateText="Add New"
             {...ChartReleaseColors}
           />

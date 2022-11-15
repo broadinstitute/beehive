@@ -50,7 +50,7 @@ export const EnvironmentDetails: React.FunctionComponent<
         )}
       </div>
     )}
-    {(toEdit || toDelete) && (
+    {(toEdit || toDelete || toChangeVersions) && (
       <MutateControls
         name={environment.name || ""}
         colors={EnvironmentColors}

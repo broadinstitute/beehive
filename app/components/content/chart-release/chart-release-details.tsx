@@ -39,7 +39,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
       helmfileRef={chartRelease.helmfileRef}
       renderChartVersionLink={chartRelease.chartVersionReference != null}
     />
-    {(toEdit || toDelete) && (
+    {(toEdit || toDelete || toChangeVersions) && (
       <MutateControls
         name={chartRelease.name || ""}
         colors={ChartReleaseColors}
