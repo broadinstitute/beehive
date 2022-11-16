@@ -25,7 +25,6 @@ import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
 import { ListControls } from "~/components/interactivity/list-controls";
-import { TextField } from "~/components/interactivity/text-field";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
@@ -99,15 +98,17 @@ export const action: ActionFunction = async ({ request }) => {
       },
       forwardIAP(request)
     )
-    .then(async (changesets) => {
+    .then(async () => {
       const payload = {
         owner: "broadinstitute",
         repo: "terra-github-workflows",
         workflow_id: ".github/workflows/sync-release.yaml",
         ref: "main",
         inputs: {
-          "chart-release-names": changesets
-            .map((changeset) => changeset.chartRelease)
+          // Get this from hidden fields on the form so that we can filter out what is and isn't a template easily
+          "chart-release-names": formData
+            .getAll("sync")
+            .filter((value): value is string => typeof value === "string")
             .join(","),
         },
       };
@@ -172,6 +173,16 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
 
   const [filterText, setFilterText] = useState("");
 
+  const templateLookup = useMemo(
+    () =>
+      new Map(
+        changesets.map((changeset) => [
+          changeset.chartRelease || "",
+          changeset.chartReleaseInfo?.environmentInfo?.lifecycle === "template",
+        ])
+      ),
+    [changesets]
+  );
   const changesetIdLookup = useMemo(
     () =>
       new Map(
@@ -309,17 +320,29 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                       />
                       <span className="align-middle">{name}</span>
                     </label>
+                    {!templateLookup.get(name) && (
+                      <input type="hidden" name="sync" value={name} />
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           )}
           {changesets.length == 1 && (
-            <input
-              type="hidden"
-              name="changeset"
-              value={changesets.at(0)?.id}
-            />
+            <>
+              <input
+                type="hidden"
+                name="changeset"
+                value={changesets.at(0)?.id}
+              />
+              {!templateLookup.get(changesets.at(0)?.chartRelease || "") && (
+                <input
+                  type="hidden"
+                  name="sync"
+                  value={changesets.at(0)?.chartRelease || ""}
+                />
+              )}
+            </>
           )}
           {actionData && displayErrorInfo(actionData)}
         </BigActionBox>
