@@ -27,6 +27,20 @@ export const ClusterDetails: React.FunctionComponent<ClusterDetailsProps> = ({
         <h2>View Charts in This Cluster</h2>
       </NavButton>
     )}
+    {cluster.provider && (
+      <p>This cluster is based out of the {cluster.provider} cloud provider.</p>
+    )}
+    {cluster.googleProject && (
+      <p>
+        This cluster has an associated GCP project of "{cluster.googleProject}".
+      </p>
+    )}
+    {cluster.azureSubscription && (
+      <p>
+        This cluster has an associated Azure subscription of "
+        {cluster.azureSubscription}".
+      </p>
+    )}
     {(toEdit || toDelete) && (
       <MutateControls
         name={cluster.name || ""}
