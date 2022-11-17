@@ -10,6 +10,7 @@ export interface MutateControlsProps {
   name: string;
   colors: DataTypeColors;
   toChangeVersions?: string;
+  changeVersionText?: string;
   toEdit?: string;
   toDelete?: string;
 }
@@ -18,6 +19,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   name,
   colors,
   toChangeVersions,
+  changeVersionText,
   toEdit,
   toDelete,
 }) => (
@@ -28,6 +30,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         <NavButton to={toChangeVersions} sizeClassName="w-[29vw]" {...colors}>
           Change Versions
         </NavButton>
+        {changeVersionText && <p>{changeVersionText}</p>}
       </div>
     )}
     {(toEdit || toDelete) && (
