@@ -8,7 +8,7 @@ export function catchBoundary() {
     caught.data
   );
   return (
-    <div className="bg-red-50 border-red-500 border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
+    <div className="bg-color-error-bg border-color-error-border border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
       <p className="font-semibold">{title}</p>
       {(reloadRequired && (
         <button
@@ -17,14 +17,14 @@ export function catchBoundary() {
             // @ts-ignore
             window.location.reload(true)
           }
-          className="m-2 p-1 bg-red-100 border-red-500 border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
+          className="m-2 p-1 bg-color-error-button border-color-error-border border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
         >
           Refresh Page
         </button>
       )) || (
         <button
           onClick={() => history.back()}
-          className="m-2 p-1 bg-red-100 border-red-500 border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
+          className="m-2 p-1 bg-color-error-button border-color-error-border border rounded-lg drop-shadow-md hover:drop-shadow-lg transition-all"
         >
           Go Back
         </button>

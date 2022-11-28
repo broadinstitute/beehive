@@ -31,12 +31,12 @@ export const EnumSelect = <T extends any>({
   <div className={`min-h-[3rem] w-full gap-2 ${className}`}>
     {enums.map(([displayValue, valueToSet], index) => (
       <button
-        className={`first:rounded-l-2xl last:rounded-r-2xl shadow-md hover:shadow-lg motion-safe:transition-all  ${
+        className={`first:rounded-l-2xl last:rounded-r-2xl shadow-md hover:shadow-lg focus-visible:outline focus-visible:outline-color-focused-element motion-safe:transition-all  ${
           bigButtons ? "text-xl" : ""
-        } ${borderClassName || "border-zinc-300"} ${
+        } ${borderClassName || "border-color-neutral-soft-border"} ${
           valueToSet === fieldValue
-            ? "bg-white border-4 font-medium"
-            : `bg-white/50 border-2 hover:border-4 `
+            ? "bg-color-nearest-bg border-4 font-medium"
+            : `bg-color-nearest-bg/50 border-2 hover:border-4 `
         }`}
         key={index}
         onClickCapture={(e) => {

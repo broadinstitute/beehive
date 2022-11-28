@@ -11,6 +11,7 @@ import {
   CsrfTokenContext,
   csrfTokenInputName,
 } from "~/components/logic/csrf-token";
+import { ThemeDropdown } from "~/components/logic/theme";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   errorResponseReturner,
@@ -66,12 +67,12 @@ const MiscRoute: FunctionComponent = () => {
       ]
     >();
   return (
-    <div className="h-full text-center flex flex-col justify-center items-center">
+    <div className="h-full text-color-body-text text-center flex flex-col justify-center items-center">
       <p>
         Beehive version{" "}
         <Link
           to={`/charts/beehive/app-versions/${beehiveVersion}`}
-          className="font-mono underline decoration-blue-500"
+          className="font-mono underline decoration-color-link-underline"
         >
           {beehiveVersion}
         </Link>
@@ -91,7 +92,7 @@ const MiscRoute: FunctionComponent = () => {
             to={`/charts/sherlock/app-versions/${
               (sherlockVersion as MiscVersionResponse).version
             }`}
-            className="font-mono underline decoration-blue-500"
+            className="font-mono underline decoration-color-link-underline"
           >
             {" "}
             {(sherlockVersion as MiscVersionResponse).version}
@@ -126,7 +127,7 @@ const MiscRoute: FunctionComponent = () => {
             Click{" "}
             <a
               href="?gcp-iap-mode=CLEAR_LOGIN_COOKIE"
-              className="decoration-blue-500 underline"
+              className="decoration-color-link-underline underline"
             >
               here
             </a>{" "}
@@ -143,7 +144,7 @@ const MiscRoute: FunctionComponent = () => {
           You are{" "}
           <a
             href={(myGitHubUser as { html_url: string }).html_url}
-            className="font-mono underline decoration-blue-500"
+            className="font-mono underline decoration-color-link-underline"
           >
             {(myGitHubUser as { login: string }).login}
           </a>{" "}
@@ -155,7 +156,7 @@ const MiscRoute: FunctionComponent = () => {
           <p>
             Click{" "}
             <button
-              className="decoration-blue-500 underline"
+              className="decoration-color-link-underline underline"
               onClick={async () => {
                 // We don't want fancy form-submitting server-side
                 // behavior here: our goal is to get the client to
@@ -182,6 +183,8 @@ const MiscRoute: FunctionComponent = () => {
           </p>
         )}
       </CsrfTokenContext.Consumer>
+      {/* <br />
+      <ThemeDropdown /> */}
     </div>
   );
 };

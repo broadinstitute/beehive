@@ -11,10 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - name: Checkout current code
-        uses: actions/checkout@v2
-      - name: Docker Build
-        run: docker build . -t ${{ github.event.repository.name }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build image
+        uses: docker/build-push-action@v3
+        with:
+          push: false
+          tags: |
+            ${{ github.event.repository.name }}
+          cache-from: type=gha
       - name: Run Trivy vulnerability scanner
         uses: broadinstitute/dsp-appsec-trivy-action@v1
         with:

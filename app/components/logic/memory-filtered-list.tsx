@@ -38,8 +38,12 @@ export const MemoryFilteredList = <T extends unknown>({
     filter === undefined ||
     filterText === ""
   ) {
-    return <div>{`(There's nothing here)`}</div>;
+    return (
+      <div className="text-color-body-text/70">{`(There's nothing here)`}</div>
+    );
   } else {
-    return <div>{`(There's nothing here matching ${filterText})`}</div>;
+    return (
+      <div className="text-color-body-text/70">{`(There's nothing here matching ${filterText})`}</div>
+    );
   }
 };

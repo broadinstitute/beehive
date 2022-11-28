@@ -1,6 +1,7 @@
 import { DataTypeColors } from "../helpers";
 
 export const EnvironmentColors: DataTypeColors = {
-  borderClassName: "border-amber-300",
-  backgroundClassName: "bg-amber-50",
+  borderClassName: "border-color-environment-border",
+  beforeBorderClassName: "before:border-color-environment-border",
+  backgroundClassName: "bg-color-environment-bg",
 };

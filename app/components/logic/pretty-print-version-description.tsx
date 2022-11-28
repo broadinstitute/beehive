@@ -20,7 +20,7 @@ export const PrettyPrintVersionDescription: React.FunctionComponent<
               href={`https://${jira}.atlassian.net/browse/${ticketMatch[1]}`}
               target="_blank"
               rel="noreferrer"
-              className="underline decoration-blue-500"
+              className="underline decoration-color-link-underline"
             >
               {string}
             </a>
@@ -33,7 +33,7 @@ export const PrettyPrintVersionDescription: React.FunctionComponent<
               href={`https://github.com/${repo}/pull/${prMatch[1]}`}
               target="_blank"
               rel="noreferrer"
-              className="underline decoration-blue-500"
+              className="underline decoration-color-link-underline"
             >
               {string}
             </a>

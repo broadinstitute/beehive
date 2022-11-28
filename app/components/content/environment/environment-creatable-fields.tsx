@@ -57,7 +57,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
           {...EnvironmentColors}
         />
       </div>
-      <div className="pl-6 border-l-2 border-zinc-400 flex flex-col">
+      <div className="pl-6 border-l-2 border-color-divider-line flex flex-col">
         <label className={lifecycle === "dynamic" ? "hidden" : "mb-4"}>
           <h2 className="font-light text-2xl">Values Base</h2>
           <p className="mb-2">
@@ -70,7 +70,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             inside{" "}
             <a
               href="https://github.com/broadinstitute/terra-helmfile"
-              className="underline decoration-blue-500"
+              className="underline decoration-color-link-underline"
             >
               terra-helmfile
             </a>

@@ -24,6 +24,7 @@ import { catchBoundary } from "./components/boundaries/catch-boundary";
 import { errorBoundary } from "./components/boundaries/error-boundary";
 import { CsrfTokenContext } from "./components/logic/csrf-token";
 import { LoadScroller } from "./components/logic/load-scroller";
+import { LoadThemeSetter } from "./components/logic/theme";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -176,19 +177,27 @@ export const App: React.FunctionComponent = () => {
     // https://html.spec.whatwg.org/multipage/urls-and-fetching.html#nonce-attributes
     // When this code runs in the browser, we want the nonce to be empty because
     // that's what it will be regardless of what we do. If we have it anything other
-    // than an empty string, React's dev mode will warn us about about a mismatch.
+    // than an empty string, React's will warn us about about a mismatch.
     cspScriptNonce = "";
   }
   const transition = useTransition();
   return (
     <CsrfTokenContext.Provider value={csrfToken}>
-      <html lang="en">
+      <html
+        lang="en"
+        // suppressHydrationWarning to allow LoadThemeSetter's manipulation of the
+        // document's data-theme attribute. Suppressing is okay because it only
+        // works at this level (it doesn't cascade).
+        suppressHydrationWarning={true}
+      >
         <head>
           <Meta />
           <Links />
+          <LoadThemeSetter nonce={cspScriptNonce} />
         </head>
         <body
-          className={`bg-zinc-100 overflow-hidden flex flex-col min-w-screen h-screen w-full ${
+          data-theme-prod={false}
+          className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-screen w-full ${
             transition.state != "idle" ? "cursor-progress" : ""
           }`}
         >

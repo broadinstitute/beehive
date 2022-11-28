@@ -34,14 +34,14 @@ export const AppVersionSummary: React.FunctionComponent<
             commit{" "}
             <a
               href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
-              className="font-mono underline decoration-blue-500"
+              className="font-mono underline decoration-color-link-underline"
             >
               {appVersionCommit?.substring(0, 7)}
             </a>{" "}
             on the{" "}
             <a
               href={`https://github.com/${appImageGitRepo}/tree/${appVersionBranch}`}
-              className="font-mono underline decoration-blue-500"
+              className="font-mono underline decoration-color-link-underline"
             >
               {appVersionBranch}
             </a>{" "}
@@ -55,7 +55,7 @@ export const AppVersionSummary: React.FunctionComponent<
             commit{" "}
             <a
               href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
-              className="font-mono underline decoration-blue-500"
+              className="font-mono underline decoration-color-link-underline"
             >
               {appVersionCommit?.substring(0, 7)}
             </a>{" "}
@@ -78,14 +78,14 @@ export const AppVersionSummary: React.FunctionComponent<
             This app version was the most recent from specified commit{" "}
             <a
               href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
-              className="font-mono underline decoration-blue-500"
+              className="font-mono underline decoration-color-link-underline"
             >
               {appVersionCommit?.substring(0, 7)}
             </a>{" "}
             that happens to be on the{" "}
             <a
               href={`https://github.com/${appImageGitRepo}/tree/${appVersionBranch}`}
-              className="font-mono underline decoration-blue-500"
+              className="font-mono underline decoration-color-link-underline"
             >
               {appVersionBranch}
             </a>{" "}
@@ -98,7 +98,7 @@ export const AppVersionSummary: React.FunctionComponent<
             This app version was the most recent from specified commit{" "}
             <a
               href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
-              className="font-mono underline decoration-blue-500"
+              className="font-mono underline decoration-color-link-underline"
             >
               {appVersionCommit?.substring(0, 7)}
             </a>
@@ -113,14 +113,14 @@ export const AppVersionSummary: React.FunctionComponent<
           This app version was from commit{" "}
           <a
             href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
-            className="font-mono underline decoration-blue-500"
+            className="font-mono underline decoration-color-link-underline"
           >
             {appVersionCommit?.substring(0, 7)}
           </a>
           , the most recent from specified branch{" "}
           <a
             href={`https://github.com/${appImageGitRepo}/tree/${appVersionBranch}`}
-            className="font-mono underline decoration-blue-500"
+            className="font-mono underline decoration-color-link-underline"
           >
             {appVersionBranch}
           </a>
@@ -134,7 +134,7 @@ export const AppVersionSummary: React.FunctionComponent<
   }
   return (
     <div className="flex flex-col space-y-2">
-      <h2 className="font-light text-4xl">
+      <h2 className="font-light text-4xl text-color-header-text">
         {`${chartName} app @ ${appVersionExact}`}
       </h2>
       {explanation}
@@ -143,7 +143,7 @@ export const AppVersionSummary: React.FunctionComponent<
           Configuration uses values from firecloud-develop's{" "}
           <a
             href={`https://github.com/broadinstitute/firecloud-develop/tree/${firecloudDevelopRef}`}
-            className="font-mono underline decoration-blue-500"
+            className="font-mono underline decoration-color-link-underline"
           >
             {firecloudDevelopRef}
           </a>

@@ -44,7 +44,7 @@ export const ErrorBoundary = errorBoundary;
 const ClusterNameRoute: React.FunctionComponent = () => {
   const cluster = useLoaderData<V2controllersCluster>();
   return (
-    <Branch>
+    <Branch prod={cluster.name === "terra-prod"}>
       <OutsetPanel {...ClusterColors}>
         <ItemDetails subtitle="Kubernetes Cluster" title={cluster.name || ""}>
           <ClusterDetails

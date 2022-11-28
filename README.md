@@ -14,9 +14,15 @@
 
 4. Run `npm install` to download dependencies and `npm run dev` to spin up the development server
 
-You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up.
+You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up. If you're set up with Thelma, `thelma state export` will give your local Sherlock instance some familiar-looking data.
 
-If you're using Visual Studio Code, Tailwind has a [small plugin](https://tailwindcss.com/docs/editor-setup#intelli-sense-for-vs-code) that provides really good autocomplete.
+### If you're using Visual Studio Code
+
+[The Tailwind plugin](vscode:extension/bradlc.vscode-tailwindcss) adds very helpful autocomplete for Tailwind's class names. **This plugin is strongly recommended.**
+
+[The Prettier plugin](vscode:extension/esbenp.prettier-vscode) aligns the editor and pre-commit formatting behaviors. **This plugin is strongly recommended.**
+
+PostCSS also has a plugin but it isn't recommended here as it unnecessarily relaxes a bunch of CSS syntax rules and ends up causing build-time syntax errors. Instead, we just ignore unknown directives in non-Tailwind CSS linting--so far that's caused far fewer errors.
 
 ## Stack
 
@@ -47,6 +53,8 @@ React
 
 We're using React because DSP already uses it for [Terra UI](https://github.com/DataBiosphere/terra-ui) and [DUOS UI](https://github.com/DataBiosphere/duos-ui), and we have similar requirements for interactivity--no need to reinvent the wheel.
 
+We use the `tsx` syntax since that's the most common syntax in modern resources online. Files that specifically don't include any inlined React at all can opt to use `ts` to help make that clear. This dovetails nicely with code-splitting hinting to Remix's compiler, resulting in `session.server.ts` vs `clusters.tsx`.
+
 </details>
 
 <details>
@@ -69,6 +77,8 @@ Tailwind
 
 [Tailwind](https://tailwindcss.com/) is a library of utility CSS classes. They have an explanation of why this is [a good idea](https://tailwindcss.com/docs/utility-first) but they're too humble to brag about one of their greatest features: [a documentation site so thorough](https://tailwindcss.com/docs/editor-setup) that we don't all need to memorize CSS or have a thousand tabs open to be able to contribute code to Beehive.
 
+We use Tailwind as a PostCSS plugin along with a few others to help organize files ([import](https://github.com/postcss/postcss-import) and [import-glob](https://github.com/dimitrinicolas/postcss-import-ext-glob)), improve compatibility ([autoprefixer](https://github.com/postcss/autoprefixer)), and lower load times ([cssnano](https://cssnano.co/)); see [postcss.config.js](./postcss.config.js) for more info. Everything in `./styles` ends up in `./app/styles` where [Remix can grab it](https://github.com/dimitrinicolas/postcss-import-ext-glob#example), but working directly with CSS in Beehive is mostly just an escape hatch for when Tailwind can't do something.
+
 </details>
 
 The overall architecture of the system is diagrammed [here](https://lucid.app/lucidchart/0b274518-4e5a-449e-b3bc-19714096d5a4/edit?page=0_0#).
@@ -77,26 +87,16 @@ The overall architecture of the system is diagrammed [here](https://lucid.app/lu
 
 [Remix docs](https://remix.run/docs), [Tailwind docs](https://tailwindcss.com/docs/editor-setup)
 
-### Colors
+### Themes and Colors
 
-[The colors come from Tailwind](https://tailwindcss.com/docs/customizing-colors):
+Beehive has a theming system. This isn't just a vanity feature, it is used to vary the entire UI when affecting production resources to help avoid accidents.
 
-- Neutrals: Zinc
-- Beehive logo and environment: Amber
-- Cluster: Green
-- Chart: Sky
-- Chart Versions: Violet (low contrast with Sky for protanopia/deuteranopia but it is very closely related to Charts anyway)
-- App Versions: Rose
-- Errors: Red (labeled as such and with unique styling)
-- Focus: Blue (just continuing browser behavior, not a significant UI element)
+To support this, use the colors defined in [our Tailwind configuration](./tailwind.config.js) (e.g. use `bg-color-near-bg` instead of `bg-white`).
 
-Errors use the Red series but are also labeled as such and have different styling from app versions.
-Focused elements may use the Blue
-
-[Colorblindness check here.](https://davidmathlogic.com/colorblind/#%23FCD34D-%237DD3FC-%2386EFAC-%23FDA4AF-%23C4B5FD)
+If you want to add a new theme, see [./themes](./themes).
 
 ### Icons
 
 [Lucide](https://lucide.dev/) is set up, [here's how to use it](https://lucide.dev/docs/lucide-react#how-to-use). You can apply Tailwind classes to the imported components like normal to style them.
 
-(If you know [Feather Icons](https://github.com/feathericons/feather), Lucide is a fork of that project with more active leadership and thus more icons)
+(If you know [Feather Icons](https://github.com/feathericons/feather), Lucide is a fork of that project with more active leadership and more icons)

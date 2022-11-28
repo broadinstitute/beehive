@@ -22,19 +22,19 @@ export const BeehiveIcon: React.FunctionComponent<BeehiveIconProps> = ({
     className={className}
   >
     <path
-      className={`fill-amber-300 ${loading ? "beehive-loading" : ""}`}
+      className={`fill-color-beehive-logo ${loading ? "beehive-loading" : ""}`}
       d="M142.5 0h215C381.045 0 400 18.955 400 42.5S381.045 85 357.5 85h-215C118.955 85 100 66.045 100 42.5S118.955 0 142.5 0Z"
     />
     <path
-      className={`fill-amber-300 ${loading ? "beehive-loading" : ""}`}
+      className={`fill-color-beehive-logo ${loading ? "beehive-loading" : ""}`}
       d="M42.5 138.333h415c23.545 0 42.5 18.955 42.5 42.5s-18.955 42.5-42.5 42.5h-415c-23.545 0-42.5-18.955-42.5-42.5s18.955-42.5 42.5-42.5z"
     />
     <path
-      className={`fill-amber-300 ${loading ? "beehive-loading" : ""}`}
+      className={`fill-color-beehive-logo ${loading ? "beehive-loading" : ""}`}
       d="M92.5 276.667h315c23.545 0 42.5 18.955 42.5 42.5s-18.955 42.5-42.5 42.5h-315c-23.545 0-42.5-18.955-42.5-42.5s18.955-42.5 42.5-42.5z"
     />
     <path
-      className={`fill-amber-300 ${loading ? "beehive-loading" : ""}`}
+      className={`fill-color-beehive-logo ${loading ? "beehive-loading" : ""}`}
       d="M192.5 415h115c23.545 0 42.5 18.955 42.5 42.5S331.045 500 307.5 500h-115c-23.545 0-42.5-18.955-42.5-42.5s18.955-42.5 42.5-42.5Z"
     />
   </svg>

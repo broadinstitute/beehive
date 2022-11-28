@@ -179,7 +179,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       {creating ? (
         <details className="pt-2">
           <summary className="cursor-pointer font-medium">Extra Fields</summary>
-          <div className="pl-6 border-l-2 border-zinc-400 mt-4 flex flex-col space-y-4">
+          <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
             {extraFields}
           </div>
         </details>

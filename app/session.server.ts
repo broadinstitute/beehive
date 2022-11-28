@@ -10,7 +10,7 @@ const { getSession, commitSession, destroySession } =
       path: "/",
 
       // See Secure attribute at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
 
       // See SameSite attribute at https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
       // We can't use 'strict' because we need to store the GitHub OAuth state client-side in this cookie--we need the

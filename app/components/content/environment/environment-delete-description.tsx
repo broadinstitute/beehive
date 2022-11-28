@@ -36,7 +36,7 @@ export const EnvironmentDeleteDescription: React.FunctionComponent<
       This will not delete any associated configuration from our Helm values in{" "}
       <a
         href="https://github.com/broadinstitute/terra-helmfile"
-        className="decoration-blue-500 underline"
+        className="decoration-color-link-underline underline"
       >
         terra-helmfile
       </a>

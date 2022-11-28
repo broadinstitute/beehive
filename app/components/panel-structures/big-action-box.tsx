@@ -18,15 +18,16 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
   title,
   submitText,
   borderClassName,
+  beforeBorderClassName,
   backgroundClassName,
   hideButton,
 }) => {
   const safeReturnPath = safeRedirectPath(returnPath);
   const transition = useTransition();
   return (
-    <div className="w-[33vw] h-full flex flex-col space-y-8 p-8 pt-4">
+    <div className="w-[33vw] h-full flex flex-col space-y-8 p-8 pt-4 text-color-body-text">
       <div>
-        <h1 className="text-5xl font-medium">{title}</h1>
+        <h1 className="text-5xl font-medium text-color-header-text">{title}</h1>
       </div>
       <Form
         method="post"
@@ -43,7 +44,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
             <br />
             <ActionButton
               sizeClassName="w-full"
-              borderClassName={borderClassName}
+              beforeBorderClassName={beforeBorderClassName}
               type="submit"
               isLoading={transition.state === "submitting"}
             >
@@ -58,11 +59,12 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
       </Form>
       <NavButton
         to={safeReturnPath}
-        borderClassName={borderClassName}
+        beforeBorderClassName={borderClassName}
         sizeClassName
       >
         <h2 className="font-light">{returnText}</h2>
       </NavButton>
+      <br />
     </div>
   );
 };

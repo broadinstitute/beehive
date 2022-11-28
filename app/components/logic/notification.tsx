@@ -70,18 +70,18 @@ export const NotificationComponent: React.FunctionComponent<{
   }, []);
   return (
     <div
-      className={`relative motion-safe:transition-all motion-safe:duration-1000 ease-out ${
+      className={`relative motion-safe:transition-all motion-safe:duration-1000 ease-out text-color-body-text ${
         visible ? "right-0" : "right-[-30vw]"
       }`}
     >
       <a
-        className={`w-[20vw] bg-white flex flex-col rounded-2xl shadow-2xl drop-shadow-xl motion-safe:transition-all before:block  before:absolute before:rounded-2xl before:border-2 ${
+        className={`w-[20vw] bg-color-nearest-bg flex flex-col rounded-2xl shadow-2xl drop-shadow-xl motion-safe:transition-all before:block before:absolute before:rounded-2xl before:border-2 ${
           notification.error
-            ? "before:border-rose-400 before:border-dashed"
-            : "before:border-black"
-        } before:w-full before:h-full before:motion-safe:transition-all before:duration-75 ${
+            ? "before:border-color-error-border before:border-dashed"
+            : "before:border-color-neutral-hard-border"
+        } before:w-full before:h-full before:motion-safe:transition-all ${
           notification.url
-            ? "active:bg-zinc-50 hover:drop-shadow-2xl before:hover:border-4"
+            ? "active:bg-color-button-down hover:drop-shadow-2xl before:hover:border-4"
             : ""
         }`}
         href={notification.url}
@@ -90,7 +90,9 @@ export const NotificationComponent: React.FunctionComponent<{
         <div className="p-6 pt-6">
           <div className="flex flex-row space-x-2 mb-4">
             <Icon className="motion-safe:animate-bounce" />
-            <span className="grow font-medium text-lg">{title}</span>
+            <span className="grow font-medium text-lg text-color-header-text">
+              {title}
+            </span>
           </div>
           {notification.text}
           {notification.url &&
@@ -102,9 +104,9 @@ export const NotificationComponent: React.FunctionComponent<{
           setVisible(false);
           setTimeout(close, 1000);
         }}
-        className="absolute right-5 top-5 p-1 hover:bg-zinc-200 active:bg-zinc-300 rounded-full"
+        className="absolute right-5 top-5 p-1 hover:bg-color-icon-button-hover active:bg-color-icon-button-down rounded-full"
       >
-        <X />
+        <X className="fill-color-header-text" />
       </button>
     </div>
   );

@@ -2,7 +2,7 @@ import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartReleaseColors } from "../chart-release/chart-release-colors";
 import { ClusterColors } from "../cluster/cluster-colors";
-import { MutateControls } from "../helpers";
+import { MutateControls, ProdWarning } from "../helpers";
 import { EnvironmentColors } from "./environment-colors";
 
 export interface EnvironmentDetailsProps {
@@ -17,10 +17,12 @@ export const EnvironmentDetails: React.FunctionComponent<
   EnvironmentDetailsProps
 > = ({ environment, toChartReleases, toChangeVersions, toEdit, toDelete }) => (
   <div className="flex flex-col space-y-10">
-    {(toChartReleases ||
+    {(environment.name === "prod" ||
+      toChartReleases ||
       environment.templateEnvironment ||
       environment.defaultCluster) && (
       <div className="flex flex-col space-y-4">
+        {environment.name === "prod" && <ProdWarning name={environment.name} />}
         {toChartReleases && (
           <NavButton
             to={toChartReleases}
@@ -48,6 +50,28 @@ export const EnvironmentDetails: React.FunctionComponent<
             <h2>Jump to Default Cluster</h2>
           </NavButton>
         )}
+      </div>
+    )}
+    {environment.lifecycle !== "template" && environment.defaultNamespace && (
+      <div className="flex flex-col space-y-4">
+        <a
+          href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications?namespace=${environment.defaultNamespace}`}
+          target="_blank"
+          className="underline decoration-color-link-underline w-fit"
+        >
+          View in Argo CD ↗
+        </a>
+        {environment.defaultCluster &&
+          environment.defaultClusterInfo?.provider === "google" &&
+          environment.defaultClusterInfo.googleProject && (
+            <a
+              href={`https://console.cloud.google.com/kubernetes/workload/overview?project=${environment.defaultClusterInfo.googleProject}&pageState=("savedViews":("c":%5B"gke%2Fus-central1-a%2F${environment.defaultCluster}"%5D,"n":%5B"${environment.defaultNamespace}"%5D))`}
+              target="_blank"
+              className="underline decoration-color-link-underline w-fit"
+            >
+              View in Google Cloud Platform ↗
+            </a>
+          )}
       </div>
     )}
     {(toEdit || toDelete || toChangeVersions) && (

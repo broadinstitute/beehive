@@ -68,7 +68,7 @@ export const AppVersionPicker: React.FunctionComponent<
           ]}
           {...AppVersionColors}
         />
-        <div className="pl-6 border-l-2 border-zinc-400 mt-4 flex flex-col space-y-4">
+        <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
           {appVersionResolver === "exact" && (
             <label>
               <h2 className="font-light text-2xl">Set Exact Version</h2>
@@ -164,7 +164,7 @@ export const AppVersionPicker: React.FunctionComponent<
                 <a
                   href="https://github.com/broadinstitute/firecloud-develop"
                   target="_blank"
-                  className="underline decoration-blue-500"
+                  className="underline decoration-color-link-underline"
                 >
                   firecloud-develop
                 </a>{" "}

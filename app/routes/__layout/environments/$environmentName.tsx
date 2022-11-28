@@ -45,7 +45,7 @@ export const ErrorBoundary = errorBoundary;
 const EnvironmentNameRoute: React.FunctionComponent = () => {
   const environment = useLoaderData<V2controllersEnvironment>();
   return (
-    <Branch>
+    <Branch prod={environment.name === "prod"}>
       <OutsetPanel {...EnvironmentColors}>
         <ItemDetails
           subtitle={`${
@@ -59,7 +59,7 @@ const EnvironmentNameRoute: React.FunctionComponent = () => {
             environment={environment}
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
-            toEdit={environment.name != "prod" ? "./edit" : ""}
+            toEdit="./edit"
             toDelete={environment.lifecycle != "static" ? "./delete" : ""}
           />
         </ItemDetails>

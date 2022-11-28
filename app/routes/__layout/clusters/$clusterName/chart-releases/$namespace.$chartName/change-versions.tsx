@@ -412,11 +412,11 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
               )) || (
                 <>
                   <div className="flex flex-row items-center gap-4 py-4">
-                    <div className="grow border-b-2 border-zinc-400"></div>
+                    <div className="grow border-b-2 border-color-divider-line"></div>
                     <div className="shrink-0 grow-0 font-medium text-xl">
                       Or
                     </div>
-                    <div className="grow border-b-2 border-zinc-400"></div>
+                    <div className="grow border-b-2 border-color-divider-line"></div>
                   </div>
                   <p>
                     Here are the current versions. You can change them if you

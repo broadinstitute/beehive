@@ -10,5 +10,10 @@
     "sizeClassName",
     "borderClassName",
     "backgroundClassName"
-  ]
+  ],
+  "files.associations": {
+    "*.tailwind.css": "tailwindcss",
+    "*.css": "css"
+  },
+  "css.lint.unknownAtRules": "ignore"
 }

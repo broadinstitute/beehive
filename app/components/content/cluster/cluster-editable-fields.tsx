@@ -27,7 +27,7 @@ export const ClusterEditableFields: React.FunctionComponent<
           base as the directory name as the file name inside{" "}
           <a
             href="https://github.com/broadinstitute/terra-helmfile"
-            className="underline decoration-blue-500"
+            className="underline decoration-color-link-underline"
           >
             terra-helmfile
           </a>

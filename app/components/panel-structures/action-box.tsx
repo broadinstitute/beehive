@@ -7,6 +7,7 @@ export interface ActionBoxProps {
   title: string;
   submitText: string;
   borderClassName: string;
+  beforeBorderClassName: string;
   backgroundClassName: string;
 }
 
@@ -15,13 +16,14 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
   title,
   submitText,
   borderClassName,
+  beforeBorderClassName,
   backgroundClassName,
 }) => {
   const transition = useTransition();
   return (
-    <div className="flex flex-col items-center space-y-4 pb-4">
+    <div className="flex flex-col items-center space-y-4 pb-4 text-color-body-text">
       <div className="w-[30vw] p-3 pt-4">
-        <h1 className="text-3xl font-medium">{title}</h1>
+        <h1 className="text-3xl font-medium text-color-header-text">{title}</h1>
       </div>
       <Form
         method="post"
@@ -36,7 +38,7 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
         <br />
         <ActionButton
           sizeClassName="w-full"
-          borderClassName={borderClassName}
+          beforeBorderClassName={beforeBorderClassName}
           type="submit"
           isLoading={transition.state === "submitting"}
         >

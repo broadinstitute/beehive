@@ -3,43 +3,55 @@ import { BeehiveIcon } from "../assets/beehive-icon";
 export interface ActionButtonProps {
   type?: "submit" | "reset" | "button";
   sizeClassName?: string;
-  borderClassName?: string;
+  beforeBorderClassName?: string;
+  textAlignment?: string;
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isActive?: boolean;
   isLoading?: boolean;
   activeOnHover?: boolean;
+  prod?: boolean;
 }
 
 export const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
   type,
   sizeClassName = "w-[30vw]",
-  borderClassName,
+  beforeBorderClassName,
+  textAlignment = "text-left",
   children,
   onClick,
   isActive = false,
   isLoading = false,
   activeOnHover = false,
+  prod,
 }) => (
-  <div className={`relative h-12 shrink-0 ${sizeClassName || ""}`}>
+  <div data-theme-prod={prod} className="relative shrink-0">
     <button
       type={type}
-      className={`h-full w-full flex flex-row items-center rounded-2xl ${
-        isActive ? "border-r-[2rem] hover:border-r-[2rem]" : ""
-      } ${activeOnHover ? "hover:border-r-[2rem]" : ""} ${
+      className={`flex flex-row items-center bg-color-nearest-bg active:bg-color-button-down rounded-2xl min-h-[3rem] ${
+        sizeClassName || "w-full"
+      } focus-visible:outline focus-visible:outline-color-focused-element before:w-full before:h-full before:block before:absolute before:rounded-2xl ${
+        isActive ? "before:border-r-[2rem] before:hover:border-r-[2rem]" : ""
+      } ${activeOnHover ? "before:hover:border-r-[2rem]" : ""} ${
         isLoading
-          ? "border-4 shadow-lg"
-          : "shadow-md hover:shadow-lg border-2 hover:border-4"
-      } motion-safe:transition-all  bg-white active:bg-zinc-50 focus-visible:outline-blue-500 ${borderClassName}`}
+          ? "before:border-4 shadow-lg"
+          : "before:border-2 before:hover:border-4 shadow-md hover:shadow-lg"
+      } ${beforeBorderClassName} motion-safe:transition-all before:motion-safe:transition-all`}
       onClick={onClick}
       disabled={isLoading}
     >
-      <div className="flex flex-row justify-start items-center absolute left-[1vw] text-xl font-medium">
-        {children}
+      <div className="shrink-0 flex flex-row justify-between items-center h-full w-full px-[1rem] py-2">
+        <div
+          className={`grow text-xl font-medium text-color-body-text ${textAlignment}`}
+        >
+          {children}
+        </div>
+        {isLoading ? (
+          <BeehiveIcon className="h-7 w-7" loading />
+        ) : isActive ? (
+          <div className="h-7 w-7" />
+        ) : null}
       </div>
-      {isLoading && (
-        <BeehiveIcon className="h-7 w-7 absolute right-[1vw]" loading />
-      )}
     </button>
   </div>
 );

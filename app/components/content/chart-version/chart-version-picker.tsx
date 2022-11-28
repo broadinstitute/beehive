@@ -52,7 +52,7 @@ export const ChartVersionPicker: React.FunctionComponent<
           {...ChartVersionColors}
         />
       </div>
-      <div className="pl-6 border-l-2 border-zinc-400 mt-4 flex flex-col space-y-4">
+      <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
         {chartVersionResolver === "exact" && (
           <label>
             <h2 className="font-light text-2xl">Set Exact Version</h2>
@@ -90,7 +90,7 @@ export const ChartVersionPicker: React.FunctionComponent<
             <a
               href="https://github.com/broadinstitute/terra-helmfile"
               target="_blank"
-              className="underline decoration-blue-500"
+              className="underline decoration-color-link-underline"
             >
               terra-helmfile
             </a>{" "}

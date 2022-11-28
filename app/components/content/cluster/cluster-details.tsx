@@ -1,7 +1,7 @@
 import { V2controllersCluster } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartReleaseColors } from "../chart-release/chart-release-colors";
-import { MutateControls } from "../helpers";
+import { MutateControls, ProdWarning } from "../helpers";
 import { ClusterColors } from "./cluster-colors";
 
 export interface ClusterDetailsProps {
@@ -18,6 +18,7 @@ export const ClusterDetails: React.FunctionComponent<ClusterDetailsProps> = ({
   toDelete,
 }) => (
   <div className="flex flex-col space-y-10">
+    {cluster.name === "terra-prod" && <ProdWarning name={cluster.name} />}
     {toChartReleases && (
       <NavButton
         to={toChartReleases}

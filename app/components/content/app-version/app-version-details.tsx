@@ -19,21 +19,21 @@ export const AppVersionDetails: React.FunctionComponent<
         This App Version was built from commit{" "}
         <a
           href={`https://github.com/${appVersion.chartInfo?.appImageGitRepo}/commit/${appVersion.gitCommit}`}
-          className="font-mono decoration-blue-500 underline"
+          className="font-mono decoration-color-link-underline underline"
         >
           {appVersion.gitCommit?.substring(0, 7)}
         </a>
         , on the{" "}
         <a
           href={`https://github.com/${appVersion.chartInfo?.appImageGitRepo}/tree/${appVersion.gitBranch}`}
-          className="font-mono decoration-blue-500 underline"
+          className="font-mono decoration-color-link-underline underline"
         >
           {appVersion.gitBranch}
         </a>{" "}
         branch of{" "}
         <a
           href={`https://github.com/${appVersion.chartInfo?.appImageGitRepo}`}
-          className=" decoration-blue-500 underline"
+          className=" decoration-color-link-underline underline"
         >
           {appVersion.chartInfo?.appImageGitRepo}
         </a>

@@ -42,7 +42,7 @@ export const ChartVersionSummary: React.FunctionComponent<
   }
   return (
     <div className="flex flex-col space-y-2">
-      <h2 className="font-light text-4xl">
+      <h2 className="font-light text-4xl text-color-header-text">
         {`${chartName} chart @ ${chartVersionExact}`}
       </h2>
       {explanation}
@@ -50,7 +50,7 @@ export const ChartVersionSummary: React.FunctionComponent<
         Configuration uses values from terra-helmfile's{" "}
         <a
           href={`https://github.com/broadinstitute/terra-helmfile/tree/${helmfileRef}/values`}
-          className="font-mono underline decoration-blue-500"
+          className="font-mono underline decoration-color-link-underline"
         >
           {helmfileRef}
         </a>

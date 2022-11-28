@@ -26,7 +26,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         <p>This Helm Chart deploys a specific application:</p>
         <a
           href={`https://github.com/${chart.appImageGitRepo}`}
-          className="font-light text-4xl decoration-blue-500 underline"
+          className="font-light text-4xl decoration-color-link-underline underline text-color-header-text"
         >
           {chart.appImageGitRepo}
         </a>
@@ -35,7 +35,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
             The app's stable branch is{" "}
             <a
               href={`https://github.com/${chart.appImageGitRepo}/tree/${chart.appImageGitMainBranch}`}
-              className="font-mono decoration-blue-500 underline"
+              className="font-mono decoration-color-link-underline underline"
             >
               {chart.appImageGitMainBranch}
             </a>
@@ -59,7 +59,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         This application is flagged as receiving legacy configuration from{" "}
         <a
           href="https://github.com/broadinstitute/firecloud-develop"
-          className="decoration-blue-500 underline"
+          className="decoration-color-link-underline underline"
         >
           firecloud-develop
         </a>
@@ -73,7 +73,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
           <p>This Helm Chart's source code is managed by DevOps:</p>
           <a
             href={`https://github.com/broadinstitute/terra-helmfile/tree/master/charts/${chart.name}`}
-            className="font-light text-4xl decoration-blue-500 underline"
+            className="font-light text-4xl decoration-color-link-underline underline text-color-header-text"
           >
             broadinstitute/terra-helmfile
           </a>
@@ -82,7 +82,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
             automatically upon merges to{" "}
             <a
               href={`https://github.com/broadinstitute/terra-helmfile/tree/master/charts/${chart.name}`}
-              className="font-mono decoration-blue-500 underline"
+              className="font-mono decoration-color-link-underline underline"
             >
               master
             </a>

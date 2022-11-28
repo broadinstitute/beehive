@@ -8,8 +8,17 @@ interface BranchProps {
     // Outlet
     React.ReactElement | null
   ];
+  prod?: boolean;
 }
 
-export const Branch: React.FunctionComponent<BranchProps> = ({ children }) => (
-  <div className="flex flex-row h-full grow">{children}</div>
+export const Branch: React.FunctionComponent<BranchProps> = ({
+  children,
+  prod,
+}) => (
+  <div
+    data-theme-prod={prod}
+    className="flex flex-row h-full grow bg-color-far-bg"
+  >
+    {children}
+  </div>
 );

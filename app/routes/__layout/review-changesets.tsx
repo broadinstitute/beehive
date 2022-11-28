@@ -24,6 +24,7 @@ import { ChartVersionColors } from "~/components/content/chart-version/chart-ver
 import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
+import ActionButton from "~/components/interactivity/action-button";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -173,25 +174,10 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
 
   const [filterText, setFilterText] = useState("");
 
-  const templateLookup = useMemo(
+  const changesetLookup = useMemo(
     () =>
       new Map(
-        changesets.map((changeset) => [
-          changeset.chartRelease || "",
-          changeset.chartReleaseInfo?.environmentInfo?.lifecycle === "template",
-        ])
-      ),
-    [changesets]
-  );
-  const changesetIdLookup = useMemo(
-    () =>
-      new Map(
-        changesets
-          .filter(
-            (changeset): changeset is { chartRelease: string; id: number } =>
-              changeset.chartRelease !== undefined && changeset.id !== undefined
-          )
-          .map(({ chartRelease, id }) => [chartRelease, id])
+        changesets.map((changeset) => [changeset.chartRelease || "", changeset])
       ),
     [changesets]
   );
@@ -214,57 +200,47 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
     ([_, included]) => included
   ).length;
 
-  const [showProdModal, setShowProdModal] = useState(
-    changesets.filter(
-      (changeset) =>
-        changeset.chartReleaseInfo?.environment === "prod" ||
-        changeset.chartReleaseInfo?.cluster === "terra-prod"
-    ).length > 0
-  );
-  const [userTriedPasting, setUserTriedPasting] = useState(false);
+  let includesProd = false;
+  for (const changeset of changesets) {
+    if (
+      changeset.chartRelease &&
+      includedChangesets.get(changeset.chartRelease) &&
+      (changeset.chartReleaseInfo?.environment === "prod" ||
+        changeset.chartReleaseInfo?.cluster === "terra-prod")
+    ) {
+      includesProd = true;
+      break;
+    }
+  }
+
+  const [showProdModal, setShowProdModal] = useState(includesProd);
 
   if (showProdModal) {
-    const text = "Yes I would like to edit prod";
     return (
-      <div className="absolute w-full h-full bg-black flex flex-col items-center justify-center">
-        <h2 className="text-6xl text-white font-extralight">
-          Hey, these changes affect
-        </h2>
-        <h1 className="text-[12rem] leading-none text-white font-semibold">
-          Production
-        </h1>
-        <h3 className="text-3xl text-white font-extralight">
-          The usual review screen is coming up next, type below to continue
+      <div
+        data-theme-prod="true"
+        className="absolute w-full h-full bg-color-far-bg flex flex-col items-center justify-center text-color-header-text"
+      >
+        <h2 className="text-6xl font-extralight">Hey, these changes affect</h2>
+        <h1 className="text-[12rem] leading-none font-semibold">Production</h1>
+        <h3 className="text-3xl font-extralight">
+          The usual review screen is coming up next
         </h3>
-        <p className="text-white mt-6">"{text}"</p>
-        <input
-          type="text"
-          placeholder={
-            userTriedPasting ? "are you sure? (pasting now allowed)" : text
-          }
-          pattern={text}
-          onPasteCapture={
-            userTriedPasting
-              ? undefined
-              : (e) => {
-                  setUserTriedPasting(true);
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-          }
-          onChange={(e) => {
-            if (e.target.value === text) {
-              setShowProdModal(false);
-            }
-          }}
-          className="rounded-2xl w-1/3 mt-6 h-12 border border-zinc-400 focus-visible:outline-none text-white text-center bg-black placeholder:text-zinc-500 invalid:border-dashed invalid:border-red-500"
-        />
+        <br />
+        <ActionButton
+          type="button"
+          beforeBorderClassName="before:border-color-neutral-hard-border"
+          textAlignment="text-center"
+          onClick={() => setShowProdModal(false)}
+        >
+          Click to Continue
+        </ActionButton>
       </div>
     );
   }
 
   return (
-    <Branch>
+    <Branch prod={includesProd}>
       <OutsetPanel>
         <BigActionBox
           title="Review Version Changes"
@@ -315,12 +291,13 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           );
                         }}
                         name="changeset"
-                        value={changesetIdLookup.get(name)}
+                        value={changesetLookup.get(name)?.id}
                         className="align-middle mr-3"
                       />
                       <span className="align-middle">{name}</span>
                     </label>
-                    {!templateLookup.get(name) && (
+                    {changesetLookup.get(name)?.chartReleaseInfo
+                      ?.environmentInfo?.lifecycle === "template" || (
                       <input type="hidden" name="sync" value={name} />
                     )}
                   </li>
@@ -335,7 +312,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                 name="changeset"
                 value={changesets.at(0)?.id}
               />
-              {!templateLookup.get(changesets.at(0)?.chartRelease || "") && (
+              {changesets.at(0)?.chartReleaseInfo?.environmentInfo
+                ?.lifecycle === "template" || (
                 <input
                   type="hidden"
                   name="sync"
@@ -410,8 +388,12 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                   !changeset.appliedAt && !changeset.supersededAt;
                 return (
                   <div
+                    data-theme-prod={
+                      changeset.chartReleaseInfo?.environment === "prod" ||
+                      changeset.chartReleaseInfo?.cluster === "terra-prod"
+                    }
                     key={index.toString()}
-                    className={`h-fit w-[60vw] bg-white rounded-2xl shadow-md border-2 ${ChartReleaseColors.borderClassName} flex flex-col space-y-2 px-6 pb-5 pt-4`}
+                    className={`h-fit w-[60vw] bg-color-near-bg rounded-2xl shadow-md border-2 ${ChartReleaseColors.borderClassName} flex flex-col space-y-2 px-6 pb-5 pt-4 text-color-body-text`}
                   >
                     <div className="flex flex-row space-x-4 pb-2">
                       {appliable &&
@@ -445,7 +427,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             }}
                           />
                         )}
-                      <h1 className="font-light text-4xl">
+                      <h1 className="font-light text-4xl text-color-header-text">
                         {changeset.chartReleaseInfo?.name}
                       </h1>
                     </div>
@@ -528,10 +510,10 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                         appliable ? "" : "opacity-50"
                       }`}
                     >
-                      <h2 className="font-medium text-2xl border-b border-zinc-500 pb-1">
+                      <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
                         Before
                       </h2>
-                      <h2 className="font-medium text-2xl border-b border-zinc-500 pb-1">
+                      <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
                         After
                       </h2>
                       {(changeset.fromAppVersionResolver === "none" &&
@@ -539,7 +521,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                         <>
                           <h2
                             className={`mt-1 row-span-2 font-light text-3xl ${
-                              appVersionChanged ? "text-black" : "text-black/40"
+                              appVersionChanged
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
                             }`}
                           >
                             {changeset.fromAppVersionResolver === "none"
@@ -548,7 +532,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           </h2>
                           <h2
                             className={`mt-1 font-light text-3xl ${
-                              appVersionChanged ? "text-black" : "text-black/40"
+                              appVersionChanged
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
                             }`}
                           >
                             {changeset.toAppVersionResolver === "none"
@@ -573,7 +559,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                                       {" ("}
                                       <a
                                         href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/compare/${changeset.fromAppVersionCommit}...${changeset.toAppVersionCommit}`}
-                                        className="underline decoration-blue-500"
+                                        className="underline decoration-color-link-underline"
                                         target="_blank"
                                       >
                                         git diff ↗
@@ -609,7 +595,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                                             <a
                                               href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/commit/${appVersion.gitCommit}`}
                                               target="_blank"
-                                              className="underline decoration-blue-500"
+                                              className="underline decoration-color-link-underline"
                                             >
                                               {`${appVersion.gitCommit?.substring(
                                                 0,
@@ -637,8 +623,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           <p
                             className={
                               appVersionResolverChanged
-                                ? "text-black"
-                                : "text-black/40"
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
                             }
                           >
                             {`Specified `}
@@ -654,8 +640,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           <p
                             className={
                               appVersionResolverChanged
-                                ? "text-black"
-                                : "text-black/40"
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
                             }
                           >
                             {`Specified `}
@@ -674,8 +660,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               <p
                                 className={
                                   appVersionInSherlockChanged
-                                    ? "text-black"
-                                    : "text-black/40"
+                                    ? "text-color-body-text"
+                                    : "text-color-body-text/40"
                                 }
                               >{`This app version is ${
                                 changeset.fromAppVersionReference ? "" : " not"
@@ -683,8 +669,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               <p
                                 className={
                                   appVersionInSherlockChanged
-                                    ? "text-black"
-                                    : "text-black/40"
+                                    ? "text-color-body-text"
+                                    : "text-color-body-text/40"
                                 }
                               >{`This app version is ${
                                 changeset.toAppVersionReference ? "" : " not"
@@ -699,9 +685,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           <p
                             className={`${
                               firecloudDevelopRefChanged
-                                ? "text-black"
-                                : "text-black/40"
-                            } border-b border-zinc-500 pb-2`}
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
+                            } border-b border-color-divider-line pb-2`}
                           >{`Legacy configuration from firecloud-develop's ${changeset.fromFirecloudDevelopRef?.substring(
                             0,
                             7
@@ -709,9 +695,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           <p
                             className={`${
                               firecloudDevelopRefChanged
-                                ? "text-black"
-                                : "text-black/40"
-                            } border-b border-zinc-500 pb-2`}
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
+                            } border-b border-color-divider-line pb-2`}
                           >
                             {`Legacy configuration from firecloud-develop's ${changeset.toFirecloudDevelopRef?.substring(
                               0,
@@ -723,7 +709,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                                 <a
                                   href={`https://github.com/broadinstitute/firecloud-develop/compare/${changeset.fromFirecloudDevelopRef}...${changeset.toFirecloudDevelopRef}`}
                                   target="_blank"
-                                  className="underline decoration-blue-500"
+                                  className="underline decoration-color-link-underline"
                                 >
                                   git diff ↗
                                 </a>
@@ -735,14 +721,18 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                       )}
                       <h2
                         className={`mt-3 row-span-2 font-light text-3xl ${
-                          chartVersionChanged ? "text-black" : "text-black/40"
+                          chartVersionChanged
+                            ? "text-color-body-text"
+                            : "text-color-body-text/40"
                         }`}
                       >
                         {`${changeset.chartReleaseInfo?.chart} chart @ ${changeset.fromChartVersionExact}`}
                       </h2>
                       <h2
                         className={`mt-3 font-light text-3xl ${
-                          chartVersionChanged ? "text-black" : "text-black/40"
+                          chartVersionChanged
+                            ? "text-color-body-text"
+                            : "text-color-body-text/40"
                         }`}
                       >
                         {`${changeset.chartReleaseInfo?.chart} chart @ ${changeset.toChartVersionExact}`}
@@ -755,7 +745,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                               {`From tag ${changeset.fromChartVersionExact} to ${changeset.toChartVersionExact} (`}
                               <a
                                 href={`https://github.com/broadinstitute/terra-helmfile/compare/charts/${changeset.chartReleaseInfo.chart}-${changeset.fromChartVersionExact}...charts/${changeset.chartReleaseInfo.chart}-${changeset.toChartVersionExact}`}
-                                className="underline decoration-blue-500"
+                                className="underline decoration-color-link-underline"
                                 target="_blank"
                               >
                                 git diff ↗
@@ -808,8 +798,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                       <p
                         className={
                           chartVersionResolverChanged
-                            ? "text-black"
-                            : "text-black/40"
+                            ? "text-color-body-text"
+                            : "text-color-body-text/40"
                         }
                       >
                         {`Specified ${changeset.fromChartVersionResolver} chart version`}
@@ -817,8 +807,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                       <p
                         className={
                           chartVersionResolverChanged
-                            ? "text-black"
-                            : "text-black/40"
+                            ? "text-color-body-text"
+                            : "text-color-body-text/40"
                         }
                       >
                         {`Specified ${changeset.toChartVersionResolver} chart version`}
@@ -829,8 +819,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           <p
                             className={
                               chartVersionInSherlockChanged
-                                ? "text-black"
-                                : "text-black/40"
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
                             }
                           >{`This chart version is ${
                             changeset.fromChartVersionReference ? "" : " not"
@@ -838,8 +828,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                           <p
                             className={
                               chartVersionInSherlockChanged
-                                ? "text-black"
-                                : "text-black/40"
+                                ? "text-color-body-text"
+                                : "text-color-body-text/40"
                             }
                           >{`This chart version is ${
                             changeset.toChartVersionReference ? "" : " not"
@@ -848,16 +838,20 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                       )}
                       <p
                         className={`${
-                          helmfileRefChanged ? "text-black" : "text-black/40"
-                        } border-b border-zinc-500 pb-2`}
+                          helmfileRefChanged
+                            ? "text-color-body-text"
+                            : "text-color-body-text/40"
+                        } border-b border-color-divider-line pb-2`}
                       >{`Configuration from terra-helmfile's ${changeset.fromHelmfileRef?.substring(
                         0,
                         7
                       )}`}</p>
                       <p
                         className={`${
-                          helmfileRefChanged ? "text-black" : "text-black/40"
-                        } border-b border-zinc-500 pb-2`}
+                          helmfileRefChanged
+                            ? "text-color-body-text"
+                            : "text-color-body-text/40"
+                        } border-b border-color-divider-line pb-2`}
                       >
                         {`Configuration from terra-helmfile's ${changeset.toHelmfileRef?.substring(
                           0,
@@ -869,7 +863,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             <a
                               href={`https://github.com/broadinstitute/terra-helmfile/compare/${changeset.fromHelmfileRef}...${changeset.toHelmfileRef}`}
                               target="_blank"
-                              className="underline decoration-blue-500"
+                              className="underline decoration-color-link-underline"
                             >
                               git diff ↗
                             </a>

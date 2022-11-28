@@ -51,7 +51,7 @@ export const ChartEditableFields: React.FunctionComponent<
         />
       </label>
       <div
-        className={`pl-6 border-l-2 border-zinc-400 ${
+        className={`pl-6 border-l-2 border-color-divider-line ${
           showMainBranchBox ? "" : "hidden"
         }`}
       >
@@ -89,7 +89,7 @@ export const ChartEditableFields: React.FunctionComponent<
         />
       </div>
       <div
-        className={`pl-6 border-l-2 border-zinc-400 ${
+        className={`pl-6 border-l-2 border-color-divider-line ${
           chartExposesEndpoint == "true" ? "flex flex-col space-y-4" : "hidden"
         }`}
       >

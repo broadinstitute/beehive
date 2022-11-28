@@ -107,8 +107,8 @@ const EditRoute: React.FunctionComponent = () => {
             />
           )) || (
             <p>
-              This chart isn't flagged as having an endpoint so those options
-              aren't available here.
+              This chart isn't flagged as having a Beehive-tracked endpoint so
+              those options aren't available here.
             </p>
           )}
           {actionData && displayErrorInfo(actionData)}

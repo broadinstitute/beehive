@@ -49,13 +49,9 @@ const scrollToRightFunctionText = ((scrollDivID: string): void => {
   }
 }).toString();
 
-export interface LoadScrollerProps {
+export const LoadScroller: React.FunctionComponent<{
   nonce?: string;
-}
-
-export const LoadScroller: React.FunctionComponent<LoadScrollerProps> = ({
-  nonce,
-}) => (
+}> = ({ nonce }) => (
   <script
     nonce={nonce}
     suppressHydrationWarning={true}

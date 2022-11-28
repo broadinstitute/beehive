@@ -3,7 +3,7 @@ import { NavButton } from "./nav-button";
 export interface ListControlsProps {
   filterText?: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
-  borderClassName: string;
+  beforeBorderClassName: string;
   toCreateText?: string;
   toCreate?: string;
   doubleWidth?: boolean;
@@ -12,21 +12,23 @@ export interface ListControlsProps {
 export const ListControls: React.FunctionComponent<ListControlsProps> = ({
   filterText,
   setFilterText,
-  borderClassName,
+  beforeBorderClassName,
   toCreateText = "Create New",
   toCreate,
   doubleWidth,
 }) => (
   <div
-    className={`${doubleWidth ? "w-[60vw]" : "w-[30vw]"} flex flex-row-reverse`}
+    className={`${
+      doubleWidth ? "w-[60vw]" : "w-[30vw]"
+    } flex flex-row-reverse gap-4`}
   >
     {toCreate && (
       <NavButton
         to={toCreate}
-        borderClassName={borderClassName}
-        sizeClassName="w-[12vw] ml-4"
+        beforeBorderClassName={beforeBorderClassName}
+        sizeClassName="w-[12vw]"
       >
-        <h2 className="font-medium">{toCreateText}</h2>
+        {toCreateText}
       </NavButton>
     )}
     <input
@@ -34,7 +36,7 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
       placeholder="Search..."
       value={filterText}
       onChange={(e) => setFilterText(e.target.value)}
-      className="w-full h-12 pl-[1vw] bg-transparent rounded-2xl placeholder:text-zinc-500 border border-zinc-400 focus-visible:outline-blue-500"
+      className="w-full h-12 pl-[1vw] bg-transparent rounded-2xl text-color-body-text placeholder:text-color-placeholder-text border border-color-text-box-border focus-visible:outline focus-visible:outline-color-focused-element"
     />
   </div>
 );
