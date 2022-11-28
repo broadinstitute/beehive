@@ -23,11 +23,7 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
     } flex flex-row-reverse gap-4`}
   >
     {toCreate && (
-      <NavButton
-        to={toCreate}
-        beforeBorderClassName={beforeBorderClassName}
-        sizeClassName="w-[12vw]"
-      >
+      <NavButton to={toCreate} beforeBorderClassName={beforeBorderClassName}>
         {toCreateText}
       </NavButton>
     )}
@@ -36,7 +32,7 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
       placeholder="Search..."
       value={filterText}
       onChange={(e) => setFilterText(e.target.value)}
-      className="w-full h-12 pl-[1vw] bg-transparent rounded-2xl text-color-body-text placeholder:text-color-placeholder-text border border-color-text-box-border focus-visible:outline focus-visible:outline-color-focused-element"
+      className="grow h-12 pl-[1vw] bg-transparent rounded-2xl text-color-body-text placeholder:text-color-placeholder-text border border-color-text-box-border focus-visible:outline focus-visible:outline-color-focused-element"
     />
   </div>
 );

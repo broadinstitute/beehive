@@ -12,7 +12,6 @@ export interface NavButtonProps {
 
 export const NavButton: React.FunctionComponent<NavButtonProps> = ({
   to,
-  sizeClassName = "w-[30vw]",
   beforeBorderClassName,
   textAlignment = "text-left",
   children,
@@ -21,7 +20,7 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
 }) => (
   <div
     data-theme-prod={prod}
-    className={`min-w-min relative shrink-0 ${
+    className={`min-w-min grow relative shrink-0 ${
       disabled ? "pointer-events-none" : ""
     }`}
   >
@@ -29,9 +28,7 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
       prefetch="intent"
       to={to}
       className={({ isActive }) =>
-        `flex flex-row items-center bg-color-nearest-bg active:bg-color-button-down rounded-2xl min-h-[3rem] ${
-          sizeClassName || "w-full"
-        } focus-visible:outline focus-visible:outline-color-focused-element before:w-full before:h-full before:block before:absolute before:rounded-2xl ${
+        `flex flex-row items-center bg-color-nearest-bg active:bg-color-button-down rounded-2xl min-h-[3rem] ${"w-full"} focus-visible:outline focus-visible:outline-color-focused-element before:w-full before:h-full before:block before:absolute before:rounded-2xl ${
           isActive
             ? "before:border-r-[2rem] before:hover:border-r-[2rem]"
             : "before:hover:border-r-[2rem]"
