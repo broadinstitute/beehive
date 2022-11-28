@@ -23,7 +23,8 @@ export const ChartVersionSummary: React.FunctionComponent<
     case "exact":
       explanation = (
         <p>
-          This chart version was directly specified. Refreshing won't affect it.
+          This chart version was directly specified. Refreshing the versions
+          won't affect it.
         </p>
       );
       break;
@@ -32,7 +33,7 @@ export const ChartVersionSummary: React.FunctionComponent<
         <p>
           This chart version was the most recent one during the last refresh;{" "}
           <span className="font-mono">latest</span> is what's specified.
-          Refreshing will recalculate it.
+          Refreshing the versions will recalculate it.
         </p>
       );
       break;

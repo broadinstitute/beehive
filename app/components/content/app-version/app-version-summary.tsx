@@ -45,7 +45,7 @@ export const AppVersionSummary: React.FunctionComponent<
             >
               {appVersionBranch}
             </a>{" "}
-            branch. Refreshing won't affect it.
+            branch. Refreshing the versions won't affect it.
           </p>
         );
       } else if (appVersionCommit) {
@@ -59,14 +59,15 @@ export const AppVersionSummary: React.FunctionComponent<
             >
               {appVersionCommit?.substring(0, 7)}
             </a>{" "}
-            (no branch known, it might be local somewhere?). Refreshing won't
-            affect it.
+            (no branch known, it might be local somewhere?). Refreshing the
+            versions won't affect it.
           </p>
         );
       } else {
         explanation = (
           <p>
-            This app version was directly specified. Refreshing won't affect it.
+            This app version was directly specified. Refreshing the versions
+            won't affect it.
           </p>
         );
       }
@@ -89,7 +90,7 @@ export const AppVersionSummary: React.FunctionComponent<
             >
               {appVersionBranch}
             </a>{" "}
-            branch. Refreshing will recalculate it.
+            branch. Refreshing the versions will recalculate it.
           </p>
         );
       } else {
@@ -102,7 +103,7 @@ export const AppVersionSummary: React.FunctionComponent<
             >
               {appVersionCommit?.substring(0, 7)}
             </a>
-            . Refreshing will recalculate it.
+            . Refreshing the versions will recalculate it.
           </p>
         );
       }
@@ -124,7 +125,7 @@ export const AppVersionSummary: React.FunctionComponent<
           >
             {appVersionBranch}
           </a>
-          . Refreshing will recalculate it.
+          . Refreshing the versions will recalculate it.
         </p>
       );
       break;
