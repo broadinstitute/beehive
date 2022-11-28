@@ -153,7 +153,6 @@ export const AppVersionSummary: React.FunctionComponent<
       {renderAppVersionLink && (
         <NavButton
           to={`/charts/${chartName}/app-versions/${appVersionExact}`}
-          sizeClassName="w-[29vw]"
           {...AppVersionColors}
         >
           <h2 className="font-medium">Jump to This App Version</h2>

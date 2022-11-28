@@ -57,11 +57,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
           </>
         )}
       </Form>
-      <NavButton
-        to={safeReturnPath}
-        beforeBorderClassName={borderClassName}
-        sizeClassName
-      >
+      <NavButton to={safeReturnPath} beforeBorderClassName={borderClassName}>
         <h2 className="font-light">{returnText}</h2>
       </NavButton>
       <br />

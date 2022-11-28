@@ -56,7 +56,6 @@ export const ChartVersionDetails: React.FunctionComponent<
               (chartVersion.parentChartVersionInfo as V2controllersChartVersion)
                 .chartVersion
             }`}
-            sizeClassName="w-[29vw]"
             {...ChartVersionColors}
           >
             Jump to Parent

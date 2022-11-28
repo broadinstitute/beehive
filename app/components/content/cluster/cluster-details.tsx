@@ -20,11 +20,7 @@ export const ClusterDetails: React.FunctionComponent<ClusterDetailsProps> = ({
   <div className="flex flex-col space-y-10">
     {cluster.name === "terra-prod" && <ProdWarning name={cluster.name} />}
     {toChartReleases && (
-      <NavButton
-        to={toChartReleases}
-        sizeClassName="w-[29vw]"
-        {...ChartReleaseColors}
-      >
+      <NavButton to={toChartReleases} {...ChartReleaseColors}>
         <h2>View Charts in This Cluster</h2>
       </NavButton>
     )}

@@ -2,7 +2,6 @@ import { NavLink } from "@remix-run/react";
 
 export interface NavButtonProps {
   to: string;
-  sizeClassName?: string | boolean;
   beforeBorderClassName: string;
   textAlignment?: string;
   children: React.ReactNode;
@@ -20,7 +19,7 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
 }) => (
   <div
     data-theme-prod={prod}
-    className={`min-w-min grow relative shrink-0 ${
+    className={`min-w-min relative shrink-0 ${
       disabled ? "pointer-events-none" : ""
     }`}
   >
@@ -40,7 +39,7 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
       }
     >
       <div
-        className={`shrink-0 flex flex-row justify-between items-center h-full w-full px-[1rem] py-2 ${
+        className={`shrink-0 flex flex-row justify-between items-center h-full w-full pl-4 pr-16 py-2 ${
           disabled ? "opacity-50" : ""
         }`}
       >

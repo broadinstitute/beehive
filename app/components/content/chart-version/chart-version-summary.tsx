@@ -59,7 +59,6 @@ export const ChartVersionSummary: React.FunctionComponent<
       {renderChartVersionLink && (
         <NavButton
           to={`/charts/${chartName}/chart-versions/${chartVersionExact}`}
-          sizeClassName="w-[29vw]"
           {...ChartVersionColors}
         >
           <h2 className="font-medium">Jump to This Chart Version</h2>

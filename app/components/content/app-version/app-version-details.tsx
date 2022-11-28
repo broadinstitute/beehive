@@ -77,7 +77,6 @@ export const AppVersionDetails: React.FunctionComponent<
               (appVersion.parentAppVersionInfo as V2controllersAppVersion)
                 .appVersion
             }`}
-            sizeClassName="w-[29vw]"
             {...AppVersionColors}
           >
             Jump to Parent

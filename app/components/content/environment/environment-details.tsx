@@ -24,18 +24,13 @@ export const EnvironmentDetails: React.FunctionComponent<
       <div className="flex flex-col space-y-4">
         {environment.name === "prod" && <ProdWarning name={environment.name} />}
         {toChartReleases && (
-          <NavButton
-            to={toChartReleases}
-            sizeClassName="w-[29vw]"
-            {...ChartReleaseColors}
-          >
+          <NavButton to={toChartReleases} {...ChartReleaseColors}>
             <h2>View Charts in This Environment</h2>
           </NavButton>
         )}
         {environment.templateEnvironment && (
           <NavButton
             to={`../${environment.templateEnvironment}`}
-            sizeClassName="w-[29vw]"
             {...EnvironmentColors}
           >
             <h2>Jump to Template</h2>
@@ -44,7 +39,6 @@ export const EnvironmentDetails: React.FunctionComponent<
         {environment.defaultCluster && (
           <NavButton
             to={`/clusters/${environment.defaultCluster}`}
-            sizeClassName="w-[29vw]"
             {...ClusterColors}
           >
             <h2>Jump to Default Cluster</h2>

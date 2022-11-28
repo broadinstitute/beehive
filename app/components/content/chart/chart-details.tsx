@@ -43,11 +43,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
           </p>
         )}
         {toAppVersions && (
-          <NavButton
-            to={toAppVersions}
-            sizeClassName="w-[29vw]"
-            {...AppVersionColors}
-          >
+          <NavButton to={toAppVersions} {...AppVersionColors}>
             <h2>View App Versions</h2>
           </NavButton>
         )}
@@ -96,11 +92,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         </p>
       )}
       {toChartVersions && (
-        <NavButton
-          to={toChartVersions}
-          sizeClassName="w-[29vw]"
-          {...ChartVersionColors}
-        >
+        <NavButton to={toChartVersions} {...ChartVersionColors}>
           <h2>View Chart Versions</h2>
         </NavButton>
       )}

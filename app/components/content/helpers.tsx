@@ -48,7 +48,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         <h2 className="text-2xl font-light text-color-header-text">
           On-Demand Deployment
         </h2>
-        <NavButton to={toChangeVersions} sizeClassName="w-[29vw]" {...colors}>
+        <NavButton to={toChangeVersions} {...colors}>
           Change Versions
         </NavButton>
         {changeVersionText && <p>{changeVersionText}</p>}
@@ -60,12 +60,12 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
           Make Changes
         </h2>
         {toEdit && (
-          <NavButton to={toEdit} sizeClassName="w-[29vw]" {...colors}>
+          <NavButton to={toEdit} {...colors}>
             Edit Metadata
           </NavButton>
         )}
         {toDelete && (
-          <NavButton to={toDelete} sizeClassName="w-[29vw]" {...colors}>
+          <NavButton to={toDelete} {...colors}>
             Delete
           </NavButton>
         )}
