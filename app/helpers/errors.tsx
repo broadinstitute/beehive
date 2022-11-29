@@ -53,9 +53,9 @@ export function displayErrorInfo({
   message,
 }: DerivedErrorInfo): JSX.Element {
   return (
-    <div className="bg-rose-50 border-rose-400 border-2 rounded-lg p-1 border-dashed grow">
-      <p className="font-semibold">{title}</p>
-      <p className="font-light">{message}</p>
+    <div className="bg-color-error-bg border-color-error-border border-2 rounded-lg p-1 border-dashed grow">
+      <p className="font-semibold text-color-header-text">{title}</p>
+      <p className="font-light text-color-body-text">{message}</p>
     </div>
   );
 }
