@@ -65,7 +65,7 @@ const IndexRoute: React.FunctionComponent = () => (
         Debugging info for Beehive itself
       </IndexNavButton>
     </div>
-    {/* <ThemeDropdown /> */}
+    <ThemeDropdown />
   </div>
 );
 

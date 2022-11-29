@@ -183,8 +183,8 @@ const MiscRoute: FunctionComponent = () => {
           </p>
         )}
       </CsrfTokenContext.Consumer>
-      {/* <br />
-      <ThemeDropdown /> */}
+      <br />
+      <ThemeDropdown />
     </div>
   );
 };

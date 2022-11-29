@@ -6,7 +6,7 @@ enum Theme {
 }
 
 const defaultTheme: Theme = Theme.LIGHT;
-const defaultThemeForDarkOS: Theme = Theme.LIGHT;
+const defaultThemeForDarkOS: Theme = Theme.DARK;
 
 const localStorageKey: string = "beehive-theme";
 const documentElementAttribute: string = "data-theme";
