@@ -8,9 +8,6 @@ name: Bump, Tag, and Publish
 # message.
 #
 # When run on a PR, it simulates bumping the tag and appends a hash to the pushed image.
-#
-# The workflow relies on github secrets:
-# - BROADBOT_TOKEN - the broadbot token, so we can avoid two reviewer rule on GHA operations
 on:
   push:
     branches:
@@ -41,16 +38,19 @@ jobs:
     # For Dependabot, see dependabot-build.yaml
     if: ${{ github.actor != 'dependabot[bot]' }}
     permissions:
-      contents: "read"
+      # Push changed tag
+      contents: "write"
+      # Use OIDC -> IAP
       id-token: "write"
+      # Make comments
+      pull-requests: "write"
+      issues: "write"
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
       # Git config
       - name: Checkout current code
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.BROADBOT_TOKEN }}
       - name: Set up Git
         shell: bash
         run: |
@@ -79,7 +79,6 @@ jobs:
         id: tag
         env:
           DEFAULT_BUMP: minor
-          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
           RELEASE_BRANCHES: ${{ github.event.repository.default_branch }}
           WITH_V: true
 
