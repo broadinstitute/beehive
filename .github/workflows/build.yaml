@@ -38,14 +38,13 @@ jobs:
     # For Dependabot, see dependabot-build.yaml
     if: ${{ github.actor != 'dependabot[bot]' }}
     permissions:
-      write-all
-      # # Push changed tag
-      # contents: "write"
-      # # Use OIDC -> IAP
-      # id-token: "write"
-      # # Make comments
-      # pull-requests: "write"
-      # issues: "write"
+      # Push changed tag
+      contents: "write"
+      # Use OIDC -> IAP
+      id-token: "write"
+      # Make comments
+      pull-requests: "write"
+      issues: "write"
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
@@ -133,17 +132,12 @@ jobs:
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
             github.issues.createComment({ issue_number, owner, repo, body: 'Pushed image: ${{ steps.image-name.outputs.tagged }}' });
-  # report-to-sherlock:
-  #   uses: broadinstitute/sherlock/.github/workflows/client-report-app-version.yaml@DDO-2486-rework-client-reporter
-  #   needs: tag-build-publish
-  #   with:
-  #     new-version: ${{ needs.tag-build-publish.outputs.tag }}
-  #     chart-name: "beehive"
-  #     use-git: true
-  #     custom-git-repo: "broadinstitute/beehive"
-  #     override-commit: ${{ github.sha }}
-  #   secrets:
-  #     custom-git-token: ${{ secrets.BROADBOT_TOKEN }}
-  #   permissions:
-  #     contents: "read"
-  #     id-token: "write"
+  report-to-sherlock:
+    uses: broadinstitute/sherlock/.github/workflows/client-report-app-version.yaml@DDO-2486-rework-client-reporter
+    needs: tag-build-publish
+    with:
+      new-version: ${{ needs.tag-build-publish.outputs.tag }}
+      chart-name: "beehive"
+    permissions:
+      contents: "read"
+      id-token: "write"
