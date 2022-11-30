@@ -43,9 +43,8 @@ export const EnvironmentDeleteDescription: React.FunctionComponent<
       .
     </p>
     <p>
-      After deletion, the name of the environment will remain reserved in
-      Sherlock forever. You will not be able to create a new environment with
-      the same name.
+      You can create an environment with the same name as something that's been
+      deleted.
     </p>
   </div>
 );

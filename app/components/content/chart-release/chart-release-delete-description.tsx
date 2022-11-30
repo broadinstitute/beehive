@@ -25,9 +25,8 @@ export const ChartReleaseDeleteDescription: React.FunctionComponent<
         </p>
       )}
       <p>
-        After deletion, the name of this chart instance will remain reserved in
-        Sherlock forever. DevOps can restore chart instances or clear the name
-        reservation entirely if necessary.
+        You can create a chart instance with the same name as something that's
+        been deleted.
       </p>
     </div>
   );
