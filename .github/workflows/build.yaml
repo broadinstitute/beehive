@@ -82,6 +82,7 @@ jobs:
           DEFAULT_BUMP: minor
           RELEASE_BRANCHES: ${{ github.event.repository.default_branch }}
           WITH_V: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Build images
       - name: Construct docker image name and tag
@@ -132,17 +133,17 @@ jobs:
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
             github.issues.createComment({ issue_number, owner, repo, body: 'Pushed image: ${{ steps.image-name.outputs.tagged }}' });
-  report-to-sherlock:
-    uses: broadinstitute/sherlock/.github/workflows/client-report-app-version.yaml@DDO-2486-rework-client-reporter
-    needs: tag-build-publish
-    with:
-      new-version: ${{ needs.tag-build-publish.outputs.tag }}
-      chart-name: "beehive"
-      use-git: true
-      custom-git-repo: "broadinstitute/beehive"
-      override-commit: ${{ github.sha }}
-    secrets:
-      custom-git-token: ${{ secrets.BROADBOT_TOKEN }}
-    permissions:
-      contents: "read"
-      id-token: "write"
+  # report-to-sherlock:
+  #   uses: broadinstitute/sherlock/.github/workflows/client-report-app-version.yaml@DDO-2486-rework-client-reporter
+  #   needs: tag-build-publish
+  #   with:
+  #     new-version: ${{ needs.tag-build-publish.outputs.tag }}
+  #     chart-name: "beehive"
+  #     use-git: true
+  #     custom-git-repo: "broadinstitute/beehive"
+  #     override-commit: ${{ github.sha }}
+  #   secrets:
+  #     custom-git-token: ${{ secrets.BROADBOT_TOKEN }}
+  #   permissions:
+  #     contents: "read"
+  #     id-token: "write"
