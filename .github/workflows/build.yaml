@@ -81,6 +81,7 @@ jobs:
           DEFAULT_BUMP: minor
           RELEASE_BRANCHES: ${{ github.event.repository.default_branch }}
           WITH_V: true
+          GITHUB_TOKEN: ${{ github.token }}
 
       # Build images
       - name: Construct docker image name and tag
@@ -137,6 +138,11 @@ jobs:
     with:
       new-version: ${{ needs.tag-build-publish.outputs.tag }}
       chart-name: "beehive"
+      use-git: true
+      custom-git-repo: "broadinstitute/beehive"
+      override-commit: ${{ github.sha }}
+    secrets:
+      custom-git-token: ${{ secrets.BROADBOT_TOKEN }}
     permissions:
       contents: "read"
       id-token: "write"
