@@ -38,13 +38,14 @@ jobs:
     # For Dependabot, see dependabot-build.yaml
     if: ${{ github.actor != 'dependabot[bot]' }}
     permissions:
-      # Push changed tag
-      contents: "write"
-      # Use OIDC -> IAP
-      id-token: "write"
-      # Make comments
-      pull-requests: "write"
-      issues: "write"
+      write-all
+      # # Push changed tag
+      # contents: "write"
+      # # Use OIDC -> IAP
+      # id-token: "write"
+      # # Make comments
+      # pull-requests: "write"
+      # issues: "write"
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
@@ -81,7 +82,6 @@ jobs:
           DEFAULT_BUMP: minor
           RELEASE_BRANCHES: ${{ github.event.repository.default_branch }}
           WITH_V: true
-          GITHUB_TOKEN: ${{ github.token }}
 
       # Build images
       - name: Construct docker image name and tag
