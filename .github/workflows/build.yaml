@@ -136,8 +136,8 @@ jobs:
     uses: broadinstitute/sherlock/.github/workflows/client-report-app-version.yaml@main
     needs: tag-build-publish
     with:
-      new-version: ${{ needs.tag-build-publish.outputs.tag }}
       chart-name: "beehive"
+      new-version: ${{ needs.tag-build-publish.outputs.tag }}
     permissions:
       contents: "read"
       id-token: "write"
