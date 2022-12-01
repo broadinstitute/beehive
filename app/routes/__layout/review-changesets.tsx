@@ -25,6 +25,7 @@ import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
 import ActionButton from "~/components/interactivity/action-button";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -100,44 +101,46 @@ export const action: ActionFunction = async ({ request }) => {
       forwardIAP(request)
     )
     .then(async () => {
-      const payload = {
-        owner: "broadinstitute",
-        repo: "terra-github-workflows",
-        workflow_id: ".github/workflows/sync-release.yaml",
-        ref: "main",
-        inputs: {
-          // Get this from hidden fields on the form so that we can filter out what is and isn't a template easily
-          "chart-release-names": formData
-            .getAll("sync")
-            .filter((value): value is string => typeof value === "string")
-            .join(","),
-        },
-      };
-      console.log(
-        `review-changesets workflow dispatch: ${JSON.stringify(payload)}`
-      );
-      const notification = await new Octokit({
-        auth: session.get(sessionFields.githubAccessToken),
-      }).actions
-        .createWorkflowDispatch(payload)
-        .then(
-          (): Notification => ({
-            type: "gha",
-            text: "A GitHub Action has been started to sync your changes",
-            url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/sync-release.yaml",
-          }),
-          (rejected): Notification => ({
-            type: "error",
-            text: `There was a problem calling the GitHub Action to sync your changes: ${JSON.stringify(
-              rejected
-            )}`,
-            error: true,
-          })
+      if (formData.get("action") === "sync") {
+        const payload = {
+          owner: "broadinstitute",
+          repo: "terra-github-workflows",
+          workflow_id: ".github/workflows/sync-release.yaml",
+          ref: "main",
+          inputs: {
+            // Get this from hidden fields on the form so that we can filter out what is and isn't a template easily
+            "chart-release-names": formData
+              .getAll("sync")
+              .filter((value): value is string => typeof value === "string")
+              .join(","),
+          },
+        };
+        console.log(
+          `review-changesets workflow dispatch: ${JSON.stringify(payload)}`
         );
-      session.flash(
-        sessionFields.flashNotifications,
-        buildNotifications(notification)
-      );
+        const notification = await new Octokit({
+          auth: session.get(sessionFields.githubAccessToken),
+        }).actions
+          .createWorkflowDispatch(payload)
+          .then(
+            (): Notification => ({
+              type: "gha",
+              text: "A GitHub Action has been started to sync your changes",
+              url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/sync-release.yaml",
+            }),
+            (rejected): Notification => ({
+              type: "error",
+              text: `There was a problem calling the GitHub Action to sync your changes: ${JSON.stringify(
+                rejected
+              )}`,
+              error: true,
+            })
+          );
+        session.flash(
+          sessionFields.flashNotifications,
+          buildNotifications(notification)
+        );
+      }
       return redirect(
         safeRedirectPath(formData.get("return")?.toString() || "/"),
         {
@@ -173,6 +176,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
     : EnvironmentColors;
 
   const [filterText, setFilterText] = useState("");
+  const [actionToRun, setActionToRun] = useState("sync");
 
   const changesetLookup = useMemo(
     () =>
@@ -201,15 +205,23 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
   ).length;
 
   let includesProd = false;
+  let includesTemplate = false;
   for (const changeset of changesets) {
     if (
       changeset.chartRelease &&
-      includedChangesets.get(changeset.chartRelease) &&
-      (changeset.chartReleaseInfo?.environment === "prod" ||
-        changeset.chartReleaseInfo?.cluster === "terra-prod")
+      includedChangesets.get(changeset.chartRelease)
     ) {
-      includesProd = true;
-      break;
+      if (
+        changeset.chartReleaseInfo?.environment === "prod" ||
+        changeset.chartReleaseInfo?.cluster === "terra-prod"
+      ) {
+        includesProd = true;
+      }
+      if (
+        changeset.chartReleaseInfo?.environmentInfo?.lifecycle === "template"
+      ) {
+        includesTemplate = true;
+      }
     }
   }
 
@@ -259,11 +271,6 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
               ? "this chart instance"
               : `these ${changesets.length} chart instances`}{" "}
             should be.
-          </p>
-          <p>
-            Our systems will then kick off a GitHub Action to sync Argo (to pick
-            up the any new versions) and run smoke tests (when the chart has
-            them configured).
           </p>
           {filterText && (
             <p>
@@ -322,6 +329,43 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
               )}
             </>
           )}
+          <div>
+            <h2 className="font-light text-2xl">Action to Run</h2>
+            <EnumInputSelect
+              name="action"
+              className="grid grid-cols-2 mt-2"
+              fieldValue={actionToRun}
+              setFieldValue={setActionToRun}
+              enums={[
+                ["Sync", "sync"],
+                ["None", "none"],
+              ]}
+              {...returnColors}
+            />
+            <div className="mt-4 pl-6 border-l-2 border-color-divider-line flex flex-col">
+              {actionToRun === "sync" && (
+                <p>
+                  When applying, a GitHub Action will be kicked off to refresh
+                  and sync ArgoCD, where applicable. This will deploy the
+                  applied versions immediately.
+                </p>
+              )}
+              {actionToRun === "none" && (
+                <p>
+                  When applying, no GitHub Action will be kicked off. The
+                  changes won't be deployed until someone or something
+                  hard-refreshes and syncs ArgoCD.
+                </p>
+              )}
+              {includesTemplate && (
+                <p className="mt-4">
+                  {
+                    "At least one of the changes you're applying is to a template, so no GitHub Actions will be run for that regardless of what option you select here."
+                  }
+                </p>
+              )}
+            </div>
+          </div>
           {actionData && displayErrorInfo(actionData)}
         </BigActionBox>
       </OutsetPanel>
