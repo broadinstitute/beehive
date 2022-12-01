@@ -35,7 +35,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Release - Delete`,
+  title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Instance - Delete`,
 });
 
 export const action: ActionFunction = async ({ request, params }) => {

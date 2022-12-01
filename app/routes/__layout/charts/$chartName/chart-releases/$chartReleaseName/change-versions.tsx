@@ -61,7 +61,7 @@ import { getSession } from "~/session.server";
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink
-      to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}/change-versions`}
+      to={`/charts/${params.chartName}/chart-releases/${params.chartReleaseName}/change-versions`}
     >
       Change Versions
     </NavLink>
@@ -69,7 +69,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Instance - Change Versions`,
+  title: `${params.chartReleaseName} - Chart Instance - Change Versions`,
 });
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -114,7 +114,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
   const changesetRequest: V2controllersChangesetPlanRequestChartReleaseEntry = {
     ...formDataToObject(formData, true),
-    chartRelease: `${params.clusterName}/${params.namespace}/${params.chartName}`,
+    chartRelease: params.chartReleaseName || "",
   };
 
   return new ChangesetsApi(SherlockConfiguration)
@@ -132,7 +132,7 @@ export const action: ActionFunction = async ({ request, params }) => {
             `/review-changesets?${[
               ...changesets.map((c) => `changeset=${c.id}`),
               `return=${encodeURIComponent(
-                `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`
+                `/charts/${params.chartName}/chart-releases/${params.chartReleaseName}`
               )}`,
             ].join("&")}`
           )

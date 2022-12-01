@@ -28,7 +28,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.environmentName}/${params.chartName} - Chart Release`,
+  title: `${params.environmentName}/${params.chartName} - Chart Instance`,
 });
 
 export const loader: LoaderFunction = async ({ request, params }) => {

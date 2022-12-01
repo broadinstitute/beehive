@@ -4,13 +4,11 @@ import {
   Outlet,
   Params,
   useLoaderData,
-  useOutletContext,
   useParams,
 } from "@remix-run/react";
 import {
   ChartReleasesApi,
   V2controllersChartRelease,
-  V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
@@ -30,20 +28,20 @@ import {
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/environments/${params.environmentName}/chart-releases`}>
-      Charts
+    <NavLink to={`/charts/${params.chartName}/chart-releases`}>
+      Instances
     </NavLink>
   ),
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.environmentName} - Environment - Chart Instances`,
+  title: `${params.chartName} - Chart - Instances`,
 });
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
-      { environment: params.environmentName || "" },
+      { chart: params.chartName || "" },
       forwardIAP(request)
     )
     .catch(errorResponseThrower);
@@ -53,9 +51,6 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const ChartReleasesRoute: React.FunctionComponent = () => {
-  const outletContext = useOutletContext<{
-    environment: V2controllersEnvironment;
-  }>();
   const params = useParams();
   const chartReleases = useLoaderData<Array<V2controllersChartRelease>>();
   const [filterText, setFilterText] = useState("");
@@ -63,40 +58,33 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
     <Branch>
       <InsetPanel>
         <InteractiveList
-          title={`Charts in ${params.environmentName}`}
+          title={`Instances of ${params.chartName}`}
           {...ChartReleaseColors}
         >
-          <ListControls
-            setFilterText={setFilterText}
-            toCreate={outletContext.environment.name != "prod" ? "./add" : ""}
-            toCreateText="Add New"
-            {...ChartReleaseColors}
-          />
+          <ListControls setFilterText={setFilterText} {...ChartReleaseColors} />
           <MemoryFilteredList
             entries={chartReleases}
             filterText={filterText}
             filter={(chartRelease, filterText) =>
               chartRelease.name?.includes(filterText) ||
-              chartRelease.chart?.includes(filterText)
+              chartRelease.namespace?.includes(filterText) ||
+              chartRelease.cluster?.includes(filterText) ||
+              chartRelease.environment?.includes(filterText)
             }
           >
             {(chartRelease, index) => (
               <NavButton
-                to={`./${chartRelease.chart}`}
+                to={`./${chartRelease.name}`}
                 key={index.toString()}
                 {...ChartReleaseColors}
               >
-                <h2 className="font-light">
-                  <span className="font-medium">{chartRelease.chart}</span>
-                  {chartRelease.appVersionResolver !== "none" &&
-                    ` (app @ ${chartRelease.appVersionExact})`}
-                </h2>
+                <h2 className="font-medium">{chartRelease.name}</h2>
               </NavButton>
             )}
           </MemoryFilteredList>
         </InteractiveList>
       </InsetPanel>
-      <Outlet context={{ chartReleases, ...outletContext }} />
+      <Outlet />
     </Branch>
   );
 };

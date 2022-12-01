@@ -27,7 +27,7 @@ import { getSession } from "~/session.server";
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink
-      to={`/environments/${params.environmentName}/chart-releases/${params.chartName}/delete`}
+      to={`/charts/${params.chartName}/chart-releases/${params.chartReleaseName}/delete`}
     >
       Delete
     </NavLink>
@@ -35,7 +35,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.environmentName}/${params.chartName} - Chart Instance - Delete`,
+  title: `${params.chartReleaseName} - Chart Instance - Delete`,
 });
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -44,11 +44,13 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorDelete(
-      { selector: `${params.environmentName}/${params.chartName}` },
+      {
+        selector: `${params.chartReleaseName}`,
+      },
       forwardIAP(request)
     )
     .then(
-      () => redirect(`/environments/${params.environmentName}/chart-releases`),
+      () => redirect(`/charts/${params.chartName}/chart-releases`),
       errorResponseReturner
     );
 };

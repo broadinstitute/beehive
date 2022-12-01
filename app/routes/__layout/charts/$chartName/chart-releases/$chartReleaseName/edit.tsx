@@ -29,7 +29,7 @@ import { getSession } from "~/session.server";
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink
-      to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}/edit`}
+      to={`/charts/${params.chartName}/chart-releases/${params.chartReleaseName}/edit`}
     >
       Edit
     </NavLink>
@@ -37,7 +37,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Instance - Edit`,
+  title: `${params.chartReleaseName} - Chart Instance - Edit`,
 });
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -56,7 +56,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorPatch(
       {
-        selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
+        selector: params.chartReleaseName || "",
         chartRelease: chartReleaseRequest,
       },
       forwardIAP(request)
@@ -64,7 +64,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     .then(
       () =>
         redirect(
-          `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`
+          `/charts/${params.chartName}/chart-releases/${params.chartReleaseName}`
         ),
       makeErrorResponserReturner(chartReleaseRequest)
     );

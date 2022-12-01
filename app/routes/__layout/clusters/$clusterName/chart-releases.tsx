@@ -37,7 +37,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.clusterName} - Cluster - Chart Releases`,
+  title: `${params.clusterName} - Cluster - Chart Instances`,
 });
 
 export const loader: LoaderFunction = async ({ request, params }) => {

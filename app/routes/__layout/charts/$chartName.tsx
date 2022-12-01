@@ -49,6 +49,7 @@ const ChartNameRoute: React.FunctionComponent = () => {
             chart={chart}
             toChartVersions="./chart-versions"
             toAppVersions="./app-versions"
+            toChartReleases="./chart-releases"
             toEdit="./edit"
             toDelete="./delete"
           />

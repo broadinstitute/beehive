@@ -1,6 +1,7 @@
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { AppVersionColors } from "../app-version/app-version-colors";
+import { ChartReleaseColors } from "../chart-release/chart-release-colors";
 import { ChartVersionColors } from "../chart-version/chart-version-colors";
 import { MutateControls } from "../helpers";
 import { ChartColors } from "./chart-colors";
@@ -9,6 +10,7 @@ export interface ChartDetailsProps {
   chart: V2controllersChart;
   toChartVersions?: string;
   toAppVersions?: string;
+  toChartReleases?: string;
   toEdit?: string;
   toDelete?: string;
 }
@@ -17,6 +19,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
   chart,
   toChartVersions,
   toAppVersions,
+  toChartReleases,
   toEdit,
   toDelete,
 }) => (
@@ -97,6 +100,11 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         </NavButton>
       )}
     </div>
+    {toChartReleases && (
+      <NavButton to={toChartReleases} {...ChartReleaseColors}>
+        <h2>View Instances of This Chart</h2>
+      </NavButton>
+    )}
     {(toEdit || toDelete) && (
       <MutateControls
         name={chart.name || ""}

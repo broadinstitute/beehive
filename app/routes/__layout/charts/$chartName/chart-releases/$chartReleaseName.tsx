@@ -20,22 +20,22 @@ import {
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink
-      to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`}
+      to={`/charts/${params.chartName}/chart-releases/${params.chartReleaseName}`}
     >
-      {params.namespace}/{params.chartName}
+      {params.chartReleaseName}
     </NavLink>
   ),
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Instance`,
+  title: `${params.chartReleaseName} - Chart Instance`,
 });
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorGet(
       {
-        selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
+        selector: params.chartReleaseName || "",
       },
       forwardIAP(request)
     )
@@ -51,7 +51,7 @@ const ChartReleaseRoute: React.FunctionComponent = () => {
     <Branch>
       <OutsetPanel {...ChartReleaseColors}>
         <ItemDetails
-          subtitle={`Instance of ${chartRelease.chart} in the ${chartRelease.namespace} namespace`}
+          subtitle={`Instance of ${chartRelease.chart}`}
           title={chartRelease.name || ""}
         >
           <ChartReleaseDetails

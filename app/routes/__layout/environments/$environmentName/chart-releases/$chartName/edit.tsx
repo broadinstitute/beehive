@@ -37,7 +37,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.environmentName}/${params.chartName} - Chart Release - Edit`,
+  title: `${params.environmentName}/${params.chartName} - Chart Instance - Edit`,
 });
 
 export const action: ActionFunction = async ({ request, params }) => {
