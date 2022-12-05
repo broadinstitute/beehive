@@ -101,7 +101,7 @@ export const action: ActionFunction = async ({ request }) => {
       forwardIAP(request)
     )
     .then(async () => {
-      if (formData.get("action") === "sync") {
+      if (formData.get("action") !== "none") {
         const payload = {
           owner: "broadinstitute",
           repo: "terra-github-workflows",
@@ -113,6 +113,9 @@ export const action: ActionFunction = async ({ request }) => {
               .getAll("sync")
               .filter((value): value is string => typeof value === "string")
               .join(","),
+            "refresh-only": (
+              formData.get("action") === "refresh-only"
+            ).toString(),
           },
         };
         console.log(
@@ -333,11 +336,12 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
             <h2 className="font-light text-2xl">Action to Run</h2>
             <EnumInputSelect
               name="action"
-              className="grid grid-cols-2 mt-2"
+              className="grid grid-cols-3 mt-2"
               fieldValue={actionToRun}
               setFieldValue={setActionToRun}
               enums={[
-                ["Sync", "sync"],
+                ["Refresh + Sync", "sync"],
+                ["Refresh", "refresh"],
                 ["None", "none"],
               ]}
               {...returnColors}
@@ -345,9 +349,18 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
             <div className="mt-4 pl-6 border-l-2 border-color-divider-line flex flex-col">
               {actionToRun === "sync" && (
                 <p>
-                  When applying, a GitHub Action will be kicked off to refresh
-                  and sync ArgoCD, where applicable. This will deploy the
-                  applied versions immediately.
+                  When applying, a GitHub Action will be kicked off to{" "}
+                  <b className="font-semibold">refresh and sync</b> ArgoCD. This
+                  will deploy the applied versions immediately.
+                </p>
+              )}
+              {actionToRun === "refresh" && (
+                <p>
+                  When applying, a GitHub Action will be kicked off to{" "}
+                  <b className="font-semibold">just refresh</b> ArgoCD. This
+                  will not deployed the applied versions immediately, but it
+                  will make ArgoCD say that the app is "out of sync." ArgoCD's
+                  manual sync button would then deploy the new versions.
                 </p>
               )}
               {actionToRun === "none" && (
