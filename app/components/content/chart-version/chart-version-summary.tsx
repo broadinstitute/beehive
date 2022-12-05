@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartVersionColors } from "./chart-version-colors";
 
@@ -5,6 +6,7 @@ export interface ChartVersionSummaryProps {
   chartName?: string;
   chartVersionResolver?: string;
   chartVersionExact?: string;
+  chartVersionFollowChartRelease?: string;
   helmfileRef?: string;
   renderChartVersionLink: boolean;
 }
@@ -15,6 +17,7 @@ export const ChartVersionSummary: React.FunctionComponent<
   chartName,
   chartVersionResolver,
   chartVersionExact,
+  chartVersionFollowChartRelease,
   helmfileRef,
   renderChartVersionLink,
 }) => {
@@ -25,6 +28,25 @@ export const ChartVersionSummary: React.FunctionComponent<
         <p>
           This chart version was directly specified. Refreshing the versions
           won't affect it.
+        </p>
+      );
+      break;
+    case "follow":
+      explanation = (
+        <p>
+          This chart version was the version in{" "}
+          {chartVersionFollowChartRelease ? (
+            <Link
+              to={`/r/chart-release/${chartVersionFollowChartRelease}`}
+              className="underline decoration-color-link-underline"
+            >
+              {chartVersionFollowChartRelease}
+            </Link>
+          ) : (
+            "the followed instance"
+          )}{" "}
+          during the last refresh. Refreshing the versions will get whatever is
+          there currently.
         </p>
       );
       break;

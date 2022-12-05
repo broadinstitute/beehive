@@ -16,7 +16,7 @@ export interface EnumSelectProps<T> {
   fieldValue: T;
   setFieldValue: (value: T) => void;
   enums: Array<[string, T]>;
-  borderClassName: string;
+  beforeBorderClassName: string;
   bigButtons?: boolean;
 }
 
@@ -25,27 +25,37 @@ export const EnumSelect = <T extends any>({
   fieldValue,
   setFieldValue,
   enums,
-  borderClassName,
+  beforeBorderClassName,
   bigButtons,
 }: EnumSelectProps<T>) => (
   <div className={`min-h-[3rem] w-full gap-2 ${className}`}>
     {enums.map(([displayValue, valueToSet], index) => (
-      <button
-        className={`first:rounded-l-2xl last:rounded-r-2xl shadow-md hover:shadow-lg focus-visible:outline focus-visible:outline-color-focused-element motion-safe:transition-all  ${
-          bigButtons ? "text-xl" : ""
-        } ${borderClassName || "border-color-neutral-soft-border"} ${
-          valueToSet === fieldValue
-            ? "bg-color-nearest-bg border-4 font-medium"
-            : `bg-color-nearest-bg/50 border-2 hover:border-4 `
-        }`}
-        key={index}
-        onClickCapture={(e) => {
-          setFieldValue(valueToSet);
-          e.preventDefault();
-        }}
-      >
-        {displayValue}
-      </button>
+      <div className="relative">
+        <button
+          type="button"
+          className={`p-2 w-full h-full shadow-md hover:shadow-lg flex flex-col items-center justify-center ${
+            index === 0 ? "rounded-l-2xl before:rounded-l-2xl" : ""
+          } ${
+            index === enums.length - 1
+              ? "rounded-r-2xl before:rounded-r-2xl"
+              : ""
+          } focus-visible:outline focus-visible:outline-color-focused-element ${
+            bigButtons ? "text-xl" : ""
+          }
+    before:w-full before:h-full before:block before:absolute ${beforeBorderClassName} ${
+            valueToSet === fieldValue
+              ? "bg-color-nearest-bg before:border-4 font-medium"
+              : "bg-color-nearest-bg/50 before:border-2 before:hover:border-4"
+          } motion-safe:transition-all before:motion-safe:transition-all`}
+          key={index}
+          onClickCapture={(e) => {
+            setFieldValue(valueToSet);
+            e.preventDefault();
+          }}
+        >
+          {displayValue}
+        </button>
+      </div>
     ))}
   </div>
 );

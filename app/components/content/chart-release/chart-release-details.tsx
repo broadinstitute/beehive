@@ -22,6 +22,9 @@ export const ChartReleaseDetails: React.FunctionComponent<
           appImageGitRepo={chartRelease.chartInfo?.appImageGitRepo}
           appVersionResolver={chartRelease.appVersionResolver}
           appVersionExact={chartRelease.appVersionExact}
+          appVersionFollowChartRelease={
+            chartRelease.appVersionFollowChartRelease
+          }
           appVersionCommit={chartRelease.appVersionCommit}
           appVersionBranch={chartRelease.appVersionBranch}
           firecloudDevelopRef={
@@ -36,6 +39,9 @@ export const ChartReleaseDetails: React.FunctionComponent<
       chartName={chartRelease.chart}
       chartVersionResolver={chartRelease.chartVersionResolver}
       chartVersionExact={chartRelease.chartVersionExact}
+      chartVersionFollowChartRelease={
+        chartRelease.chartVersionFollowChartRelease
+      }
       helmfileRef={chartRelease.helmfileRef}
       renderChartVersionLink={chartRelease.chartVersionReference != null}
     />

@@ -9,6 +9,9 @@ export interface AppVersionPickerProps {
   appVersionExact: string;
   setAppVersionExact: (value: string) => void;
   setShowAppVersionExactPicker: (value: boolean) => void;
+  appVersionFollowChartRelease: string;
+  setAppVersionFollowChartRelease: (value: string) => void;
+  setShowAppVersionFollowChartReleasePicker: (value: boolean) => void;
   defaultAppVersionCommit?: string;
   appVersionBranch: string;
   setAppVersionBranch: (value: string) => void;
@@ -27,6 +30,9 @@ export const AppVersionPicker: React.FunctionComponent<
   setAppVersionExact,
   defaultAppVersionCommit,
   setShowAppVersionExactPicker,
+  appVersionFollowChartRelease,
+  setAppVersionFollowChartRelease,
+  setShowAppVersionFollowChartReleasePicker,
   appVersionBranch,
   setAppVersionBranch,
   setShowAppVersionBranchPicker,
@@ -52,18 +58,20 @@ export const AppVersionPicker: React.FunctionComponent<
           name={
             isTargetingChangeset ? "toAppVersionResolver" : "appVersionResolver"
           }
-          className="grid grid-cols-4 mt-2"
+          className="grid grid-cols-5 mt-2"
           fieldValue={appVersionResolver}
           setFieldValue={(value) => {
             setShowAppVersionExactPicker(value === "exact");
+            setShowAppVersionFollowChartReleasePicker(value === "follow");
             setShowAppVersionBranchPicker(value === "branch");
             hideOtherPickers();
             setAppVersionResolver(value);
           }}
           enums={[
             ["Exact", "exact"],
-            ["Commit", "commit"],
-            ["Branch", "branch"],
+            ["Other Instance", "follow"],
+            ["Git Commit", "commit"],
+            ["Git Branch", "branch"],
             ["None", "none"],
           ]}
           {...AppVersionColors}
@@ -85,10 +93,40 @@ export const AppVersionPicker: React.FunctionComponent<
                 onFocus={() => {
                   setShowAppVersionExactPicker(true);
                   setShowAppVersionBranchPicker(false);
+                  setShowAppVersionFollowChartReleasePicker(false);
                   hideOtherPickers();
                 }}
                 required
                 placeholder="Enter custom value or search..."
+              />
+            </label>
+          )}
+          {appVersionResolver === "follow" && (
+            <label>
+              <h2 className="font-light text-2xl">Select Other Instance</h2>
+              <p>
+                Another instance of this chart to get the app version from. As
+                long as this is set, future refreshes will grab whatever version
+                that other instance has.
+              </p>
+              <TextField
+                name={
+                  isTargetingChangeset
+                    ? "toAppVersionFollowChartRelease"
+                    : "appVersionFollowChartRelease"
+                }
+                value={appVersionFollowChartRelease}
+                onChange={(e) =>
+                  setAppVersionFollowChartRelease(e.currentTarget.value)
+                }
+                onFocus={() => {
+                  setShowAppVersionFollowChartReleasePicker(true);
+                  setShowAppVersionBranchPicker(false);
+                  setShowAppVersionBranchPicker(false);
+                  hideOtherPickers();
+                }}
+                required
+                placeholder="Search..."
               />
             </label>
           )}
@@ -115,6 +153,7 @@ export const AppVersionPicker: React.FunctionComponent<
                 onFocus={() => {
                   setShowAppVersionExactPicker(false);
                   setShowAppVersionBranchPicker(false);
+                  setShowAppVersionFollowChartReleasePicker(false);
                   hideOtherPickers();
                 }}
                 required
@@ -142,6 +181,7 @@ export const AppVersionPicker: React.FunctionComponent<
                 onFocus={() => {
                   setShowAppVersionBranchPicker(true);
                   setShowAppVersionExactPicker(false);
+                  setShowAppVersionFollowChartReleasePicker(false);
                   hideOtherPickers();
                 }}
                 required
