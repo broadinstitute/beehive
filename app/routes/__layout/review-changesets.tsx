@@ -101,7 +101,13 @@ export const action: ActionFunction = async ({ request }) => {
       forwardIAP(request)
     )
     .then(async () => {
-      if (formData.get("action") !== "none") {
+      if (
+        formData.get("action") !== "none" &&
+        formData
+          .getAll("sync")
+          .filter((value): value is string => typeof value === "string")
+          .length > 0
+      ) {
         const payload = {
           owner: "broadinstitute",
           repo: "terra-github-workflows",
