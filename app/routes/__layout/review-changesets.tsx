@@ -418,6 +418,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                 const appVersionResolverChanged =
                   changeset.fromAppVersionResolver !==
                     changeset.toAppVersionResolver ||
+                  (changeset.toAppVersionResolver === "follow" &&
+                    changeset.fromAppVersionFollowChartRelease !==
+                      changeset.toAppVersionFollowChartRelease) ||
                   (changeset.toAppVersionResolver === "commit" &&
                     changeset.fromAppVersionCommit !==
                       changeset.toAppVersionCommit) ||
@@ -687,6 +690,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             {`Specified `}
                             {changeset.fromAppVersionResolver === "exact" &&
                               `exact app version`}
+                            {changeset.fromAppVersionResolver === "follow" &&
+                              `another instance - ${changeset.fromAppVersionFollowChartRelease}`}
                             {changeset.fromAppVersionResolver === "commit" &&
                               `app commit — ${changeset.fromAppVersionCommit}`}
                             {changeset.fromAppVersionResolver === "branch" &&
@@ -704,6 +709,8 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             {`Specified `}
                             {changeset.toAppVersionResolver === "exact" &&
                               `exact app version`}
+                            {changeset.toAppVersionResolver === "follow" &&
+                              `another instance for app version - ${changeset.toAppVersionFollowChartRelease}`}
                             {changeset.toAppVersionResolver === "commit" &&
                               `app commit — ${changeset.toAppVersionCommit}`}
                             {changeset.toAppVersionResolver === "branch" &&
@@ -859,7 +866,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             : "text-color-body-text/40"
                         }
                       >
-                        {`Specified ${changeset.fromChartVersionResolver} chart version`}
+                        {changeset.fromChartVersionResolver === "follow"
+                          ? `Specified another instance for chart version - ${changeset.fromChartVersionFollowChartRelease}`
+                          : `Specified ${changeset.fromChartVersionResolver} chart version`}
                       </p>
                       <p
                         className={
@@ -868,7 +877,9 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                             : "text-color-body-text/40"
                         }
                       >
-                        {`Specified ${changeset.toChartVersionResolver} chart version`}
+                        {changeset.toChartVersionResolver === "follow"
+                          ? `Specified another instance for chart version - ${changeset.toChartVersionFollowChartRelease}`
+                          : `Specified ${changeset.toChartVersionResolver} chart version`}
                       </p>
                       {(!changeset.fromChartVersionReference ||
                         !changeset.toChartVersionReference) && (

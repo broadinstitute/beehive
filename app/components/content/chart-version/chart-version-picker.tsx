@@ -9,6 +9,9 @@ export interface ChartVersionPickerProps {
   chartVersionExact: string;
   setChartVersionExact: (value: string) => void;
   setShowChartVersionExactPicker: (value: boolean) => void;
+  chartVersionFollowChartRelease: string;
+  setChartVersionFollowChartRelease: (value: string) => void;
+  setShowChartVersionFollowChartRelease: (value: boolean) => void;
   defaultHelmfileRef: string;
   hideOtherPickers?: () => void;
 }
@@ -21,6 +24,9 @@ export const ChartVersionPicker: React.FunctionComponent<
   chartVersionExact,
   setChartVersionExact,
   setShowChartVersionExactPicker,
+  chartVersionFollowChartRelease,
+  setChartVersionFollowChartRelease,
+  setShowChartVersionFollowChartRelease,
   defaultHelmfileRef,
   hideOtherPickers = () => {},
 }) => {
@@ -38,15 +44,17 @@ export const ChartVersionPicker: React.FunctionComponent<
               ? "toChartVersionResolver"
               : "chartVersionResolver"
           }
-          className="grid grid-cols-2 mt-2"
+          className="grid grid-cols-3 mt-2"
           fieldValue={chartVersionResolver}
           setFieldValue={(value) => {
             setShowChartVersionExactPicker(value === "exact");
+            setShowChartVersionFollowChartRelease(value === "follow");
             hideOtherPickers();
             setChartVersionResolver(value);
           }}
           enums={[
             ["Exact", "exact"],
+            ["Other Instance", "follow"],
             ["Latest", "latest"],
           ]}
           {...ChartVersionColors}
@@ -70,10 +78,39 @@ export const ChartVersionPicker: React.FunctionComponent<
               onChange={(e) => setChartVersionExact(e.currentTarget.value)}
               onFocus={() => {
                 setShowChartVersionExactPicker(true);
+                setShowChartVersionFollowChartRelease(false);
                 hideOtherPickers();
               }}
               required
               placeholder="Enter custom value or search..."
+            />
+          </label>
+        )}
+        {chartVersionResolver === "follow" && (
+          <label>
+            <h2 className="font-light text-2xl">Select Other Instance</h2>
+            <p>
+              Another instance of this chart to get the chart version from. As
+              long as this is set, future refreshes will grab whatever version
+              that other instance has.
+            </p>
+            <TextField
+              name={
+                isTargetingChangeset
+                  ? "toChartVersionFollowChartRelease"
+                  : "chartVersionFollowChartRelease"
+              }
+              value={chartVersionFollowChartRelease}
+              onChange={(e) =>
+                setChartVersionFollowChartRelease(e.currentTarget.value)
+              }
+              onFocus={() => {
+                setShowChartVersionFollowChartRelease(true);
+                setShowChartVersionExactPicker(false);
+                hideOtherPickers();
+              }}
+              required
+              placeholder="Search..."
             />
           </label>
         )}

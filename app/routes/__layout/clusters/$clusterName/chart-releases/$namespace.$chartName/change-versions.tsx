@@ -206,6 +206,16 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
   );
   const [showAppVersionExactPicker, setShowAppVersionExactPicker] =
     useState(false);
+  const [appVersionFollowChartRelease, setAppVersionFollowChartRelease] =
+    useState(
+      existingFormData?.toAppVersionFollowChartRelease ||
+        chartRelease.appVersionFollowChartRelease ||
+        ""
+    );
+  const [
+    showAppVersionFollowChartReleasePicker,
+    setShowAppVersionFollowChartReleasePicker,
+  ] = useState(false);
   const [appVersionBranch, setAppVersionBranch] = useState(
     existingFormData?.toAppVersionBranch || chartRelease.appVersionBranch || ""
   );
@@ -219,6 +229,16 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
   );
   const [showChartVersionExactPicker, setShowChartVersionExactPicker] =
     useState(false);
+  const [chartVersionFollowChartRelease, setChartVersionFollowChartRelease] =
+    useState(
+      existingFormData?.toChartVersionFollowChartRelease ||
+        chartRelease.chartVersionFollowChartRelease ||
+        ""
+    );
+  const [
+    showChartVersionFollowChartReleasePicker,
+    setShowChartVersionFollowChartReleasePicker,
+  ] = useState(false);
 
   let sidebar: React.ReactElement<InteractiveListProps | FillerTextProps>;
   if (showOtherChartReleasePicker) {
@@ -301,6 +321,50 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
         </MemoryFilteredList>
       </InteractiveList>
     );
+  } else if (showAppVersionFollowChartReleasePicker) {
+    sidebar = (
+      <InteractiveList title="Select Other Instance" {...ChartReleaseColors}>
+        <ListFilterInfo filterText={appVersionFollowChartRelease} />
+        <MemoryFilteredList
+          entries={otherChartReleases}
+          filterText={appVersionFollowChartRelease}
+          filter={(chartRelease, filterText) =>
+            chartRelease.name?.includes(filterText) ||
+            chartRelease.environment?.includes(filterText) ||
+            chartRelease.cluster?.includes(filterText) ||
+            chartRelease.namespace?.includes(filterText)
+          }
+        >
+          {(chartRelease, index) => (
+            <ActionButton
+              key={index}
+              onClick={() => {
+                setAppVersionFollowChartRelease(chartRelease.name || "");
+                setShowAppVersionFollowChartReleasePicker(false);
+              }}
+              isActive={appVersionFollowChartRelease === chartRelease.name}
+              {...ChartReleaseColors}
+            >
+              {chartRelease.destinationType === "environment" ? (
+                <h2 className="font-light">
+                  Environment:{" "}
+                  <span className="font-medium">
+                    {chartRelease.environment}
+                  </span>{" "}
+                  / {chartRelease.chart}
+                </h2>
+              ) : (
+                <h2 className="font-light">
+                  Cluster:{" "}
+                  <span className="font-medium">{`${chartRelease.cluster} / ${chartRelease.namespace}`}</span>{" "}
+                  / {chartRelease.chart}
+                </h2>
+              )}
+            </ActionButton>
+          )}
+        </MemoryFilteredList>
+      </InteractiveList>
+    );
   } else if (showAppVersionBranchPicker) {
     sidebar = (
       <InteractiveList title="Recent Branches" {...AppVersionColors}>
@@ -357,6 +421,50 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
         </MemoryFilteredList>
       </InteractiveList>
     );
+  } else if (showChartVersionFollowChartReleasePicker) {
+    sidebar = (
+      <InteractiveList title="Select Other Instance" {...ChartReleaseColors}>
+        <ListFilterInfo filterText={chartVersionFollowChartRelease} />
+        <MemoryFilteredList
+          entries={otherChartReleases}
+          filterText={chartVersionFollowChartRelease}
+          filter={(chartRelease, filterText) =>
+            chartRelease.name?.includes(filterText) ||
+            chartRelease.environment?.includes(filterText) ||
+            chartRelease.cluster?.includes(filterText) ||
+            chartRelease.namespace?.includes(filterText)
+          }
+        >
+          {(chartRelease, index) => (
+            <ActionButton
+              key={index}
+              onClick={() => {
+                setChartVersionFollowChartRelease(chartRelease.name || "");
+                setShowChartVersionFollowChartReleasePicker(false);
+              }}
+              isActive={chartVersionFollowChartRelease === chartRelease.name}
+              {...ChartReleaseColors}
+            >
+              {chartRelease.destinationType === "environment" ? (
+                <h2 className="font-light">
+                  Environment:{" "}
+                  <span className="font-medium">
+                    {chartRelease.environment}
+                  </span>{" "}
+                  / {chartRelease.chart}
+                </h2>
+              ) : (
+                <h2 className="font-light">
+                  Cluster:{" "}
+                  <span className="font-medium">{`${chartRelease.cluster} / ${chartRelease.namespace}`}</span>{" "}
+                  / {chartRelease.chart}
+                </h2>
+              )}
+            </ActionButton>
+          )}
+        </MemoryFilteredList>
+      </InteractiveList>
+    );
   } else {
     sidebar = (
       <FillerText>
@@ -395,8 +503,10 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 onFocus={() => {
                   setShowOtherChartReleasePicker(true);
                   setShowAppVersionExactPicker(false);
+                  setShowAppVersionFollowChartReleasePicker(false);
                   setShowAppVersionBranchPicker(false);
                   setShowChartVersionExactPicker(false);
+                  setShowChartVersionFollowChartReleasePicker(false);
                 }}
                 placeholder="Search..."
               />
@@ -437,6 +547,13 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 appVersionExact={appVersionExact}
                 setAppVersionExact={setAppVersionExact}
                 setShowAppVersionExactPicker={setShowAppVersionExactPicker}
+                appVersionFollowChartRelease={appVersionFollowChartRelease}
+                setAppVersionFollowChartRelease={
+                  setAppVersionFollowChartRelease
+                }
+                setShowAppVersionFollowChartReleasePicker={
+                  setShowAppVersionFollowChartReleasePicker
+                }
                 defaultAppVersionCommit={
                   existingFormData?.toAppVersionCommit ||
                   chartRelease.appVersionCommit ||
@@ -456,6 +573,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 hideOtherPickers={() => {
                   setShowOtherChartReleasePicker(false);
                   setShowChartVersionExactPicker(false);
+                  setShowChartVersionFollowChartReleasePicker(false);
                 }}
               />
               <ChartVersionPicker
@@ -469,6 +587,13 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 chartVersionExact={chartVersionExact}
                 setChartVersionExact={setChartVersionExact}
                 setShowChartVersionExactPicker={setShowChartVersionExactPicker}
+                chartVersionFollowChartRelease={chartVersionFollowChartRelease}
+                setChartVersionFollowChartRelease={
+                  setChartVersionFollowChartRelease
+                }
+                setShowChartVersionFollowChartRelease={
+                  setShowChartVersionFollowChartReleasePicker
+                }
                 defaultHelmfileRef={
                   existingFormData?.toHelmfileRef ||
                   chartRelease.helmfileRef ||
@@ -477,6 +602,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 hideOtherPickers={() => {
                   setShowAppVersionExactPicker(false);
                   setShowAppVersionBranchPicker(false);
+                  setShowAppVersionFollowChartReleasePicker(false);
                   setShowOtherChartReleasePicker(false);
                 }}
               />

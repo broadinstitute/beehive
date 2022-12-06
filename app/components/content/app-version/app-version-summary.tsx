@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { AppVersionColors } from "./app-version-colors";
 
@@ -6,6 +7,7 @@ export interface AppVersionSummaryProps {
   appImageGitRepo?: string;
   appVersionResolver?: string;
   appVersionExact?: string;
+  appVersionFollowChartRelease?: string;
   appVersionCommit?: string;
   appVersionBranch?: string;
   firecloudDevelopRef?: string;
@@ -19,58 +21,77 @@ export const AppVersionSummary: React.FunctionComponent<
   appImageGitRepo,
   appVersionResolver,
   appVersionExact,
+  appVersionFollowChartRelease,
   appVersionCommit,
   appVersionBranch,
   firecloudDevelopRef,
   renderAppVersionLink,
 }) => {
+  let extraGitInfo: JSX.Element | null = null;
+  if (appVersionBranch) {
+    extraGitInfo = (
+      <span>
+        {" "}
+        It happens to come from commit{" "}
+        <a
+          href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
+          className="font-mono underline decoration-color-link-underline"
+        >
+          {appVersionCommit?.substring(0, 7)}
+        </a>{" "}
+        on the{" "}
+        <a
+          href={`https://github.com/${appImageGitRepo}/tree/${appVersionBranch}`}
+          className="font-mono underline decoration-color-link-underline"
+        >
+          {appVersionBranch}
+        </a>{" "}
+        branch.
+      </span>
+    );
+  } else if (appVersionCommit) {
+    extraGitInfo = (
+      <span>
+        {" "}
+        It happens to come from commit{" "}
+        <a
+          href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
+          className="font-mono underline decoration-color-link-underline"
+        >
+          {appVersionCommit?.substring(0, 7)}
+        </a>{" "}
+        (no branch known, it might be local somewhere?).
+      </span>
+    );
+  }
   let explanation: JSX.Element;
   switch (appVersionResolver) {
     case "exact":
-      if (appVersionBranch) {
-        explanation = (
-          <p>
-            This app version was directly specified. It happens to come from
-            commit{" "}
-            <a
-              href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
-              className="font-mono underline decoration-color-link-underline"
+      explanation = (
+        <p>
+          This app version was directly specified.{extraGitInfo} Refreshing the
+          versions won't affect it.
+        </p>
+      );
+      break;
+    case "follow":
+      explanation = (
+        <p>
+          This app version was the version in{" "}
+          {appVersionFollowChartRelease ? (
+            <Link
+              to={`/r/chart-release/${appVersionFollowChartRelease}`}
+              className="underline decoration-color-link-underline"
             >
-              {appVersionCommit?.substring(0, 7)}
-            </a>{" "}
-            on the{" "}
-            <a
-              href={`https://github.com/${appImageGitRepo}/tree/${appVersionBranch}`}
-              className="font-mono underline decoration-color-link-underline"
-            >
-              {appVersionBranch}
-            </a>{" "}
-            branch. Refreshing the versions won't affect it.
-          </p>
-        );
-      } else if (appVersionCommit) {
-        explanation = (
-          <p>
-            This app version was directly specified. It happens to come from
-            commit{" "}
-            <a
-              href={`https://github.com/${appImageGitRepo}/commit/${appVersionCommit}`}
-              className="font-mono underline decoration-color-link-underline"
-            >
-              {appVersionCommit?.substring(0, 7)}
-            </a>{" "}
-            (no branch known, it might be local somewhere?). Refreshing the
-            versions won't affect it.
-          </p>
-        );
-      } else {
-        explanation = (
-          <p>
-            This app version was directly specified. Refreshing the versions
-            won't affect it.
-          </p>
-        );
-      }
+              {appVersionFollowChartRelease}
+            </Link>
+          ) : (
+            "the followed instance"
+          )}{" "}
+          during the last refresh.{extraGitInfo} Refreshing the versions will
+          get whatever is there currently.
+        </p>
+      );
       break;
     case "commit":
       if (appVersionBranch) {

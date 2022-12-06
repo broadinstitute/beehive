@@ -26,6 +26,7 @@ import { ChartReleaseColors } from "~/components/content/chart-release/chart-rel
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
 import { liveEnvironmentSorter } from "~/components/content/environment/environment-sort.server";
 import ActionButton from "~/components/interactivity/action-button";
+import { EnumSelect } from "~/components/interactivity/enum-select";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { TextField } from "~/components/interactivity/text-field";
@@ -34,7 +35,6 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import { FillerTextProps } from "~/components/panel-structures/filler-text";
 import {
   InteractiveList,
   InteractiveListProps,
@@ -103,6 +103,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   const useExactVersionsFromOtherEnvironment = formData.get(
     "useExactVersionsFromOtherEnvironment"
   );
+  const followVersionsFromOtherEnvironment = formData.get(
+    "followVersionsFromOtherEnvironment"
+  );
   const changesetRequest: V2controllersChangesetPlanRequestEnvironmentEntry = {
     environment: params.environmentName,
     includeCharts: formData
@@ -112,6 +115,11 @@ export const action: ActionFunction = async ({ request, params }) => {
       typeof useExactVersionsFromOtherEnvironment === "string" &&
       useExactVersionsFromOtherEnvironment.length > 0
         ? useExactVersionsFromOtherEnvironment
+        : undefined,
+    followVersionsFromOtherEnvironment:
+      typeof followVersionsFromOtherEnvironment === "string" &&
+      followVersionsFromOtherEnvironment.length > 0
+        ? followVersionsFromOtherEnvironment
         : undefined,
   };
 
@@ -171,16 +179,15 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
       ? actionData.faultyRequest
       : actionData;
 
-  const [
-    useExactVersionsFromOtherEnvironment,
-    setUseExactVersionsFromOtherEnvironment,
-  ] = useState(
+  const [otherEnvironment, setOtherEnvironment] = useState(
     existingFormData?.useExactVersionsFromOtherEnvironment ||
       preconfiguredOtherEnvironment ||
       ""
   );
-  const [showOtherEnvironmentPicker, setshowOtherEnvironmentPicker] =
+  const [showOtherEnvironmentPicker, setShowOtherEnvironmentPicker] =
     useState(false);
+  const [otherEnvironmentBehavior, setOtherEnvironmentBehavior] =
+    useState("exact");
   const [includedCharts, setIncludedCharts] = useState<Map<string, boolean>>(
     new Map(
       chartReleases
@@ -201,10 +208,10 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
   if (showOtherEnvironmentPicker) {
     sidebar = (
       <InteractiveList title="Select Other Environment" {...EnvironmentColors}>
-        <ListFilterInfo filterText={useExactVersionsFromOtherEnvironment} />
+        <ListFilterInfo filterText={otherEnvironment} />
         <MemoryFilteredList
           entries={otherEnvironments}
-          filterText={useExactVersionsFromOtherEnvironment}
+          filterText={otherEnvironment}
           filter={(environment, filterText) =>
             environment.lifecycle?.includes(filterText) ||
             environment.base?.includes(filterText) ||
@@ -215,12 +222,10 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
             <ActionButton
               key={index}
               onClick={() => {
-                setUseExactVersionsFromOtherEnvironment(environment.name || "");
-                setshowOtherEnvironmentPicker(false);
+                setOtherEnvironment(environment.name || "");
+                setShowOtherEnvironmentPicker(false);
               }}
-              isActive={
-                useExactVersionsFromOtherEnvironment === environment.name
-              }
+              isActive={otherEnvironment === environment.name}
               {...EnvironmentColors}
             >
               <h2 className="font-light">
@@ -290,7 +295,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
         >
           <label>
             <h2 className="font-light text-2xl">
-              Use Exact Versions From Another Environment
+              Use Versions From Another Environment
             </h2>
             <p className="mb-2">
               You can think of this functionality like an old-school monolith
@@ -299,8 +304,8 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
             <p className="mb-2">
               For every chart instance included in this "{environment.name}"{" "}
               environment, if there is an instance of that chart in the
-              environment referenced here, use the exact versions of that other
-              chart instance.
+              environment referenced here, use the versions of that other chart
+              instance.
             </p>
             <p>
               For example, if you wanted your BEE to have the same versions as
@@ -314,18 +319,73 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
               </p>
             )}
             <TextField
-              name="useExactVersionsFromOtherEnvironment"
-              value={useExactVersionsFromOtherEnvironment}
-              onChange={(e) =>
-                setUseExactVersionsFromOtherEnvironment(e.currentTarget.value)
-              }
-              onFocus={() => setshowOtherEnvironmentPicker(true)}
+              value={otherEnvironment}
+              onChange={(e) => setOtherEnvironment(e.currentTarget.value)}
+              onFocus={() => setShowOtherEnvironmentPicker(true)}
               placeholder="Search..."
             />
           </label>
+          {otherEnvironment && (
+            <>
+              <div>
+                <h2 className="font-light text-2xl">Choose Behavior</h2>
+                <p>
+                  Beehive will grab versions from {otherEnvironment}. Here you
+                  can choose how those versions should be applied.
+                </p>
+                <EnumSelect
+                  className="grid grid-cols-2 mt-2"
+                  fieldValue={otherEnvironmentBehavior}
+                  setFieldValue={(value) => setOtherEnvironmentBehavior(value)}
+                  enums={[
+                    ["Once", "exact"],
+                    ["Follow", "follow"],
+                  ]}
+                  {...EnvironmentColors}
+                />
+              </div>
+              <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
+                {otherEnvironmentBehavior === "exact" && (
+                  <>
+                    <p>
+                      This will copy versions and pin this environment to them
+                      exactly. Refreshing anything in this environment won't
+                      change the versions, they'll stick until someone changes
+                      them.
+                    </p>
+                    <input
+                      type="hidden"
+                      name="useExactVersionsFromOtherEnvironment"
+                      value={otherEnvironment}
+                    />
+                  </>
+                )}
+                {otherEnvironmentBehavior === "follow" && (
+                  <>
+                    <p>
+                      This will copy versions and remember where they came from.
+                      Refreshing anything in this environment in the future will
+                      check {otherEnvironment} and grab whatever versions it
+                      has.
+                    </p>
+                    <p>
+                      Note that refreshing generally isn't automatic: someone
+                      would still have to go and press the calculate button, but
+                      they wouldn't need to specify anything in particular.
+                    </p>
+                    <input
+                      type="hidden"
+                      name="followVersionsFromOtherEnvironment"
+                      value={otherEnvironment}
+                    />
+                  </>
+                )}
+              </div>
+            </>
+          )}
           <p className="pt-8">
             When you click calculate below, our systems will{" "}
-            {useExactVersionsFromOtherEnvironment
+            {otherEnvironment
               ? "copy versions from the environment above and "
               : ""}
             refresh all the included charts in this environment. You can select
@@ -336,7 +396,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
             sizeClassName=""
             isActive={!showOtherEnvironmentPicker}
             onClick={(e) => {
-              setshowOtherEnvironmentPicker(false);
+              setShowOtherEnvironmentPicker(false);
               e.preventDefault();
             }}
             activeOnHover
