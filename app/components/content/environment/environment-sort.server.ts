@@ -1,12 +1,6 @@
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 
-const liveEnvironmentValuesNameOrder = [
-  "dev",
-  "perf",
-  "alpha",
-  "staging",
-  "prod",
-];
+const liveEnvironmentValuesNameOrder = ["dev", "alpha", "staging", "prod"];
 
 export function liveEnvironmentSorter(
   x: V2controllersEnvironment,
