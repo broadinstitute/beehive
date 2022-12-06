@@ -45,6 +45,9 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             } else {
               setShowTemplateEnvironmentPicker(false);
               setTemplateEnvironment("");
+              if (value === "template") {
+                setBase("bee");
+              }
             }
             setLifecycle(value);
           }}
@@ -86,9 +89,8 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             and any other files along the way.
           </p>
           <p className={lifecycle === "template" ? "mt-2" : "hidden"}>
-            (Why is this field hidden when making a BEE? They always use the
-            values base <i>and even the values name</i> of their template—that's
-            how they borrow the template's configuration.)
+            For a BEE template, you'll almost always want to keep the default of
+            "bee" here so you inherit the configuration that makes BEEs work.
           </p>
           <TextField
             name="base"
