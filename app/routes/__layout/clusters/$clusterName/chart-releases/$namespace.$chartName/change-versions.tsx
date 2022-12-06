@@ -478,7 +478,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
       <OutsetPanel>
         <ActionBox
           title="Now Changing Versions"
-          submitText="Click to Calculate and Preview"
+          submitText="Click to Refresh and Preview Changes"
           {...ChartReleaseColors}
         >
           {preconfigured || (
