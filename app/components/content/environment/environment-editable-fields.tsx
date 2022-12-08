@@ -44,6 +44,11 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       ? environment.namePrefixesDomain.toString()
       : "true"
   );
+  const [preventDeletion, setPreventDeletion] = useState(
+    environment?.preventDeletion != null
+      ? environment.preventDeletion.toString()
+      : "false"
+  );
   const extraFields = (
     <>
       <div>
@@ -153,6 +158,26 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           defaultValue={environment?.defaultFirecloudDevelopRef}
         />
       </label>
+      {(creating ? templateInUse : environment?.lifecycle === "dynamic") && (
+        <div>
+          <h2 className="font-light text-2xl">Prevent Deletion</h2>
+          <p>
+            This flag prevents auto-deletion of this BEE and also hides the
+            delete button in Beehive.
+          </p>
+          <EnumInputSelect
+            name="preventDeletion"
+            className="grid grid-cols-2 mt-2"
+            fieldValue={preventDeletion}
+            setFieldValue={(value) => setPreventDeletion(value)}
+            enums={[
+              ["Yes", "true"],
+              ["No", "false"],
+            ]}
+            {...EnvironmentColors}
+          />
+        </div>
+      )}
     </>
   );
   return (

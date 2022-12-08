@@ -75,7 +75,7 @@ export const EnvironmentDetails: React.FunctionComponent<
         toChangeVersions={toChangeVersions}
         changeVersionText="Here you can do a bulk update of versions from another environment. If you want to update just one service or chart, view the charts in this environment and select the one you'd like to change."
         toEdit={toEdit}
-        toDelete={toDelete}
+        toDelete={environment.preventDeletion !== true ? toDelete : undefined}
       />
     )}
   </div>
