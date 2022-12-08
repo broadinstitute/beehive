@@ -160,7 +160,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       </label>
       {(creating ? templateInUse : environment?.lifecycle === "dynamic") && (
         <div>
-          <h2 className="font-light text-2xl">Prevent Deletion</h2>
+          <h2 className="font-light text-2xl">Prevent Deletion?</h2>
           <p>
             This flag prevents auto-deletion of this BEE and also hides the
             delete button in Beehive.
