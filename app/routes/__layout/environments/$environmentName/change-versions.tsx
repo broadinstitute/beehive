@@ -274,6 +274,12 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
               {...ChartReleaseColors}
             >
               <h2 className="font-light">
+                <input
+                  className="w-4 h-4 mr-2"
+                  type="checkbox"
+                  checked={includedCharts.get(chartRelease.chart || "")}
+                  readOnly
+                />
                 <span className="font-medium">{chartRelease.chart}</span>
                 {chartRelease.appVersionResolver !== "none" &&
                   ` (app @ ${chartRelease.appVersionExact})`}
