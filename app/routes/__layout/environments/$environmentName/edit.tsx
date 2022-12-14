@@ -78,6 +78,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       formData.get("chartReleasesFromTemplate") === "true",
     requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
+    preventDeletion: formData.get("preventDeletion") === "true",
   };
 
   return new EnvironmentsApi(SherlockConfiguration)
