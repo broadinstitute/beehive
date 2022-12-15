@@ -187,7 +187,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
           placeholder="(can be left empty)"
-          wrap="hard"
+          wrap="soft"
         />
       </label>
       {description && (
