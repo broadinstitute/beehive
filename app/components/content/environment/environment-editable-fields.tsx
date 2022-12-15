@@ -192,7 +192,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       </label>
       {description && (
         <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
-          <p className="w-full break-all">
+          <p className="w-full">
             Preview: <PrettyPrintDescription description={description} />
           </p>
         </div>
