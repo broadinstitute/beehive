@@ -47,7 +47,7 @@ export const AppVersionEditableFields: React.FunctionComponent<
           wrap="soft"
         />
       </label>
-      <p className="w-full break-all">
+      <p className="w-full">
         Preview:{" "}
         <PrettyPrintDescription description={description} repo={repo} />
       </p>
