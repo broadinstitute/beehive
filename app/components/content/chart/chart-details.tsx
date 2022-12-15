@@ -1,3 +1,4 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { AppVersionColors } from "../app-version/app-version-colors";
@@ -7,7 +8,7 @@ import { MutateControls } from "../helpers";
 import { ChartColors } from "./chart-colors";
 
 export interface ChartDetailsProps {
-  chart: V2controllersChart;
+  chart: V2controllersChart | SerializeFrom<V2controllersChart>;
   toChartVersions?: string;
   toAppVersions?: string;
   toChartReleases?: string;

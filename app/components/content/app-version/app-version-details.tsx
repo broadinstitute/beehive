@@ -1,12 +1,13 @@
 import { V2controllersAppVersion } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
-import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { MutateControls } from "../helpers";
 import { AppVersionColors } from "./app-version-colors";
+import { SerializeFrom } from "@remix-run/node";
 
 export interface AppVersionDetailsProps {
-  appVersion: V2controllersAppVersion;
+  appVersion: V2controllersAppVersion | SerializeFrom<V2controllersAppVersion>;
   toEdit?: string;
 }
 
@@ -43,7 +44,7 @@ export const AppVersionDetails: React.FunctionComponent<
     <p>
       Description:{" "}
       {appVersion.description ? (
-        <PrettyPrintVersionDescription
+        <PrettyPrintDescription
           description={appVersion.description}
           repo={appVersion.chartInfo?.appImageGitRepo}
         />

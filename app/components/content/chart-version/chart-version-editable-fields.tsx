@@ -1,10 +1,13 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
-import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 
 export interface ChartVersionEditableFieldsProps {
-  chartVersion?: V2controllersChartVersion;
+  chartVersion?:
+    | V2controllersChartVersion
+    | SerializeFrom<V2controllersChartVersion>;
   repo?: string;
 }
 
@@ -26,6 +29,10 @@ export const ChartVersionEditableFields: React.FunctionComponent<
           When this field is displayed, links will get automatically generated:
         </p>
         <ul className="list-disc pl-5 mb-2">
+          <li>
+            Simple Markdown links will work, like
+            "[example](https://example.com)"
+          </li>
           <li>Text like "[ABC-123]" will become Jira links</li>
           {repo ? (
             <li>Text like "(#123)" will become GitHub links to {repo}</li>
@@ -46,7 +53,7 @@ export const ChartVersionEditableFields: React.FunctionComponent<
       </label>
       <p className="w-full break-all">
         Preview:{" "}
-        <PrettyPrintVersionDescription description={description} repo={repo} />
+        <PrettyPrintDescription description={description} repo={repo} />
       </p>
     </div>
   );

@@ -1,10 +1,11 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersAppVersion } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
-import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 
 export interface AppVersionEditableFieldsProps {
-  appVersion?: V2controllersAppVersion;
+  appVersion?: V2controllersAppVersion | SerializeFrom<V2controllersAppVersion>;
   repo?: string;
 }
 
@@ -24,6 +25,10 @@ export const AppVersionEditableFields: React.FunctionComponent<
           When this field is displayed, links will get automatically generated:
         </p>
         <ul className="list-disc pl-5 mb-2">
+          <li>
+            Simple Markdown links will work, like
+            "[example](https://example.com)"
+          </li>
           <li>Text like "[ABC-123]" will become Jira links</li>
           {repo ? (
             <li>Text like "(#123)" will become GitHub links to {repo}</li>
@@ -44,7 +49,7 @@ export const AppVersionEditableFields: React.FunctionComponent<
       </label>
       <p className="w-full break-all">
         Preview:{" "}
-        <PrettyPrintVersionDescription description={description} repo={repo} />
+        <PrettyPrintDescription description={description} repo={repo} />
       </p>
     </div>
   );

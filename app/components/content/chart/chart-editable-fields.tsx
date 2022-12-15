@@ -1,3 +1,4 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -5,7 +6,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { ChartColors } from "./chart-colors";
 
 export interface ChartEditableFieldsProps {
-  chart?: V2controllersChart;
+  chart?: V2controllersChart | SerializeFrom<V2controllersChart>;
 }
 
 export const ChartEditableFields: React.FunctionComponent<

@@ -1,8 +1,9 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { TextField } from "~/components/interactivity/text-field";
 
 export interface ChartCreatableFieldsProps {
-  chart?: V2controllersChart;
+  chart?: V2controllersChart | SerializeFrom<V2controllersChart>;
 }
 
 export const ChartCreatableFields: React.FunctionComponent<
