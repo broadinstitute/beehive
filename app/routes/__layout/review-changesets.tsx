@@ -36,7 +36,7 @@ import {
   Notification,
 } from "~/components/logic/notification";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
-import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { BigActionBox } from "~/components/panel-structures/big-action-box";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
@@ -648,7 +648,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                                         <>
                                           {": "}
                                           {appVersion.description ? (
-                                            <PrettyPrintVersionDescription
+                                            <PrettyPrintDescription
                                               description={
                                                 appVersion.description
                                               }
@@ -839,7 +839,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                                   {chartVersion.description && (
                                     <>
                                       {": "}
-                                      <PrettyPrintVersionDescription
+                                      <PrettyPrintDescription
                                         description={chartVersion.description}
                                         repo={
                                           changeset.chartReleaseInfo?.chartInfo

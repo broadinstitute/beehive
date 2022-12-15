@@ -1,3 +1,4 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
 import { AppVersionSummary } from "../app-version/app-version-summary";
 import { ChartVersionSummary } from "../chart-version/chart-version-summary";
@@ -5,7 +6,9 @@ import { MutateControls } from "../helpers";
 import { ChartReleaseColors } from "./chart-release-colors";
 
 export interface ChartReleaseDetailsProps {
-  chartRelease: V2controllersChartRelease;
+  chartRelease:
+    | V2controllersChartRelease
+    | SerializeFrom<V2controllersChartRelease>;
   toChangeVersions?: string;
   toEdit?: string;
   toDelete?: string;

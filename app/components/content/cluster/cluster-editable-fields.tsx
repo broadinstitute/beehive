@@ -1,3 +1,4 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersCluster } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -5,7 +6,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { ClusterColors } from "./cluster-colors";
 
 export interface ClusterEditableFieldsProps {
-  cluster?: V2controllersCluster;
+  cluster?: V2controllersCluster | SerializeFrom<V2controllersCluster>;
 }
 
 export const ClusterEditableFields: React.FunctionComponent<

@@ -70,7 +70,7 @@ const EnvironmentsRoute: React.FunctionComponent = () => {
           >
             {(environment, index) => (
               <NavButton
-                to={`./${environment.name}`}
+                to={`./${environment.name}/chart-releases`}
                 key={index.toString()}
                 {...EnvironmentColors}
               >

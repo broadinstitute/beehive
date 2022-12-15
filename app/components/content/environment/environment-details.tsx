@@ -1,12 +1,16 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { ChartReleaseColors } from "../chart-release/chart-release-colors";
 import { ClusterColors } from "../cluster/cluster-colors";
 import { MutateControls, ProdWarning } from "../helpers";
 import { EnvironmentColors } from "./environment-colors";
 
 export interface EnvironmentDetailsProps {
-  environment: V2controllersEnvironment;
+  environment:
+    | V2controllersEnvironment
+    | SerializeFrom<V2controllersEnvironment>;
   toChartReleases?: string;
   toChangeVersions?: string;
   toEdit?: string;
@@ -45,6 +49,11 @@ export const EnvironmentDetails: React.FunctionComponent<
           </NavButton>
         )}
       </div>
+    )}
+    {environment.description && (
+      <h3 className="text-2xl text-color-header-text">
+        <PrettyPrintDescription description={environment.description} />
+      </h3>
     )}
     {environment.lifecycle !== "template" && environment.defaultNamespace && (
       <div className="flex flex-col space-y-4">

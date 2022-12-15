@@ -1,11 +1,16 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
+import { TextAreaField } from "~/components/interactivity/text-area-field";
 import { TextField } from "~/components/interactivity/text-field";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { EnvironmentColors } from "./environment-colors";
 
 export interface EnvironmentEditableFieldsProps {
-  environment?: V2controllersEnvironment;
+  environment?:
+    | V2controllersEnvironment
+    | SerializeFrom<V2controllersEnvironment>;
   // When we're creating an environment, we don't want to try to replicate Sherlock's
   // advanced template-default behavior, so this flag tells us to let the user pass
   // empty values for fields where we might otherwise block it.
@@ -43,6 +48,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
     environment?.namePrefixesDomain != null
       ? environment.namePrefixesDomain.toString()
       : "true"
+  );
+  const [description, setDescription] = useState(
+    environment?.description || ""
   );
   const [preventDeletion, setPreventDeletion] = useState(
     environment?.preventDeletion != null
@@ -158,6 +166,37 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           defaultValue={environment?.defaultFirecloudDevelopRef}
         />
       </label>
+      <label>
+        <h2 className="font-light text-2xl">Description</h2>
+        <p className="mb-2">
+          An extra optional note to include for this environment, just for
+          display in Beehive.
+        </p>
+        <p className="mb-2">
+          When this field is displayed, links will get automatically generated:
+        </p>
+        <ul className="list-disc pl-5 mb-2">
+          <li>
+            Simple Markdown links will work, like
+            "[example](https://example.com)"
+          </li>
+          <li>Text like "[ABC-123]" will become Jira links</li>
+        </ul>
+        <TextAreaField
+          name="description"
+          value={description}
+          onChange={(e) => setDescription(e.currentTarget.value)}
+          placeholder="(can be left empty)"
+          wrap="hard"
+        />
+      </label>
+      {description && (
+        <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
+          <p className="w-full break-all">
+            Preview: <PrettyPrintDescription description={description} />
+          </p>
+        </div>
+      )}
       {(creating ? templateInUse : environment?.lifecycle === "dynamic") && (
         <div>
           <h2 className="font-light text-2xl">Prevent Deletion?</h2>

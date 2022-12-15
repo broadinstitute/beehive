@@ -1,3 +1,4 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersCluster } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartReleaseColors } from "../chart-release/chart-release-colors";
@@ -5,7 +6,7 @@ import { MutateControls, ProdWarning } from "../helpers";
 import { ClusterColors } from "./cluster-colors";
 
 export interface ClusterDetailsProps {
-  cluster: V2controllersCluster;
+  cluster: V2controllersCluster | SerializeFrom<V2controllersCluster>;
   toChartReleases?: string;
   toEdit?: string;
   toDelete?: string;

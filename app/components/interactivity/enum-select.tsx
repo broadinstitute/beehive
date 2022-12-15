@@ -30,7 +30,7 @@ export const EnumSelect = <T extends any>({
 }: EnumSelectProps<T>) => (
   <div className={`min-h-[3rem] w-full gap-2 ${className}`}>
     {enums.map(([displayValue, valueToSet], index) => (
-      <div className="relative">
+      <div className="relative" key={index}>
         <button
           type="button"
           className={`p-2 w-full h-full shadow-md hover:shadow-lg flex flex-col items-center justify-center ${
@@ -47,7 +47,6 @@ export const EnumSelect = <T extends any>({
               ? "bg-color-nearest-bg before:border-4 font-medium"
               : "bg-color-nearest-bg/50 before:border-2 before:hover:border-4"
           } motion-safe:transition-all before:motion-safe:transition-all`}
-          key={index}
           onClickCapture={(e) => {
             setFieldValue(valueToSet);
             e.preventDefault();

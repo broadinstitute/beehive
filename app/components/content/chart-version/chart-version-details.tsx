@@ -1,12 +1,15 @@
 import { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
-import { PrettyPrintVersionDescription } from "~/components/logic/pretty-print-version-description";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { MutateControls } from "../helpers";
 import { ChartVersionColors } from "./chart-version-colors";
+import { SerializeFrom } from "@remix-run/node";
 
 export interface ChartVersionDetailsProps {
-  chartVersion: V2controllersChartVersion;
+  chartVersion:
+    | V2controllersChartVersion
+    | SerializeFrom<V2controllersChartVersion>;
   toEdit?: string;
 }
 
@@ -17,7 +20,7 @@ export const ChartVersionDetails: React.FunctionComponent<
     <p>
       Description:{" "}
       {chartVersion.description ? (
-        <PrettyPrintVersionDescription
+        <PrettyPrintDescription
           description={chartVersion.description}
           repo={
             chartVersion.chartInfo?.chartRepo

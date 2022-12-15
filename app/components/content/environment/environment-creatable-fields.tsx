@@ -1,3 +1,4 @@
+import { SerializeFrom } from "@remix-run/node";
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -5,7 +6,9 @@ import { TextField } from "~/components/interactivity/text-field";
 import { EnvironmentColors } from "./environment-colors";
 
 export interface EnvironmentCreatableFieldsProps {
-  environment?: V2controllersEnvironment;
+  environment?:
+    | V2controllersEnvironment
+    | SerializeFrom<V2controllersEnvironment>;
   lifecycle: string;
   setLifecycle: (value: string) => void;
   templateEnvironment: string;
