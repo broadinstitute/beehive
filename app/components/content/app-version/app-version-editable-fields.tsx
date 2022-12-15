@@ -44,7 +44,7 @@ export const AppVersionEditableFields: React.FunctionComponent<
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
           placeholder="(can be left empty)"
-          wrap="hard"
+          wrap="soft"
         />
       </label>
       <p className="w-full break-all">
