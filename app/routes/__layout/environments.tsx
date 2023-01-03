@@ -1,11 +1,10 @@
 import { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import {
   EnvironmentsApi,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
