@@ -12,7 +12,7 @@ export const PrettyPrintDescription: React.FunctionComponent<
   <span>
     {description
       .split(
-        /((?:\[?[A-Z]+-[0-9]+\]?)|(?:\(?#[0-9]+\)?)|(?:\[[^\]]+\]\(https?:\/\/[\w\d./?=#]+\)))/g
+        /((?:\[?[A-Z]+-[0-9]+\]?)|(?:\(?#[0-9]+\)?)|(?:\[[^\]]+\]\(https?:\/\/[\w\d./?=#&]+\)))/g
       )
       .map((string): React.ReactNode => {
         const ticketMatch = /([A-Z]+-[0-9]+)/.exec(string);
@@ -41,7 +41,7 @@ export const PrettyPrintDescription: React.FunctionComponent<
             </a>
           );
         }
-        const linkMatch = /\[([^\]]+)\]\((https?:\/\/[\w\d./?=#]+)\)/.exec(
+        const linkMatch = /\[([^\]]+)\]\((https?:\/\/[\w\d./?=#&]+)\)/.exec(
           string
         );
         if (linkMatch && linkMatch.length >= 2) {
