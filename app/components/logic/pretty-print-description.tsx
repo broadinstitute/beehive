@@ -41,7 +41,7 @@ export const PrettyPrintDescription: React.FunctionComponent<
             </a>
           );
         }
-        const linkMatch = /\[([^\]]+)\]\((https?:\/\/[\w\d./?=#]+)\)/.exec(
+        const linkMatch = /\[([^\]]+)\]\((https?:\/\/[\w\d./?=#&]+)\)/.exec(
           string
         );
         if (linkMatch && linkMatch.length >= 2) {
