@@ -58,6 +58,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           )
         ),
       errorResponseThrower
+    )
+    .then((chartReleases) =>
+      chartReleases.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0)
     );
 };
 

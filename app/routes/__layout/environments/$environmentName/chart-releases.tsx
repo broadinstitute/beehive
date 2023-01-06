@@ -46,7 +46,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       { environment: params.environmentName || "" },
       forwardIAP(request)
     )
-    .catch(errorResponseThrower);
+    .catch(errorResponseThrower)
+    .then((chartReleases) =>
+      chartReleases.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0)
+    );
 };
 
 export const CatchBoundary = catchBoundary;
