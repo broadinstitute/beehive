@@ -10,13 +10,20 @@ export interface ChartReleaseDetailsProps {
     | V2controllersChartRelease
     | SerializeFrom<V2controllersChartRelease>;
   toChangeVersions?: string;
+  toVersionHistory?: string;
   toEdit?: string;
   toDelete?: string;
 }
 
 export const ChartReleaseDetails: React.FunctionComponent<
   ChartReleaseDetailsProps
-> = ({ chartRelease, toChangeVersions, toEdit, toDelete }) => (
+> = ({
+  chartRelease,
+  toChangeVersions,
+  toVersionHistory,
+  toEdit,
+  toDelete,
+}) => (
   <div className="flex flex-col space-y-10">
     {chartRelease.appVersionResolver &&
       chartRelease.appVersionResolver != "none" && (
@@ -53,6 +60,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
         name={chartRelease.name || ""}
         colors={ChartReleaseColors}
         toChangeVersions={toChangeVersions}
+        toVersionHistory={toVersionHistory}
         toEdit={toEdit}
         toDelete={toDelete}
       />

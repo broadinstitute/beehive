@@ -18,10 +18,7 @@ import {
 import { useMemo, useState } from "react";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
-import { AppVersionColors } from "~/components/content/app-version/app-version-colors";
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
-import { ChartVersionColors } from "~/components/content/chart-version/chart-version-colors";
-import { ChartColors } from "~/components/content/chart/chart-colors";
 import { ClusterColors } from "~/components/content/cluster/cluster-colors";
 import { EnvironmentColors } from "~/components/content/environment/environment-colors";
 import ActionButton from "~/components/interactivity/action-button";
@@ -35,8 +32,6 @@ import {
   buildNotifications,
   Notification,
 } from "~/components/logic/notification";
-import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
-import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { BigActionBox } from "~/components/panel-structures/big-action-box";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
@@ -50,6 +45,7 @@ import {
 } from "~/helpers/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
 import { commitSession, getSession, sessionFields } from "~/session.server";
+import { ChangesetEntry } from "~/components/content/changeset/changeset-entry";
 
 export const handle = {
   breadcrumb: () => (
@@ -410,561 +406,38 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                 changeset.chartReleaseInfo?.environment?.includes(filterText) ||
                 changeset.chartReleaseInfo?.cluster?.includes(filterText) ||
                 changeset.chartReleaseInfo?.namespace?.includes(filterText) ||
-                `app:${changeset.chartReleaseInfo?.appVersionReference}`.includes(
+                changeset.chartReleaseInfo?.appVersionExact?.includes(
                   filterText
                 ) ||
-                `chart:${changeset.chartReleaseInfo?.chartVersionReference}`.includes(
+                changeset.toAppVersionResolver?.includes(filterText) ||
+                changeset.chartReleaseInfo?.chartVersionExact?.includes(
                   filterText
-                )
+                ) ||
+                changeset.toChartVersionResolver?.includes(filterText)
               }
             >
-              {(changeset, index) => {
-                const appVersionChanged =
-                  changeset.fromAppVersionExact !== changeset.toAppVersionExact;
-                const appVersionResolverChanged =
-                  changeset.fromAppVersionResolver !==
-                    changeset.toAppVersionResolver ||
-                  (changeset.toAppVersionResolver === "follow" &&
-                    changeset.fromAppVersionFollowChartRelease !==
-                      changeset.toAppVersionFollowChartRelease) ||
-                  (changeset.toAppVersionResolver === "commit" &&
-                    changeset.fromAppVersionCommit !==
-                      changeset.toAppVersionCommit) ||
-                  (changeset.toAppVersionResolver === "branch" &&
-                    changeset.fromAppVersionBranch !==
-                      changeset.toAppVersionBranch);
-                const appVersionInSherlockChanged =
-                  (changeset.fromAppVersionReference === undefined) !==
-                  (changeset.toAppVersionReference === undefined);
-                const firecloudDevelopRefChanged =
-                  changeset.fromFirecloudDevelopRef !==
-                  changeset.toFirecloudDevelopRef;
-                const chartVersionChanged =
-                  changeset.fromChartVersionExact !==
-                  changeset.toChartVersionExact;
-                const chartVersionResolverChanged =
-                  changeset.fromChartVersionResolver !==
-                  changeset.toChartVersionResolver;
-                const chartVersionInSherlockChanged =
-                  (changeset.fromChartVersionReference === undefined) !==
-                  (changeset.toChartVersionReference === undefined);
-                const helmfileRefChanged =
-                  changeset.fromHelmfileRef !== changeset.toHelmfileRef;
-                const appliable =
-                  !changeset.appliedAt && !changeset.supersededAt;
-                return (
-                  <div
-                    data-theme-prod={
-                      changeset.chartReleaseInfo?.environment === "prod" ||
-                      changeset.chartReleaseInfo?.cluster === "terra-prod"
-                    }
-                    key={index.toString()}
-                    className={`h-fit w-[60vw] bg-color-near-bg rounded-2xl shadow-md border-2 ${ChartReleaseColors.borderClassName} flex flex-col space-y-2 px-6 pb-5 pt-4 text-color-body-text`}
-                  >
-                    <div className="flex flex-row space-x-4 pb-2">
-                      {appliable &&
-                        changesets.length > 1 &&
-                        !changeset.supersededAt &&
-                        !changeset.appliedAt && (
-                          <input
-                            type="checkbox"
-                            className="w-9"
-                            title="Include in the changes to apply?"
-                            checked={
-                              includedChangesets.get(
-                                changeset.chartRelease as string
-                              ) || false
-                            }
-                            onChange={() => {
-                              setIncludedChangesets(
-                                (previous) =>
-                                  new Map([
-                                    ...previous,
-                                    [
-                                      changeset.chartRelease as string,
-                                      !(
-                                        previous.get(
-                                          changeset.chartRelease as string
-                                        ) || false
-                                      ),
-                                    ],
-                                  ])
-                              );
-                            }}
-                          />
-                        )}
-                      <h1 className="font-light text-4xl text-color-header-text">
-                        {changeset.chartReleaseInfo?.name}
-                      </h1>
-                    </div>
-                    <div
-                      className={`flex flex-row gap-3 max-h-full flex-wrap ${
-                        appliable ? "" : "opacity-50 pointer-events-none"
-                      }`}
-                    >
-                      <button
-                        onClick={() =>
-                          setFilterText(changeset.chartReleaseInfo?.chart || "")
-                        }
-                        className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ChartColors.backgroundClassName} ${ChartColors.borderClassName} flex flex-row h-8 items-center`}
-                      >
-                        <h2 className="text-xl font-light">{`Chart: ${changeset.chartReleaseInfo?.chart}`}</h2>
-                      </button>
-                      {changeset.chartReleaseInfo?.environment && (
-                        <button
-                          onClick={() =>
-                            setFilterText(
-                              changeset.chartReleaseInfo?.environment || ""
-                            )
-                          }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${EnvironmentColors.backgroundClassName} ${EnvironmentColors.borderClassName} flex flex-row h-8 items-center`}
-                        >
-                          <h2 className="text-xl font-light">{`Environment: ${changeset.chartReleaseInfo?.environment}`}</h2>
-                        </button>
-                      )}
-                      {changeset.chartReleaseInfo?.cluster && (
-                        <button
-                          onClick={() =>
-                            setFilterText(
-                              changeset.chartReleaseInfo?.cluster || ""
-                            )
-                          }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ClusterColors.backgroundClassName} ${ClusterColors.borderClassName} flex flex-row h-8 items-center`}
-                        >
-                          <h2 className="text-xl font-light">{`Cluster: ${changeset.chartReleaseInfo?.cluster}`}</h2>
-                        </button>
-                      )}
-                      {changeset.chartReleaseInfo?.namespace && (
-                        <button
-                          onClick={() =>
-                            setFilterText(
-                              changeset.chartReleaseInfo?.namespace || ""
-                            )
-                          }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ClusterColors.backgroundClassName} ${ClusterColors.borderClassName} flex flex-row h-8 items-center`}
-                        >
-                          <h2 className="text-xl font-light">{`Namespace: ${changeset.chartReleaseInfo?.namespace}`}</h2>
-                        </button>
-                      )}
-                      {changeset.chartReleaseInfo?.appVersionReference && (
-                        <button
-                          onClick={() =>
-                            setFilterText(
-                              `app:${changeset.chartReleaseInfo?.appVersionReference}`
-                            )
-                          }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${AppVersionColors.backgroundClassName} ${AppVersionColors.borderClassName} flex flex-row h-8 items-center`}
-                        >
-                          <h2 className="text-xl font-light">{`App Version: ${changeset.chartReleaseInfo?.appVersionExact}`}</h2>
-                        </button>
-                      )}
-                      {changeset.chartReleaseInfo?.chartVersionReference && (
-                        <button
-                          onClick={() =>
-                            setFilterText(
-                              `chart:${changeset.chartReleaseInfo?.chartVersionReference}`
-                            )
-                          }
-                          className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all  px-2 ${ChartVersionColors.backgroundClassName} ${ChartVersionColors.borderClassName} flex flex-row h-8 items-center`}
-                        >
-                          <h2 className="text-xl font-light">{`Chart Version: ${changeset.chartReleaseInfo?.chartVersionExact}`}</h2>
-                        </button>
-                      )}
-                    </div>
-                    <div
-                      className={`grid grid-cols-2 pt-2 gap-y-1 gap-x-4 ${
-                        appliable ? "" : "opacity-50"
-                      }`}
-                    >
-                      <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
-                        Before
-                      </h2>
-                      <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
-                        After
-                      </h2>
-                      {(changeset.fromAppVersionResolver === "none" &&
-                        changeset.toAppVersionResolver === "none") || (
-                        <>
-                          <h2
-                            className={`mt-1 row-span-2 font-light text-3xl ${
-                              appVersionChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            }`}
-                          >
-                            {changeset.fromAppVersionResolver === "none"
-                              ? "None"
-                              : `${changeset.chartReleaseInfo?.chart} app @ ${changeset.fromAppVersionExact}`}
-                          </h2>
-                          <h2
-                            className={`mt-1 font-light text-3xl ${
-                              appVersionChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            }`}
-                          >
-                            {changeset.toAppVersionResolver === "none"
-                              ? "None"
-                              : `${changeset.chartReleaseInfo?.chart} app @ ${changeset.toAppVersionExact}`}
-                          </h2>
-                          <div>
-                            {appVersionChanged &&
-                              changeset.fromAppVersionCommit &&
-                              changeset.toAppVersionCommit && (
-                                <p>
-                                  {`From commit ${changeset.fromAppVersionCommit.substring(
-                                    0,
-                                    7
-                                  )} to ${changeset.toAppVersionCommit.substring(
-                                    0,
-                                    7
-                                  )}`}
-                                  {changeset.chartReleaseInfo?.chartInfo
-                                    ?.appImageGitRepo && (
-                                    <>
-                                      {" ("}
-                                      <a
-                                        href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/compare/${changeset.fromAppVersionCommit}...${changeset.toAppVersionCommit}`}
-                                        className="underline decoration-color-link-underline"
-                                        target="_blank"
-                                      >
-                                        git diff ↗
-                                      </a>
-                                      {")"}
-                                    </>
-                                  )}
-                                </p>
-                              )}
-                            {appVersionChanged && (
-                              <ul className="list-disc pl-5">
-                                {changeset.newAppVersions?.map(
-                                  (appVersion, index) => (
-                                    <li key={index}>
-                                      <span className="font-semibold">
-                                        {appVersion.appVersion}
-                                      </span>
-                                      {(appVersion.description ||
-                                        appVersion.gitCommit) && (
-                                        <>
-                                          {": "}
-                                          {appVersion.description ? (
-                                            <PrettyPrintDescription
-                                              description={
-                                                appVersion.description
-                                              }
-                                              repo={
-                                                changeset.chartReleaseInfo
-                                                  ?.chartInfo?.appImageGitRepo
-                                              }
-                                            />
-                                          ) : (
-                                            <a
-                                              href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/commit/${appVersion.gitCommit}`}
-                                              target="_blank"
-                                              className="underline decoration-color-link-underline"
-                                            >
-                                              {`${appVersion.gitCommit?.substring(
-                                                0,
-                                                7
-                                              )} ↗`}
-                                            </a>
-                                          )}
-                                        </>
-                                      )}
-                                    </li>
-                                  )
-                                )}
-                              </ul>
-                            )}
-                            {appVersionChanged &&
-                              changeset.newAppVersions?.at(0)
-                                ?.parentAppVersion !==
-                                changeset.fromAppVersionReference && (
-                                <p>
-                                  A full version tree wasn't built; this list of
-                                  changes might be incomplete.
-                                </p>
-                              )}
-                          </div>
-                          <p
-                            className={
-                              appVersionResolverChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            }
-                          >
-                            {`Specified `}
-                            {changeset.fromAppVersionResolver === "exact" &&
-                              `exact app version`}
-                            {changeset.fromAppVersionResolver === "follow" &&
-                              `another instance - ${changeset.fromAppVersionFollowChartRelease}`}
-                            {changeset.fromAppVersionResolver === "commit" &&
-                              `app commit — ${changeset.fromAppVersionCommit}`}
-                            {changeset.fromAppVersionResolver === "branch" &&
-                              `app branch — ${changeset.fromAppVersionBranch}`}
-                            {changeset.fromAppVersionResolver === "none" &&
-                              `no app`}
-                          </p>
-                          <p
-                            className={
-                              appVersionResolverChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            }
-                          >
-                            {`Specified `}
-                            {changeset.toAppVersionResolver === "exact" &&
-                              `exact app version`}
-                            {changeset.toAppVersionResolver === "follow" &&
-                              `another instance for app version - ${changeset.toAppVersionFollowChartRelease}`}
-                            {changeset.toAppVersionResolver === "commit" &&
-                              `app commit — ${changeset.toAppVersionCommit}`}
-                            {changeset.toAppVersionResolver === "branch" &&
-                              `app branch — ${changeset.toAppVersionBranch}`}
-                            {changeset.toAppVersionResolver === "none" &&
-                              `no app`}
-                          </p>
-                          {(!changeset.fromAppVersionReference ||
-                            !changeset.toAppVersionReference) && (
-                            <>
-                              <p
-                                className={
-                                  appVersionInSherlockChanged
-                                    ? "text-color-body-text"
-                                    : "text-color-body-text/40"
-                                }
-                              >{`This app version is ${
-                                changeset.fromAppVersionReference ? "" : " not"
-                              } tracked by DevOps`}</p>
-                              <p
-                                className={
-                                  appVersionInSherlockChanged
-                                    ? "text-color-body-text"
-                                    : "text-color-body-text/40"
-                                }
-                              >{`This app version is ${
-                                changeset.toAppVersionReference ? "" : " not"
-                              } tracked by DevOps`}</p>
-                            </>
-                          )}
-                        </>
-                      )}
-                      {changeset.chartReleaseInfo?.chartInfo
-                        ?.legacyConfigsEnabled && (
-                        <>
-                          <p
-                            className={`${
-                              firecloudDevelopRefChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            } border-b border-color-divider-line pb-2`}
-                          >{`Legacy configuration from firecloud-develop's ${changeset.fromFirecloudDevelopRef?.substring(
-                            0,
-                            7
-                          )}`}</p>
-                          <p
-                            className={`${
-                              firecloudDevelopRefChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            } border-b border-color-divider-line pb-2`}
-                          >
-                            {`Legacy configuration from firecloud-develop's ${changeset.toFirecloudDevelopRef?.substring(
-                              0,
-                              7
-                            )}`}
-                            {firecloudDevelopRefChanged && (
-                              <>
-                                {" ("}
-                                <a
-                                  href={`https://github.com/broadinstitute/firecloud-develop/compare/${changeset.fromFirecloudDevelopRef}...${changeset.toFirecloudDevelopRef}`}
-                                  target="_blank"
-                                  className="underline decoration-color-link-underline"
-                                >
-                                  git diff ↗
-                                </a>
-                                {")"}
-                              </>
-                            )}
-                          </p>
-                        </>
-                      )}
-                      <h2
-                        className={`mt-3 row-span-2 font-light text-3xl ${
-                          chartVersionChanged
-                            ? "text-color-body-text"
-                            : "text-color-body-text/40"
-                        }`}
-                      >
-                        {`${changeset.chartReleaseInfo?.chart} chart @ ${changeset.fromChartVersionExact}`}
-                      </h2>
-                      <h2
-                        className={`mt-3 font-light text-3xl ${
-                          chartVersionChanged
-                            ? "text-color-body-text"
-                            : "text-color-body-text/40"
-                        }`}
-                      >
-                        {`${changeset.chartReleaseInfo?.chart} chart @ ${changeset.toChartVersionExact}`}
-                      </h2>
-                      <div>
-                        {chartVersionChanged &&
-                          ((changeset.chartReleaseInfo?.chartInfo?.chartRepo ===
-                            "terra-helm" && (
-                            <p>
-                              {`From tag ${changeset.fromChartVersionExact} to ${changeset.toChartVersionExact} (`}
-                              <a
-                                href={`https://github.com/broadinstitute/terra-helmfile/compare/charts/${changeset.chartReleaseInfo.chart}-${changeset.fromChartVersionExact}...charts/${changeset.chartReleaseInfo.chart}-${changeset.toChartVersionExact}`}
-                                className="underline decoration-color-link-underline"
-                                target="_blank"
-                              >
-                                git diff ↗
-                              </a>
-                              {")"}
-                            </p>
-                          )) || (
-                            <p>
-                              This chart isn't directly managed by DevOps, so
-                              our ability to show changes is limited.
-                            </p>
-                          ))}
-                        {chartVersionChanged && (
-                          <ul className="list-disc pl-5">
-                            {changeset.newChartVersions?.map(
-                              (chartVersion, index) => (
-                                <li key={index}>
-                                  <span className="font-semibold">
-                                    {chartVersion.chartVersion}
-                                  </span>
-                                  {chartVersion.description && (
-                                    <>
-                                      {": "}
-                                      <PrettyPrintDescription
-                                        description={chartVersion.description}
-                                        repo={
-                                          changeset.chartReleaseInfo?.chartInfo
-                                            ?.chartRepo === "terra-helm"
-                                            ? "broadinstitute/terra-helmfile"
-                                            : undefined
-                                        }
-                                      />
-                                    </>
-                                  )}
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        )}
-                        {chartVersionChanged &&
-                          changeset.newChartVersions?.at(0)
-                            ?.parentChartVersion !==
-                            changeset.fromChartVersionReference && (
-                            <p>
-                              A full version tree wasn't built; this list of
-                              changes might be incomplete.
-                            </p>
-                          )}
-                      </div>
-                      <p
-                        className={
-                          chartVersionResolverChanged
-                            ? "text-color-body-text"
-                            : "text-color-body-text/40"
-                        }
-                      >
-                        {changeset.fromChartVersionResolver === "follow"
-                          ? `Specified another instance for chart version - ${changeset.fromChartVersionFollowChartRelease}`
-                          : `Specified ${changeset.fromChartVersionResolver} chart version`}
-                      </p>
-                      <p
-                        className={
-                          chartVersionResolverChanged
-                            ? "text-color-body-text"
-                            : "text-color-body-text/40"
-                        }
-                      >
-                        {changeset.toChartVersionResolver === "follow"
-                          ? `Specified another instance for chart version - ${changeset.toChartVersionFollowChartRelease}`
-                          : `Specified ${changeset.toChartVersionResolver} chart version`}
-                      </p>
-                      {(!changeset.fromChartVersionReference ||
-                        !changeset.toChartVersionReference) && (
-                        <>
-                          <p
-                            className={
-                              chartVersionInSherlockChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            }
-                          >{`This chart version is ${
-                            changeset.fromChartVersionReference ? "" : " not"
-                          } tracked by DevOps`}</p>
-                          <p
-                            className={
-                              chartVersionInSherlockChanged
-                                ? "text-color-body-text"
-                                : "text-color-body-text/40"
-                            }
-                          >{`This chart version is ${
-                            changeset.toChartVersionReference ? "" : " not"
-                          } tracked by DevOps`}</p>
-                        </>
-                      )}
-                      <p
-                        className={`${
-                          helmfileRefChanged
-                            ? "text-color-body-text"
-                            : "text-color-body-text/40"
-                        } border-b border-color-divider-line pb-2`}
-                      >{`Configuration from terra-helmfile's ${changeset.fromHelmfileRef?.substring(
-                        0,
-                        7
-                      )}`}</p>
-                      <p
-                        className={`${
-                          helmfileRefChanged
-                            ? "text-color-body-text"
-                            : "text-color-body-text/40"
-                        } border-b border-color-divider-line pb-2`}
-                      >
-                        {`Configuration from terra-helmfile's ${changeset.toHelmfileRef?.substring(
-                          0,
-                          7
-                        )}`}
-                        {helmfileRefChanged && (
-                          <>
-                            {" ("}
-                            <a
-                              href={`https://github.com/broadinstitute/terra-helmfile/compare/${changeset.fromHelmfileRef}...${changeset.toHelmfileRef}`}
-                              target="_blank"
-                              className="underline decoration-color-link-underline"
-                            >
-                              git diff ↗
-                            </a>
-                            {")"}
-                          </>
-                        )}
-                      </p>
-                    </div>
-                    {(changeset.supersededAt || changeset.appliedAt) && (
-                      <div className="flex flex-col items-center pt-4">
-                        {changeset.supersededAt && (
-                          <h1 className="text-2xl font-light">
-                            This proposed change is out of date as of{" "}
-                            <PrettyPrintTime time={changeset.supersededAt} />
-                          </h1>
-                        )}
-                        {changeset.appliedAt && (
-                          <h1 className="text-2xl font-light">
-                            This change was already applied at{" "}
-                            <PrettyPrintTime time={changeset.appliedAt} />
-                          </h1>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              }}
+              {(changeset, index) => (
+                <ChangesetEntry
+                  changeset={changeset}
+                  key={index}
+                  includedCheckboxValue={
+                    changesets.length > 1
+                      ? includedChangesets.get(
+                          changeset.chartRelease as string
+                        ) || false
+                      : undefined
+                  }
+                  setIncludedCheckboxValue={(value: boolean) =>
+                    setIncludedChangesets(
+                      (previous) =>
+                        new Map([
+                          ...previous,
+                          [changeset.chartRelease as string, value],
+                        ])
+                    )
+                  }
+                />
+              )}
             </MemoryFilteredList>
           </InteractiveList>
         </DoubleInsetPanel>

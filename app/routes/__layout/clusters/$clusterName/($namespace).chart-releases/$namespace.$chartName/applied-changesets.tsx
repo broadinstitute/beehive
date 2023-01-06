@@ -1,0 +1,124 @@
+import { LoaderFunction, MetaFunction, SerializeFrom } from "@remix-run/node";
+import {
+  NavLink,
+  Params,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
+import {
+  ChangesetsApi,
+  V2controllersChangeset,
+  V2controllersChartRelease,
+} from "@sherlock-js-client/sherlock";
+import { useMemo, useState } from "react";
+import { catchBoundary } from "~/components/boundaries/catch-boundary";
+import { errorBoundary } from "~/components/boundaries/error-boundary";
+import { ChangesetEntry } from "~/components/content/changeset/changeset-entry";
+import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
+import { ListControls } from "~/components/interactivity/list-controls";
+import { DoubleInsetPanel } from "~/components/layout/inset-panel";
+import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
+import { InteractiveList } from "~/components/panel-structures/interactive-list";
+import { Leaf } from "~/components/route-tree/leaf";
+import {
+  errorResponseThrower,
+  SherlockConfiguration,
+} from "~/helpers/sherlock.server";
+
+export const handle = {
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink
+      to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}/applied-changesets`}
+    >
+      Version History
+    </NavLink>
+  ),
+};
+
+export const meta: MetaFunction = ({ params }) => ({
+  title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Instance - Version History`,
+});
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const url = new URL(request.url);
+  const offset = url.searchParams.get("offset");
+  const limit = url.searchParams.get("limit");
+  return Promise.all([
+    new ChangesetsApi(SherlockConfiguration)
+      .apiV2ProceduresChangesetsQueryAppliedForChartReleaseSelectorGet({
+        selector: `${params.environmentName}/${params.chartName}`,
+        offset: offset ? parseInt(offset) : undefined,
+        limit: limit ? parseInt(limit) : undefined,
+      })
+      .catch(errorResponseThrower),
+    offset,
+    limit,
+  ]);
+};
+
+export const CatchBoundary = catchBoundary;
+export const ErrorBoundary = errorBoundary;
+
+const AppliedChangesetsRoute: React.FunctionComponent = () => {
+  const [changesets] =
+    useLoaderData<
+      [Array<V2controllersChangeset>, string | null, string | null]
+    >();
+  const { chartRelease } = useOutletContext<{
+    chartRelease: SerializeFrom<V2controllersChartRelease>;
+  }>();
+  // Our existing chart release has more deeply-nested data than what the API just
+  // gave us, and it was repetitive anyway, so we just slot ours in.
+  const assembledChangesets = useMemo(() => {
+    changesets.forEach((changeset) => {
+      changeset.chartReleaseInfo = chartRelease;
+    });
+    return changesets;
+  }, [changesets, chartRelease]);
+
+  const [filterText, setFilterText] = useState("");
+
+  return (
+    <Leaf>
+      <DoubleInsetPanel>
+        <InteractiveList
+          title="Version History"
+          doubleWidth
+          {...ChartReleaseColors}
+        >
+          <ListControls
+            filterText={filterText}
+            setFilterText={setFilterText}
+            doubleWidth
+            {...ChartReleaseColors}
+          />
+          <MemoryFilteredList
+            filterText={filterText}
+            entries={assembledChangesets}
+            filter={(changeset, filterText) =>
+              changeset.chartReleaseInfo?.appVersionExact?.includes(
+                filterText
+              ) ||
+              changeset.toAppVersionResolver?.includes(filterText) ||
+              changeset.chartReleaseInfo?.chartVersionExact?.includes(
+                filterText
+              ) ||
+              changeset.toChartVersionResolver?.includes(filterText)
+            }
+          >
+            {(changeset, index) => (
+              <ChangesetEntry
+                changeset={changeset}
+                key={index}
+                disableTitle={true}
+                fadeIfUnappliable={false}
+              />
+            )}
+          </MemoryFilteredList>
+        </InteractiveList>
+      </DoubleInsetPanel>
+    </Leaf>
+  );
+};
+
+export default AppliedChangesetsRoute;
