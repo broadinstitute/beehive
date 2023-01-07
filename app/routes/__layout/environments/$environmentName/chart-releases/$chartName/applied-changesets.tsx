@@ -48,7 +48,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       .apiV2ProceduresChangesetsQueryAppliedForChartReleaseSelectorGet({
         selector: `${params.environmentName}/${params.chartName}`,
         offset: offset ? parseInt(offset) : undefined,
-        limit: limit ? parseInt(limit) : undefined,
+        limit: limit ? parseInt(limit) : 25,
       })
       .catch(errorResponseThrower),
     offset,

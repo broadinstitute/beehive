@@ -1,4 +1,5 @@
 import { SerializeFrom } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import { V2controllersChangeset } from "@sherlock-js-client/sherlock";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
@@ -189,9 +190,13 @@ export const ChangesetEntry: React.FunctionComponent<{
                 <ul className="list-disc pl-5">
                   {changeset.newAppVersions?.map((appVersion, index) => (
                     <li key={index}>
-                      <span className="font-semibold">
+                      <Link
+                        to={`/charts/${changeset.chartReleaseInfo?.chart}/app-versions/${appVersion.appVersion}`}
+                        target="_blank"
+                        className="underline decoration-color-link-underline font-semibold"
+                      >
                         {appVersion.appVersion}
-                      </span>
+                      </Link>
                       {(appVersion.description || appVersion.gitCommit) && (
                         <>
                           {": "}
@@ -272,18 +277,38 @@ export const ChangesetEntry: React.FunctionComponent<{
                       ? "text-color-body-text"
                       : "text-color-body-text/40"
                   }
-                >{`This app version is ${
-                  changeset.fromAppVersionReference ? "" : " not"
-                } tracked by DevOps`}</p>
+                >
+                  {changeset.fromAppVersionReference ? (
+                    <Link
+                      to={`/charts/${changeset.chartReleaseInfo?.chart}/app-versions/${changeset.fromAppVersionExact}`}
+                      target="_blank"
+                      className="underline decoration-color-link-underline"
+                    >
+                      This app version is tracked by DevOps ↗
+                    </Link>
+                  ) : (
+                    "This app version is not tracked by DevOps"
+                  )}
+                </p>
                 <p
                   className={
                     appVersionInSherlockChanged
                       ? "text-color-body-text"
                       : "text-color-body-text/40"
                   }
-                >{`This app version is ${
-                  changeset.toAppVersionReference ? "" : " not"
-                } tracked by DevOps`}</p>
+                >
+                  {changeset.toAppVersionReference ? (
+                    <Link
+                      to={`/charts/${changeset.chartReleaseInfo?.chart}/app-versions/${changeset.toAppVersionExact}`}
+                      target="_blank"
+                      className="underline decoration-color-link-underline"
+                    >
+                      This app version is tracked by DevOps ↗
+                    </Link>
+                  ) : (
+                    "This app version is not tracked by DevOps"
+                  )}
+                </p>
               </>
             )}
           </>
@@ -370,9 +395,13 @@ export const ChangesetEntry: React.FunctionComponent<{
             <ul className="list-disc pl-5">
               {changeset.newChartVersions?.map((chartVersion, index) => (
                 <li key={index}>
-                  <span className="font-semibold">
+                  <Link
+                    to={`/charts/${changeset.chartReleaseInfo?.chart}/chart-versions/${chartVersion.chartVersion}`}
+                    target="_blank"
+                    className="underline decoration-color-link-underline font-semibold"
+                  >
                     {chartVersion.chartVersion}
-                  </span>
+                  </Link>
                   {chartVersion.description && (
                     <>
                       {": "}
