@@ -78,6 +78,18 @@ export const ChartReleaseDetails: React.FunctionComponent<
       helmfileRef={chartRelease.helmfileRef}
       renderChartVersionLink={chartRelease.chartVersionReference != null}
     />
+    {chartRelease.cluster &&
+      chartRelease.environmentInfo?.lifecycle !== "template" && (
+        <div className="flex flex-col space-y-4">
+          <a
+            href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications/ap-argocd/${chartRelease.name}`}
+            target="_blank"
+            className="underline decoration-color-link-underline w-fit"
+          >
+            View in Argo CD ↗
+          </a>
+        </div>
+      )}
     {(toEdit || toDelete || toChangeVersions) && (
       <MutateControls
         name={chartRelease.name || ""}
