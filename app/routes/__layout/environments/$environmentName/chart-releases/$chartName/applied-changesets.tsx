@@ -22,6 +22,7 @@ import { InteractiveList } from "~/components/panel-structures/interactive-list"
 import { Leaf } from "~/components/route-tree/leaf";
 import {
   errorResponseThrower,
+  forwardIAP,
   SherlockConfiguration,
 } from "~/helpers/sherlock.server";
 
@@ -47,11 +48,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const limit = limitString ? parseInt(limitString) : 25;
   return Promise.all([
     new ChangesetsApi(SherlockConfiguration)
-      .apiV2ProceduresChangesetsQueryAppliedForChartReleaseSelectorGet({
-        selector: `${params.environmentName}/${params.chartName}`,
-        offset: offset,
-        limit: limit,
-      })
+      .apiV2ProceduresChangesetsQueryAppliedForChartReleaseSelectorGet(
+        {
+          selector: `${params.environmentName}/${params.chartName}`,
+          offset: offset,
+          limit: limit,
+        },
+        forwardIAP(request)
+      )
       .catch(errorResponseThrower),
     offset,
     limit,
