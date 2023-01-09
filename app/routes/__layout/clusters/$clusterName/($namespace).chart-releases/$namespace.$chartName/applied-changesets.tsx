@@ -15,7 +15,7 @@ import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChangesetEntry } from "~/components/content/changeset/changeset-entry";
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
-import { ListControls } from "~/components/interactivity/list-controls";
+import { ListPaginationControls } from "~/components/interactivity/list-pagination-controls";
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
@@ -41,14 +41,16 @@ export const meta: MetaFunction = ({ params }) => ({
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
-  const offset = url.searchParams.get("offset");
-  const limit = url.searchParams.get("limit");
+  const offsetString = url.searchParams.get("offset");
+  const offset = offsetString ? parseInt(offsetString) : 0;
+  const limitString = url.searchParams.get("limit");
+  const limit = limitString ? parseInt(limitString) : 25;
   return Promise.all([
     new ChangesetsApi(SherlockConfiguration)
       .apiV2ProceduresChangesetsQueryAppliedForChartReleaseSelectorGet({
-        selector: `${params.environmentName}/${params.chartName}`,
-        offset: offset ? parseInt(offset) : undefined,
-        limit: limit ? parseInt(limit) : 25,
+        selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
+        offset: offset,
+        limit: limit,
       })
       .catch(errorResponseThrower),
     offset,
@@ -60,10 +62,8 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const AppliedChangesetsRoute: React.FunctionComponent = () => {
-  const [changesets] =
-    useLoaderData<
-      [Array<V2controllersChangeset>, string | null, string | null]
-    >();
+  const [changesets, offset, limit] =
+    useLoaderData<[Array<V2controllersChangeset>, number, number]>();
   const { chartRelease } = useOutletContext<{
     chartRelease: SerializeFrom<V2controllersChartRelease>;
   }>();
@@ -86,9 +86,12 @@ const AppliedChangesetsRoute: React.FunctionComponent = () => {
           doubleWidth
           {...ChartReleaseColors}
         >
-          <ListControls
+          <ListPaginationControls
             filterText={filterText}
             setFilterText={setFilterText}
+            offset={offset}
+            limit={limit}
+            currentCount={changesets.length}
             doubleWidth
             {...ChartReleaseColors}
           />
@@ -112,9 +115,21 @@ const AppliedChangesetsRoute: React.FunctionComponent = () => {
                 key={index}
                 disableTitle={true}
                 fadeIfUnappliable={false}
+                startMinimized={true}
               />
             )}
           </MemoryFilteredList>
+          {changesets.length > 3 && (
+            <ListPaginationControls
+              filterText={filterText}
+              setFilterText={setFilterText}
+              offset={offset}
+              limit={limit}
+              currentCount={changesets.length}
+              doubleWidth
+              {...ChartReleaseColors}
+            />
+          )}
         </InteractiveList>
       </DoubleInsetPanel>
     </Leaf>
