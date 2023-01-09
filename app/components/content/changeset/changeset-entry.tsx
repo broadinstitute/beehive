@@ -132,7 +132,7 @@ export const ChangesetEntry: React.FunctionComponent<{
         }`}
       >
         <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
-          Before
+          {appliable ? "Current" : "Before"}
         </h2>
         <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
           After
