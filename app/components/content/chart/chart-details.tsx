@@ -106,6 +106,15 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         <h2>View Instances of This Chart</h2>
       </NavButton>
     )}
+    {chart.appImageGitRepo && (
+      <a
+        href={`https://grafana.dsp-devops.broadinstitute.org/d/oyhJF6t4k/v2-accelerate-metrics-per-app?&var-chart=${chart.name}`}
+        target="_blank"
+        className="underline decoration-color-link-underline w-fit"
+      >
+        View Accelerate Metrics in Grafana ↗
+      </a>
+    )}
     {(toEdit || toDelete) && (
       <MutateControls
         name={chart.name || ""}
