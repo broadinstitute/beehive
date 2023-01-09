@@ -31,6 +31,7 @@ export interface MutateControlsProps {
   toChangeVersions?: string;
   toChangeVersionsText?: string;
   changeVersionText?: string;
+  toVersionHistory?: string;
   toEdit?: string;
   toDelete?: string;
 }
@@ -41,19 +42,29 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   toChangeVersions,
   toChangeVersionsText = "Change Versions",
   changeVersionText,
+  toVersionHistory,
   toEdit,
   toDelete,
 }) => (
   <div className="flex flex-col space-y-12">
-    {toChangeVersions && (
+    {(toChangeVersions || toVersionHistory) && (
       <div className="flex flex-col space-y-4">
         <h2 className="text-2xl font-light text-color-header-text">
           On-Demand Deployment
         </h2>
-        <NavButton to={toChangeVersions} {...colors}>
-          {toChangeVersionsText}
-        </NavButton>
-        {changeVersionText && <p>{changeVersionText}</p>}
+        {toChangeVersions && (
+          <>
+            <NavButton to={toChangeVersions} {...colors}>
+              {toChangeVersionsText}
+            </NavButton>
+            {changeVersionText && <p>{changeVersionText}</p>}
+          </>
+        )}
+        {toVersionHistory && (
+          <NavButton to={toVersionHistory} {...colors}>
+            Version History
+          </NavButton>
+        )}
       </div>
     )}
     {(toEdit || toDelete) && (

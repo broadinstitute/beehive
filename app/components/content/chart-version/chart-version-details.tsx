@@ -5,6 +5,7 @@ import { PrettyPrintDescription } from "~/components/logic/pretty-print-descript
 import { MutateControls } from "../helpers";
 import { ChartVersionColors } from "./chart-version-colors";
 import { SerializeFrom } from "@remix-run/node";
+import { ChartLinkChip } from "../chart/chart-link-chip";
 
 export interface ChartVersionDetailsProps {
   chartVersion:
@@ -17,6 +18,9 @@ export const ChartVersionDetails: React.FunctionComponent<
   ChartVersionDetailsProps
 > = ({ chartVersion, toEdit }) => (
   <div className="flex flex-col space-y-10">
+    <div className="flex flex-row gap-3 flex-wrap">
+      {chartVersion.chart && <ChartLinkChip chart={chartVersion.chart} />}
+    </div>
     <p>
       Description:{" "}
       {chartVersion.description ? (

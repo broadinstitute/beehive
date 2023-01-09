@@ -177,7 +177,7 @@ export const AppVersionSummary: React.FunctionComponent<
           to={`/charts/${chartName}/app-versions/${appVersionExact}`}
           {...AppVersionColors}
         >
-          <h2 className="font-medium">Jump to This App Version</h2>
+          <h2 className="font-medium">View Details of This App Version</h2>
         </NavButton>
       )}
     </div>

@@ -1,31 +1,41 @@
-export const ChartReleaseChangeVersionHelpCopy: React.FunctionComponent =
-  () => (
-    <>
-      <p>
-        This screen lets you change the versions of a specific chart instance.
-      </p>
-      <p>
-        When you click the button at the bottom, changes won't be applied
-        immediately—you'll be taken to a screen where you'll review the changes
-        before confirming.
-      </p>
-      <br />
-      <br />
-      <p>
-        You might see some references to "refreshing" or "calculating" versions
-        on this screen. That's what we call the process where our tooling looks
-        at all the versions we know about and figures out what to use.
-      </p>
-      <p>
-        If you specify an exact version, then our tooling doesn't need to work
-        very hard—it just uses that exact version and moves on.
-      </p>
-      <p>
-        If you specify an app branch, or the latest chart, then it has to work a
-        bit harder. Each time you calculate verions by clicking the button at
-        the bottom—<i>even if you didn't change anything on this page</i>—our
-        systems will go looking for the most recent match. It saves the answer
-        and will hold on to it until you come back and refresh things again.
-      </p>
-    </>
-  );
+export const ChartReleaseChangeVersionHelpCopy: React.FunctionComponent<{
+  chartInstanceName?: string;
+}> = ({ chartInstanceName = "sam-dev" }) => (
+  <>
+    <p>
+      Every instance of a chart has two versions: the app version (your code
+      itself) and the chart version (the Kubernetes config, which doesn't change
+      as often).
+    </p>
+    <br />
+    <p>
+      Beehive doesn't just remember those two versions—it remembers what you
+      specified and what the result was. This makes more sense with an example:
+    </p>
+    <p>
+      Suppose you set {chartInstanceName}'s app version to v1.2.3. Beehive will
+      remember that you set it to exactly v1.2.3, and it'll remember that the
+      result was v1.2.3.
+    </p>
+    <p>
+      Or, you could set {chartInstanceName}'s app version to the the git repo's{" "}
+      main branch. Beehive will remember that you specified the main branch, and
+      when it saves, it'll figure out what the latest actual app version was
+      from that branch and store that as the result.{" "}
+    </p>
+    <p>
+      Other advanced ways to specify versions work the same way: the result is
+      calculated once and stored.
+    </p>
+    <br />
+    <p>
+      In Beehive, you can control what's specified, and when our other tools
+      like ArgoCD look at the version, they only see the resulting actual app
+      version.
+    </p>
+    <p>
+      That result won't ever change without you knowing, because Beehive only
+      refreshes it on-demand, and you'll always be shown a preview first.
+    </p>
+  </>
+);

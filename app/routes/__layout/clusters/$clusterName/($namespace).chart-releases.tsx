@@ -30,20 +30,31 @@ import {
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/clusters/${params.clusterName}/chart-releases`}>
-      Charts
+    <NavLink
+      to={`/clusters/${params.clusterName}${
+        params.namespace ? `/${params.namespace}` : ""
+      }/chart-releases`}
+    >
+      {params.namespace ? `${params.namespace}` : "Charts"}
     </NavLink>
   ),
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.clusterName} - Cluster - Chart Instances`,
+  title: `${
+    params.namespace
+      ? `${params.clusterName}/${params.namespace} - Namespace`
+      : `${params.clusterName} - Cluster`
+  } - Chart Instances`,
 });
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
-      { cluster: params.clusterName || "" },
+      {
+        cluster: params.clusterName || "",
+        namespace: params.namespace || undefined,
+      },
       forwardIAP(request)
     )
     .then(
@@ -58,6 +69,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           )
         ),
       errorResponseThrower
+    )
+    .then((chartReleases) =>
+      chartReleases.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0)
     );
 };
 
@@ -73,7 +87,11 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
     <Branch>
       <InsetPanel>
         <InteractiveList
-          title={`Charts in ${params.clusterName}`}
+          title={`Charts in ${
+            params.namespace
+              ? `${params.namespace} Namespace`
+              : params.clusterName
+          }`}
           {...ChartReleaseColors}
         >
           <ListControls
