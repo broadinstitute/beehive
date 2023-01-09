@@ -350,20 +350,34 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
             />
             <div className="mt-4 pl-6 border-l-2 border-color-divider-line flex flex-col">
               {actionToRun === "sync" && (
-                <p>
-                  When applying, a GitHub Action will be kicked off to{" "}
-                  <b className="font-semibold">refresh and sync</b> ArgoCD. This
-                  will deploy the applied versions immediately.
-                </p>
+                <>
+                  <p className="pb-2">
+                    When applying, a GitHub Action will be kicked off to{" "}
+                    <b className="font-semibold">refresh and sync</b> ArgoCD.
+                    This will deploy the applied versions immediately.
+                  </p>
+                  <p>
+                    Note that refreshing ArgoCD just makes it notice the
+                    versions you're applying here, it won't recalculate
+                    anything.
+                  </p>
+                </>
               )}
               {actionToRun === "refresh" && (
-                <p>
-                  When applying, a GitHub Action will be kicked off to{" "}
-                  <b className="font-semibold">just refresh</b> ArgoCD. This
-                  will not deployed the applied versions immediately, but it
-                  will make ArgoCD say that the app is "out of sync." ArgoCD's
-                  manual sync button would then deploy the new versions.
-                </p>
+                <>
+                  <p className="pb-2">
+                    When applying, a GitHub Action will be kicked off to{" "}
+                    <b className="font-semibold">just refresh</b> ArgoCD. This
+                    will not deployed the applied versions immediately, but it
+                    will make ArgoCD say that the app is "out of sync." ArgoCD's
+                    manual sync button would then deploy the new versions.
+                  </p>
+                  <p>
+                    Note that refreshing ArgoCD just makes it notice the
+                    versions you're applying here, it won't recalculate
+                    anything.
+                  </p>
+                </>
               )}
               {actionToRun === "none" && (
                 <p>
@@ -436,6 +450,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
                         ])
                     )
                   }
+                  startMinimized={changesets.length > 1}
                 />
               )}
             </MemoryFilteredList>
