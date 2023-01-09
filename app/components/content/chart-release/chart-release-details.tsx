@@ -2,6 +2,12 @@ import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
 import { AppVersionSummary } from "../app-version/app-version-summary";
 import { ChartVersionSummary } from "../chart-version/chart-version-summary";
+import { ChartLinkChip } from "../chart/chart-link-chip";
+import {
+  ClusterLinkChip,
+  NamespaceLinkChip,
+} from "../cluster/cluster-link-chip";
+import { EnvironmentLinkChip } from "../environment/environment-link-chip";
 import { MutateControls } from "../helpers";
 import { ChartReleaseColors } from "./chart-release-colors";
 
@@ -25,6 +31,23 @@ export const ChartReleaseDetails: React.FunctionComponent<
   toDelete,
 }) => (
   <div className="flex flex-col space-y-10">
+    <div className="flex flex-row gap-3 flex-wrap">
+      {chartRelease.chart && <ChartLinkChip chart={chartRelease.chart} />}
+      {chartRelease.environment && (
+        <EnvironmentLinkChip environment={chartRelease.environment} />
+      )}
+      {chartRelease.cluster && (
+        <>
+          <ClusterLinkChip cluster={chartRelease.cluster} />
+          {chartRelease.namespace && (
+            <NamespaceLinkChip
+              cluster={chartRelease.cluster}
+              namespace={chartRelease.namespace}
+            />
+          )}
+        </>
+      )}
+    </div>
     {chartRelease.appVersionResolver &&
       chartRelease.appVersionResolver != "none" && (
         <AppVersionSummary

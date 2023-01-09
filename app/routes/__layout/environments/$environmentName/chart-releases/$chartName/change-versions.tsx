@@ -478,7 +478,9 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
   } else {
     sidebar = (
       <FillerText>
-        <ChartReleaseChangeVersionHelpCopy />
+        <ChartReleaseChangeVersionHelpCopy
+          chartInstanceName={chartRelease.name}
+        />
       </FillerText>
     );
   }
@@ -500,7 +502,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                 This is a shortcut to copy the current exact versions from
                 another instance of {chartRelease.chart}. It won't start
                 following the other instance's versions or copy other
-                configuration—it is a one-time copy of the current state.
+                configuration—it is a one-time copy of the current versions.
               </p>
               {preconfiguredOtherEnvironment && (
                 <p className="mt-2 font-medium">

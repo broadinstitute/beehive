@@ -3,19 +3,10 @@ import { EnvironmentColors } from "./environment-colors";
 
 export const EnvironmentLinkChip: React.FunctionComponent<{
   environment: string;
-}> = ({ environment }) => (
+  justTemplate?: boolean;
+}> = ({ environment, justTemplate = false }) => (
   <LinkChip
-    text={`Environment: ${environment}`}
-    to={`/environments/${environment}`}
-    {...EnvironmentColors}
-  />
-);
-
-export const TemplateEnvironmentLinkChip: React.FunctionComponent<{
-  environment: string;
-}> = ({ environment }) => (
-  <LinkChip
-    text={`Template: ${environment}`}
+    text={`${justTemplate ? "Template" : "Environment"}: ${environment}`}
     to={`/environments/${environment}`}
     {...EnvironmentColors}
   />

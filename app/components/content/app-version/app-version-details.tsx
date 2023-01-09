@@ -5,6 +5,7 @@ import { PrettyPrintDescription } from "~/components/logic/pretty-print-descript
 import { MutateControls } from "../helpers";
 import { AppVersionColors } from "./app-version-colors";
 import { SerializeFrom } from "@remix-run/node";
+import { ChartLinkChip } from "../chart/chart-link-chip";
 
 export interface AppVersionDetailsProps {
   appVersion: V2controllersAppVersion | SerializeFrom<V2controllersAppVersion>;
@@ -15,6 +16,9 @@ export const AppVersionDetails: React.FunctionComponent<
   AppVersionDetailsProps
 > = ({ appVersion, toEdit }) => (
   <div className="flex flex-col space-y-10">
+    <div className="flex flex-row gap-3 flex-wrap">
+      {appVersion.chart && <ChartLinkChip chart={appVersion.chart} />}
+    </div>
     {appVersion.gitCommit && appVersion.gitBranch && (
       <p>
         This App Version was built from commit{" "}

@@ -3,9 +3,10 @@ import { ClusterColors } from "./cluster-colors";
 
 export const ClusterLinkChip: React.FunctionComponent<{
   cluster: string;
-}> = ({ cluster }) => (
+  justDefault?: boolean;
+}> = ({ cluster, justDefault = false }) => (
   <LinkChip
-    text={`Cluster: ${cluster}`}
+    text={`${justDefault ? "Default " : ""}Cluster: ${cluster}`}
     to={`/clusters/${cluster}`}
     {...ClusterColors}
   />

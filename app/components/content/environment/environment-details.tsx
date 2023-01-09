@@ -3,9 +3,13 @@ import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { ChartReleaseColors } from "../chart-release/chart-release-colors";
-import { ClusterColors } from "../cluster/cluster-colors";
+import {
+  ClusterLinkChip,
+  NamespaceLinkChip,
+} from "../cluster/cluster-link-chip";
 import { MutateControls, ProdWarning } from "../helpers";
 import { EnvironmentColors } from "./environment-colors";
+import { EnvironmentLinkChip } from "./environment-link-chip";
 
 export interface EnvironmentDetailsProps {
   environment:
@@ -21,35 +25,34 @@ export const EnvironmentDetails: React.FunctionComponent<
   EnvironmentDetailsProps
 > = ({ environment, toChartReleases, toChangeVersions, toEdit, toDelete }) => (
   <div className="flex flex-col space-y-10">
-    {(environment.name === "prod" ||
-      toChartReleases ||
-      environment.templateEnvironment ||
-      environment.defaultCluster) && (
-      <div className="flex flex-col space-y-4">
-        {environment.name === "prod" && <ProdWarning name={environment.name} />}
-        {toChartReleases && (
-          <NavButton to={toChartReleases} {...ChartReleaseColors}>
-            <h2>View Charts in This Environment</h2>
-          </NavButton>
-        )}
+    <div className="flex flex-col space-y-4">
+      <div className="flex flex-row gap-3 flex-wrap pb-2">
         {environment.templateEnvironment && (
-          <NavButton
-            to={`../${environment.templateEnvironment}`}
-            {...EnvironmentColors}
-          >
-            <h2>Jump to Template</h2>
-          </NavButton>
+          <EnvironmentLinkChip
+            environment={environment.templateEnvironment}
+            justTemplate
+          />
         )}
         {environment.defaultCluster && (
-          <NavButton
-            to={`/clusters/${environment.defaultCluster}`}
-            {...ClusterColors}
-          >
-            <h2>Jump to Default Cluster</h2>
-          </NavButton>
+          <>
+            <ClusterLinkChip cluster={environment.defaultCluster} justDefault />
+            {environment.defaultNamespace &&
+              environment.lifecycle != "template" && (
+                <NamespaceLinkChip
+                  cluster={environment.defaultCluster}
+                  namespace={environment.defaultNamespace}
+                />
+              )}
+          </>
         )}
       </div>
-    )}
+      {environment.name === "prod" && <ProdWarning name={environment.name} />}
+      {toChartReleases && (
+        <NavButton to={toChartReleases} {...ChartReleaseColors}>
+          <h2>View Charts in This Environment</h2>
+        </NavButton>
+      )}
+    </div>
     {environment.description && (
       <h3 className="text-2xl text-color-header-text">
         <PrettyPrintDescription description={environment.description} />

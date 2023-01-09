@@ -84,7 +84,7 @@ export const ChartVersionSummary: React.FunctionComponent<
           to={`/charts/${chartName}/chart-versions/${chartVersionExact}`}
           {...ChartVersionColors}
         >
-          <h2 className="font-medium">Jump to This Chart Version</h2>
+          <h2 className="font-medium">View Details of This Chart Version</h2>
         </NavButton>
       )}
     </div>
