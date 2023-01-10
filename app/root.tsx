@@ -12,6 +12,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  ShouldRevalidateFunction,
   useLoaderData,
   useTransition,
 } from "@remix-run/react";
@@ -166,7 +167,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   );
 };
 
-export const unstable_shouldReload = () => false;
+export const shouldRevalidate: ShouldRevalidateFunction = () => false;
 
 export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
