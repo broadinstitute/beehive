@@ -78,6 +78,15 @@ export const EnvironmentDetails: React.FunctionComponent<
               View in Google Cloud Platform ↗
             </a>
           )}
+        {environment.lifecycle === "static" && (
+          <a
+            href={`https://grafana.dsp-devops.broadinstitute.org/d/Uh_BPk2Vz/v2-accelerate-metrics-per-environment?var-environment=${environment.name}`}
+            target="_blank"
+            className="underline decoration-color-link-underline w-fit"
+          >
+            View Accelerate Metrics in Grafana ↗
+          </a>
+        )}
       </div>
     )}
     {(toEdit || toDelete || toChangeVersions) && (
