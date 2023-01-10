@@ -23,11 +23,8 @@ export default function handleRequest(
           let body = new PassThrough();
 
           const nonce: string | undefined =
-            remixContext.appState.catchBoundaryRouteId === "root" &&
-            remixContext.appState.error
-              ? // Root boundaries wouldn't have route data loaded
-                undefined
-              : remixContext.routeData.root?.cspScriptNonce;
+            remixContext.staticHandlerContext.loaderData["root"]
+              ?.cspScriptNonce;
           responseHeaders.set(
             "Content-Security-Policy",
             getContentSecurityPolicy(nonce)
