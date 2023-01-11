@@ -116,7 +116,7 @@ export const action: ActionFunction = async ({ request }) => {
               .filter((value): value is string => typeof value === "string")
               .join(","),
             "refresh-only": (
-              formData.get("action") === "refresh-only"
+              formData.get("action") === "refresh"
             ).toString(),
           },
         };
