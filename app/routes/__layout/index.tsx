@@ -37,8 +37,7 @@ const IndexRoute: React.FunctionComponent = () => (
         Welcome to Beehive
       </h1>
       <span className="text-lg">
-        <b className="font-semibold">New!</b> Browse version histories in
-        Beehive
+        <b className="font-semibold">New!</b> View ArgoCD statuses in Beehive
       </span>
     </div>
     <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">

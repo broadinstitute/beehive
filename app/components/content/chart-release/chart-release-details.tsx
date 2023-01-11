@@ -10,6 +10,7 @@ import {
 import { EnvironmentLinkChip } from "../environment/environment-link-chip";
 import { MutateControls } from "../helpers";
 import { ChartReleaseColors } from "./chart-release-colors";
+import { ArgoLinkChip } from "./chart-release-link-chip";
 
 export interface ChartReleaseDetailsProps {
   chartRelease:
@@ -47,6 +48,11 @@ export const ChartReleaseDetails: React.FunctionComponent<
           )}
         </>
       )}
+      {chartRelease.name &&
+        chartRelease.environmentInfo &&
+        chartRelease.environmentInfo.lifecycle !== "template" && (
+          <ArgoLinkChip chartReleaseName={chartRelease.name} />
+        )}
     </div>
     {chartRelease.appVersionResolver &&
       chartRelease.appVersionResolver != "none" && (
