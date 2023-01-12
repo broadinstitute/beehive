@@ -32,18 +32,18 @@ export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink
       to={`/clusters/${params.clusterName}${
-        params.namespace ? `/${params.namespace}` : ""
+        params.filterNamespace ? `/${params.filterNamespace}` : ""
       }/chart-releases`}
     >
-      {params.namespace ? `${params.namespace}` : "Charts"}
+      {params.filterNamespace ? `${params.filterNamespace}` : "Charts"}
     </NavLink>
   ),
 };
 
 export const meta: MetaFunction = ({ params }) => ({
   title: `${
-    params.namespace
-      ? `${params.clusterName}/${params.namespace} - Namespace`
+    params.filterNamespace
+      ? `${params.clusterName}/${params.filterNamespace} - Namespace`
       : `${params.clusterName} - Cluster`
   } - Chart Instances`,
 });
@@ -53,7 +53,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     .apiV2ChartReleasesGet(
       {
         cluster: params.clusterName || "",
-        namespace: params.namespace || undefined,
+        namespace: params.filterNamespace || undefined,
       },
       forwardIAP(request)
     )
@@ -88,8 +88,8 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
       <InsetPanel>
         <InteractiveList
           title={`Charts in ${
-            params.namespace
-              ? `${params.namespace} Namespace`
+            params.filterNamespace
+              ? `${params.filterNamespace} Namespace`
               : params.clusterName
           }`}
           {...ChartReleaseColors}
