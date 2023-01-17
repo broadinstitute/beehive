@@ -19,10 +19,12 @@ export const loader: LoaderFunction = async ({ request }) =>
     {
       ...forwardIAP(request),
       // We don't do TLS hostname validation when the hostname is in the
-      // same cluster.
-      // @ts-ignore
-      agent: process.env.ARGOCD_BASE_URL?.endsWith(".local")
-        ? new https.Agent({ rejectUnauthorized: false })
-        : undefined,
+      // same cluster and is using TLS.
+      // @ts-expect-error
+      agent:
+        process.env.ARGOCD_BASE_URL?.startsWith("https://") &&
+        process.env.ARGOCD_BASE_URL?.endsWith(".local")
+          ? new https.Agent({ rejectUnauthorized: false })
+          : undefined,
     }
   );
