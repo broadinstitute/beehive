@@ -18,6 +18,7 @@ import {
 } from "@remix-run/react";
 import tailwindStyles from "./styles/tailwind.css";
 import beehiveLoadingStyles from "./styles/beehive-loading.css";
+import safeAreaStyles from "./styles/safe-area.css";
 import favicon from "./assets/favicon.svg";
 import { commitSession, getSession, sessionFields } from "./session.server";
 import { generateNonce } from "./helpers/nonce.server";
@@ -36,6 +37,7 @@ export const meta: MetaFunction = () => ({
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStyles },
   { rel: "stylesheet", href: beehiveLoadingStyles },
+  { rel: "stylesheet", href: safeAreaStyles },
   { rel: "icon", href: favicon, type: "image/svg+xml" },
 ];
 
@@ -200,7 +202,7 @@ export const App: React.FunctionComponent = () => {
           data-theme-prod={false}
           className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-screen w-full ${
             transition.state != "idle" ? "cursor-progress" : ""
-          }`}
+          } safe-area-inset-bottom`}
         >
           <Outlet />
           <LoadScroller nonce={cspScriptNonce} />
