@@ -8,7 +8,7 @@ export interface InsetPanelProps {
 export const InsetPanel: React.FunctionComponent<InsetPanelProps> = ({
   children,
 }) => (
-  <div className="w-[33vw] shrink-0 h-full overflow-y-auto overflow-x-clip">
+  <div className="w-screen lg:w-[33vw] shrink-0 h-full overflow-y-auto overflow-x-clip">
     {children}
   </div>
 );
@@ -16,7 +16,7 @@ export const InsetPanel: React.FunctionComponent<InsetPanelProps> = ({
 export const DoubleInsetPanel: React.FunctionComponent<InsetPanelProps> = ({
   children,
 }) => (
-  <div className="min-w-[66vw] grow shrink-0 h-full overflow-y-auto overflow-x-clip">
+  <div className="w-screen lg:w-fit lg:min-w-[66vw] grow shrink-0 h-full overflow-y-auto overflow-x-clip">
     {children}
   </div>
 );

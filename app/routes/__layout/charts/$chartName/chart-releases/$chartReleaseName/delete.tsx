@@ -15,7 +15,7 @@ import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import { Leaf } from "~/components/route-tree/leaf";
+import { Branch } from "~/components/route-tree/branch";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   errorResponseReturner,
@@ -61,7 +61,7 @@ const DeleteRoute: React.FunctionComponent = () => {
   }>();
   const actionData = useActionData<DerivedErrorInfo>();
   return (
-    <Leaf>
+    <Branch>
       <OutsetPanel>
         <ActionBox
           title={`Now Deleting ${chartRelease.name}`}
@@ -75,7 +75,7 @@ const DeleteRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>
-    </Leaf>
+    </Branch>
   );
 };
 

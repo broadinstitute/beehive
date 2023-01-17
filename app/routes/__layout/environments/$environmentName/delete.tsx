@@ -22,7 +22,7 @@ import {
   Notification,
 } from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import { Leaf } from "~/components/route-tree/leaf";
+import { Branch } from "~/components/route-tree/branch";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   errorResponseReturner,
@@ -113,7 +113,7 @@ const DeleteRoute: React.FunctionComponent = () => {
   }>();
   const actionData = useActionData<DerivedErrorInfo>();
   return (
-    <Leaf>
+    <Branch>
       <OutsetPanel>
         <ActionBox
           title={`Now Deleting ${environment.name}`}
@@ -127,7 +127,7 @@ const DeleteRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>
-    </Leaf>
+    </Branch>
   );
 };
 

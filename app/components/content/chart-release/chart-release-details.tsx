@@ -49,8 +49,8 @@ export const ChartReleaseDetails: React.FunctionComponent<
         </>
       )}
       {chartRelease.name &&
-        chartRelease.environmentInfo &&
-        chartRelease.environmentInfo.lifecycle !== "template" && (
+        chartRelease.cluster &&
+        chartRelease.environmentInfo?.lifecycle !== "template" && (
           <ArgoLinkChip chartReleaseName={chartRelease.name} />
         )}
     </div>

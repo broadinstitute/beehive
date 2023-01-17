@@ -20,7 +20,7 @@ export function getContentSecurityPolicy(nonce?: string | undefined): string {
     "default-src 'self'; " +
     `script-src ${scriptSrc}; ` +
     "style-src 'self' 'report-sample'; " +
-    "img-src 'self' https://ap-argocd.dsp-devops.broadinstitute.org data:; " +
+    "img-src 'self' data:; " +
     "font-src 'self'; " +
     `connect-src ${connectSrc}; ` +
     "media-src 'self'; " +

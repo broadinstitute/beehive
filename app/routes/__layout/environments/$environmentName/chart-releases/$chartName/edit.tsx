@@ -16,7 +16,7 @@ import { ChartReleaseEditableFields } from "~/components/content/chart-release/c
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import { Leaf } from "~/components/route-tree/leaf";
+import { Branch } from "~/components/route-tree/branch";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   formDataToObject,
@@ -80,7 +80,7 @@ const EditRoute: React.FunctionComponent = () => {
   const actionData =
     useActionData<ActionErrorInfo<V2controllersChartRelease>>();
   return (
-    <Leaf>
+    <Branch>
       <OutsetPanel>
         <ActionBox
           title={`Now Editing ${chartRelease.name}`}
@@ -114,7 +114,7 @@ const EditRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>
-    </Leaf>
+    </Branch>
   );
 };
 

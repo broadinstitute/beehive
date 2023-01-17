@@ -50,7 +50,6 @@ import {
   InteractiveListProps,
 } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   errorResponseThrower,
@@ -523,9 +522,9 @@ const NewRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>
-      <Leaf>
+      <Branch>
         <InsetPanel>{sidebar}</InsetPanel>
-      </Leaf>
+      </Branch>
     </Branch>
   );
 };

@@ -15,7 +15,7 @@ export interface ActionButtonProps {
 
 export const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
   type,
-  sizeClassName = "w-[30vw]",
+  sizeClassName = "w-[90vw] lg:w-[30vw]",
   beforeBorderClassName,
   textAlignment = "text-left",
   children,

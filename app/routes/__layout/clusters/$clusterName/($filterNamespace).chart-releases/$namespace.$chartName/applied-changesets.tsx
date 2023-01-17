@@ -19,7 +19,7 @@ import { ListPaginationControls } from "~/components/interactivity/list-paginati
 import { DoubleInsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
-import { Leaf } from "~/components/route-tree/leaf";
+import { Branch } from "~/components/route-tree/branch";
 import {
   errorResponseThrower,
   forwardIAP,
@@ -83,7 +83,7 @@ const AppliedChangesetsRoute: React.FunctionComponent = () => {
   const [filterText, setFilterText] = useState("");
 
   return (
-    <Leaf>
+    <Branch>
       <DoubleInsetPanel>
         <InteractiveList
           title="Version History"
@@ -136,7 +136,7 @@ const AppliedChangesetsRoute: React.FunctionComponent = () => {
           )}
         </InteractiveList>
       </DoubleInsetPanel>
-    </Leaf>
+    </Branch>
   );
 };
 

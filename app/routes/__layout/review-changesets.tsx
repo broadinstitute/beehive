@@ -35,7 +35,6 @@ import {
 import { BigActionBox } from "~/components/panel-structures/big-action-box";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { Branch } from "~/components/route-tree/branch";
-import { Leaf } from "~/components/route-tree/leaf";
 import { DerivedErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
   errorResponseReturner,
@@ -115,9 +114,7 @@ export const action: ActionFunction = async ({ request }) => {
               .getAll("sync")
               .filter((value): value is string => typeof value === "string")
               .join(","),
-            "refresh-only": (
-              formData.get("action") === "refresh"
-            ).toString(),
+            "refresh-only": (formData.get("action") === "refresh").toString(),
           },
         };
         console.log(
@@ -398,7 +395,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </BigActionBox>
       </OutsetPanel>
-      <Leaf>
+      <Branch>
         <DoubleInsetPanel>
           <InteractiveList
             title="Changes to Be Applied"
@@ -456,7 +453,7 @@ const ReviewChangesetsRoute: React.FunctionComponent = () => {
             </MemoryFilteredList>
           </InteractiveList>
         </DoubleInsetPanel>
-      </Leaf>
+      </Branch>
     </Branch>
   );
 };

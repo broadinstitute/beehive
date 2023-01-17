@@ -38,10 +38,7 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import {
-  FillerText,
-  FillerTextProps,
-} from "~/components/panel-structures/filler-text";
+import { FillerText } from "~/components/panel-structures/filler-text";
 import {
   InteractiveList,
   InteractiveListProps,
@@ -250,7 +247,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
     setShowChartVersionFollowChartReleasePicker,
   ] = useState(false);
 
-  let sidebar: React.ReactElement<InteractiveListProps | FillerTextProps>;
+  let sidebar: React.ReactElement<InteractiveListProps> | undefined;
   if (showOtherChartReleasePicker) {
     sidebar = (
       <InteractiveList title="Select Other Instance" {...ChartReleaseColors}>
@@ -475,14 +472,6 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
         </MemoryFilteredList>
       </InteractiveList>
     );
-  } else {
-    sidebar = (
-      <FillerText>
-        <ChartReleaseChangeVersionHelpCopy
-          chartInstanceName={chartRelease.name}
-        />
-      </FillerText>
-    );
   }
 
   return (
@@ -640,9 +629,21 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
           {actionErrorInfo && displayErrorInfo(actionErrorInfo)}
         </ActionBox>
       </OutsetPanel>
-      <Leaf>
-        <InsetPanel>{sidebar}</InsetPanel>
-      </Leaf>
+      {(sidebar && (
+        <Branch>
+          <InsetPanel>{sidebar}</InsetPanel>
+        </Branch>
+      )) || (
+        <Leaf>
+          <InsetPanel>
+            <FillerText>
+              <ChartReleaseChangeVersionHelpCopy
+                chartInstanceName={chartRelease.name}
+              />
+            </FillerText>
+          </InsetPanel>
+        </Leaf>
+      )}
     </Branch>
   );
 };

@@ -23,7 +23,7 @@ export const InactiveNavButton: React.FunctionComponent<
 }) => (
   <div
     data-theme-prod={prod}
-    className={`min-w-min relative shrink-0 ${
+    className={`grow min-w-min relative shrink-0 ${
       disabled ? "pointer-events-none" : ""
     }`}
   >
