@@ -30,7 +30,7 @@ import { LoadThemeSetter } from "./components/logic/theme";
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Beehive",
-  viewport: "width=device-width,initial-scale=1",
+  viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
 });
 
 export const links: LinksFunction = () => [
@@ -198,7 +198,7 @@ export const App: React.FunctionComponent = () => {
         </head>
         <body
           data-theme-prod={false}
-          className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-screen w-full ${
+          className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-[100dvh] w-full ${
             transition.state != "idle" ? "cursor-progress" : ""
           }`}
         >
