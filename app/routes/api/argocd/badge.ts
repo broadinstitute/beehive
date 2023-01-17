@@ -1,5 +1,6 @@
 import { LoaderFunction } from "@remix-run/node";
 import { forwardIAP } from "~/helpers/sherlock.server";
+import https from "https";
 
 // IAP pass-through to ArgoCD's /badge endpoint. This endpoint on ArgoCD doesn't
 // require any authentication, but we wrap it in IAP so we actually do still
@@ -15,5 +16,13 @@ export const loader: LoaderFunction = async ({ request }) =>
       process.env.ARGOCD_BASE_URL ||
       "https://ap-argocd.dsp-devops.broadinstitute.org"
     }/api/badge?name=${new URL(request.url).searchParams.get("name")}`,
-    forwardIAP(request)
+    {
+      ...forwardIAP(request),
+      // We don't do TLS hostname validation when the hostname is in the
+      // same cluster.
+      // @ts-ignore
+      agent: process.env.ARGOCD_BASE_URL?.endsWith(".local")
+        ? new https.Agent({ rejectUnauthorized: false })
+        : undefined,
+    }
   );
