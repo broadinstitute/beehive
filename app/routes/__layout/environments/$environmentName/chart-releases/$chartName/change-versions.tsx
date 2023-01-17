@@ -250,7 +250,7 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
     setShowChartVersionFollowChartReleasePicker,
   ] = useState(false);
 
-  let sidebar: React.ReactElement<InteractiveListProps | FillerTextProps>;
+  let sidebar: React.ReactElement<InteractiveListProps> | undefined;
   if (showOtherChartReleasePicker) {
     sidebar = (
       <InteractiveList title="Select Other Instance" {...ChartReleaseColors}>
@@ -475,14 +475,6 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
         </MemoryFilteredList>
       </InteractiveList>
     );
-  } else {
-    sidebar = (
-      <FillerText>
-        <ChartReleaseChangeVersionHelpCopy
-          chartInstanceName={chartRelease.name}
-        />
-      </FillerText>
-    );
   }
 
   return (
@@ -640,9 +632,21 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
           {actionErrorInfo && displayErrorInfo(actionErrorInfo)}
         </ActionBox>
       </OutsetPanel>
-      <Leaf>
-        <InsetPanel>{sidebar}</InsetPanel>
-      </Leaf>
+      {(sidebar && (
+        <Branch>
+          <InsetPanel>{sidebar}</InsetPanel>
+        </Branch>
+      )) || (
+        <Leaf>
+          <InsetPanel>
+            <FillerText>
+              <ChartReleaseChangeVersionHelpCopy
+                chartInstanceName={chartRelease.name}
+              />
+            </FillerText>
+          </InsetPanel>
+        </Leaf>
+      )}
     </Branch>
   );
 };

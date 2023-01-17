@@ -528,9 +528,9 @@ const NewRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>
-      <Leaf>
+      <Branch>
         <InsetPanel>{sidebar}</InsetPanel>
-      </Leaf>
+      </Branch>
     </Branch>
   );
 };

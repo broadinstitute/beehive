@@ -17,6 +17,7 @@ import { ChartVersionEditableFields } from "~/components/content/chart-version/c
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { ActionBox } from "~/components/panel-structures/action-box";
+import { Branch } from "~/components/route-tree/branch";
 import { Leaf } from "~/components/route-tree/leaf";
 import { ActionErrorInfo, displayErrorInfo } from "~/helpers/errors";
 import {
@@ -80,7 +81,7 @@ const EditRoute: React.FunctionComponent = () => {
   const actionData =
     useActionData<ActionErrorInfo<V2controllersChartVersion>>();
   return (
-    <Leaf>
+    <Branch>
       <OutsetPanel>
         <ActionBox
           title={`Now Editing ${chart.name}/${chartVersion.chartVersion}`}
@@ -98,7 +99,7 @@ const EditRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>
-    </Leaf>
+    </Branch>
   );
 };
 

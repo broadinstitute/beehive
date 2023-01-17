@@ -426,9 +426,9 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
           {actionErrorInfo && displayErrorInfo(actionErrorInfo)}
         </ActionBox>
       </OutsetPanel>
-      <Leaf>
+      <Branch>
         <InsetPanel>{sidebar}</InsetPanel>
-      </Leaf>
+      </Branch>
     </Branch>
   );
 };

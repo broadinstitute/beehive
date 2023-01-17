@@ -82,7 +82,7 @@ export const ChangesetEntry: React.FunctionComponent<{
         changeset.chartReleaseInfo?.environment === "prod" ||
         changeset.chartReleaseInfo?.cluster === "terra-prod"
       }
-      className={`relative h-fit w-[60vw] bg-color-near-bg rounded-2xl shadow-md border-2 ${ChartReleaseColors.borderClassName} flex flex-col gap-2 px-6 py-4 text-color-body-text`}
+      className={`relative h-fit w-[90vw] lg:w-[60vw] bg-color-near-bg rounded-2xl shadow-md border-2 ${ChartReleaseColors.borderClassName} flex flex-col gap-2 px-6 py-4 text-color-body-text`}
     >
       <div className="flex flex-row gap-4 font-light">
         {appliable &&
@@ -147,7 +147,7 @@ export const ChangesetEntry: React.FunctionComponent<{
       )}
       {minimized || (
         <div
-          className={`grid grid-cols-2 pt-2 gap-y-1 gap-x-4 ${
+          className={`overflow-x-auto grid grid-cols-2 pt-2 gap-y-1 gap-x-4 ${
             !appliable && fadeIfUnappliable ? "opacity-50" : ""
           }`}
         >

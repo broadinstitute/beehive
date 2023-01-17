@@ -6,5 +6,5 @@ interface LeafProps {
 }
 
 export const Leaf: React.FunctionComponent<LeafProps> = ({ children }) => (
-  <div className="h-full grow">{children}</div>
+  <div className="h-full grow hidden lg:block">{children}</div>
 );

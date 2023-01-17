@@ -8,7 +8,7 @@ export function catchBoundary() {
     caught.data
   );
   return (
-    <div className="bg-color-error-bg border-color-error-border border-2 rounded-lg p-1 border-dashed grow max-w-[33vw]">
+    <div className="bg-color-error-bg border-color-error-border border-2 rounded-lg p-1 border-dashed grow max-w-[100vw] lg:max-w-[33vw]">
       <p className="font-semibold">{title}</p>
       {(reloadRequired && (
         <button

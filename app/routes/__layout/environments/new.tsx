@@ -165,7 +165,7 @@ const NewRoute: React.FunctionComponent = () => {
   const [showDefaultClusterPicker, setShowDefaultClusterPicker] =
     useState(false);
 
-  let sidebar: React.ReactElement<InteractiveListProps | FillerTextProps>;
+  let sidebar: React.ReactElement<InteractiveListProps> | undefined;
   if (showTemplateEnvironmentPicker) {
     sidebar = (
       <InteractiveList
@@ -233,12 +233,6 @@ const NewRoute: React.FunctionComponent = () => {
         </MemoryFilteredList>
       </InteractiveList>
     );
-  } else {
-    sidebar = (
-      <FillerText>
-        <EnvironmentHelpCopy />
-      </FillerText>
-    );
   }
 
   return (
@@ -272,9 +266,19 @@ const NewRoute: React.FunctionComponent = () => {
           {actionData && displayErrorInfo(actionData)}
         </ActionBox>
       </OutsetPanel>
-      <Leaf>
-        <InsetPanel>{sidebar}</InsetPanel>
-      </Leaf>
+      {(sidebar && (
+        <Branch>
+          <InsetPanel>{sidebar}</InsetPanel>
+        </Branch>
+      )) || (
+        <Leaf>
+          <InsetPanel>
+            <FillerText>
+              <EnvironmentHelpCopy />
+            </FillerText>
+          </InsetPanel>
+        </Leaf>
+      )}
     </Branch>
   );
 };

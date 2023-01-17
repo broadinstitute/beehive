@@ -2,12 +2,14 @@ import { InsetPanelProps } from "../layout/inset-panel";
 import { OutsetPanelProps } from "../layout/outset-panel";
 
 interface BranchProps {
-  children: [
-    // InsetPanel or OutsetPanel
-    React.ReactElement<InsetPanelProps | OutsetPanelProps>,
-    // Outlet
-    React.ReactElement | null
-  ];
+  children:
+    | React.ReactElement<InsetPanelProps | OutsetPanelProps>
+    | [
+        // InsetPanel or OutsetPanel
+        React.ReactElement<InsetPanelProps | OutsetPanelProps>,
+        // Outlet
+        React.ReactElement | null
+      ];
   prod?: boolean;
 }
 
