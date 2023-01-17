@@ -38,10 +38,7 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { verifySessionCsrfToken } from "~/components/logic/csrf-token";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import {
-  FillerText,
-  FillerTextProps,
-} from "~/components/panel-structures/filler-text";
+import { FillerText } from "~/components/panel-structures/filler-text";
 import {
   InteractiveList,
   InteractiveListProps,

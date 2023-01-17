@@ -37,10 +37,7 @@ import {
   Notification,
 } from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import {
-  FillerText,
-  FillerTextProps,
-} from "~/components/panel-structures/filler-text";
+import { FillerText } from "~/components/panel-structures/filler-text";
 import {
   InteractiveList,
   InteractiveListProps,
