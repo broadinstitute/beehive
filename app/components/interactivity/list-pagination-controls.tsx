@@ -26,6 +26,7 @@ export const ListPaginationControls: React.FunctionComponent<{
       <InactiveNavButton
         to={`./?offset=${Math.max(0, offset - limit)}`}
         beforeBorderClassName={beforeBorderClassName}
+        grow
       >
         Previous Page
       </InactiveNavButton>
@@ -41,6 +42,7 @@ export const ListPaginationControls: React.FunctionComponent<{
       <InactiveNavButton
         to={`./?offset=${offset + limit}`}
         beforeBorderClassName={beforeBorderClassName}
+        grow
       >
         Next Page
       </InactiveNavButton>
