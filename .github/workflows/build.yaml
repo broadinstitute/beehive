@@ -78,7 +78,7 @@ jobs:
         uses: databiosphere/github-actions/actions/bumper@bumper-0.0.6
         id: tag
         env:
-          DEFAULT_BUMP: minor
+          DEFAULT_BUMP: patch
           RELEASE_BRANCHES: ${{ github.event.repository.default_branch }}
           WITH_V: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
