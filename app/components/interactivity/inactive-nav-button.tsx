@@ -1,19 +1,9 @@
 import { Link } from "@remix-run/react";
-
-export interface InactiveNavButtonProps {
-  to: string;
-  beforeBorderClassName: string;
-  textAlignment?: string;
-  children: React.ReactNode;
-  disabled?: boolean;
-  prod?: boolean;
-}
+import { NavButtonProps } from "./nav-button";
 
 // Like NavButton but never shows as active. Useful to navigate between URL parameters, since those aren't taken into account to
 // determine what is active or not by Remix or React Router.
-export const InactiveNavButton: React.FunctionComponent<
-  InactiveNavButtonProps
-> = ({
+export const InactiveNavButton: React.FunctionComponent<NavButtonProps> = ({
   to,
   beforeBorderClassName,
   textAlignment = "text-left",

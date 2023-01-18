@@ -23,7 +23,11 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
     } flex flex-row-reverse gap-4 flex-wrap lg:flex-nowrap`}
   >
     {toCreate && (
-      <NavButton to={toCreate} beforeBorderClassName={beforeBorderClassName}>
+      <NavButton
+        to={toCreate}
+        beforeBorderClassName={beforeBorderClassName}
+        grow
+      >
         {toCreateText}
       </NavButton>
     )}

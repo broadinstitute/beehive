@@ -7,6 +7,7 @@ export interface NavButtonProps {
   children: React.ReactNode;
   disabled?: boolean;
   prod?: boolean;
+  grow?: boolean;
 }
 
 export const NavButton: React.FunctionComponent<NavButtonProps> = ({
@@ -16,10 +17,11 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
   children,
   disabled,
   prod,
+  grow,
 }) => (
   <div
     data-theme-prod={prod}
-    className={`grow min-w-min relative shrink-0 ${
+    className={`${grow ? "grow" : ""} min-w-min relative shrink-0 ${
       disabled ? "pointer-events-none" : ""
     }`}
   >
