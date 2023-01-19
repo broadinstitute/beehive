@@ -342,10 +342,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                     ? "text-color-body-text"
                     : "text-color-body-text/40"
                 } border-b border-color-divider-line pb-2`}
-              >{`Legacy configuration from firecloud-develop's ${changeset.fromFirecloudDevelopRef?.substring(
-                0,
-                7
-              )}`}</p>
+              >{`Legacy configuration from firecloud-develop's ${changeset.fromFirecloudDevelopRef}`}</p>
               <p
                 className={`${
                   firecloudDevelopRefChanged
@@ -353,10 +350,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                     : "text-color-body-text/40"
                 } border-b border-color-divider-line pb-2`}
               >
-                {`Legacy configuration from firecloud-develop's ${changeset.toFirecloudDevelopRef?.substring(
-                  0,
-                  7
-                )}`}
+                {`Legacy configuration from firecloud-develop's ${changeset.toFirecloudDevelopRef}`}
                 {firecloudDevelopRefChanged && (
                   <>
                     {" ("}
@@ -501,10 +495,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                 ? "text-color-body-text"
                 : "text-color-body-text/40"
             } border-b border-color-divider-line pb-2`}
-          >{`Configuration from terra-helmfile's ${changeset.fromHelmfileRef?.substring(
-            0,
-            7
-          )}`}</p>
+          >{`Configuration from terra-helmfile's ${changeset.fromHelmfileRef}`}</p>
           <p
             className={`${
               helmfileRefChanged
@@ -512,10 +503,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                 : "text-color-body-text/40"
             } border-b border-color-divider-line pb-2`}
           >
-            {`Configuration from terra-helmfile's ${changeset.toHelmfileRef?.substring(
-              0,
-              7
-            )}`}
+            {`Configuration from terra-helmfile's ${changeset.toHelmfileRef}`}
             {helmfileRefChanged && (
               <>
                 {" ("}
