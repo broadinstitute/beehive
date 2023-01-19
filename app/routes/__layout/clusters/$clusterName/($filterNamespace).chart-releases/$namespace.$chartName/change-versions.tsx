@@ -28,6 +28,7 @@ import { AppVersionColors } from "~/components/content/app-version/app-version-c
 import { AppVersionPicker } from "~/components/content/app-version/app-version-picker";
 import { ChartReleaseChangeVersionHelpCopy } from "~/components/content/chart-release/chart-release-change-version-help-copy";
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
+import { liveChartReleaseSorter } from "~/components/content/chart-release/chart-release-sort.server";
 import { ChartVersionColors } from "~/components/content/chart-version/chart-version-colors";
 import { ChartVersionPicker } from "~/components/content/chart-version/chart-version-picker";
 import ActionButton from "~/components/interactivity/action-button";
@@ -86,7 +87,25 @@ export const loader: LoaderFunction = async ({ request, params }) => {
             )
           ),
         errorResponseThrower
-      ),
+      )
+      .then((chartReleases) => [
+        ...chartReleases
+          .filter(
+            (chartRelease) =>
+              chartRelease.environment &&
+              chartRelease.environmentInfo &&
+              chartRelease.environmentInfo.lifecycle === "static"
+          )
+          .sort(liveChartReleaseSorter),
+        ...chartReleases.filter(
+          (chartRelease) =>
+            !(
+              chartRelease.environment &&
+              chartRelease.environmentInfo &&
+              chartRelease.environmentInfo.lifecycle === "static"
+            )
+        ),
+      ]),
     new AppVersionsApi(SherlockConfiguration)
       .apiV2AppVersionsGet(
         { chart: params.chartName, limit: 25 },
@@ -273,12 +292,16 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                     {chartRelease.environment}
                   </span>{" "}
                   / {chartRelease.chart}
+                  {chartRelease.appVersionResolver !== "none" &&
+                    ` (app @ ${chartRelease.appVersionExact})`}
                 </h2>
               ) : (
                 <h2 className="font-light">
                   Cluster:{" "}
                   <span className="font-medium">{`${chartRelease.cluster} / ${chartRelease.namespace}`}</span>{" "}
                   / {chartRelease.chart}
+                  {chartRelease.appVersionResolver !== "none" &&
+                    ` (app @ ${chartRelease.appVersionExact})`}
                 </h2>
               )}
             </ActionButton>
@@ -349,12 +372,16 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                     {chartRelease.environment}
                   </span>{" "}
                   / {chartRelease.chart}
+                  {chartRelease.appVersionResolver !== "none" &&
+                    ` (app @ ${chartRelease.appVersionExact})`}
                 </h2>
               ) : (
                 <h2 className="font-light">
                   Cluster:{" "}
                   <span className="font-medium">{`${chartRelease.cluster} / ${chartRelease.namespace}`}</span>{" "}
                   / {chartRelease.chart}
+                  {chartRelease.appVersionResolver !== "none" &&
+                    ` (app @ ${chartRelease.appVersionExact})`}
                 </h2>
               )}
             </ActionButton>
@@ -449,12 +476,14 @@ const ChangeVersionsRoute: React.FunctionComponent = () => {
                     {chartRelease.environment}
                   </span>{" "}
                   / {chartRelease.chart}
+                  {` (chart @ ${chartRelease.chartVersionExact})`}
                 </h2>
               ) : (
                 <h2 className="font-light">
                   Cluster:{" "}
                   <span className="font-medium">{`${chartRelease.cluster} / ${chartRelease.namespace}`}</span>{" "}
                   / {chartRelease.chart}
+                  {` (chart @ ${chartRelease.chartVersionExact})`}
                 </h2>
               )}
             </ActionButton>
