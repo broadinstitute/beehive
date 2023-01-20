@@ -19,7 +19,9 @@ export const DeletionGuard: React.FunctionComponent<DeletionGuardProps> = ({
             : `delete ${name || "this"}`
         }
         required
-        pattern={`delete ${name || "this"}`}
+        pattern={`delete ${
+          name?.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") || "this"
+        }`}
         onPasteCapture={
           userTriedPasting
             ? undefined

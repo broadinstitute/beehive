@@ -9,6 +9,7 @@ import {
 } from "../cluster/cluster-link-chip";
 import { EnvironmentLinkChip } from "../environment/environment-link-chip";
 import { MutateControls } from "../helpers";
+import { PagerdutyIntegrationLinkChip } from "../pagerduty-integration/pagerduty-integration-link-chip";
 import { ChartReleaseColors } from "./chart-release-colors";
 import { ArgoLinkChip } from "./chart-release-link-chip";
 
@@ -19,6 +20,7 @@ export interface ChartReleaseDetailsProps {
   toChangeVersions?: string;
   toVersionHistory?: string;
   toEdit?: string;
+  toLinkPagerduty?: string;
   toDelete?: string;
 }
 
@@ -29,6 +31,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
   toChangeVersions,
   toVersionHistory,
   toEdit,
+  toLinkPagerduty,
   toDelete,
 }) => (
   <div className="flex flex-col space-y-10">
@@ -48,6 +51,16 @@ export const ChartReleaseDetails: React.FunctionComponent<
           )}
         </>
       )}
+      {chartRelease.environment &&
+        chartRelease.pagerdutyIntegration &&
+        chartRelease.pagerdutyIntegrationInfo?.name && (
+          <PagerdutyIntegrationLinkChip
+            to={`/trigger-incident/${chartRelease.environment}/chart-releases/${chartRelease.chart}`}
+            pagerdutyIntegrationName={
+              chartRelease.pagerdutyIntegrationInfo.name
+            }
+          />
+        )}
       {chartRelease.name &&
         chartRelease.cluster &&
         chartRelease.environmentInfo?.lifecycle !== "template" && (
@@ -96,13 +109,14 @@ export const ChartReleaseDetails: React.FunctionComponent<
           </a>
         </div>
       )}
-    {(toEdit || toDelete || toChangeVersions) && (
+    {(toEdit || toLinkPagerduty || toDelete || toChangeVersions) && (
       <MutateControls
         name={chartRelease.name || ""}
         colors={ChartReleaseColors}
         toChangeVersions={toChangeVersions}
         toVersionHistory={toVersionHistory}
         toEdit={toEdit}
+        toLinkPagerduty={toLinkPagerduty}
         toDelete={toDelete}
       />
     )}

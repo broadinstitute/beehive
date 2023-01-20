@@ -26,6 +26,7 @@ import { errorBoundary } from "./components/boundaries/error-boundary";
 import { CsrfTokenContext } from "./components/logic/csrf-token";
 import { LoadScroller } from "./components/logic/load-scroller";
 import { LoadThemeSetter } from "./components/logic/theme";
+import { PagerdutyTokenContext } from "./components/logic/pagerduty-token";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -41,6 +42,7 @@ export const links: LinksFunction = () => [
 
 interface LoaderData {
   csrfToken: string;
+  pdToken: string;
   cspScriptNonce: string;
 }
 
@@ -156,11 +158,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   }
 
-  // Update CSRF token
+  // Update tokens
   session.set(sessionFields.csrfToken, generateNonce());
+  session.set(sessionFields.pdToken, generateNonce());
   return json<LoaderData>(
     {
       csrfToken: session.get(sessionFields.csrfToken),
+      pdToken: session.get(sessionFields.pdToken),
       cspScriptNonce: generateNonce(),
     },
     { headers: { "Set-Cookie": await commitSession(session) } }
@@ -173,7 +177,7 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 export const App: React.FunctionComponent = () => {
-  let { csrfToken, cspScriptNonce } = useLoaderData<LoaderData>();
+  let { csrfToken, pdToken, cspScriptNonce } = useLoaderData<LoaderData>();
   if (typeof window !== "undefined") {
     // https://html.spec.whatwg.org/multipage/urls-and-fetching.html#nonce-attributes
     // When this code runs in the browser, we want the nonce to be empty because
@@ -184,31 +188,33 @@ export const App: React.FunctionComponent = () => {
   const transition = useTransition();
   return (
     <CsrfTokenContext.Provider value={csrfToken}>
-      <html
-        lang="en"
-        // suppressHydrationWarning to allow LoadThemeSetter's manipulation of the
-        // document's data-theme attribute. Suppressing is okay because it only
-        // works at this level (it doesn't cascade).
-        suppressHydrationWarning={true}
-      >
-        <head>
-          <Meta />
-          <Links />
-          <LoadThemeSetter nonce={cspScriptNonce} />
-        </head>
-        <body
-          data-theme-prod={false}
-          className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-[100dvh] w-full ${
-            transition.state != "idle" ? "cursor-progress" : ""
-          }`}
+      <PagerdutyTokenContext.Provider value={pdToken}>
+        <html
+          lang="en"
+          // suppressHydrationWarning to allow LoadThemeSetter's manipulation of the
+          // document's data-theme attribute. Suppressing is okay because it only
+          // works at this level (it doesn't cascade).
+          suppressHydrationWarning={true}
         >
-          <Outlet />
-          <LoadScroller nonce={cspScriptNonce} />
-          <ScrollRestoration nonce={cspScriptNonce} />
-          <Scripts nonce={cspScriptNonce} />
-          <LiveReload nonce={cspScriptNonce} />
-        </body>
-      </html>
+          <head>
+            <Meta />
+            <Links />
+            <LoadThemeSetter nonce={cspScriptNonce} />
+          </head>
+          <body
+            data-theme-prod={false}
+            className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-[100dvh] w-full ${
+              transition.state != "idle" ? "cursor-progress" : ""
+            }`}
+          >
+            <Outlet />
+            <LoadScroller nonce={cspScriptNonce} />
+            <ScrollRestoration nonce={cspScriptNonce} />
+            <Scripts nonce={cspScriptNonce} />
+            <LiveReload nonce={cspScriptNonce} />
+          </body>
+        </html>
+      </PagerdutyTokenContext.Provider>
     </CsrfTokenContext.Provider>
   );
 };

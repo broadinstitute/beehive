@@ -32,4 +32,5 @@ export const sessionFields = {
   githubOAuthState: "githubOAuthState",
   githubAccessToken: "githubAccessToken",
   flashNotifications: "flashNotification",
+  pdToken: "pdToken",
 };

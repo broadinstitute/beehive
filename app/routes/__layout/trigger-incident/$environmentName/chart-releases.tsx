@@ -4,17 +4,18 @@ import {
   Outlet,
   Params,
   useLoaderData,
+  useOutletContext,
   useParams,
 } from "@remix-run/react";
 import {
   ChartReleasesApi,
   V2controllersChartRelease,
+  V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { catchBoundary } from "~/components/boundaries/catch-boundary";
 import { errorBoundary } from "~/components/boundaries/error-boundary";
 import { ChartReleaseColors } from "~/components/content/chart-release/chart-release-colors";
-import { liveChartReleaseSorter } from "~/components/content/chart-release/chart-release-sort.server";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -29,42 +30,33 @@ import {
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/charts/${params.chartName}/chart-releases`}>
-      Instances
+    <NavLink to={`/trigger-incident/${params.environmentName}/chart-releases`}>
+      Specific Apps
     </NavLink>
   ),
 };
 
 export const meta: MetaFunction = ({ params }) => ({
-  title: `${params.chartName} - Chart - Instances`,
+  title: `${params.environmentName} - Trigger Incident - Specific Apps`,
 });
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
-      { chart: params.chartName || "" },
+      { environment: params.environmentName || "" },
       forwardIAP(request)
     )
     .then(
-      (chartReleases) => [
-        ...chartReleases
-          .filter(
-            (chartRelease) =>
-              chartRelease.environment &&
-              chartRelease.environmentInfo &&
-              chartRelease.environmentInfo.lifecycle === "static"
-          )
-          .sort(liveChartReleaseSorter),
-        ...chartReleases.filter(
+      (chartReleases) =>
+        chartReleases.filter(
           (chartRelease) =>
-            !(
-              chartRelease.environment &&
-              chartRelease.environmentInfo &&
-              chartRelease.environmentInfo.lifecycle === "static"
-            )
+            chartRelease.pagerdutyIntegration &&
+            chartRelease.pagerdutyIntegrationInfo?.name
         ),
-      ],
       errorResponseThrower
+    )
+    .then((chartReleases) =>
+      chartReleases.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0)
     );
 };
 
@@ -72,14 +64,16 @@ export const CatchBoundary = catchBoundary;
 export const ErrorBoundary = errorBoundary;
 
 const ChartReleasesRoute: React.FunctionComponent = () => {
-  const params = useParams();
+  const outletContext = useOutletContext<{
+    environment: V2controllersEnvironment;
+  }>();
   const chartReleases = useLoaderData<Array<V2controllersChartRelease>>();
   const [filterText, setFilterText] = useState("");
   return (
     <Branch>
       <InsetPanel>
         <InteractiveList
-          title={`Instances of ${params.chartName}`}
+          title="Applications with Specific Incident Channels"
           {...ChartReleaseColors}
         >
           <ListControls setFilterText={setFilterText} {...ChartReleaseColors} />
@@ -88,24 +82,25 @@ const ChartReleasesRoute: React.FunctionComponent = () => {
             filterText={filterText}
             filter={(chartRelease, filterText) =>
               chartRelease.name?.includes(filterText) ||
-              chartRelease.namespace?.includes(filterText) ||
-              chartRelease.cluster?.includes(filterText) ||
-              chartRelease.environment?.includes(filterText)
+              chartRelease.chart?.includes(filterText)
             }
           >
             {(chartRelease, index) => (
               <NavButton
-                to={`./${chartRelease.name}`}
+                to={`./${chartRelease.chart}`}
                 key={index.toString()}
                 {...ChartReleaseColors}
               >
-                <h2 className="font-medium">{chartRelease.name}</h2>
+                <h2 className="font-light">
+                  <span className="font-medium">{chartRelease.chart}</span>
+                  {` (Channel: "${chartRelease.pagerdutyIntegrationInfo?.name}")`}
+                </h2>
               </NavButton>
             )}
           </MemoryFilteredList>
         </InteractiveList>
       </InsetPanel>
-      <Outlet />
+      <Outlet context={{ chartReleases, ...outletContext }} />
     </Branch>
   );
 };

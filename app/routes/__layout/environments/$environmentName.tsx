@@ -60,6 +60,9 @@ const EnvironmentNameRoute: React.FunctionComponent = () => {
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
             toEdit="./edit"
+            toLinkPagerduty={
+              environment.lifecycle == "static" ? "./link-pagerduty" : ""
+            }
             toDelete={environment.lifecycle != "static" ? "./delete" : ""}
           />
         </ItemDetails>
