@@ -59,11 +59,11 @@ const ChartReleaseRoute: React.FunctionComponent = () => {
             toChangeVersions="./change-versions"
             toVersionHistory="./applied-changesets"
             toEdit="./edit"
-            toLinkPagerduty={
-              chartRelease.environmentInfo?.pagerdutyIntegration
-                ? "./link-pagerduty"
-                : ""
-            }
+            // toLinkPagerduty={
+            //   chartRelease.environmentInfo?.pagerdutyIntegration
+            //     ? "./link-pagerduty"
+            //     : ""
+            // }
             toDelete="./delete"
           />
         </ItemDetails>
