@@ -33,6 +33,7 @@ export interface MutateControlsProps {
   changeVersionText?: string;
   toVersionHistory?: string;
   toEdit?: string;
+  toLinkPagerduty?: string;
   toDelete?: string;
 }
 
@@ -44,6 +45,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   changeVersionText,
   toVersionHistory,
   toEdit,
+  toLinkPagerduty,
   toDelete,
 }) => (
   <div className="flex flex-col space-y-12">
@@ -67,7 +69,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         )}
       </div>
     )}
-    {(toEdit || toDelete) && (
+    {(toEdit || toLinkPagerduty || toDelete) && (
       <div className="flex flex-col space-y-4">
         <h2 className="text-2xl font-light text-color-header-text">
           Make Changes
@@ -75,6 +77,11 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         {toEdit && (
           <NavButton to={toEdit} {...colors}>
             Edit Metadata
+          </NavButton>
+        )}
+        {toLinkPagerduty && (
+          <NavButton to={toLinkPagerduty} {...colors}>
+            Configure PagerDuty Link
           </NavButton>
         )}
         {toDelete && (

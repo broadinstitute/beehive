@@ -8,6 +8,7 @@ import {
   NamespaceLinkChip,
 } from "../cluster/cluster-link-chip";
 import { MutateControls, ProdWarning } from "../helpers";
+import { PagerdutyIntegrationLinkChip } from "../pagerduty-integration/pagerduty-integration-link-chip";
 import { EnvironmentColors } from "./environment-colors";
 import { EnvironmentLinkChip } from "./environment-link-chip";
 
@@ -18,12 +19,20 @@ export interface EnvironmentDetailsProps {
   toChartReleases?: string;
   toChangeVersions?: string;
   toEdit?: string;
+  toLinkPagerduty?: string;
   toDelete?: string;
 }
 
 export const EnvironmentDetails: React.FunctionComponent<
   EnvironmentDetailsProps
-> = ({ environment, toChartReleases, toChangeVersions, toEdit, toDelete }) => (
+> = ({
+  environment,
+  toChartReleases,
+  toChangeVersions,
+  toEdit,
+  toLinkPagerduty,
+  toDelete,
+}) => (
   <div className="flex flex-col space-y-10">
     <div className="flex flex-col space-y-4">
       <div className="flex flex-row gap-3 flex-wrap pb-2">
@@ -44,6 +53,12 @@ export const EnvironmentDetails: React.FunctionComponent<
                 />
               )}
           </>
+        )}
+        {environment.pagerdutyIntegrationInfo?.name && (
+          <PagerdutyIntegrationLinkChip
+            to={`/trigger-incident/${environment.name}`}
+            pagerdutyIntegrationName={environment.pagerdutyIntegrationInfo.name}
+          />
         )}
       </div>
       {environment.name === "prod" && <ProdWarning name={environment.name} />}
@@ -89,7 +104,7 @@ export const EnvironmentDetails: React.FunctionComponent<
         )}
       </div>
     )}
-    {(toEdit || toDelete || toChangeVersions) && (
+    {(toEdit || toLinkPagerduty || toDelete || toChangeVersions) && (
       <MutateControls
         name={environment.name || ""}
         colors={EnvironmentColors}
@@ -97,6 +112,7 @@ export const EnvironmentDetails: React.FunctionComponent<
         toChangeVersionsText="Monolith / Bulk Version Update"
         changeVersionText="Here you can do a bulk update of versions from another environment. If you want to update just one service or chart, view the charts in this environment and select the one you'd like to change."
         toEdit={toEdit}
+        toLinkPagerduty={toLinkPagerduty}
         toDelete={environment.preventDeletion !== true ? toDelete : undefined}
       />
     )}

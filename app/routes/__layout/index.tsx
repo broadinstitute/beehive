@@ -37,7 +37,7 @@ const IndexRoute: React.FunctionComponent = () => (
         Welcome to Beehive
       </h1>
       <span className="text-lg">
-        <b className="font-semibold">New!</b> View ArgoCD statuses in Beehive
+        <b className="font-semibold">New!</b> Trigger incidents from Beehive
       </span>
     </div>
     <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">
@@ -63,12 +63,30 @@ const IndexRoute: React.FunctionComponent = () => (
         Browse apps and the Helm Charts that deploy them
       </IndexNavButton>
       <IndexNavButton
-        to="/misc"
-        title="Misc"
-        className="border-color-neutral-soft-border h-28"
+        to="/trigger-incident/prod"
+        title="Trigger Incident"
+        className="border-color-neutral-soft-border h-52"
       >
-        Debugging info for Beehive itself
+        Page someone about a problem with production Terra
       </IndexNavButton>
+    </div>
+    <div className="flex flex-col items-center lg:flex-row gap-2 justify-center font-light">
+      {[
+        ["/pagerduty-integrations", "Manage PagerDuty"],
+        ["/misc", "Misc"],
+      ].map(([to, text], index) => (
+        <>
+          <NavLink to={to} prefetch="intent" key={(index * 2).toString()}>
+            {text}
+          </NavLink>
+          <span
+            className="hidden lg:inline lg:last:hidden"
+            key={(index * 2 + 1).toString()}
+          >
+            •
+          </span>
+        </>
+      ))}
     </div>
     <ThemeDropdown />
   </div>
