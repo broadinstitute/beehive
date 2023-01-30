@@ -1,9 +1,9 @@
 import {
-  MetaFunction,
-  LinksFunction,
-  LoaderFunction,
   json,
+  LinksFunction,
+  LoaderArgs,
   redirect,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   Links,
@@ -16,23 +16,23 @@ import {
   useLoaderData,
   useTransition,
 } from "@remix-run/react";
-import tailwindStyles from "./styles/tailwind.css";
-import beehiveLoadingStyles from "./styles/beehive-loading.css";
+import React from "react";
 import favicon from "./assets/favicon.svg";
-import { commitSession, getSession, sessionFields } from "./session.server";
-import { generateNonce } from "./helpers/nonce.server";
-import { catchBoundary } from "./components/boundaries/catch-boundary";
-import { errorBoundary } from "./components/boundaries/error-boundary";
 import { CsrfTokenContext } from "./components/logic/csrf-token";
 import { LoadScroller } from "./components/logic/load-scroller";
-import { LoadThemeSetter } from "./components/logic/theme";
 import { PagerdutyTokenContext } from "./components/logic/pagerduty-token";
+import { LoadThemeSetter } from "./components/logic/theme";
+import { PanelErrorBoundary } from "./errors/components/error-boundary";
+import { generateNonce } from "./helpers/nonce.server";
+import { commitSession, getSession, sessionFields } from "./session.server";
+import beehiveLoadingStyles from "./styles/beehive-loading.css";
+import tailwindStyles from "./styles/tailwind.css";
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "Beehive",
-  viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
-});
+export const meta: V2_MetaFunction = () => [
+  {
+    title: "Beehive",
+  },
+];
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStyles },
@@ -40,13 +40,7 @@ export const links: LinksFunction = () => [
   { rel: "icon", href: favicon, type: "image/svg+xml" },
 ];
 
-interface LoaderData {
-  csrfToken: string;
-  pdToken: string;
-  cspScriptNonce: string;
-}
-
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   let requestUrl = new URL(request.url);
 
@@ -161,7 +155,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   // Update tokens
   session.set(sessionFields.csrfToken, generateNonce());
   session.set(sessionFields.pdToken, generateNonce());
-  return json<LoaderData>(
+  return json(
     {
       csrfToken: session.get(sessionFields.csrfToken),
       pdToken: session.get(sessionFields.pdToken),
@@ -169,15 +163,14 @@ export const loader: LoaderFunction = async ({ request }) => {
     },
     { headers: { "Set-Cookie": await commitSession(session) } }
   );
-};
+}
 
 export const shouldRevalidate: ShouldRevalidateFunction = () => false;
 
-export const CatchBoundary = catchBoundary;
-export const ErrorBoundary = errorBoundary;
+export const ErrorBoundary = PanelErrorBoundary;
 
 export const App: React.FunctionComponent = () => {
-  let { csrfToken, pdToken, cspScriptNonce } = useLoaderData<LoaderData>();
+  let { csrfToken, pdToken, cspScriptNonce } = useLoaderData<typeof loader>();
   if (typeof window !== "undefined") {
     // https://html.spec.whatwg.org/multipage/urls-and-fetching.html#nonce-attributes
     // When this code runs in the browser, we want the nonce to be empty because
@@ -187,35 +180,43 @@ export const App: React.FunctionComponent = () => {
   }
   const transition = useTransition();
   return (
-    <CsrfTokenContext.Provider value={csrfToken}>
-      <PagerdutyTokenContext.Provider value={pdToken}>
-        <html
-          lang="en"
-          // suppressHydrationWarning to allow LoadThemeSetter's manipulation of the
-          // document's data-theme attribute. Suppressing is okay because it only
-          // works at this level (it doesn't cascade).
-          suppressHydrationWarning={true}
-        >
-          <head>
-            <Meta />
-            <Links />
-            <LoadThemeSetter nonce={cspScriptNonce} />
-          </head>
-          <body
-            data-theme-prod={false}
-            className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-[100dvh] w-full ${
-              transition.state != "idle" ? "cursor-progress" : ""
-            }`}
+    <React.StrictMode>
+      <CsrfTokenContext.Provider value={csrfToken}>
+        <PagerdutyTokenContext.Provider value={pdToken}>
+          <html
+            lang="en"
+            // suppressHydrationWarning to allow LoadThemeSetter's manipulation of the
+            // document's data-theme attribute. Suppressing is okay because it only
+            // works at this level (it doesn't cascade).
+            suppressHydrationWarning={true}
           >
-            <Outlet />
-            <LoadScroller nonce={cspScriptNonce} />
-            <ScrollRestoration nonce={cspScriptNonce} />
-            <Scripts nonce={cspScriptNonce} />
-            <LiveReload nonce={cspScriptNonce} />
-          </body>
-        </html>
-      </PagerdutyTokenContext.Provider>
-    </CsrfTokenContext.Provider>
+            <head>
+              <meta charSet="utf-8" />
+              <meta
+                name="viewport"
+                content="width=device-width,initial-scale=1,viewport-fit=cover"
+              />
+              <Meta />
+              <Links />
+              <LoadThemeSetter nonce={cspScriptNonce} />
+            </head>
+            <body
+              data-theme-prod={false}
+              className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-[100dvh] w-full ${
+                transition.state != "idle" ? "cursor-progress" : ""
+              }`}
+            >
+              <Outlet />
+
+              <LoadScroller nonce={cspScriptNonce} />
+              <ScrollRestoration nonce={cspScriptNonce} />
+              <Scripts nonce={cspScriptNonce} />
+              <LiveReload nonce={cspScriptNonce} />
+            </body>
+          </html>
+        </PagerdutyTokenContext.Provider>
+      </CsrfTokenContext.Provider>
+    </React.StrictMode>
   );
 };
 

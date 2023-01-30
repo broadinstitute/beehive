@@ -55,5 +55,3 @@ export const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
     </button>
   </div>
 );
-
-export default ActionButton;

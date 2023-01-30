@@ -1,7 +1,7 @@
 import { Session } from "@remix-run/node";
 import { createContext, useEffect, useState } from "react";
 import { sessionFields } from "~/session.server";
-import { PagerdutyIntegrationColors } from "../content/pagerduty-integration/pagerduty-integration-colors";
+import { PagerdutyIntegrationColors } from "../../features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
 import { ExternalNavButton } from "../interactivity/external-nav-button";
 
 export const PagerdutyTokenContext = createContext("");
