@@ -130,14 +130,14 @@ export const ChartVersionPicker: React.FunctionComponent<{
               onChange={(e) =>
                 setChartVersionFollowChartRelease(e.currentTarget.value)
               }
-              onFocus={() => {
+              onFocus={() => (
                 <SidebarSelectOtherChartRelease
                   chartReleases={chartReleases}
                   fieldValue={chartVersionFollowChartRelease}
                   setFieldValue={setChartVersionFollowChartRelease}
                   showVersion="chart"
-                />;
-              }}
+                />
+              )}
               required
               placeholder="Search..."
             />
