@@ -20,7 +20,7 @@ export const meta: V2_MetaFunction = () => [
   },
 ];
 
-export async function loader({}: LoaderArgs) {
+export async function loader(_: LoaderArgs) {
   return getPdAppIdFromEnv();
 }
 

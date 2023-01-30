@@ -98,15 +98,15 @@ export const ChartVersionPicker: React.FunctionComponent<{
               }
               value={chartVersionExact}
               onChange={(e) => setChartVersionExact(e.currentTarget.value)}
-              onFocus={() => {
+              onFocus={() =>
                 setSidebar(
                   <SidebarSelectChartVersion
                     chartVersions={chartVersions}
                     fieldValue={chartVersionExact}
                     setFieldValue={setChartVersionExact}
                   />
-                );
-              }}
+                )
+              }
               required
               placeholder="Enter custom value or search..."
             />
