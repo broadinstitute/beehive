@@ -72,7 +72,10 @@ export const AppVersionPicker: React.FunctionComponent<{
                 <SidebarSelectAppVersion
                   appVersions={appVersions}
                   fieldValue={appVersionExact}
-                  setFieldValue={setAppVersionExact}
+                  setFieldValue={(value) => {
+                    setAppVersionExact(value);
+                    setSidebar();
+                  }}
                 />
               );
             } else if (value === "follow") {
@@ -80,7 +83,10 @@ export const AppVersionPicker: React.FunctionComponent<{
                 <SidebarSelectOtherChartRelease
                   chartReleases={chartReleases}
                   fieldValue={appVersionFollowChartRelease}
-                  setFieldValue={setAppVersionFollowChartRelease}
+                  setFieldValue={(value) => {
+                    setAppVersionFollowChartRelease(value);
+                    setSidebar();
+                  }}
                 />
               );
             } else if (value === "branch") {
@@ -88,7 +94,10 @@ export const AppVersionPicker: React.FunctionComponent<{
                 <SidebarSelectAppVersionBranch
                   appVersions={appVersions}
                   fieldValue={appVersionBranch}
-                  setFieldValue={setAppVersionBranch}
+                  setFieldValue={(value) => {
+                    setAppVersionBranch(value);
+                    setSidebar();
+                  }}
                 />
               );
             } else {
@@ -124,7 +133,10 @@ export const AppVersionPicker: React.FunctionComponent<{
                     <SidebarSelectAppVersion
                       appVersions={appVersions}
                       fieldValue={appVersionExact}
-                      setFieldValue={setAppVersionExact}
+                      setFieldValue={(value) => {
+                        setAppVersionExact(value);
+                        setSidebar();
+                      }}
                     />
                   );
                 }}
@@ -156,7 +168,10 @@ export const AppVersionPicker: React.FunctionComponent<{
                     <SidebarSelectOtherChartRelease
                       chartReleases={chartReleases}
                       fieldValue={appVersionFollowChartRelease}
-                      setFieldValue={setAppVersionFollowChartRelease}
+                      setFieldValue={(value) => {
+                        setAppVersionFollowChartRelease(value);
+                        setSidebar();
+                      }}
                     />
                   );
                 }}
@@ -215,7 +230,10 @@ export const AppVersionPicker: React.FunctionComponent<{
                     <SidebarSelectAppVersionBranch
                       appVersions={appVersions}
                       fieldValue={appVersionBranch}
-                      setFieldValue={setAppVersionBranch}
+                      setFieldValue={(value) => {
+                        setAppVersionBranch(value);
+                        setSidebar();
+                      }}
                     />
                   );
                 }}

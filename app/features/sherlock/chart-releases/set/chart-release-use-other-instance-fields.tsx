@@ -6,7 +6,7 @@ import { SidebarSelectOtherChartRelease } from "./sidebar-select-other-chart-rel
 
 export const ChartReleaseUseOtherInstanceFields: React.FunctionComponent<{
   chartReleases: SerializeFrom<V2controllersChartRelease[]>;
-  setSidebar: (sidebar: React.ReactNode) => void;
+  setSidebar: (sidebar?: React.ReactNode) => void;
   chartName: string;
   preconfigured?: boolean;
   useExactVersionsFromOtherChartRelease: string;
@@ -45,7 +45,10 @@ export const ChartReleaseUseOtherInstanceFields: React.FunctionComponent<{
           <SidebarSelectOtherChartRelease
             chartReleases={chartReleases}
             fieldValue={useExactVersionsFromOtherChartRelease}
-            setFieldValue={setUseExactVersionsFromOtherChartRelease}
+            setFieldValue={(value) => {
+              setUseExactVersionsFromOtherChartRelease(value);
+              setSidebar();
+            }}
           />
         );
       }}

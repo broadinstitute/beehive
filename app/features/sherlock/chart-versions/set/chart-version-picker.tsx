@@ -57,7 +57,10 @@ export const ChartVersionPicker: React.FunctionComponent<{
                 <SidebarSelectChartVersion
                   chartVersions={chartVersions}
                   fieldValue={chartVersionExact}
-                  setFieldValue={setChartVersionExact}
+                  setFieldValue={(value) => {
+                    setChartVersionExact(value);
+                    setSidebar();
+                  }}
                 />
               );
             } else if (value === "follow") {
@@ -65,7 +68,10 @@ export const ChartVersionPicker: React.FunctionComponent<{
                 <SidebarSelectOtherChartRelease
                   chartReleases={chartReleases}
                   fieldValue={chartVersionFollowChartRelease}
-                  setFieldValue={setChartVersionFollowChartRelease}
+                  setFieldValue={(value) => {
+                    setChartVersionFollowChartRelease(value);
+                    setSidebar();
+                  }}
                   showVersion="chart"
                 />
               );
@@ -103,7 +109,10 @@ export const ChartVersionPicker: React.FunctionComponent<{
                   <SidebarSelectChartVersion
                     chartVersions={chartVersions}
                     fieldValue={chartVersionExact}
-                    setFieldValue={setChartVersionExact}
+                    setFieldValue={(value) => {
+                      setChartVersionExact(value);
+                      setSidebar();
+                    }}
                   />
                 )
               }
@@ -134,7 +143,10 @@ export const ChartVersionPicker: React.FunctionComponent<{
                 <SidebarSelectOtherChartRelease
                   chartReleases={chartReleases}
                   fieldValue={chartVersionFollowChartRelease}
-                  setFieldValue={setChartVersionFollowChartRelease}
+                  setFieldValue={(value) => {
+                    setChartVersionFollowChartRelease(value);
+                    setSidebar();
+                  }}
                   showVersion="chart"
                 />
               )}

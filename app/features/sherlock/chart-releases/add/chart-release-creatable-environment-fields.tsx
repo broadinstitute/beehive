@@ -49,7 +49,10 @@ export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<{
               <SidebarSelectCluster
                 clusters={clusters}
                 fieldValue={cluster}
-                setFieldValue={setCluster}
+                setFieldValue={(value) => {
+                  setCluster(value);
+                  setSidebar();
+                }}
               />
             );
           }}
