@@ -7,27 +7,30 @@ import React, { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
+import { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectOtherChartRelease } from "../../chart-releases/set/sidebar-select-other-chart-release";
 import { SidebarSelectAppVersion } from "./sidebar-select-app-version";
 import { SidebarSelectAppVersionBranch } from "./sidebar-select-app-version-branch";
 
-export const AppVersionPicker: React.FunctionComponent<{
-  appVersions: SerializeFrom<V2controllersAppVersion[]>;
-  chartReleases: SerializeFrom<V2controllersChartRelease[]>;
-  setSidebar: (sidebar?: React.ReactNode) => void;
-  isTargetingChangeset?: boolean;
-  showFirecloudDevelopRef?: boolean;
+export const AppVersionPicker: React.FunctionComponent<
+  {
+    appVersions: SerializeFrom<V2controllersAppVersion[]>;
+    chartReleases: SerializeFrom<V2controllersChartRelease[]>;
+    isTargetingChangeset?: boolean;
+    showFirecloudDevelopRef?: boolean;
 
-  initialAppVersionResolver: string;
-  initialAppVersionExact: string;
-  initialAppVersionCommit: string;
-  initialAppVersionBranch: string;
-  initialAppVersionFollowChartRelease: string;
-  initialFirecloudDevelopRef: string;
-}> = ({
+    initialAppVersionResolver: string;
+    initialAppVersionExact: string;
+    initialAppVersionCommit: string;
+    initialAppVersionBranch: string;
+    initialAppVersionFollowChartRelease: string;
+    initialFirecloudDevelopRef: string;
+  } & SetsSidebarProps
+> = ({
+  setSidebarFilterText,
+  setSidebar,
   appVersions,
   chartReleases,
-  setSidebar,
   isTargetingChangeset,
   showFirecloudDevelopRef,
   initialAppVersionResolver,
@@ -68,38 +71,38 @@ export const AppVersionPicker: React.FunctionComponent<{
           fieldValue={appVersionResolver}
           setFieldValue={(value) => {
             if (value === "exact") {
-              setSidebar(
+              setSidebar(({ filterText }) => (
                 <SidebarSelectAppVersion
                   appVersions={appVersions}
-                  fieldValue={appVersionExact}
+                  fieldValue={filterText}
                   setFieldValue={(value) => {
                     setAppVersionExact(value);
                     setSidebar();
                   }}
                 />
-              );
+              ));
             } else if (value === "follow") {
-              setSidebar(
+              setSidebar(({ filterText }) => (
                 <SidebarSelectOtherChartRelease
                   chartReleases={chartReleases}
-                  fieldValue={appVersionFollowChartRelease}
+                  fieldValue={filterText}
                   setFieldValue={(value) => {
                     setAppVersionFollowChartRelease(value);
                     setSidebar();
                   }}
                 />
-              );
+              ));
             } else if (value === "branch") {
-              setSidebar(
+              setSidebar(({ filterText }) => (
                 <SidebarSelectAppVersionBranch
                   appVersions={appVersions}
-                  fieldValue={appVersionBranch}
+                  fieldValue={filterText}
                   setFieldValue={(value) => {
                     setAppVersionBranch(value);
                     setSidebar();
                   }}
                 />
-              );
+              ));
             } else {
               setSidebar();
             }
@@ -127,18 +130,21 @@ export const AppVersionPicker: React.FunctionComponent<{
                   isTargetingChangeset ? "toAppVersionExact" : "appVersionExact"
                 }
                 value={appVersionExact}
-                onChange={(e) => setAppVersionExact(e.currentTarget.value)}
+                onChange={(e) => {
+                  setAppVersionExact(e.currentTarget.value);
+                  setSidebarFilterText(e.currentTarget.value);
+                }}
                 onFocus={() => {
-                  setSidebar(
+                  setSidebar(({ filterText }) => (
                     <SidebarSelectAppVersion
                       appVersions={appVersions}
-                      fieldValue={appVersionExact}
+                      fieldValue={filterText}
                       setFieldValue={(value) => {
                         setAppVersionExact(value);
                         setSidebar();
                       }}
                     />
-                  );
+                  ));
                 }}
                 required
                 placeholder="Enter custom value or search..."
@@ -160,20 +166,21 @@ export const AppVersionPicker: React.FunctionComponent<{
                     : "appVersionFollowChartRelease"
                 }
                 value={appVersionFollowChartRelease}
-                onChange={(e) =>
-                  setAppVersionFollowChartRelease(e.currentTarget.value)
-                }
+                onChange={(e) => {
+                  setAppVersionFollowChartRelease(e.currentTarget.value);
+                  setSidebarFilterText(e.currentTarget.value);
+                }}
                 onFocus={() => {
-                  setSidebar(
+                  setSidebar(({ filterText }) => (
                     <SidebarSelectOtherChartRelease
                       chartReleases={chartReleases}
-                      fieldValue={appVersionFollowChartRelease}
+                      fieldValue={filterText}
                       setFieldValue={(value) => {
                         setAppVersionFollowChartRelease(value);
                         setSidebar();
                       }}
                     />
-                  );
+                  ));
                 }}
                 required
                 placeholder="Search..."
@@ -224,18 +231,21 @@ export const AppVersionPicker: React.FunctionComponent<{
                     : "appVersionBranch"
                 }
                 value={appVersionBranch}
-                onChange={(e) => setAppVersionBranch(e.currentTarget.value)}
+                onChange={(e) => {
+                  setAppVersionBranch(e.currentTarget.value);
+                  setSidebarFilterText(e.currentTarget.value);
+                }}
                 onFocus={() => {
-                  setSidebar(
+                  setSidebar(({ filterText }) => (
                     <SidebarSelectAppVersionBranch
                       appVersions={appVersions}
-                      fieldValue={appVersionBranch}
+                      fieldValue={filterText}
                       setFieldValue={(value) => {
                         setAppVersionBranch(value);
                         setSidebar();
                       }}
                     />
-                  );
+                  ));
                 }}
                 required
                 placeholder="Enter custom value or search..."

@@ -17,6 +17,7 @@ import {
 } from "~/errors/helpers/error-response-handlers";
 import { ChartReleaseChangeVersionHelpCopy } from "~/features/sherlock/chart-releases/change-versions/chart-release-change-version-help-copy";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
+import { useSidebar } from "~/hooks/use-sidebar";
 import { AppVersionPicker } from "../../app-versions/set/app-version-picker";
 import { ChartVersionPicker } from "../../chart-versions/set/chart-version-picker";
 import { ChartReleaseUseOtherInstanceFields } from "../set/chart-release-use-other-instance-fields";
@@ -57,7 +58,12 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
     preconfiguredAppVersionExact || preconfiguredChartVersionExact
   );
 
-  const [sidebar, setSidebar] = useState<React.ReactNode>();
+  const {
+    setSidebarFilterText,
+    setSidebar,
+    isSidebarPresent,
+    SidebarComponent,
+  } = useSidebar();
 
   const [
     useExactVersionsFromOtherChartRelease,
@@ -79,8 +85,9 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
         >
           {preconfiguredVersions || (
             <ChartReleaseUseOtherInstanceFields
-              chartReleases={otherChartReleases}
               setSidebar={setSidebar}
+              setSidebarFilterText={setSidebarFilterText}
+              chartReleases={otherChartReleases}
               chartName={chartRelease.name || ""}
               preconfigured={Boolean(preconfiguredOtherEnvironment)}
               useExactVersionsFromOtherChartRelease={
@@ -115,9 +122,10 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
                 </>
               )}
               <AppVersionPicker
+                setSidebar={setSidebar}
+                setSidebarFilterText={setSidebarFilterText}
                 appVersions={appVersions}
                 chartReleases={otherChartReleases}
-                setSidebar={setSidebar}
                 isTargetingChangeset={true}
                 showFirecloudDevelopRef={
                   chartRelease.chartInfo?.legacyConfigsEnabled
@@ -157,10 +165,10 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
                 }
               />
               <ChartVersionPicker
+                setSidebar={setSidebar}
+                setSidebarFilterText={setSidebarFilterText}
                 chartVersions={chartVersions}
                 chartReleases={otherChartReleases}
-                setSidebar={setSidebar}
-                isTargetingChangeset={true}
                 initialChartVersionResolver={
                   formState?.toChartVersionResolver ||
                   (preconfiguredChartVersionExact && "exact") ||
@@ -197,8 +205,8 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
           {errorSummary && <FormErrorDisplay {...errorSummary} />}
         </ActionBox>
       </OutsetPanel>
-      <InsetPanel largeScreenOnly={!sidebar}>
-        {sidebar || (
+      <InsetPanel largeScreenOnly={!isSidebarPresent}>
+        {<SidebarComponent /> || (
           <FillerText>
             <ChartReleaseChangeVersionHelpCopy
               chartInstanceName={chartRelease.name}

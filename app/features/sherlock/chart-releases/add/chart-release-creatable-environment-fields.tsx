@@ -2,18 +2,21 @@ import { SerializeFrom } from "@remix-run/node";
 import { V2controllersCluster } from "@sherlock-js-client/sherlock";
 import React, { useState } from "react";
 import { TextField } from "~/components/interactivity/text-field";
+import { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectCluster } from "../../clusters/set/sidebar-select-cluster";
 
-export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<{
-  clusters: SerializeFrom<V2controllersCluster[]>;
-  setSidebar: (sidebar?: React.ReactNode) => void;
+export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<
+  {
+    clusters: SerializeFrom<V2controllersCluster[]>;
 
-  requireCluster?: boolean;
-  initialName: string;
-  initialCluster: string;
-}> = ({
-  clusters,
+    requireCluster?: boolean;
+    initialName: string;
+    initialCluster: string;
+  } & SetsSidebarProps
+> = ({
+  setSidebarFilterText,
   setSidebar,
+  clusters,
   requireCluster,
   initialName,
   initialCluster,
@@ -43,18 +46,21 @@ export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<{
         <TextField
           name="cluster"
           value={cluster}
-          onChange={(e) => setCluster(e.currentTarget.value)}
+          onChange={(e) => {
+            setCluster(e.currentTarget.value);
+            setSidebarFilterText(e.currentTarget.value);
+          }}
           onFocus={() => {
-            setSidebar(
+            setSidebar(({ filterText }) => (
               <SidebarSelectCluster
                 clusters={clusters}
-                fieldValue={cluster}
+                fieldValue={filterText}
                 setFieldValue={(value) => {
                   setCluster(value);
                   setSidebar();
                 }}
               />
-            );
+            ));
           }}
           required={requireCluster}
           placeholder="Search..."

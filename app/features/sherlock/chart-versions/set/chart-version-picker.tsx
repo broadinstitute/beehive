@@ -7,23 +7,26 @@ import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { ChartVersionColors } from "~/features/sherlock/chart-versions/chart-version-colors";
+import { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectOtherChartRelease } from "../../chart-releases/set/sidebar-select-other-chart-release";
 import { SidebarSelectChartVersion } from "./sidebar-select-chart-version";
 
-export const ChartVersionPicker: React.FunctionComponent<{
-  chartVersions: SerializeFrom<V2controllersChartVersion[]>;
-  chartReleases: SerializeFrom<V2controllersChartRelease[]>;
-  setSidebar: (sidebar?: React.ReactNode) => void;
-  isTargetingChangeset?: boolean;
+export const ChartVersionPicker: React.FunctionComponent<
+  {
+    chartVersions: SerializeFrom<V2controllersChartVersion[]>;
+    chartReleases: SerializeFrom<V2controllersChartRelease[]>;
+    isTargetingChangeset?: boolean;
 
-  initialChartVersionResolver: string;
-  initialChartVersionExact: string;
-  initialChartVersionFollowChartRelease: string;
-  initialHelmfileRef: string;
-}> = ({
+    initialChartVersionResolver: string;
+    initialChartVersionExact: string;
+    initialChartVersionFollowChartRelease: string;
+    initialHelmfileRef: string;
+  } & SetsSidebarProps
+> = ({
+  setSidebarFilterText,
+  setSidebar,
   chartVersions,
   chartReleases,
-  setSidebar,
   isTargetingChangeset,
   initialChartVersionResolver,
   initialChartVersionExact,
@@ -53,28 +56,28 @@ export const ChartVersionPicker: React.FunctionComponent<{
           fieldValue={chartVersionResolver}
           setFieldValue={(value) => {
             if (value === "exact") {
-              setSidebar(
+              setSidebar(({ filterText }) => (
                 <SidebarSelectChartVersion
                   chartVersions={chartVersions}
-                  fieldValue={chartVersionExact}
+                  fieldValue={filterText}
                   setFieldValue={(value) => {
                     setChartVersionExact(value);
                     setSidebar();
                   }}
                 />
-              );
+              ));
             } else if (value === "follow") {
-              setSidebar(
+              setSidebar(({ filterText }) => (
                 <SidebarSelectOtherChartRelease
                   chartReleases={chartReleases}
-                  fieldValue={chartVersionFollowChartRelease}
+                  fieldValue={filterText}
                   setFieldValue={(value) => {
                     setChartVersionFollowChartRelease(value);
                     setSidebar();
                   }}
                   showVersion="chart"
                 />
-              );
+              ));
             } else {
               setSidebar();
             }
@@ -103,18 +106,21 @@ export const ChartVersionPicker: React.FunctionComponent<{
                   : "chartVersionExact"
               }
               value={chartVersionExact}
-              onChange={(e) => setChartVersionExact(e.currentTarget.value)}
+              onChange={(e) => {
+                setChartVersionExact(e.currentTarget.value);
+                setSidebarFilterText(e.currentTarget.value);
+              }}
               onFocus={() =>
-                setSidebar(
+                setSidebar(({ filterText }) => (
                   <SidebarSelectChartVersion
                     chartVersions={chartVersions}
-                    fieldValue={chartVersionExact}
+                    fieldValue={filterText}
                     setFieldValue={(value) => {
                       setChartVersionExact(value);
                       setSidebar();
                     }}
                   />
-                )
+                ))
               }
               required
               placeholder="Enter custom value or search..."
@@ -136,20 +142,23 @@ export const ChartVersionPicker: React.FunctionComponent<{
                   : "chartVersionFollowChartRelease"
               }
               value={chartVersionFollowChartRelease}
-              onChange={(e) =>
-                setChartVersionFollowChartRelease(e.currentTarget.value)
+              onChange={(e) => {
+                setChartVersionFollowChartRelease(e.currentTarget.value);
+                setSidebarFilterText(e.currentTarget.value);
+              }}
+              onFocus={() =>
+                setSidebar(({ filterText }) => (
+                  <SidebarSelectOtherChartRelease
+                    chartReleases={chartReleases}
+                    fieldValue={filterText}
+                    setFieldValue={(value) => {
+                      setChartVersionFollowChartRelease(value);
+                      setSidebar();
+                    }}
+                    showVersion="chart"
+                  />
+                ))
               }
-              onFocus={() => (
-                <SidebarSelectOtherChartRelease
-                  chartReleases={chartReleases}
-                  fieldValue={chartVersionFollowChartRelease}
-                  setFieldValue={(value) => {
-                    setChartVersionFollowChartRelease(value);
-                    setSidebar();
-                  }}
-                  showVersion="chart"
-                />
-              )}
               required
               placeholder="Search..."
             />

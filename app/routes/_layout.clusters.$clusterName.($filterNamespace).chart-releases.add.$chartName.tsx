@@ -17,7 +17,6 @@ import {
   ChartVersionsApi,
   V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
-import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -39,6 +38,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
+import { useSidebar } from "~/hooks/use-sidebar";
 import { useClusterChartReleasesAddContext } from "./_layout.clusters.$clusterName.($filterNamespace).chart-releases.add";
 
 export const handle = {
@@ -129,7 +129,12 @@ export default function Route() {
   const errorInfo = useActionData<typeof action>();
   const { cluster, environments } = useClusterChartReleasesAddContext();
 
-  const [sidebar, setSidebar] = useState<React.ReactNode>();
+  const {
+    setSidebarFilterText,
+    setSidebar,
+    isSidebarPresent,
+    SidebarComponent,
+  } = useSidebar();
 
   return (
     <>
@@ -140,8 +145,9 @@ export default function Route() {
           {...ChartReleaseColors}
         >
           <ChartReleaseCreatableClusterFields
-            environments={environments}
             setSidebar={setSidebar}
+            setSidebarFilterText={setSidebarFilterText}
+            environments={environments}
             initialName={
               errorInfo?.formState?.name || `${chart.name}-${cluster.name}`
             }
@@ -150,9 +156,10 @@ export default function Route() {
           />
           <p className="py-4">Fields below this point can be edited later.</p>
           <AppVersionPicker
+            setSidebar={setSidebar}
+            setSidebarFilterText={setSidebarFilterText}
             appVersions={appVersions}
             chartReleases={otherChartReleases}
-            setSidebar={setSidebar}
             isTargetingChangeset={false}
             showFirecloudDevelopRef={chart.legacyConfigsEnabled}
             initialAppVersionResolver={
@@ -177,9 +184,10 @@ export default function Route() {
           />
           <br />
           <ChartVersionPicker
+            setSidebar={setSidebar}
+            setSidebarFilterText={setSidebarFilterText}
             chartVersions={chartVersions}
             chartReleases={otherChartReleases}
-            setSidebar={setSidebar}
             isTargetingChangeset={false}
             initialChartVersionResolver={
               errorInfo?.formState?.chartVersionResolver || "latest"
@@ -215,7 +223,9 @@ export default function Route() {
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
-      <InsetPanel largeScreenOnly={!sidebar}>{sidebar}</InsetPanel>
+      <InsetPanel largeScreenOnly={!isSidebarPresent}>
+        <SidebarComponent />
+      </InsetPanel>
     </>
   );
 }

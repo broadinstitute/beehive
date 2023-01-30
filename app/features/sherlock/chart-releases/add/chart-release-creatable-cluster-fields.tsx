@@ -3,17 +3,20 @@ import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import React, { useState } from "react";
 import { TextField } from "~/components/interactivity/text-field";
 import { SidebarSelectEnvironment } from "~/features/sherlock/environments/set/sidebar-select-environment";
+import { SetsSidebarProps } from "~/hooks/use-sidebar";
 
-export const ChartReleaseCreatableClusterFields: React.FunctionComponent<{
-  environments: SerializeFrom<V2controllersEnvironment[]>;
-  setSidebar: (sidebar?: React.ReactNode) => void;
+export const ChartReleaseCreatableClusterFields: React.FunctionComponent<
+  {
+    environments: SerializeFrom<V2controllersEnvironment[]>;
 
-  initialName: string;
-  initialNamespace: string;
-  initialEnvironment: string;
-}> = ({
-  environments,
+    initialName: string;
+    initialNamespace: string;
+    initialEnvironment: string;
+  } & SetsSidebarProps
+> = ({
+  setSidebarFilterText,
   setSidebar,
+  environments,
   initialName,
   initialNamespace,
   initialEnvironment,
@@ -67,18 +70,21 @@ export const ChartReleaseCreatableClusterFields: React.FunctionComponent<{
         <TextField
           name="environment"
           value={environment}
-          onChange={(e) => setEnvironment(e.currentTarget.value)}
+          onChange={(e) => {
+            setEnvironment(e.currentTarget.value);
+            setSidebarFilterText(e.currentTarget.value);
+          }}
           onFocus={() => {
-            setSidebar(
+            setSidebar(({ filterText }) => (
               <SidebarSelectEnvironment
                 environments={environments}
-                fieldValue={environment}
+                fieldValue={filterText}
                 setFieldValue={(value) => {
                   setEnvironment(value);
                   setSidebar();
                 }}
               />
-            );
+            ));
           }}
           placeholder="Search..."
         />

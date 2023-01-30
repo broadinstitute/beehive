@@ -2,18 +2,22 @@ import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
 import React from "react";
 import { TextField } from "~/components/interactivity/text-field";
+import { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectOtherChartRelease } from "./sidebar-select-other-chart-release";
 
-export const ChartReleaseUseOtherInstanceFields: React.FunctionComponent<{
-  chartReleases: SerializeFrom<V2controllersChartRelease[]>;
-  setSidebar: (sidebar?: React.ReactNode) => void;
-  chartName: string;
-  preconfigured?: boolean;
-  useExactVersionsFromOtherChartRelease: string;
-  setUseExactVersionsFromOtherChartRelease: (value: string) => void;
-}> = ({
-  chartReleases,
+export const ChartReleaseUseOtherInstanceFields: React.FunctionComponent<
+  {
+    chartReleases: SerializeFrom<V2controllersChartRelease[]>;
+    chartName: string;
+    preconfigured?: boolean;
+    useExactVersionsFromOtherChartRelease: string;
+    setUseExactVersionsFromOtherChartRelease: (value: string) => void;
+  } & SetsSidebarProps
+> = ({
+  setSidebarFilterText,
   setSidebar,
+
+  chartReleases,
   chartName,
   preconfigured,
   useExactVersionsFromOtherChartRelease,
@@ -37,20 +41,20 @@ export const ChartReleaseUseOtherInstanceFields: React.FunctionComponent<{
     <TextField
       name="useExactVersionsFromOtherChartRelease"
       value={useExactVersionsFromOtherChartRelease}
-      onChange={(e) =>
-        setUseExactVersionsFromOtherChartRelease(e.currentTarget.value)
-      }
+      onChange={(e) => {
+        setUseExactVersionsFromOtherChartRelease(e.currentTarget.value);
+        setSidebarFilterText(e.currentTarget.value);
+      }}
       onFocus={() => {
-        setSidebar(
+        setSidebar(({ filterText }) => (
           <SidebarSelectOtherChartRelease
             chartReleases={chartReleases}
-            fieldValue={useExactVersionsFromOtherChartRelease}
+            fieldValue={filterText}
             setFieldValue={(value) => {
               setUseExactVersionsFromOtherChartRelease(value);
-              setSidebar();
             }}
           />
-        );
+        ));
       }}
       placeholder="Search..."
     />
