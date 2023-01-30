@@ -1,6 +1,6 @@
 import { Form, useTransition } from "@remix-run/react";
 import { safeRedirectPath } from "~/helpers/validate";
-import ActionButton from "../interactivity/action-button";
+import { ActionButton } from "../interactivity/action-button";
 import { NavButton } from "../interactivity/nav-button";
 import { CsrfTokenInput } from "../logic/csrf-token";
 import { ActionBoxProps } from "./action-box";

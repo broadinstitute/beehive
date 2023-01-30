@@ -1,5 +1,3 @@
-import { scrollDivID } from "~/routes/__layout";
-
 /*
 LoadScroller is some magic informed by the internals of Remix and React.
 
@@ -41,6 +39,8 @@ Here's the overview:
    is pretty deep into Remix-land while this here is just an odd React
    component.
 */
+
+import { scrollDivID } from "~/routes/_layout";
 
 const scrollToRightFunctionText = ((scrollDivID: string): void => {
   const scrollControlDiv = document.getElementById(scrollDivID);

@@ -5,6 +5,9 @@
     "strings": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
   "tailwindCSS.classAttributes": [
     "className",
     "sizeClassName",

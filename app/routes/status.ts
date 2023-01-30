@@ -1,5 +1,5 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderArgs } from "@remix-run/node";
 
-export const loader: LoaderFunction = async () => {
+export async function loader(_: LoaderArgs) {
   return "OK";
-};
+}

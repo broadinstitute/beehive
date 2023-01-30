@@ -1,5 +1,5 @@
 import { Form, useTransition } from "@remix-run/react";
-import ActionButton from "../interactivity/action-button";
+import { ActionButton } from "../interactivity/action-button";
 import { CsrfTokenInput } from "../logic/csrf-token";
 
 export interface ActionBoxProps {
