@@ -4,5 +4,5 @@ import { LoaderArgs, redirect } from "@remix-run/node";
 // laying around in the /routes diectory to actual routes, so
 // this actually does work.
 export function loader(_: LoaderArgs) {
-  return redirect("r/README");
+  return redirect("/r/README");
 }
