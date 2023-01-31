@@ -286,6 +286,7 @@ export default function Route() {
             in the list, it won't be affected at all.
           </p>
           <ActionButton
+            type="button"
             sizeClassName=""
             isActive={sidebar === "select included charts"}
             onClick={(e) => {
