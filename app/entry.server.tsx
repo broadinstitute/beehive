@@ -16,15 +16,16 @@ export default function handleRequest(
   return new Promise((resolve, reject) => {
     let didError = false;
 
+    const nonce: string | undefined =
+      remixContext.staticHandlerContext.loaderData["root"]?.cspScriptNonce;
+
     let { pipe, abort } = renderToPipeableStream(
       <RemixServer context={remixContext} url={request.url} />,
       {
+        nonce: nonce,
         onShellReady: () => {
           let body = new PassThrough();
 
-          const nonce: string | undefined =
-            remixContext.staticHandlerContext.loaderData["root"]
-              ?.cspScriptNonce;
           responseHeaders.set(
             "Content-Security-Policy",
             getContentSecurityPolicy(nonce)
