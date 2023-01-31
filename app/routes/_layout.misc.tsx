@@ -1,21 +1,13 @@
 import { Octokit } from "@octokit/rest";
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { Link, NavLink, useLoaderData } from "@remix-run/react";
-import {
-  MiscApi,
-  MiscMyUserResponse,
-  MiscVersionResponse,
-} from "@sherlock-js-client/sherlock";
+import { defer, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { Await, Link, NavLink, useLoaderData } from "@remix-run/react";
+import { MiscApi } from "@sherlock-js-client/sherlock";
+import { Suspense } from "react";
 import {
   CsrfTokenContext,
   csrfTokenInputName,
 } from "~/components/logic/csrf-token";
 import { ThemeDropdown } from "~/components/logic/theme";
-import { FormErrorDisplay } from "~/errors/components/form-error-display";
-import {
-  makeErrorResponseReturner,
-  ReturnedErrorInfo,
-} from "~/errors/helpers/error-response-handlers";
 import {
   forwardIAP,
   SherlockConfiguration,
@@ -38,39 +30,28 @@ export async function loader({ request }: LoaderArgs) {
   const octokit = new Octokit({
     auth: session.get(sessionFields.githubAccessToken),
   });
-  return [
-    process.env.BUILD_VERSION || "development",
-    await sherlock
+  return defer({
+    beehiveVersion: process.env.BUILD_VERSION || "development",
+    sherlockVersionPromise: sherlock
       .versionGet(forwardIAP(request))
-      .then((versionResponse) => versionResponse, makeErrorResponseReturner()),
-    await sherlock
+      .then((versionResponse) => versionResponse),
+    mySherlockUserPromise: sherlock
       .myUserGet(forwardIAP(request))
-      .then((myUserResponse) => myUserResponse, makeErrorResponseReturner()),
-    // TODO: defer
-    await octokit.users
+      .then((myUserResponse) => myUserResponse),
+    myGitHubUserPromise: octokit.users
       .getAuthenticated()
-      .then((response) => response.data, makeErrorResponseReturner()),
-  ];
+      .then((response) => response.data),
+  });
 }
 
 export default function Route() {
-  const [beehiveVersion, sherlockVersion, mySherlockUser, myGitHubUser] =
-    useLoaderData<
-      [
-        // This loader has... particularly awful typing... because the
-        // goal is to return as much as we can even if some requests error.
-        // The semantics we can make good use of everywhere else pretty
-        // much just fail here. This is one file, used just as a debugging
-        // tool, so right now there's not much urgency to figure out some
-        // more idiomatic mechanism here.
-        // (If this seems fine, look below at all the type assertions we
-        // need to do)
-        string,
-        MiscVersionResponse | ReturnedErrorInfo<unknown>,
-        MiscMyUserResponse | ReturnedErrorInfo<unknown>,
-        { login: string; html_url: string } | ReturnedErrorInfo<unknown>
-      ]
-    >();
+  const {
+    beehiveVersion,
+    sherlockVersionPromise,
+    mySherlockUserPromise,
+    myGitHubUserPromise,
+  } = useLoaderData<typeof loader>();
+
   return (
     <div className="h-full w-full text-color-body-text text-center flex flex-col justify-center items-center">
       <p>
@@ -82,86 +63,75 @@ export default function Route() {
           {beehiveVersion}
         </Link>
       </p>
-      {sherlockVersion.hasOwnProperty("errorSummary") ? (
-        <FormErrorDisplay
-          {...(sherlockVersion as ReturnedErrorInfo<unknown>).errorSummary}
-        />
-      ) : (
-        <p
-          title={JSON.stringify(
-            (sherlockVersion as MiscVersionResponse).buildInfo,
-            null,
-            2
-          )}
+
+      <Suspense fallback={<p>Loading Sherlock version...</p>}>
+        <Await
+          resolve={sherlockVersionPromise}
+          errorElement={<p>Error loading Sherlock version!</p>}
         >
-          Sherlock version{" "}
-          <Link
-            to={`/charts/sherlock/app-versions/${
-              (sherlockVersion as MiscVersionResponse).version
-            }`}
-            className="font-mono underline decoration-color-link-underline"
-          >
-            {" "}
-            {(sherlockVersion as MiscVersionResponse).version}
-          </Link>{" "}
-          built on{" "}
-          <span className="font-mono">
-            {" "}
-            {(sherlockVersion as MiscVersionResponse).goVersion}
-          </span>
-        </p>
-      )}
+          {(sherlockVersion) => (
+            <p title={JSON.stringify(sherlockVersion.buildInfo, null, 2)}>
+              Sherlock version{" "}
+              <Link
+                to={`/charts/sherlock/app-versions/${sherlockVersion.version}`}
+                className="font-mono underline decoration-color-link-underline"
+              >
+                {" "}
+                {sherlockVersion.version}
+              </Link>{" "}
+              built on{" "}
+              <span className="font-mono"> {sherlockVersion.goVersion}</span>
+            </p>
+          )}
+        </Await>
+      </Suspense>
       <br />
-      {mySherlockUser.hasOwnProperty("errorSummary") ? (
-        <FormErrorDisplay
-          {...(mySherlockUser as ReturnedErrorInfo<unknown>).errorSummary}
-        />
-      ) : (
-        <>
-          <p
-            title={JSON.stringify(
-              (mySherlockUser as MiscMyUserResponse).rawInfo,
-              null,
-              2
-            )}
-          >
-            You are{" "}
-            <span className="font-mono">
-              {" "}
-              {(mySherlockUser as MiscMyUserResponse).email}
-            </span>
-            ; {(mySherlockUser as MiscMyUserResponse).suitability}
-          </p>
-          <p>
-            Click{" "}
-            <a
-              href="?gcp-iap-mode=CLEAR_LOGIN_COOKIE"
-              className="decoration-color-link-underline underline"
-            >
-              here
-            </a>{" "}
-            to log out by forcibly invalidating your IAP cookie (usually
-            unnecessary)
-          </p>
-        </>
-      )}
+
+      <Suspense fallback={<p>Loading Sherlock user info...</p>}>
+        <Await
+          resolve={mySherlockUserPromise}
+          errorElement={<p>Error loading Sherlock user info!</p>}
+        >
+          {(mySherlockUser) => (
+            <p title={JSON.stringify(mySherlockUser.rawInfo, null, 2)}>
+              You are <span className="font-mono"> {mySherlockUser.email}</span>
+              ; {mySherlockUser.suitability}
+            </p>
+          )}
+        </Await>
+      </Suspense>
+      <p>
+        Click{" "}
+        <a
+          href="?gcp-iap-mode=CLEAR_LOGIN_COOKIE"
+          className="decoration-color-link-underline underline"
+        >
+          here
+        </a>{" "}
+        to log out by forcibly invalidating your IAP cookie (usually
+        unnecessary)
+      </p>
       <br />
-      {myGitHubUser.hasOwnProperty("errorSummary") ? (
-        <FormErrorDisplay
-          {...(myGitHubUser as ReturnedErrorInfo<unknown>).errorSummary}
-        />
-      ) : (
-        <p title={JSON.stringify(myGitHubUser, null, 2)}>
-          You are{" "}
-          <a
-            href={(myGitHubUser as { html_url: string }).html_url}
-            className="font-mono underline decoration-color-link-underline"
-          >
-            {(myGitHubUser as { login: string }).login}
-          </a>{" "}
-          on GitHub
-        </p>
-      )}
+
+      <Suspense fallback={<p>Loading GitHub user info...</p>}>
+        <Await
+          resolve={myGitHubUserPromise}
+          errorElement={<p>Error loading GitHub user info!</p>}
+        >
+          {(myGitHubUser) => (
+            <p title={JSON.stringify(myGitHubUser, null, 2)}>
+              You are{" "}
+              <a
+                href={(myGitHubUser as { html_url: string }).html_url}
+                className="font-mono underline decoration-color-link-underline"
+              >
+                {(myGitHubUser as { login: string }).login}
+              </a>{" "}
+              on GitHub
+            </p>
+          )}
+        </Await>
+      </Suspense>
       <CsrfTokenContext.Consumer>
         {(token) => (
           <p>
@@ -195,6 +165,7 @@ export default function Route() {
         )}
       </CsrfTokenContext.Consumer>
       <br />
+
       <ThemeDropdown />
     </div>
   );
