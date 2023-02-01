@@ -15,7 +15,7 @@ export const ChartVersionPicker: React.FunctionComponent<
   {
     chartVersions: SerializeFrom<V2controllersChartVersion[]>;
     chartReleases: SerializeFrom<V2controllersChartRelease[]>;
-    isTargetingChangeset?: boolean;
+    isTargetingChangeset: boolean;
 
     initialChartVersionResolver: string;
     initialChartVersionExact: string;

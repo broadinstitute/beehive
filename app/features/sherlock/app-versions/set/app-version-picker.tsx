@@ -16,7 +16,7 @@ export const AppVersionPicker: React.FunctionComponent<
   {
     appVersions: SerializeFrom<V2controllersAppVersion[]>;
     chartReleases: SerializeFrom<V2controllersChartRelease[]>;
-    isTargetingChangeset?: boolean;
+    isTargetingChangeset: boolean;
     showFirecloudDevelopRef?: boolean;
 
     initialAppVersionResolver: string;

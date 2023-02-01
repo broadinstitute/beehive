@@ -169,6 +169,7 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
                 setSidebarFilterText={setSidebarFilterText}
                 chartVersions={chartVersions}
                 chartReleases={otherChartReleases}
+                isTargetingChangeset={true}
                 initialChartVersionResolver={
                   formState?.toChartVersionResolver ||
                   (preconfiguredChartVersionExact && "exact") ||
