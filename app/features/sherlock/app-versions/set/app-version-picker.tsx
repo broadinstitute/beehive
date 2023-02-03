@@ -67,7 +67,7 @@ export const AppVersionPicker: React.FunctionComponent<
           name={
             isTargetingChangeset ? "toAppVersionResolver" : "appVersionResolver"
           }
-          className="grid grid-cols-5 mt-2"
+          className="grid grid-cols-4 mt-2"
           fieldValue={appVersionResolver}
           setFieldValue={(value) => {
             if (value === "exact") {
@@ -111,7 +111,7 @@ export const AppVersionPicker: React.FunctionComponent<
           enums={[
             ["Exact", "exact"],
             ["Other Instance", "follow"],
-            ["Git Commit", "commit"],
+            // ["Git Commit", "commit"],
             ["Git Branch", "branch"],
             ["None", "none"],
           ]}
