@@ -3,7 +3,7 @@ import {
   V2controllersAppVersion,
   V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
@@ -55,6 +55,16 @@ export const AppVersionPicker: React.FunctionComponent<
     initialAppVersionBranch
   );
 
+  const reportsGit = useMemo(
+    () =>
+      Boolean(
+        appVersions.find(
+          (appVersion) => appVersion.gitCommit && appVersion.gitBranch
+        )
+      ),
+    [appVersions]
+  );
+
   return (
     <div className="flex flex-col space-y-4">
       <div>
@@ -67,7 +77,7 @@ export const AppVersionPicker: React.FunctionComponent<
           name={
             isTargetingChangeset ? "toAppVersionResolver" : "appVersionResolver"
           }
-          className="grid grid-cols-4 mt-2"
+          className={`mt-2 grid ${reportsGit ? "grid-cols-5" : "grid-cols-3"}`}
           fieldValue={appVersionResolver}
           setFieldValue={(value) => {
             if (value === "exact") {
@@ -108,13 +118,21 @@ export const AppVersionPicker: React.FunctionComponent<
             }
             setAppVersionResolver(value);
           }}
-          enums={[
-            ["Exact", "exact"],
-            ["Other Instance", "follow"],
-            // ["Git Commit", "commit"],
-            ["Git Branch", "branch"],
-            ["None", "none"],
-          ]}
+          enums={
+            reportsGit
+              ? [
+                  ["Exact", "exact"],
+                  ["Other Instance", "follow"],
+                  ["Git Commit", "commit"],
+                  ["Git Branch", "branch"],
+                  ["None", "none"],
+                ]
+              : [
+                  ["Exact", "exact"],
+                  ["Other Instance", "follow"],
+                  ["None", "none"],
+                ]
+          }
           {...AppVersionColors}
         />
         <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
