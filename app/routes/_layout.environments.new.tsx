@@ -63,6 +63,8 @@ export const meta: V2_MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderArgs) {
+  const url = new URL(request.url);
+  const preconfiguredLifecycle = url.searchParams.get("lifecycle");
   return Promise.all([
     // https://cloud.google.com/iap/docs/identity-howto#getting_the_users_identity_with_signed_headers
     request.headers.get("X-Goog-Authenticated-User-Email")?.split(":").at(-1) ||
@@ -70,6 +72,7 @@ export async function loader({ request }: LoaderArgs) {
     new ClustersApi(SherlockConfiguration)
       .apiV2ClustersGet({}, forwardIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
+    preconfiguredLifecycle,
   ]);
 }
 
@@ -139,12 +142,13 @@ export async function action({ request }: ActionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const [userEmail, clusters] = useLoaderData<typeof loader>();
+  const [userEmail, clusters, preconfiguredLifecycle] =
+    useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const { environments } = useEnvironmentsContext();
 
   const [lifecycle, setLifecycle] = useState(
-    errorInfo?.formState?.lifecycle || "dynamic"
+    errorInfo?.formState?.lifecycle || preconfiguredLifecycle || "dynamic"
   );
   const [templateEnvironment, setTemplateEnvironment] = useState(
     errorInfo?.formState?.templateEnvironment || ""
