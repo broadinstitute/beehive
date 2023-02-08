@@ -32,6 +32,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
       : "true"
   );
   const [base, setBase] = useState(environment?.base || "");
+  const [name, setName] = useState(environment?.name || "");
   return (
     <div className="flex flex-col space-y-4">
       <div>
@@ -55,7 +56,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
           enums={[
             ["BEE", "dynamic"],
             ["BEE Template", "template"],
-            // Soft-prevent creating a static environment through the UI
+            // Soft-prevent creating a static environment through the UI, use ?lifecycle=static instead
             // ["Static", "static"],
           ]}
           {...EnvironmentColors}
@@ -136,6 +137,18 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             {...EnvironmentColors}
           />
         </div>
+        <label className={lifecycle === "static" ? "mb-4" : "hidden"}>
+          <h2 className="font-light text-2xl">Namespace</h2>
+          <p>
+            This is the namespace that chart instances will be created in
+            (regardless of cluster).
+          </p>
+          <TextField
+            name="defaultNamespace"
+            placeholder={`terra-${name || "(name)"}`}
+            defaultValue={environment?.defaultNamespace}
+          />
+        </label>
         <label>
           <h2 className="font-light text-2xl">Name</h2>
           <p>{`The name of this new environment. ${
@@ -149,6 +162,8 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
               lifecycle === "dynamic" ? "(can be left blank)" : "(required)"
             }
             required={lifecycle !== "dynamic"}
+            value={name}
+            onChange={(e) => setName(e.currentTarget.value)}
           />
         </label>
       </div>
