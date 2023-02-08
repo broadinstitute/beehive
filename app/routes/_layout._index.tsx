@@ -32,7 +32,7 @@ const IndexNavButton: React.FunctionComponent<IndexNavButtonProps> = ({
 
 export default function Route() {
   return (
-    <div className="text-color-body-text flex flex-col w-fit lg:w-full justify-center items-center space-y-8 min-h-0 py-4">
+    <div className="text-color-body-text flex flex-col w-fit lg:w-full min-h-full h-fit justify-center items-center space-y-8 py-4">
       <div className="flex flex-col justify-center items-center space-y-6">
         <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extralight lg:font-thin shrink-0 text-center text-color-header-text min-h-0 mt-4">
           Welcome to Beehive
