@@ -11,7 +11,7 @@ export const OutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({
   largeScreenOnly,
 }) => (
   <div
-    className={`w-screen lg:w-min ${
+    className={`snap-end w-screen lg:w-min ${
       doubleWidth ? "lg:min-w-[66vw]" : "lg:min-w-[33vw]"
     } ${
       largeScreenOnly ? "hidden lg:block" : ""

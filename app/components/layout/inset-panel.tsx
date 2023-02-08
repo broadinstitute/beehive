@@ -10,7 +10,7 @@ export const InsetPanel: React.FunctionComponent<InsetPanelProps> = ({
   largeScreenOnly,
 }) => (
   <div
-    className={`w-screen ${
+    className={`snap-end w-screen ${
       doubleWidth ? "lg:w-min lg:min-w-[66vw]" : "lg:w-[33vw]"
     } ${
       largeScreenOnly ? "hidden lg:block" : ""

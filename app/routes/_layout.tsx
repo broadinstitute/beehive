@@ -84,7 +84,7 @@ const LayoutRoute: React.FunctionComponent = () => {
       </div>
       <div
         id={scrollDivID}
-        className="h-full overflow-x-auto"
+        className="h-full overflow-x-auto snap-x snap-mandatory"
         ref={scrollControlRef}
       >
         <div className="min-w-min flex flex-row h-full grow" ref={scrolledRef}>
