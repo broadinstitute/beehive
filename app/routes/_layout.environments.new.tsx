@@ -11,7 +11,7 @@ import {
   EnvironmentsApi,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { ActionButton } from "~/components/interactivity/action-button";
 import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
@@ -29,6 +29,7 @@ import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit/environment-editable-fields";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
+import { DuplicateBeeWarning } from "~/features/sherlock/environments/new/duplicate-bee-warning";
 import { EnvironmentCreatableFields } from "~/features/sherlock/environments/new/environment-creatable-fields";
 import {
   forwardIAP,
@@ -62,6 +63,8 @@ export const meta: V2_MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderArgs) {
+  const url = new URL(request.url);
+  const preconfiguredLifecycle = url.searchParams.get("lifecycle");
   return Promise.all([
     // https://cloud.google.com/iap/docs/identity-howto#getting_the_users_identity_with_signed_headers
     request.headers.get("X-Goog-Authenticated-User-Email")?.split(":").at(-1) ||
@@ -69,6 +72,7 @@ export async function loader({ request }: LoaderArgs) {
     new ClustersApi(SherlockConfiguration)
       .apiV2ClustersGet({}, forwardIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
+    preconfiguredLifecycle,
   ]);
 }
 
@@ -138,18 +142,30 @@ export async function action({ request }: ActionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const [userEmail, clusters] = useLoaderData<typeof loader>();
+  const [userEmail, clusters, preconfiguredLifecycle] =
+    useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const { environments } = useEnvironmentsContext();
 
   const [lifecycle, setLifecycle] = useState(
-    errorInfo?.formState?.lifecycle || "dynamic"
+    errorInfo?.formState?.lifecycle || preconfiguredLifecycle || "dynamic"
   );
   const [templateEnvironment, setTemplateEnvironment] = useState(
     errorInfo?.formState?.templateEnvironment || ""
   );
   const [defaultCluster, setDefaultCluster] = useState(
     errorInfo?.formState?.defaultCluster || ""
+  );
+
+  let potentialDuplicates = useMemo(
+    () =>
+      environments.filter(
+        (environment) =>
+          environment.lifecycle === "dynamic" &&
+          environment.owner === userEmail &&
+          environment.templateEnvironment === templateEnvironment
+      ),
+    [userEmail, environments, lifecycle, templateEnvironment]
   );
 
   // TODO: make sidebar have type React.ReactNode
@@ -186,6 +202,16 @@ export default function Route() {
             }
             userEmail={userEmail}
           />
+          {potentialDuplicates.length > 0 &&
+            lifecycle === "dynamic" &&
+            templateEnvironment && (
+              <DuplicateBeeWarning
+                template={templateEnvironment}
+                matchingEnvironmentNames={potentialDuplicates.map(
+                  (environment) => environment.name || ""
+                )}
+              />
+            )}
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
