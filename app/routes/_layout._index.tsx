@@ -38,7 +38,8 @@ export default function Route() {
           Welcome to Beehive
         </h1>
         <span className="text-lg">
-          <b className="font-semibold">New!</b> Trigger incidents from Beehive
+          <b className="font-semibold">New!</b> Start and stop BEEs without
+          losing state
         </span>
       </div>
       <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">
