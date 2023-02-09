@@ -14,7 +14,7 @@ import {
   ScrollRestoration,
   ShouldRevalidateFunction,
   useLoaderData,
-  useTransition,
+  useNavigation,
 } from "@remix-run/react";
 import React from "react";
 import favicon from "./assets/favicon.svg";
@@ -178,7 +178,7 @@ export const App: React.FunctionComponent = () => {
     // than an empty string, React's will warn us about about a mismatch.
     cspScriptNonce = "";
   }
-  const transition = useTransition();
+  const transition = useNavigation();
   return (
     <React.StrictMode>
       <CsrfTokenContext.Provider value={csrfToken}>

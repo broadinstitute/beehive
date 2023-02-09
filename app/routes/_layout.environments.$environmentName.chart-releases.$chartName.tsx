@@ -11,6 +11,7 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { ChartReleaseDetails } from "~/features/sherlock/chart-releases/view/chart-release-details";
+import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/view/environment-offline-icon";
 import {
   forwardIAP,
   SherlockConfiguration,
@@ -52,7 +53,19 @@ export default function Route() {
       <OutsetPanel {...ChartReleaseColors}>
         <ItemDetails
           subtitle={`Instance of ${chartRelease.chart}`}
-          title={chartRelease.name || ""}
+          title={`${chartRelease.name}${
+            chartRelease.environmentInfo?.offline === true ? " (stopped)" : ""
+          }`}
+          icon={
+            chartRelease.environmentInfo?.lifecycle === "dynamic" &&
+            !chartRelease.environmentInfo.preventDeletion &&
+            chartRelease.environmentInfo.offline != undefined && (
+              <EnvironmentOfflineIcon
+                environmentName={chartRelease.environment || ""}
+                offline={chartRelease.environmentInfo.offline}
+              />
+            )
+          }
         >
           <ChartReleaseDetails
             chartRelease={chartRelease}
