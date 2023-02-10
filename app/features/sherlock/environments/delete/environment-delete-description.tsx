@@ -49,5 +49,12 @@ export const EnvironmentDeleteDescription: React.FunctionComponent<
       You can create an environment with the same name as something that's been
       deleted.
     </p>
+    {environment.offline && (
+      <p className="text-2xl font-medium">
+        This environment is currently stopped, which means that no external
+        cloud resources like groups can be cleaned up! You should only delete
+        running BEEs.
+      </p>
+    )}
   </div>
 );

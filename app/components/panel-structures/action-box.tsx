@@ -1,4 +1,4 @@
-import { Form, useTransition } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import { ActionButton } from "../interactivity/action-button";
 import { CsrfTokenInput } from "../logic/csrf-token";
 
@@ -19,7 +19,7 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
   beforeBorderClassName,
   backgroundClassName,
 }) => {
-  const transition = useTransition();
+  const transition = useNavigation();
   return (
     <div className="flex flex-col items-center space-y-4 pb-4 text-color-body-text">
       <div className="w-[90vw] lg:w-[30vw] p-3 pt-4">

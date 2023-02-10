@@ -1,4 +1,4 @@
-import { Form, useTransition } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import { safeRedirectPath } from "~/helpers/validate";
 import { ActionButton } from "../interactivity/action-button";
 import { NavButton } from "../interactivity/nav-button";
@@ -23,7 +23,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
   hideButton,
 }) => {
   const safeReturnPath = safeRedirectPath(returnPath);
-  const transition = useTransition();
+  const transition = useNavigation();
   return (
     <div className="w-screen lg:w-[33vw] h-full flex flex-col space-y-8 p-8 pt-4 text-color-body-text">
       <div>

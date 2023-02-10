@@ -2,12 +2,14 @@ export interface ItemDetailsProps {
   children: React.ReactNode;
   subtitle?: string;
   title: string;
+  icon?: React.ReactNode;
 }
 
 export const ItemDetails: React.FunctionComponent<ItemDetailsProps> = ({
   children,
   subtitle,
   title,
+  icon,
 }) => (
   <div className="w-screen lg:w-[33vw] flex flex-col space-y-4 p-8 pt-4 text-color-body-text">
     <div>
@@ -16,7 +18,12 @@ export const ItemDetails: React.FunctionComponent<ItemDetailsProps> = ({
           {subtitle}
         </h2>
       )}
-      <h1 className="text-5xl font-medium text-color-header-text">{title}</h1>
+      <div className="flex flex-row items-start gap-4 mt-1">
+        {icon}
+        <h1 className="text-5xl font-medium text-color-header-text pt-1">
+          {title}
+        </h1>
+      </div>
     </div>
     {children}
   </div>
