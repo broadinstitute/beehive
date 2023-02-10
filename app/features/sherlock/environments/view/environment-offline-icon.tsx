@@ -3,6 +3,7 @@ import {
   autoUpdate,
   flip,
   FloatingFocusManager,
+  limitShift,
   offset,
   shift,
   useClick,
@@ -33,6 +34,7 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
     middlewareData: { arrow: { x: arrowX, y: arrowY } = {} },
     placement,
   } = useFloating({
+    placement: "left",
     open: isOpen,
     onOpenChange: setIsOpen,
     middleware: [
@@ -40,11 +42,18 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
       flip(),
       shift({
         padding: 10,
+        limiter: limitShift(),
       }),
       arrow({ element: arrowElement, padding: 16 }),
     ],
     whileElementsMounted: autoUpdate,
   });
+  const arrowSide = {
+    top: "bottom",
+    right: "left",
+    bottom: "top",
+    left: "right",
+  }[placement.split("-")[0]];
   const click = useClick(context);
   const dismiss = useDismiss(context);
   const role = useRole(context);
@@ -92,23 +101,14 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
             <div
               ref={arrowElement}
               style={{
-                left:
-                  arrowX != undefined
-                    ? `${arrowX}px`
-                    : placement.split("-")[0] === "right"
-                    ? "-10px"
-                    : "10px",
-                top:
-                  arrowY != undefined
-                    ? `${arrowY}px`
-                    : placement.split("-")[0] === "bottom"
-                    ? "-10px"
-                    : "10px",
+                left: arrowX != undefined ? `${arrowX}px` : undefined,
+                top: arrowY != undefined ? `${arrowY}px` : undefined,
+                ...(arrowSide ? { [arrowSide]: "-10px" } : {}),
               }}
               className={`absolute -z-10 w-5 h-5 rotate-45 ${EnvironmentColors.borderElementBackgroundClassName}`}
             ></div>
             <div
-              className={`bg-color-nearest-bg rounded-2xl shadow-2xl drop-shadow-xl flex flex-col gap-4 border-4 p-6 ${EnvironmentColors.borderClassName} w-[80vw] lg:w-[20vw]`}
+              className={`bg-color-nearest-bg rounded-2xl shadow-2xl drop-shadow-xl flex flex-col gap-4 border-4 p-6 ${EnvironmentColors.borderClassName} w-[80vw] lg:w-[25vw]`}
             >
               <h3 className="font-light text-3xl">{`Currently ${
                 offline ? "Stopped" : "Running"
