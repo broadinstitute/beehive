@@ -163,6 +163,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             }
             required={lifecycle !== "dynamic"}
             value={name}
+            pattern="[^A-Z]*"
             onChange={(e) => setName(e.currentTarget.value)}
           />
         </label>
