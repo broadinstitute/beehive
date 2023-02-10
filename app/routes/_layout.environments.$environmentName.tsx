@@ -11,6 +11,7 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentDetails } from "~/features/sherlock/environments/view/environment-details";
+import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/view/environment-offline-icon";
 import {
   forwardIAP,
   SherlockConfiguration,
@@ -54,7 +55,19 @@ export default function Route() {
           }${toTitleCase(environment.lifecycle || "")}${
             environment.lifecycle == "dynamic" ? " BEE" : " "
           } environment`}
-          title={environment.name || ""}
+          title={`${environment.name}${
+            environment.offline ? " (stopped)" : ""
+          }`}
+          icon={
+            environment.lifecycle === "dynamic" &&
+            !environment.preventDeletion &&
+            environment.offline != undefined && (
+              <EnvironmentOfflineIcon
+                environmentName={environment.name || ""}
+                offline={environment.offline}
+              />
+            )
+          }
         >
           <EnvironmentDetails
             environment={environment}

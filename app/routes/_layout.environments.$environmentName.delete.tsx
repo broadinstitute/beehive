@@ -107,7 +107,7 @@ export default function Route() {
         {...EnvironmentColors}
       >
         <EnvironmentDeleteDescription environment={environment} />
-        {environment.lifecycle !== "dynamic" && (
+        {(environment.lifecycle !== "dynamic" || environment.offline) && (
           <DeletionGuard name={environment.name} />
         )}
         {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
