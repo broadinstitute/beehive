@@ -34,7 +34,6 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
     middlewareData: { arrow: { x: arrowX, y: arrowY } = {} },
     placement,
   } = useFloating({
-    placement: "left",
     open: isOpen,
     onOpenChange: setIsOpen,
     middleware: [
@@ -81,9 +80,9 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
         {...getReferenceProps()}
       >
         {offline ? (
-          <PowerOff className="w-9 h-9" />
+          <PowerOff className="w-9 h-9 stroke-color-header-text" />
         ) : (
-          <Power className="w-9 h-9" />
+          <Power className="w-9 h-9 stroke-color-header-text" />
         )}
       </ActionButton>
       {isOpen && (
@@ -108,7 +107,7 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
               className={`absolute -z-10 w-5 h-5 rotate-45 ${EnvironmentColors.borderElementBackgroundClassName}`}
             ></div>
             <div
-              className={`bg-color-nearest-bg rounded-2xl shadow-2xl drop-shadow-xl flex flex-col gap-4 border-4 p-6 ${EnvironmentColors.borderClassName} w-[80vw] lg:w-[25vw]`}
+              className={`flex flex-col  gap-4 p-6 w-[80vw] lg:w-[25vw] bg-color-nearest-bg rounded-2xl border-4 ${EnvironmentColors.borderClassName} before:block before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:-z-20 before:rounded-2xl before:shadow-2xl lbefore:drop-shadow-xl`}
             >
               <h3 className="font-light text-3xl">{`Currently ${
                 offline ? "Stopped" : "Running"
