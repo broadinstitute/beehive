@@ -12,7 +12,7 @@ import {
   useInteractions,
   useRole,
 } from "@floating-ui/react";
-import { useFetcher, useNavigation } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { Power, PowerOff } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ActionButton } from "~/components/interactivity/action-button";
@@ -63,7 +63,6 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
   ]);
 
   const fetcher = useFetcher();
-  const transition = useNavigation();
   useEffect(() => {
     if (fetcher.type === "done") {
       setIsOpen(false);
@@ -141,7 +140,7 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
                 <ActionButton
                   sizeClassName="w-full"
                   type="submit"
-                  isLoading={transition.state === "submitting"}
+                  isLoading={fetcher.state !== "idle"}
                   {...EnvironmentColors}
                 >
                   {`${offline ? "Start" : "Stop"} ${environmentName}`}
