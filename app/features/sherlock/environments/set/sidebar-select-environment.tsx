@@ -9,9 +9,15 @@ export const SidebarSelectEnvironment: React.FunctionComponent<{
   environments: SerializeFrom<V2controllersEnvironment[]>;
   fieldValue: string;
   setFieldValue: (value: string) => void;
-}> = ({ environments, fieldValue, setFieldValue }) => (
+  title?: string;
+}> = ({
+  environments,
+  fieldValue,
+  setFieldValue,
+  title = "Select Environment",
+}) => (
   <SidebarFilterControlledList
-    title="Select Environment"
+    title={title}
     entries={environments}
     filterText={fieldValue}
     filter={matchEnvironment}

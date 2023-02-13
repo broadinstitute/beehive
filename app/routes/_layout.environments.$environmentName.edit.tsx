@@ -16,15 +16,10 @@ import {
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { ActionButton } from "~/components/interactivity/action-button";
-import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
-import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
-import { InteractiveList } from "~/components/panel-structures/interactive-list";
-import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit/environment-editable-fields";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
@@ -33,6 +28,7 @@ import {
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { useSidebar } from "~/hooks/use-sidebar";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
 import {
@@ -40,9 +36,6 @@ import {
   makeErrorResponseReturner,
 } from "../errors/helpers/error-response-handlers";
 import { clusterSorter } from "../features/sherlock/clusters/list/cluster-sorter";
-import { ListClusterButtonText } from "../features/sherlock/clusters/list/list-cluster-button-text";
-import { matchCluster } from "../features/sherlock/clusters/list/match-cluster";
-import { EditEnvironmentSidebarModes } from "../features/sherlock/environments/edit/edit-environment-sidebar-modes";
 import { getValidSession } from "../helpers/get-valid-session.server";
 import { useEnvironmentContext } from "./_layout.environments.$environmentName";
 
@@ -68,8 +61,6 @@ export async function action({ request, params }: ActionArgs) {
   const formData = await request.formData();
   const environmentRequest: V2controllersEnvironment = {
     ...formDataToObject(formData, false),
-    chartReleasesFromTemplate:
-      formData.get("chartReleasesFromTemplate") === "true",
     requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
     preventDeletion: formData.get("preventDeletion") === "true",
@@ -100,8 +91,12 @@ export default function Route() {
     errorInfo?.formState?.defaultCluster || environment.defaultCluster || ""
   );
 
-  const [sidebar, setSidebar] =
-    useState<EditEnvironmentSidebarModes>("help text");
+  const {
+    setSidebarFilterText,
+    setSidebar,
+    isSidebarPresent,
+    SidebarComponent,
+  } = useSidebar();
 
   return (
     <>
@@ -112,45 +107,21 @@ export default function Route() {
           {...EnvironmentColors}
         >
           <EnvironmentEditableFields
+            setSidebar={setSidebar}
+            setSidebarFilterText={setSidebarFilterText}
+            clusters={clusters}
             environment={errorInfo?.formState || environment}
             defaultCluster={defaultCluster}
             setDefaultCluster={setDefaultCluster}
-            setShowDefaultClusterPicker={() =>
-              setSidebar("select default cluster")
-            }
           />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
-      <InsetPanel largeScreenOnly={sidebar === "help text"}>
-        {sidebar === "help text" && (
+      <InsetPanel largeScreenOnly={!isSidebarPresent}>
+        {<SidebarComponent /> || (
           <FillerText>
             <EnvironmentHelpCopy />
           </FillerText>
-        )}
-        {sidebar === "select default cluster" && (
-          <InteractiveList title="Select Default Cluster" {...ClusterColors}>
-            <ListFilterInfo filterText={defaultCluster} />
-            <MemoryFilteredList
-              entries={clusters}
-              filterText={defaultCluster}
-              filter={matchCluster}
-            >
-              {(cluster, index) => (
-                <ActionButton
-                  key={index.toString()}
-                  onClick={() => {
-                    setDefaultCluster(cluster.name || "");
-                    setSidebar("help text");
-                  }}
-                  isActive={cluster.name === defaultCluster}
-                  {...ClusterColors}
-                >
-                  <ListClusterButtonText cluster={cluster} />
-                </ActionButton>
-              )}
-            </MemoryFilteredList>
-          </InteractiveList>
         )}
       </InsetPanel>
     </>

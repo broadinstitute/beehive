@@ -9,9 +9,10 @@ export const SidebarSelectCluster: React.FunctionComponent<{
   clusters: SerializeFrom<V2controllersCluster[]>;
   fieldValue: string;
   setFieldValue: (value: string) => void;
-}> = ({ clusters, fieldValue, setFieldValue }) => (
+  title?: string;
+}> = ({ clusters, fieldValue, setFieldValue, title = "Select Cluster" }) => (
   <SidebarFilterControlledList
-    title="Select Cluster"
+    title={title}
     entries={clusters}
     filterText={fieldValue}
     filter={matchCluster}
