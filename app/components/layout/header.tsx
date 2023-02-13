@@ -13,30 +13,16 @@ export const Header: FunctionComponent = () => {
           Beehive
         </span>
       </NavLink>
-      <div className="hidden lg:flex items-center gap-2 overflow-x-auto pr-2">
+      <div className="flex items-center gap-2 overflow-x-auto pr-2">
         {breadcrumbs.map((match, index) => (
           <div
             key={index.toString()}
-            className="shrink-0 flex items-center gap-2 font-light text-xl"
+            className="shrink-0 items-center gap-2 font-light text-xl lg:flex last:flex hidden"
           >
             <span>❯</span>
             {match.handle?.breadcrumb(params)}
           </div>
         ))}
-      </div>
-      <div className="flex lg:hidden items-center gap-2 pr-2 font-light text-xl">
-        {(breadcrumbs.length > 0 && (
-          <>
-            <span>❮</span>
-            {breadcrumbs[breadcrumbs.length - 2]?.handle?.breadcrumb(
-              params
-            ) || <NavLink to="/">Home</NavLink>}
-          </>
-        )) || (
-          <NavLink to="/" className="font-medium text-3xl">
-            Beehive
-          </NavLink>
-        )}
       </div>
     </div>
   );
