@@ -7,7 +7,7 @@ export const PanelErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError();
   const { title, body, status } = parseRouteError(error);
   return (
-    <div className="bg-color-error-bg border-color-error-border text-color-body-text border-2 rounded-lg p-1 border-dashed grow w-[100vw] lg:w-[33vw]">
+    <div className="snap-end bg-color-error-bg border-color-error-border text-color-body-text border-2 rounded-lg p-1 border-dashed grow w-[100vw] lg:w-[33vw]">
       <h3 className="font-semibold text-color-header-text">{title}</h3>
       {status === 404 && <BackButton />}
       {status === 422 && <ReloadButton />}

@@ -3,36 +3,42 @@ import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
+import { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { EnvironmentColors } from "../environment-colors";
+import { SidebarSelectEnvironment } from "../set/sidebar-select-environment";
 
 export interface EnvironmentCreatableFieldsProps {
   environment?:
     | V2controllersEnvironment
     | SerializeFrom<V2controllersEnvironment>;
+  templateEnvironments: SerializeFrom<V2controllersEnvironment[]>;
   lifecycle: string;
   setLifecycle: (value: string) => void;
   templateEnvironment: string;
   setTemplateEnvironment: (value: string) => void;
-  setShowTemplateEnvironmentPicker: (value: boolean) => void;
 }
 
 export const EnvironmentCreatableFields: React.FunctionComponent<
-  EnvironmentCreatableFieldsProps
+  EnvironmentCreatableFieldsProps & SetsSidebarProps
 > = ({
+  setSidebarFilterText,
+  setSidebar,
+
   environment,
+  templateEnvironments,
   lifecycle,
   setLifecycle,
   templateEnvironment,
   setTemplateEnvironment,
-  setShowTemplateEnvironmentPicker,
 }) => {
-  const [chartReleasesFromTemplate, setChartReleasesFromTemplate] = useState(
-    environment?.chartReleasesFromTemplate != null
-      ? environment.chartReleasesFromTemplate.toString()
+  const [autoPopulateChartReleases, setAutoPopulateChartReleases] = useState(
+    environment?.autoPopulateChartReleases != null
+      ? environment.autoPopulateChartReleases.toString()
       : "true"
   );
   const [base, setBase] = useState(environment?.base || "");
   const [name, setName] = useState(environment?.name || "");
+
   return (
     <div className="flex flex-col space-y-4">
       <div>
@@ -44,9 +50,20 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
           setFieldValue={(value) => {
             if (value === "dynamic") {
               setBase("");
+              setSidebar(({ filterText }) => (
+                <SidebarSelectEnvironment
+                  environments={templateEnvironments}
+                  title="Select Template"
+                  fieldValue={filterText}
+                  setFieldValue={(value) => {
+                    setTemplateEnvironment(value);
+                    setSidebar();
+                  }}
+                />
+              ));
             } else {
-              setShowTemplateEnvironmentPicker(false);
               setTemplateEnvironment("");
+              setSidebar();
               if (value === "template") {
                 setBase("bee");
               }
@@ -113,30 +130,64 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             placeholder="Search..."
             required={lifecycle === "dynamic"}
             value={templateEnvironment}
-            onChange={(e) => setTemplateEnvironment(e.currentTarget.value)}
+            onChange={(e) => {
+              setTemplateEnvironment(e.currentTarget.value);
+              setSidebarFilterText(e.currentTarget.value);
+            }}
             onFocus={() => {
-              setShowTemplateEnvironmentPicker(true);
+              setSidebar(({ filterText }) => (
+                <SidebarSelectEnvironment
+                  environments={templateEnvironments}
+                  title="Select Template"
+                  fieldValue={filterText}
+                  setFieldValue={(value) => {
+                    setTemplateEnvironment(value);
+                    setSidebar();
+                  }}
+                />
+              ));
             }}
           />
         </label>
-        <div className={lifecycle !== "dynamic" ? "hidden" : "mb-4"}>
-          <h2 className="font-light text-2xl">Copy Charts From Template?</h2>
-          <p>
-            When this is enabled, creating this new BEE will also immediately
-            create instances of all the charts that the template has.
-          </p>
-          <EnumInputSelect
-            name="chartReleasesFromTemplate"
-            className="grid grid-cols-2 mt-2"
-            fieldValue={chartReleasesFromTemplate}
-            setFieldValue={setChartReleasesFromTemplate}
-            enums={[
-              ["Enabled", "true"],
-              ["Disabled", "false"],
-            ]}
-            {...EnvironmentColors}
-          />
-        </div>
+        {lifecycle !== "static" && (
+          <div className="mb-4">
+            {lifecycle === "dynamic" && (
+              <>
+                <h2 className="font-light text-2xl">
+                  Copy Charts From Template?
+                </h2>
+                <p>
+                  When this is enabled, creating this new BEE will also
+                  immediately create instances of all the charts that the
+                  template has.
+                </p>
+              </>
+            )}
+            {lifecycle === "template" && (
+              <>
+                <h2 className="font-light text-2xl">
+                  Start With Default Charts?
+                </h2>
+                <p>
+                  When this is enabled, this template will start off with a
+                  DevOps-configured set of default charts that are usually
+                  needed for BEEs to work.
+                </p>
+              </>
+            )}
+            <EnumInputSelect
+              name="autoPopulateChartReleases"
+              className="grid grid-cols-2 mt-2"
+              fieldValue={autoPopulateChartReleases}
+              setFieldValue={setAutoPopulateChartReleases}
+              enums={[
+                ["Enabled", "true"],
+                ["Disabled", "false"],
+              ]}
+              {...EnvironmentColors}
+            />
+          </div>
+        )}
         <label className={lifecycle === "static" ? "mb-4" : "hidden"}>
           <h2 className="font-light text-2xl">Namespace</h2>
           <p>

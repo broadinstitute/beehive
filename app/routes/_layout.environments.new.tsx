@@ -12,20 +12,16 @@ import {
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useMemo, useState } from "react";
+import { EnumInputSelect } from "~/components/interactivity/enum-select";
 
-import { ActionButton } from "~/components/interactivity/action-button";
-import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
-import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import {
   buildNotifications,
   Notification,
 } from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
-import { InteractiveList } from "~/components/panel-structures/interactive-list";
-import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit/environment-editable-fields";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
@@ -36,6 +32,7 @@ import {
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { useSidebar } from "~/hooks/use-sidebar";
 import { commitSession, sessionFields } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
@@ -44,11 +41,6 @@ import {
   makeErrorResponseReturner,
 } from "../errors/helpers/error-response-handlers";
 import { clusterSorter } from "../features/sherlock/clusters/list/cluster-sorter";
-import { ListClusterButtonText } from "../features/sherlock/clusters/list/list-cluster-button-text";
-import { matchCluster } from "../features/sherlock/clusters/list/match-cluster";
-import { ListEnvironmentButtonText } from "../features/sherlock/environments/list/list-environment-button-text";
-import { matchEnvironment } from "../features/sherlock/environments/list/match-environment";
-import { NewEnvironmentSidebarModes } from "../features/sherlock/environments/new/new-environment-sidebar-modes";
 import { getValidSession } from "../helpers/get-valid-session.server";
 import { useEnvironmentsContext } from "./_layout.environments";
 
@@ -82,8 +74,8 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const environmentRequest: V2controllersEnvironment = {
     ...formDataToObject(formData, true),
-    chartReleasesFromTemplate:
-      formData.get("chartReleasesFromTemplate") === "true",
+    autoPopulateChartReleases:
+      formData.get("autoPopulateChartReleases") === "true",
     requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
     preventDeletion: formData.get("preventDeletion") === "true",
@@ -95,7 +87,10 @@ export async function action({ request }: ActionArgs) {
       forwardIAP(request)
     )
     .then(async (environment) => {
-      if (environment.lifecycle === "dynamic") {
+      if (
+        environment.lifecycle === "dynamic" &&
+        formData.get("action") !== "none"
+      ) {
         const payload = {
           owner: "broadinstitute",
           repo: "terra-github-workflows",
@@ -103,6 +98,9 @@ export async function action({ request }: ActionArgs) {
           ref: "main",
           inputs: {
             "bee-name": environment.name || "",
+            "provision-only": (
+              formData.get("action") === "provision"
+            ).toString(),
           },
         };
         console.log(
@@ -168,9 +166,14 @@ export default function Route() {
     [userEmail, environments, lifecycle, templateEnvironment]
   );
 
-  // TODO: make sidebar have type React.ReactNode
-  const [sidebar, setSidebar] =
-    useState<NewEnvironmentSidebarModes>("help text");
+  const [actionToRun, setActionToRun] = useState("provision-seed");
+
+  const {
+    setSidebarFilterText,
+    setSidebar,
+    isSidebarPresent,
+    SidebarComponent,
+  } = useSidebar();
 
   return (
     <>
@@ -181,27 +184,88 @@ export default function Route() {
           {...EnvironmentColors}
         >
           <EnvironmentCreatableFields
+            setSidebar={setSidebar}
+            setSidebarFilterText={setSidebarFilterText}
             environment={errorInfo?.formState}
+            templateEnvironments={environments.filter(
+              (environment) => environment.lifecycle === "template"
+            )}
             lifecycle={lifecycle}
             setLifecycle={setLifecycle}
             templateEnvironment={templateEnvironment}
             setTemplateEnvironment={setTemplateEnvironment}
-            setShowTemplateEnvironmentPicker={() =>
-              setSidebar("select template")
-            }
           />
-          <p className="py-4">Fields below this point can be edited later.</p>
-          <EnvironmentEditableFields
-            environment={errorInfo?.formState}
-            creating={true}
-            templateInUse={lifecycle === "dynamic"}
-            defaultCluster={defaultCluster}
-            setDefaultCluster={setDefaultCluster}
-            setShowDefaultClusterPicker={() =>
-              setSidebar("select default cluster")
-            }
-            userEmail={userEmail}
-          />
+          <details className="pt-2">
+            <summary className="cursor-pointer font-light text-2xl">
+              Click to Expand Advanced Configuration
+            </summary>
+            <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col gap-4">
+              <div>
+                <h2 className="font-light text-2xl">Action to Run</h2>
+                <EnumInputSelect
+                  name="action"
+                  className="grid grid-cols-3 mt-2"
+                  fieldValue={actionToRun}
+                  setFieldValue={setActionToRun}
+                  enums={[
+                    ["Provision + Seed", "provision-seed"],
+                    ["Provision", "provision"],
+                    ["None", "none"],
+                  ]}
+                  {...EnvironmentColors}
+                />
+              </div>
+              <div className="pl-6 border-l-2 border-color-divider-line flex flex-col gap-2">
+                {actionToRun === "provision-seed" && (
+                  <>
+                    <p>
+                      When creating, a GitHub Action will be kicked off to both
+                      provision the BEE in our infrastructure and seed it with
+                      some initial data.
+                    </p>
+                    <p>
+                      The seeding process is modeled after legacy FiaB behavior.
+                      It will skip steps as needed if some services aren't
+                      included in the BEE.
+                    </p>
+                    <p>
+                      DevOps recommends modern seeding be done via the services
+                      themselves, Kubernetes Jobs, or GitHub Actions.
+                    </p>
+                  </>
+                )}
+                {actionToRun === "provision" && (
+                  <p>
+                    When creating, a GitHub Action will be kicked off to
+                    provision the BEE in our infrastructure. The BEE will not
+                    receive legacy FiaB-style seeding.
+                  </p>
+                )}
+                {actionToRun === "none" && (
+                  <p>
+                    When creating, no GitHub Action will be kicked off. Manual
+                    intervention will be required to bring the BEE online, for
+                    example via "thelma bee provision."
+                  </p>
+                )}
+              </div>
+              <p className="py-4 font-semibold">
+                The fields below this point can be edited later but some do have
+                an initial impact during creation.
+              </p>
+              <EnvironmentEditableFields
+                setSidebar={setSidebar}
+                setSidebarFilterText={setSidebarFilterText}
+                clusters={clusters}
+                environment={errorInfo?.formState}
+                creating={true}
+                templateInUse={lifecycle === "dynamic"}
+                defaultCluster={defaultCluster}
+                setDefaultCluster={setDefaultCluster}
+                userEmail={userEmail}
+              />
+            </div>
+          </details>
           {potentialDuplicates.length > 0 &&
             lifecycle === "dynamic" &&
             templateEnvironment && (
@@ -215,64 +279,11 @@ export default function Route() {
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
-      <InsetPanel largeScreenOnly={sidebar === "help text"}>
-        {sidebar === "help text" && (
+      <InsetPanel largeScreenOnly={!isSidebarPresent}>
+        {<SidebarComponent /> || (
           <FillerText>
             <EnvironmentHelpCopy />
           </FillerText>
-        )}
-        {sidebar === "select template" && (
-          <InteractiveList
-            title="Select Template Environment"
-            {...EnvironmentColors}
-          >
-            <ListFilterInfo filterText={templateEnvironment} />
-            <MemoryFilteredList
-              entries={environments.filter(
-                (environment) => environment.lifecycle === "template"
-              )}
-              filterText={templateEnvironment}
-              filter={matchEnvironment}
-            >
-              {(environment, index) => (
-                <ActionButton
-                  key={index.toString()}
-                  onClick={() => {
-                    setTemplateEnvironment(environment.name || "");
-                    setSidebar("help text");
-                  }}
-                  isActive={environment.name === templateEnvironment}
-                  {...EnvironmentColors}
-                >
-                  <ListEnvironmentButtonText environment={environment} />
-                </ActionButton>
-              )}
-            </MemoryFilteredList>
-          </InteractiveList>
-        )}
-        {sidebar === "select default cluster" && (
-          <InteractiveList title="Select Default Cluster" {...ClusterColors}>
-            <ListFilterInfo filterText={defaultCluster} />
-            <MemoryFilteredList
-              entries={clusters}
-              filterText={defaultCluster}
-              filter={matchCluster}
-            >
-              {(cluster, index) => (
-                <ActionButton
-                  key={index.toString()}
-                  onClick={() => {
-                    setDefaultCluster(cluster.name || "");
-                    setSidebar("help text");
-                  }}
-                  isActive={cluster.name === defaultCluster}
-                  {...ClusterColors}
-                >
-                  <ListClusterButtonText cluster={cluster} />
-                </ActionButton>
-              )}
-            </MemoryFilteredList>
-          </InteractiveList>
         )}
       </InsetPanel>
     </>

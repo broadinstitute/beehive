@@ -1,16 +1,22 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import {
+  V2controllersCluster,
+  V2controllersEnvironment,
+} from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
 import { TextField } from "~/components/interactivity/text-field";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
+import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import { SidebarSelectCluster } from "../../clusters/set/sidebar-select-cluster";
 import { EnvironmentColors } from "../environment-colors";
 
 export interface EnvironmentEditableFieldsProps {
   environment?:
     | V2controllersEnvironment
     | SerializeFrom<V2controllersEnvironment>;
+  clusters: SerializeFrom<V2controllersCluster[]>;
   // When we're creating an environment, we don't want to try to replicate Sherlock's
   // advanced template-default behavior, so this flag tells us to let the user pass
   // empty values for fields where we might otherwise block it.
@@ -20,23 +26,23 @@ export interface EnvironmentEditableFieldsProps {
   templateInUse?: boolean;
   defaultCluster: string;
   setDefaultCluster: (value: string) => void;
-  setShowDefaultClusterPicker: (value: boolean) => void;
-  hideOtherPickers?: () => void;
   // We don't actually *use* this value but it looks slick if we show it to the user
   // as the placeholder for an empty owner field during creation.
   userEmail?: string | null;
 }
 
 export const EnvironmentEditableFields: React.FunctionComponent<
-  EnvironmentEditableFieldsProps
+  EnvironmentEditableFieldsProps & SetsSidebarProps
 > = ({
+  setSidebarFilterText,
+  setSidebar,
+
   environment,
+  clusters,
   creating,
   templateInUse,
   defaultCluster,
   setDefaultCluster,
-  setShowDefaultClusterPicker,
-  hideOtherPickers = () => {},
   userEmail,
 }) => {
   const [requiresSuitability, setRequiresSuitability] = useState(
@@ -57,13 +63,14 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       ? environment.preventDeletion.toString()
       : "false"
   );
-  const extraFields = (
-    <>
+  return (
+    <div className="flex flex-col space-y-4">
       <div>
         <h2 className="font-light text-2xl">Require Suitability?</h2>
         <p>
-          DevOps's systems can require production-suitability to <b>modify</b>{" "}
-          this environment (doesn't affect access).
+          DevOps's systems can require production-suitability to{" "}
+          <b className="font-semibold">modify</b> this environment (doesn't
+          affect access).
         </p>
         <EnumInputSelect
           name="requiresSuitability"
@@ -142,6 +149,37 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
+        <h2 className="font-light text-2xl">Default Cluster</h2>
+        <p>
+          The default Kubernetes cluster that charts will be deployed to.
+          Existing charts won't move if this is ever changed.
+        </p>
+        <TextField
+          name="defaultCluster"
+          placeholder={
+            templateInUse ? "(defaults to template's value)" : "Search..."
+          }
+          value={defaultCluster}
+          onChange={(e) => {
+            setDefaultCluster(e.currentTarget.value);
+            setSidebarFilterText(e.currentTarget.value);
+          }}
+          onFocus={() => {
+            setSidebar(({ filterText }) => (
+              <SidebarSelectCluster
+                clusters={clusters}
+                fieldValue={filterText}
+                setFieldValue={(value) => {
+                  setDefaultCluster(value);
+                  setSidebar();
+                }}
+                title="Select Default Cluster"
+              />
+            ));
+          }}
+        />
+      </label>
+      <label>
         <h2 className="font-light text-2xl">Default Firecloud Develop Ref</h2>
         <p className="mb-2">
           Legacy configuration from firecloud-develop doesn't work quite like
@@ -216,39 +254,6 @@ export const EnvironmentEditableFields: React.FunctionComponent<
             {...EnvironmentColors}
           />
         </div>
-      )}
-    </>
-  );
-  return (
-    <div className="flex flex-col space-y-4">
-      <label>
-        <h2 className="font-light text-2xl">Default Cluster</h2>
-        <p>
-          The default Kubernetes cluster that charts will be deployed to.
-          Existing charts won't move if this is ever changed.
-        </p>
-        <TextField
-          name="defaultCluster"
-          placeholder={
-            templateInUse ? "(defaults to template's value)" : "Search..."
-          }
-          value={defaultCluster}
-          onChange={(e) => setDefaultCluster(e.currentTarget.value)}
-          onFocus={() => {
-            setShowDefaultClusterPicker(true);
-            hideOtherPickers();
-          }}
-        />
-      </label>
-      {creating ? (
-        <details className="pt-2">
-          <summary className="cursor-pointer font-medium">Extra Fields</summary>
-          <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
-            {extraFields}
-          </div>
-        </details>
-      ) : (
-        extraFields
       )}
     </div>
   );

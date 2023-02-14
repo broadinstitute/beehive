@@ -2,6 +2,7 @@ import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 
 export const liveEnvironmentValuesNameOrder = [
   "dev",
+  "ddp-azure-dev",
   "alpha",
   "staging",
   "prod",
