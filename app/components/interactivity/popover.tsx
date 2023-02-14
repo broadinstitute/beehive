@@ -5,6 +5,7 @@ import {
   FloatingFocusManager,
   limitShift,
   offset,
+  Placement,
   shift,
   useClick,
   useDismiss,
@@ -24,9 +25,17 @@ export const Popover: React.FunctionComponent<
       ref: React.Ref<HTMLDivElement>,
       props: ReturnType<typeof useInteractions>["getReferenceProps"]
     ) => React.ReactNode;
+    initialPlacement?: Placement;
     children: React.ReactNode;
   } & ColorProps
-> = ({ open, onOpenChange, openButton, children, ...colors }) => {
+> = ({
+  open,
+  onOpenChange,
+  openButton,
+  initialPlacement = "bottom",
+  children,
+  ...colors
+}) => {
   // Floating UI's core job is to handle placement of the popover. This hook works by
   // giving us a bunch of props that we have to sprinkle around to make Floating UI's
   // math work out.
@@ -48,6 +57,7 @@ export const Popover: React.FunctionComponent<
   } = useFloating({
     open,
     onOpenChange,
+    placement: initialPlacement,
     middleware: [
       offset(20),
       flip(),
