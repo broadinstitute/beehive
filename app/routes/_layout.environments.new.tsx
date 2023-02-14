@@ -200,55 +200,60 @@ export default function Route() {
               Click to Expand Advanced Configuration
             </summary>
             <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col gap-4">
-              <div>
-                <h2 className="font-light text-2xl">Action to Run</h2>
-                <EnumInputSelect
-                  name="action"
-                  className="grid grid-cols-3 mt-2"
-                  fieldValue={actionToRun}
-                  setFieldValue={setActionToRun}
-                  enums={[
-                    ["Provision + Seed", "provision-seed"],
-                    ["Provision", "provision"],
-                    ["None", "none"],
-                  ]}
-                  {...EnvironmentColors}
-                />
-              </div>
-              <div className="pl-6 border-l-2 border-color-divider-line flex flex-col gap-2">
-                {actionToRun === "provision-seed" && (
-                  <>
-                    <p>
-                      When creating, a GitHub Action will be kicked off to both
-                      provision the BEE in our infrastructure and seed it with
-                      some initial data.
-                    </p>
-                    <p>
-                      The seeding process is modeled after legacy FiaB behavior.
-                      It will skip steps as needed if some services aren't
-                      included in the BEE.
-                    </p>
-                    <p>
-                      DevOps recommends modern seeding be done via the services
-                      themselves, Kubernetes Jobs, or GitHub Actions.
-                    </p>
-                  </>
-                )}
-                {actionToRun === "provision" && (
-                  <p>
-                    When creating, a GitHub Action will be kicked off to
-                    provision the BEE in our infrastructure. The BEE will not
-                    receive legacy FiaB-style seeding.
-                  </p>
-                )}
-                {actionToRun === "none" && (
-                  <p>
-                    When creating, no GitHub Action will be kicked off. Manual
-                    intervention will be required to bring the BEE online, for
-                    example via "thelma bee provision."
-                  </p>
-                )}
-              </div>
+              {lifecycle === "dynamic" && (
+                <>
+                  <div>
+                    <h2 className="font-light text-2xl">Action to Run</h2>
+                    <EnumInputSelect
+                      name="action"
+                      className="grid grid-cols-3 mt-2"
+                      fieldValue={actionToRun}
+                      setFieldValue={setActionToRun}
+                      enums={[
+                        ["Provision + Seed", "provision-seed"],
+                        ["Provision", "provision"],
+                        ["None", "none"],
+                      ]}
+                      {...EnvironmentColors}
+                    />
+                  </div>
+                  <div className="pl-6 border-l-2 border-color-divider-line flex flex-col gap-2">
+                    {actionToRun === "provision-seed" && (
+                      <>
+                        <p>
+                          When creating, a GitHub Action will be kicked off to
+                          both provision the BEE in our infrastructure and seed
+                          it with some initial data.
+                        </p>
+                        <p>
+                          The seeding process is modeled after legacy FiaB
+                          behavior. It will skip steps as needed if some
+                          services aren't included in the BEE.
+                        </p>
+                        <p>
+                          DevOps recommends modern seeding be done via the
+                          services themselves, Kubernetes Jobs, or GitHub
+                          Actions.
+                        </p>
+                      </>
+                    )}
+                    {actionToRun === "provision" && (
+                      <p>
+                        When creating, a GitHub Action will be kicked off to
+                        provision the BEE in our infrastructure. The BEE will
+                        not receive legacy FiaB-style seeding.
+                      </p>
+                    )}
+                    {actionToRun === "none" && (
+                      <p>
+                        When creating, no GitHub Action will be kicked off.
+                        Manual intervention will be required to bring the BEE
+                        online, for example via "thelma bee provision."
+                      </p>
+                    )}
+                  </div>
+                </>
+              )}
               <p className="py-4 font-semibold">
                 The fields below this point can be edited later but some do have
                 an initial impact during creation.
