@@ -4,6 +4,7 @@ import {
   AppVersionsApi,
   V2controllersAppVersion,
 } from "@sherlock-js-client/sherlock";
+import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -68,18 +69,21 @@ export default function Route() {
   const { chart, appVersion } = useChartAppVersionContext();
   const errorInfo = useActionData<typeof action>();
   return (
-    <OutsetPanel>
-      <ActionBox
-        title={`Now Editing ${chart.name}/${appVersion.appVersion}`}
-        submitText="Click to Save Edits"
-        {...AppVersionColors}
-      >
-        <AppVersionEditableFields
-          appVersion={errorInfo?.formState ?? appVersion}
-          repo={chart.appImageGitRepo}
-        />
-        {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
-      </ActionBox>
-    </OutsetPanel>
+    <>
+      <OutsetPanel>
+        <ActionBox
+          title={`Now Editing ${chart.name}/${appVersion.appVersion}`}
+          submitText="Click to Save Edits"
+          {...AppVersionColors}
+        >
+          <AppVersionEditableFields
+            appVersion={errorInfo?.formState ?? appVersion}
+            repo={chart.appImageGitRepo}
+          />
+          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
+        </ActionBox>
+      </OutsetPanel>
+      <OutsetFiller />
+    </>
   );
 }

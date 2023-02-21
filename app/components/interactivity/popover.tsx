@@ -154,7 +154,7 @@ export const Popover: React.FunctionComponent<
             />
             <div
               className={
-                `flex flex-col gap-4 p-6 w-[80vw] lg:w-[25vw] bg-color-nearest-bg rounded-2xl border-4 ${colors.borderClassName} ` +
+                `flex flex-col gap-4 p-6 w-[80vw] xl:w-[25vw] bg-color-nearest-bg rounded-2xl border-4 ${colors.borderClassName} ` +
                 `before:block before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:-z-20 before:rounded-2xl before:shadow-2xl before:drop-shadow-xl`
               }
             >

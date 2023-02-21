@@ -10,8 +10,8 @@ import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
+import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/offline/environment-offline-icon";
 import { EnvironmentDetails } from "~/features/sherlock/environments/view/environment-details";
-import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/view/environment-offline-icon";
 import {
   forwardIAP,
   SherlockConfiguration,
@@ -60,7 +60,7 @@ export default function Route() {
           }`}
           icon={
             environment.lifecycle === "dynamic" &&
-            !environment.preventDeletion &&
+            (!environment.preventDeletion || environment.offline === true) &&
             environment.offline != undefined && (
               <EnvironmentOfflineIcon
                 environmentName={environment.name || ""}
@@ -74,10 +74,11 @@ export default function Route() {
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
             toEdit="./edit"
+            toSchedule="./schedule"
             // toLinkPagerduty={
             //   environment.lifecycle == "static" ? "./link-pagerduty" : ""
             // }
-            toDelete={environment.lifecycle != "static" ? "./delete" : ""}
+            toDelete={"./delete"}
           />
         </ItemDetails>
       </OutsetPanel>

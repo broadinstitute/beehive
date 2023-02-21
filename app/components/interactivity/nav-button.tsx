@@ -8,6 +8,8 @@ export interface NavButtonProps {
   disabled?: boolean;
   prod?: boolean;
   grow?: boolean;
+  end?: boolean;
+  forceActive?: boolean;
 }
 
 export const NavButton: React.FunctionComponent<NavButtonProps> = ({
@@ -18,19 +20,22 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
   disabled,
   prod,
   grow,
+  end,
+  forceActive,
 }) => (
   <div
     data-theme-prod={prod}
-    className={`${grow ? "grow" : ""} min-w-min relative shrink-0 ${
+    className={`${grow ? "grow" : ""} relative shrink-0 ${
       disabled ? "pointer-events-none" : ""
     }`}
   >
     <NavLink
       prefetch="intent"
       to={to}
+      end={end}
       className={({ isActive }) =>
         `flex flex-row items-center bg-color-nearest-bg active:bg-color-button-down rounded-2xl min-h-[3rem] focus-visible:outline focus-visible:outline-color-focused-element before:w-full before:h-full before:block before:absolute before:rounded-2xl ${
-          isActive
+          isActive || forceActive
             ? "before:border-r-[2rem] before:hover:border-r-[2rem]"
             : "before:hover:border-r-[2rem]"
         } before:border-2 before:hover:border-4 shadow-md hover:shadow-lg ${

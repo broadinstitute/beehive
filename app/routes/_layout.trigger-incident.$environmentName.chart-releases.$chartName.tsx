@@ -14,6 +14,7 @@ import {
   ChartReleasesApi,
   PagerdutyAlertSummary,
 } from "@sherlock-js-client/sherlock";
+import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
@@ -86,15 +87,20 @@ export default function Route() {
   const chartRelease = useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   return (
-    <OutsetPanel>
-      <ActionBox
-        title={`Preparing to Trigger Specific Incident for ${chartRelease.chart} in ${chartRelease.environment}`}
-        submitText="Click to Trigger Incident"
-        {...ChartReleaseColors}
-      >
-        <IncidentSummaryFields initialSummary={errorInfo?.formState?.summary} />
-        {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
-      </ActionBox>
-    </OutsetPanel>
+    <>
+      <OutsetPanel>
+        <ActionBox
+          title={`Preparing to Trigger Specific Incident for ${chartRelease.chart} in ${chartRelease.environment}`}
+          submitText="Click to Trigger Incident"
+          {...ChartReleaseColors}
+        >
+          <IncidentSummaryFields
+            initialSummary={errorInfo?.formState?.summary}
+          />
+          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
+        </ActionBox>
+      </OutsetPanel>
+      <OutsetFiller />
+    </>
   );
 }

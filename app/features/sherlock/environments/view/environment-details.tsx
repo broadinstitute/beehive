@@ -20,6 +20,7 @@ export interface EnvironmentDetailsProps {
   toChartReleases?: string;
   toChangeVersions?: string;
   toEdit?: string;
+  toSchedule?: string;
   toLinkPagerduty?: string;
   toDelete?: string;
 }
@@ -31,6 +32,7 @@ export const EnvironmentDetails: React.FunctionComponent<
   toChartReleases,
   toChangeVersions,
   toEdit,
+  toSchedule,
   toLinkPagerduty,
   toDelete,
 }) => (
@@ -105,7 +107,11 @@ export const EnvironmentDetails: React.FunctionComponent<
         )}
       </div>
     )}
-    {(toEdit || toLinkPagerduty || toDelete || toChangeVersions) && (
+    {(toEdit ||
+      toSchedule ||
+      toLinkPagerduty ||
+      toDelete ||
+      toChangeVersions) && (
       <MutateControls
         name={environment.name || ""}
         colors={EnvironmentColors}
@@ -113,8 +119,19 @@ export const EnvironmentDetails: React.FunctionComponent<
         toChangeVersionsText="Monolith / Bulk Version Update"
         changeVersionText="Here you can do a bulk update of versions from another environment. If you want to update just one service or chart, view the charts in this environment and select the one you'd like to change."
         toEdit={toEdit}
+        toSchedule={
+          environment.lifecycle === "dynamic" &&
+          environment.preventDeletion !== true
+            ? toSchedule
+            : undefined
+        }
         toLinkPagerduty={toLinkPagerduty}
-        toDelete={environment.preventDeletion !== true ? toDelete : undefined}
+        toDelete={
+          environment.lifecycle !== "static" &&
+          environment.preventDeletion !== true
+            ? toDelete
+            : undefined
+        }
       />
     )}
   </div>
