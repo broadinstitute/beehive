@@ -45,7 +45,11 @@ const InternalTimeField: React.FunctionComponent<
         value={date ? dateToInputTime(date) : ""}
         onChange={(e) => setDate(inputTimeToDate(e.currentTarget.value))}
       />
-      <input type="hidden" name={name} value={date ? date.toISOString() : ""} />
+      <input
+        type="hidden"
+        name={name}
+        value={date ? toZonedIsoString(date) : ""}
+      />
     </>
   );
 };
@@ -69,4 +73,30 @@ function inputTimeToDate(inputTime: string): Date {
   const date = new Date();
   date.setHours(parseInt(parsed[1]), parseInt(parsed[2]));
   return date;
+}
+
+function toZonedIsoString(date: Date) {
+  var tzo = -date.getTimezoneOffset(),
+    dif = tzo >= 0 ? "+" : "-",
+    pad = function (num: Number) {
+      return (num < 10 ? "0" : "") + num;
+    };
+
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth() + 1) +
+    "-" +
+    pad(date.getDate()) +
+    "T" +
+    pad(date.getHours()) +
+    ":" +
+    pad(date.getMinutes()) +
+    ":" +
+    pad(date.getSeconds()) +
+    dif +
+    pad(Math.floor(Math.abs(tzo) / 60)) +
+    ":" +
+    pad(Math.abs(tzo) % 60)
+  );
 }
