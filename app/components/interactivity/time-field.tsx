@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ClientOnly } from "remix-utils";
+import { zonedISOString } from "~/helpers/date";
 import { LoadingField } from "./loading-field";
 
 // This component accepts a date/string for an existing value and/or an initial 24-hr wall clock time,
@@ -48,7 +49,7 @@ const InternalTimeField: React.FunctionComponent<
       <input
         type="hidden"
         name={name}
-        value={date ? toZonedIsoString(date) : ""}
+        value={date ? zonedISOString(date) : ""}
       />
     </>
   );
@@ -73,30 +74,4 @@ function inputTimeToDate(inputTime: string): Date {
   const date = new Date();
   date.setHours(parseInt(parsed[1]), parseInt(parsed[2]));
   return date;
-}
-
-function toZonedIsoString(date: Date) {
-  var tzo = -date.getTimezoneOffset(),
-    dif = tzo >= 0 ? "+" : "-",
-    pad = function (num: Number) {
-      return (num < 10 ? "0" : "") + num;
-    };
-
-  return (
-    date.getFullYear() +
-    "-" +
-    pad(date.getMonth() + 1) +
-    "-" +
-    pad(date.getDate()) +
-    "T" +
-    pad(date.getHours()) +
-    ":" +
-    pad(date.getMinutes()) +
-    ":" +
-    pad(date.getSeconds()) +
-    dif +
-    pad(Math.floor(Math.abs(tzo) / 60)) +
-    ":" +
-    pad(Math.abs(tzo) % 60)
-  );
 }

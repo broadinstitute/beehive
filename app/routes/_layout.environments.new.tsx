@@ -33,6 +33,7 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
+import { wrapForZonedISOString } from "~/helpers/date";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { commitSession, sessionFields } from "~/session.server";
@@ -88,13 +89,13 @@ export async function action({ request }: ActionArgs) {
       formData.get("offlineScheduleBeginEnabled") === "true",
     offlineScheduleBeginTime:
       offlineScheduleBeginTime && typeof offlineScheduleBeginTime === "string"
-        ? new Date(offlineScheduleBeginTime)
+        ? wrapForZonedISOString(new Date(offlineScheduleBeginTime))
         : undefined,
     offlineScheduleEndEnabled:
       formData.get("offlineScheduleEndEnabled") === "true",
     offlineScheduleEndTime:
       offlineScheduleEndTime && typeof offlineScheduleEndTime === "string"
-        ? new Date(offlineScheduleEndTime)
+        ? wrapForZonedISOString(new Date(offlineScheduleEndTime))
         : undefined,
     offlineScheduleEndWeekends:
       typeof offlineScheduleEndWeekends === "string" &&
