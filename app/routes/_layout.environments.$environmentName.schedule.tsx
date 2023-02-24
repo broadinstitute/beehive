@@ -21,7 +21,6 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useEnvironmentContext } from "./_layout.environments.$environmentName";
 
@@ -41,13 +40,23 @@ export async function action({ request, params }: ActionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
+  const offlineScheduleBeginTime = formData.get("offlineScheduleBeginTime");
+  const offlineScheduleEndTime = formData.get("offlineScheduleEndTime");
   const offlineScheduleEndWeekends = formData.get("offlineScheduleEndWeekends");
+
   const environmentRequest: V2controllersEnvironment = {
-    ...formDataToObject(formData, true),
     offlineScheduleBeginEnabled:
       formData.get("offlineScheduleBeginEnabled") === "true",
+    offlineScheduleBeginTime:
+      offlineScheduleBeginTime && typeof offlineScheduleBeginTime === "string"
+        ? new Date(offlineScheduleBeginTime)
+        : undefined,
     offlineScheduleEndEnabled:
       formData.get("offlineScheduleEndEnabled") === "true",
+    offlineScheduleEndTime:
+      offlineScheduleEndTime && typeof offlineScheduleEndTime === "string"
+        ? new Date(offlineScheduleEndTime)
+        : undefined,
     offlineScheduleEndWeekends:
       typeof offlineScheduleEndWeekends === "string" &&
       offlineScheduleEndWeekends !== ""

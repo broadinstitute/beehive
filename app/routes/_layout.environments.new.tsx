@@ -74,6 +74,8 @@ export async function action({ request }: ActionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();
+  const offlineScheduleBeginTime = formData.get("offlineScheduleBeginTime");
+  const offlineScheduleEndTime = formData.get("offlineScheduleEndTime");
   const offlineScheduleEndWeekends = formData.get("offlineScheduleEndWeekends");
   const environmentRequest: V2controllersEnvironment = {
     ...formDataToObject(formData, true),
@@ -84,8 +86,16 @@ export async function action({ request }: ActionArgs) {
     preventDeletion: formData.get("preventDeletion") === "true",
     offlineScheduleBeginEnabled:
       formData.get("offlineScheduleBeginEnabled") === "true",
+    offlineScheduleBeginTime:
+      offlineScheduleBeginTime && typeof offlineScheduleBeginTime === "string"
+        ? new Date(offlineScheduleBeginTime)
+        : undefined,
     offlineScheduleEndEnabled:
       formData.get("offlineScheduleEndEnabled") === "true",
+    offlineScheduleEndTime:
+      offlineScheduleEndTime && typeof offlineScheduleEndTime === "string"
+        ? new Date(offlineScheduleEndTime)
+        : undefined,
     offlineScheduleEndWeekends:
       typeof offlineScheduleEndWeekends === "string" &&
       offlineScheduleEndWeekends !== ""
