@@ -4,6 +4,7 @@ import {
   Outlet,
   useLoaderData,
   useOutletContext,
+  useParams,
 } from "@remix-run/react";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -46,6 +47,7 @@ export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const environments = useLoaderData<typeof loader>();
+  const { environmentName: currentPathEnvironment } = useParams();
   const [filterText, setFilterText] = useState("");
   return (
     <>
@@ -65,6 +67,7 @@ export default function Route() {
               <NavButton
                 to={`./${environment.name}/chart-releases`}
                 key={index.toString()}
+                forceActive={currentPathEnvironment === environment.name}
                 {...EnvironmentColors}
               >
                 <ListEnvironmentButtonText environment={environment} />

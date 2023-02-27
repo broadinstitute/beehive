@@ -11,7 +11,7 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { ChartReleaseDetails } from "~/features/sherlock/chart-releases/view/chart-release-details";
-import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/view/environment-offline-icon";
+import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/offline/environment-offline-icon";
 import {
   forwardIAP,
   SherlockConfiguration,

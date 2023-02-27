@@ -37,6 +37,7 @@ export const meta: V2_MetaFunction = () => [
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStyles },
   { rel: "stylesheet", href: beehiveLoadingStyles },
+  // { rel: "stylesheet", href: scrollbarStyles }, // Turns out that scrollbar-gutter both-sides is buggy in Chrome :/
   { rel: "icon", href: favicon, type: "image/svg+xml" },
 ];
 

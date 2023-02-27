@@ -240,7 +240,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           <h2 className="font-light text-2xl">Prevent Deletion?</h2>
           <p>
             This flag prevents auto-deletion of this BEE and also hides the
-            delete button in Beehive.
+            delete and stop functionality in Beehive.
           </p>
           <EnumInputSelect
             name="preventDeletion"

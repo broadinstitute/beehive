@@ -31,12 +31,6 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
   templateEnvironment,
   setTemplateEnvironment,
 }) => {
-  const [autoPopulateChartReleases, setAutoPopulateChartReleases] = useState(
-    environment?.autoPopulateChartReleases != null
-      ? environment.autoPopulateChartReleases.toString()
-      : "true"
-  );
-  const [base, setBase] = useState(environment?.base || "");
   const [name, setName] = useState(environment?.name || "");
 
   return (
@@ -49,7 +43,6 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
           fieldValue={lifecycle}
           setFieldValue={(value) => {
             if (value === "dynamic") {
-              setBase("");
               setSidebar(({ filterText }) => (
                 <SidebarSelectEnvironment
                   environments={templateEnvironments}
@@ -64,9 +57,6 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             } else {
               setTemplateEnvironment("");
               setSidebar();
-              if (value === "template") {
-                setBase("bee");
-              }
             }
             setLifecycle(value);
           }}
@@ -80,45 +70,6 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
         />
       </div>
       <div className="pl-6 border-l-2 border-color-divider-line flex flex-col">
-        <label className={lifecycle === "dynamic" ? "hidden" : "mb-4"}>
-          <h2 className="font-light text-2xl">Values Base</h2>
-          <p className="mb-2">
-            An environment's configuration is based on two things: the values
-            base (this field) and the values name (the name of the environment).
-          </p>
-          <p className="mb-2">
-            When searching for configuration files, our systems use the values
-            base as the directory name and the values name as the file name
-            inside{" "}
-            <a
-              href="https://github.com/broadinstitute/terra-helmfile"
-              className="underline decoration-color-link-underline"
-            >
-              terra-helmfile
-            </a>
-            .
-          </p>
-          <p>
-            For example, if an environment had a base of "my-base" and a name of
-            "my-name" and we tried to deploy a copy of the Leonardo chart, our
-            systems would check{" "}
-            <span className="font-mono">
-              values/app/leonardo/my-base/my-name.yaml
-            </span>{" "}
-            and any other files along the way.
-          </p>
-          <p className={lifecycle === "template" ? "mt-2" : "hidden"}>
-            For a BEE template, you'll almost always want to keep the default of
-            "bee" here so you inherit the configuration that makes BEEs work.
-          </p>
-          <TextField
-            name="base"
-            required={lifecycle !== "dynamic"}
-            placeholder="(required)"
-            value={base}
-            onChange={(e) => setBase(e.currentTarget.value)}
-          />
-        </label>
         <label className={lifecycle !== "dynamic" ? "hidden" : "mb-4"}>
           <h2 className="font-light text-2xl">Template</h2>
           <p>
@@ -149,45 +100,6 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             }}
           />
         </label>
-        {lifecycle !== "static" && (
-          <div className="mb-4">
-            {lifecycle === "dynamic" && (
-              <>
-                <h2 className="font-light text-2xl">
-                  Copy Charts From Template?
-                </h2>
-                <p>
-                  When this is enabled, creating this new BEE will also
-                  immediately create instances of all the charts that the
-                  template has.
-                </p>
-              </>
-            )}
-            {lifecycle === "template" && (
-              <>
-                <h2 className="font-light text-2xl">
-                  Start With Default Charts?
-                </h2>
-                <p>
-                  When this is enabled, this template will start off with a
-                  DevOps-configured set of default charts that are usually
-                  needed for BEEs to work.
-                </p>
-              </>
-            )}
-            <EnumInputSelect
-              name="autoPopulateChartReleases"
-              className="grid grid-cols-2 mt-2"
-              fieldValue={autoPopulateChartReleases}
-              setFieldValue={setAutoPopulateChartReleases}
-              enums={[
-                ["Enabled", "true"],
-                ["Disabled", "false"],
-              ]}
-              {...EnvironmentColors}
-            />
-          </div>
-        )}
         <label className={lifecycle === "static" ? "mb-4" : "hidden"}>
           <h2 className="font-light text-2xl">Namespace</h2>
           <p>

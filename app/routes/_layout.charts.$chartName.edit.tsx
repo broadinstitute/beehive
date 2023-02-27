@@ -1,6 +1,7 @@
 import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
+import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -59,15 +60,18 @@ export default function Route() {
   const { chart } = useChartContext();
   const errorInfo = useActionData<typeof action>();
   return (
-    <OutsetPanel>
-      <ActionBox
-        title={`Now Editing ${chart.name}`}
-        submitText="Click to Save Edits"
-        {...ChartColors}
-      >
-        <ChartEditableFields chart={errorInfo?.formState ?? chart} />
-        {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
-      </ActionBox>
-    </OutsetPanel>
+    <>
+      <OutsetPanel>
+        <ActionBox
+          title={`Now Editing ${chart.name}`}
+          submitText="Click to Save Edits"
+          {...ChartColors}
+        >
+          <ChartEditableFields chart={errorInfo?.formState ?? chart} />
+          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
+        </ActionBox>
+      </OutsetPanel>
+      <OutsetFiller />
+    </>
   );
 }

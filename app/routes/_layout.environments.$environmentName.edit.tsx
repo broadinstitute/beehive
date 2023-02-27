@@ -118,7 +118,9 @@ export default function Route() {
         </ActionBox>
       </OutsetPanel>
       <InsetPanel largeScreenOnly={!isSidebarPresent}>
-        {<SidebarComponent /> || (
+        {isSidebarPresent ? (
+          <SidebarComponent />
+        ) : (
           <FillerText>
             <EnvironmentHelpCopy />
           </FillerText>

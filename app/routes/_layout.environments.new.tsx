@@ -26,11 +26,14 @@ import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
 import { DuplicateBeeWarning } from "~/features/sherlock/environments/new/duplicate-bee-warning";
+import { EnvironmentAdvancedCreatableFields } from "~/features/sherlock/environments/new/environment-advanced-creatable-fields";
 import { EnvironmentCreatableFields } from "~/features/sherlock/environments/new/environment-creatable-fields";
+import { EnvironmentScheduleFields } from "~/features/sherlock/environments/offline/environment-schedule-fields";
 import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
+import { wrapForZonedISOString } from "~/helpers/date";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { commitSession, sessionFields } from "~/session.server";
@@ -72,6 +75,9 @@ export async function action({ request }: ActionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();
+  const offlineScheduleBeginTime = formData.get("offlineScheduleBeginTime");
+  const offlineScheduleEndTime = formData.get("offlineScheduleEndTime");
+  const offlineScheduleEndWeekends = formData.get("offlineScheduleEndWeekends");
   const environmentRequest: V2controllersEnvironment = {
     ...formDataToObject(formData, true),
     autoPopulateChartReleases:
@@ -79,6 +85,23 @@ export async function action({ request }: ActionArgs) {
     requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
     preventDeletion: formData.get("preventDeletion") === "true",
+    offlineScheduleBeginEnabled:
+      formData.get("offlineScheduleBeginEnabled") === "true",
+    offlineScheduleBeginTime:
+      offlineScheduleBeginTime && typeof offlineScheduleBeginTime === "string"
+        ? wrapForZonedISOString(new Date(offlineScheduleBeginTime))
+        : undefined,
+    offlineScheduleEndEnabled:
+      formData.get("offlineScheduleEndEnabled") === "true",
+    offlineScheduleEndTime:
+      offlineScheduleEndTime && typeof offlineScheduleEndTime === "string"
+        ? wrapForZonedISOString(new Date(offlineScheduleEndTime))
+        : undefined,
+    offlineScheduleEndWeekends:
+      typeof offlineScheduleEndWeekends === "string" &&
+      offlineScheduleEndWeekends !== ""
+        ? offlineScheduleEndWeekends === "true"
+        : undefined,
   };
 
   return new EnvironmentsApi(SherlockConfiguration)
@@ -177,7 +200,7 @@ export default function Route() {
 
   return (
     <>
-      <OutsetPanel {...EnvironmentColors}>
+      <OutsetPanel alwaysShowScrollbar {...EnvironmentColors}>
         <ActionBox
           title="Now Creating New Environment"
           submitText="Click to Create"
@@ -195,9 +218,54 @@ export default function Route() {
             templateEnvironment={templateEnvironment}
             setTemplateEnvironment={setTemplateEnvironment}
           />
-          <details className="pt-2">
-            <summary className="cursor-pointer font-light text-2xl">
-              Click to Expand Advanced Configuration
+          {/* {lifecycle === "dynamic" && (
+            <>
+              <p className="pt-4">
+                By default, BEEs are set to go offline automatically at night to
+                save on cloud costs. You can change the schedule later if you're
+                not sure now.
+              </p>
+              <details>
+                <summary className="cursor-pointer">
+                  Click to Show Scheduling Options
+                </summary>
+                <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col gap-4">
+                  <EnvironmentScheduleFields
+                    initialOfflineScheduleBeginEnabled={
+                      errorInfo?.formState?.offlineScheduleBeginEnabled
+                    }
+                    initialOfflineScheduleBeginTime={
+                      errorInfo?.formState?.offlineScheduleBeginTime
+                    }
+                    initialOfflineScheduleEndEnabled={
+                      errorInfo?.formState?.offlineScheduleEndEnabled
+                    }
+                    initialOfflineScheduleEndTime={
+                      errorInfo?.formState?.offlineScheduleEndTime
+                    }
+                    initialOfflineScheduleEndWeekends={
+                      errorInfo?.formState?.offlineScheduleEndWeekends
+                    }
+                  />
+                </div>
+              </details>
+            </>
+          )} */}
+          <p className="pt-4">
+            There's a number of advanced configuration options that can impact
+            how the{" "}
+            {lifecycle === "dynamic"
+              ? "BEE is deployed"
+              : lifecycle === "template"
+              ? "template works"
+              : "environment behaves"}
+            .{" "}
+            {lifecycle !== "static" &&
+              "These can usually be left alone unless you know the default behavior won't work for you."}
+          </p>
+          <details>
+            <summary className="cursor-pointer">
+              Click to Show Advanced Configuration
             </summary>
             <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col gap-4">
               {lifecycle === "dynamic" && (
@@ -254,9 +322,15 @@ export default function Route() {
                   </div>
                 </>
               )}
-              <p className="py-4 font-semibold">
-                The fields below this point can be edited later but some do have
-                an initial impact during creation.
+              <EnvironmentAdvancedCreatableFields
+                environment={errorInfo?.formState}
+                lifecycle={lifecycle}
+              />
+              <p className="py-3 font-semibold">
+                The fields below this point can be edited later
+                {lifecycle === "dynamic" &&
+                  " but some do have an initial impact during creation"}
+                .
               </p>
               <EnvironmentEditableFields
                 setSidebar={setSidebar}
@@ -285,7 +359,9 @@ export default function Route() {
         </ActionBox>
       </OutsetPanel>
       <InsetPanel largeScreenOnly={!isSidebarPresent}>
-        {<SidebarComponent /> || (
+        {isSidebarPresent ? (
+          <SidebarComponent />
+        ) : (
           <FillerText>
             <EnvironmentHelpCopy />
           </FillerText>

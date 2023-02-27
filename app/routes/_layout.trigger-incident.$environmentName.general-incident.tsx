@@ -4,6 +4,7 @@ import {
   EnvironmentsApi,
   PagerdutyAlertSummary,
 } from "@sherlock-js-client/sherlock";
+import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
@@ -66,15 +67,21 @@ export default function Route() {
   const errorInfo = useActionData<typeof action>();
 
   return (
-    <OutsetPanel>
-      <ActionBox
-        title={`Preparing to Trigger General Incident for ${environment.name}`}
-        submitText="Click to Trigger General Incident"
-        {...EnvironmentColors}
-      >
-        <IncidentSummaryFields initialSummary={errorInfo?.formState?.summary} />
-        {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
-      </ActionBox>
-    </OutsetPanel>
+    <>
+      {" "}
+      <OutsetPanel>
+        <ActionBox
+          title={`Preparing to Trigger General Incident for ${environment.name}`}
+          submitText="Click to Trigger General Incident"
+          {...EnvironmentColors}
+        >
+          <IncidentSummaryFields
+            initialSummary={errorInfo?.formState?.summary}
+          />
+          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
+        </ActionBox>
+      </OutsetPanel>
+      <OutsetFiller />
+    </>
   );
 }

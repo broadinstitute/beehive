@@ -3,6 +3,7 @@ import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
+import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import {
   buildNotifications,
@@ -100,18 +101,21 @@ export default function Route() {
   const { environment } = useEnvironmentContext();
   const errorInfo = useActionData<typeof action>();
   return (
-    <OutsetPanel>
-      <ActionBox
-        title={`Now Deleting ${environment.name}`}
-        submitText={`Click to Delete`}
-        {...EnvironmentColors}
-      >
-        <EnvironmentDeleteDescription environment={environment} />
-        {(environment.lifecycle !== "dynamic" || environment.offline) && (
-          <DeletionGuard name={environment.name} />
-        )}
-        {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
-      </ActionBox>
-    </OutsetPanel>
+    <>
+      <OutsetPanel>
+        <ActionBox
+          title={`Now Deleting ${environment.name}`}
+          submitText={`Click to Delete`}
+          {...EnvironmentColors}
+        >
+          <EnvironmentDeleteDescription environment={environment} />
+          {(environment.lifecycle !== "dynamic" || environment.offline) && (
+            <DeletionGuard name={environment.name} />
+          )}
+          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
+        </ActionBox>
+      </OutsetPanel>
+      <OutsetFiller />
+    </>
   );
 }

@@ -22,12 +22,12 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
   const transition = useNavigation();
   return (
     <div className="flex flex-col items-center space-y-4 pb-4 text-color-body-text">
-      <div className="w-[90vw] lg:w-[30vw] p-3 pt-4">
+      <div className="w-[90vw] xl:w-[30vw] p-3 pt-4">
         <h1 className="text-3xl font-medium text-color-header-text">{title}</h1>
       </div>
       <Form
         method="post"
-        className={`w-[90vw] lg:w-[30vw] flex flex-col space-y-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
+        className={`w-[90vw] xl:w-[30vw] flex flex-col space-y-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
       >
         <fieldset
           disabled={transition.state === "submitting"}

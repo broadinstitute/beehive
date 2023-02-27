@@ -19,8 +19,8 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
 }) => (
   <div
     className={`w-[90vw] ${
-      doubleWidth ? "lg:w-[60vw]" : "lg:w-[30vw]"
-    } flex flex-row-reverse gap-4 flex-wrap lg:flex-nowrap`}
+      doubleWidth ? "xl:w-[60vw]" : "xl:w-[30vw]"
+    } flex flex-row-reverse gap-4 flex-wrap xl:flex-nowrap`}
   >
     {toCreate && (
       <NavButton

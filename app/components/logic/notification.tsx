@@ -71,11 +71,11 @@ export const NotificationComponent: React.FunctionComponent<{
   return (
     <div
       className={`relative motion-safe:transition-all motion-safe:duration-1000 ease-out text-color-body-text ${
-        visible ? "right-0" : "right-[-120vw] lg:right-[-30vw]"
+        visible ? "right-0" : "right-[-120vw] xl:right-[-30vw]"
       }`}
     >
       <a
-        className={`w-[80vw] lg:w-[20vw] bg-color-nearest-bg flex flex-col rounded-2xl shadow-2xl drop-shadow-xl motion-safe:transition-all before:block before:absolute before:rounded-2xl before:border-2 ${
+        className={`w-[80vw] xl:w-[20vw] bg-color-nearest-bg flex flex-col rounded-2xl shadow-2xl drop-shadow-xl motion-safe:transition-all before:block before:absolute before:rounded-2xl before:border-2 ${
           notification.error
             ? "before:border-color-error-border before:border-dashed"
             : "before:border-color-neutral-hard-border"

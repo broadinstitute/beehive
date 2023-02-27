@@ -9,6 +9,7 @@ export interface MutateControlsProps {
   changeVersionText?: string;
   toVersionHistory?: string;
   toEdit?: string;
+  toSchedule?: string;
   toLinkPagerduty?: string;
   toDelete?: string;
 }
@@ -21,6 +22,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   changeVersionText,
   toVersionHistory,
   toEdit,
+  toSchedule,
   toLinkPagerduty,
   toDelete,
 }) => (
@@ -45,7 +47,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         )}
       </div>
     )}
-    {(toEdit || toLinkPagerduty || toDelete) && (
+    {(toEdit || toSchedule || toLinkPagerduty || toDelete) && (
       <div className="flex flex-col space-y-4">
         <h2 className="text-2xl font-light text-color-header-text">
           Make Changes
@@ -53,6 +55,11 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         {toEdit && (
           <NavButton to={toEdit} {...colors}>
             Edit Metadata
+          </NavButton>
+        )}
+        {toSchedule && (
+          <NavButton to={toSchedule} {...colors}>
+            Change Stop and Start Schedule
           </NavButton>
         )}
         {toLinkPagerduty && (

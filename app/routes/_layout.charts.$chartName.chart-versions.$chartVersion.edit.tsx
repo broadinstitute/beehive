@@ -4,6 +4,7 @@ import {
   ChartVersionsApi,
   V2controllersChartVersion,
 } from "@sherlock-js-client/sherlock";
+import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -68,22 +69,25 @@ export default function Route() {
   const { chart, chartVersion } = useChartChartVersionContext();
   const errorInfo = useActionData<typeof action>();
   return (
-    <OutsetPanel>
-      <ActionBox
-        title={`Now Editing ${chart.name}/${chartVersion.chartVersion}`}
-        submitText="Click to Save Edits"
-        {...ChartVersionColors}
-      >
-        <ChartVersionEditableFields
-          chartVersion={errorInfo?.formState ?? chartVersion}
-          repo={
-            chart.chartRepo === "terra-helm"
-              ? "broadinstitute/terra-helmfile"
-              : undefined
-          }
-        />
-        {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
-      </ActionBox>
-    </OutsetPanel>
+    <>
+      <OutsetPanel>
+        <ActionBox
+          title={`Now Editing ${chart.name}/${chartVersion.chartVersion}`}
+          submitText="Click to Save Edits"
+          {...ChartVersionColors}
+        >
+          <ChartVersionEditableFields
+            chartVersion={errorInfo?.formState ?? chartVersion}
+            repo={
+              chart.chartRepo === "terra-helm"
+                ? "broadinstitute/terra-helmfile"
+                : undefined
+            }
+          />
+          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
+        </ActionBox>
+      </OutsetPanel>
+      <OutsetFiller />
+    </>
   );
 }

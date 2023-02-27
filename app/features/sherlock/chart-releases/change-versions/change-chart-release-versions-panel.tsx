@@ -207,7 +207,9 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
         </ActionBox>
       </OutsetPanel>
       <InsetPanel largeScreenOnly={!isSidebarPresent}>
-        {<SidebarComponent /> || (
+        {isSidebarPresent ? (
+          <SidebarComponent />
+        ) : (
           <FillerText>
             <ChartReleaseChangeVersionHelpCopy
               chartInstanceName={chartRelease.name}

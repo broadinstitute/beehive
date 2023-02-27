@@ -4,6 +4,7 @@ import {
   ClustersApi,
   V2controllersCluster,
 } from "@sherlock-js-client/sherlock";
+import { OutsetFiller } from "~/components/layout/outset-filler";
 
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -56,15 +57,18 @@ export default function Route() {
   const { cluster } = useClusterContext();
   const errorInfo = useActionData<typeof action>();
   return (
-    <OutsetPanel>
-      <ActionBox
-        title={`Now Editing ${cluster.name}`}
-        submitText="Click to Save Edits"
-        {...ClusterColors}
-      >
-        <ClusterEditableFields cluster={errorInfo?.formState || cluster} />
-        {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
-      </ActionBox>
-    </OutsetPanel>
+    <>
+      <OutsetPanel>
+        <ActionBox
+          title={`Now Editing ${cluster.name}`}
+          submitText="Click to Save Edits"
+          {...ClusterColors}
+        >
+          <ClusterEditableFields cluster={errorInfo?.formState || cluster} />
+          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
+        </ActionBox>
+      </OutsetPanel>
+      <OutsetFiller />
+    </>
   );
 }
