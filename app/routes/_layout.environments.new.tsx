@@ -218,7 +218,7 @@ export default function Route() {
             templateEnvironment={templateEnvironment}
             setTemplateEnvironment={setTemplateEnvironment}
           />
-          {/* {lifecycle === "dynamic" && (
+          {lifecycle === "dynamic" && (
             <>
               <p className="pt-4">
                 By default, BEEs are set to go offline automatically at night to
@@ -250,7 +250,7 @@ export default function Route() {
                 </div>
               </details>
             </>
-          )} */}
+          )}
           <p className="pt-4">
             There's a number of advanced configuration options that can impact
             how the{" "}
