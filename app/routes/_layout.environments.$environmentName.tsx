@@ -74,7 +74,7 @@ export default function Route() {
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
             toEdit="./edit"
-            toSchedule="./schedule"
+            // toSchedule="./schedule"
             // toLinkPagerduty={
             //   environment.lifecycle == "static" ? "./link-pagerduty" : ""
             // }
