@@ -125,7 +125,8 @@ export default function Route() {
           <EnvironmentScheduleFields
             initialOfflineScheduleBeginEnabled={
               errorInfo?.formState?.offlineScheduleBeginEnabled ||
-              environment.offlineScheduleBeginEnabled
+              environment.offlineScheduleBeginEnabled ||
+              false
             }
             initialOfflineScheduleBeginTime={
               errorInfo?.formState?.offlineScheduleBeginTime ||
@@ -133,7 +134,8 @@ export default function Route() {
             }
             initialOfflineScheduleEndEnabled={
               errorInfo?.formState?.offlineScheduleEndEnabled ||
-              environment.offlineScheduleEndEnabled
+              environment.offlineScheduleEndEnabled ||
+              false
             }
             initialOfflineScheduleEndTime={
               errorInfo?.formState?.offlineScheduleEndTime ||
