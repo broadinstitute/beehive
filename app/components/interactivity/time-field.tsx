@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ClientOnly } from "remix-utils";
-import { zonedISOString } from "~/helpers/date";
+import { localZonedISOString } from "~/helpers/date";
 import { LoadingField } from "./loading-field";
 
 // This component accepts a date/string for an existing value and/or an initial 24-hr wall clock time,
@@ -49,7 +49,7 @@ const InternalTimeField: React.FunctionComponent<
       <input
         type="hidden"
         name={name}
-        value={date ? zonedISOString(date) : ""}
+        value={date ? localZonedISOString(date) : ""}
       />
     </>
   );

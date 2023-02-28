@@ -7,6 +7,7 @@ export const SherlockConfiguration = new Configuration({
     {
       pre: async (context) => {
         if (context.init.body) {
+          console.log(JSON.stringify(context.init.body));
           context.init.headers = {
             ...context.init.headers,
             "Content-Type": "application/json",
