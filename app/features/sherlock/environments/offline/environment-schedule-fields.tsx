@@ -61,7 +61,7 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
               required
               name="offlineScheduleBeginTime"
               existingTime={initialOfflineScheduleBeginTime}
-              initialInputTime="19:00"
+              initialInputTime="18:00"
             />
           </div>
         </div>
@@ -96,7 +96,7 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
               required
               name="offlineScheduleEndTime"
               existingTime={initialOfflineScheduleEndTime}
-              initialInputTime="07:00"
+              initialInputTime="08:30"
             />
           </div>
           <div>
