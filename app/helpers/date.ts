@@ -2,32 +2,29 @@ function pad(num: Number) {
   return (num < 10 ? "0" : "") + num;
 }
 
-const toZonedISOString = function (this: Date) {
-  const tzo = -this.getTimezoneOffset();
+export function localZonedISOString(date: Date) {
+  const tzo = -date.getTimezoneOffset();
   return (
-    this.getFullYear() +
+    date.getFullYear() +
     "-" +
-    pad(this.getMonth() + 1) +
+    pad(date.getMonth() + 1) +
     "-" +
-    pad(this.getDate()) +
+    pad(date.getDate()) +
     "T" +
-    pad(this.getHours()) +
+    pad(date.getHours()) +
     ":" +
-    pad(this.getMinutes()) +
+    pad(date.getMinutes()) +
     ":" +
-    pad(this.getSeconds()) +
+    pad(date.getSeconds()) +
     (tzo >= 0 ? "+" : "-") +
     pad(Math.floor(Math.abs(tzo) / 60)) +
     ":" +
     pad(Math.abs(tzo) % 60)
   );
-};
-
-export function wrapForZonedISOString(date: Date): Date {
-  date.toISOString = toZonedISOString;
-  return date;
 }
 
-export function zonedISOString(date: Date) {
-  return toZonedISOString.call(date);
+export function dateWithCustomISOString(isoString: string): Date {
+  const date = new Date(isoString);
+  date.toISOString = () => isoString; // assign our own function instead lol
+  return date;
 }

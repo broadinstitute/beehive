@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ClientOnly } from "remix-utils";
-import { zonedISOString } from "~/helpers/date";
+import { localZonedISOString } from "~/helpers/date";
 import { LoadingField } from "./loading-field";
 
 // This component accepts a date/string for an existing value and/or an initial 24-hr wall clock time,
@@ -40,7 +40,11 @@ const InternalTimeField: React.FunctionComponent<
       <input
         type="time"
         pattern={inputTimeRegex.source} // unused by type="time" but if that's unsupported, the fallback is type="text" and this is better than nothing for the user
-        onFocus={(e) => e.currentTarget.showPicker()} // #useThePlatform (it's funny because I didn't know this existed for four hours)
+        onFocus={(e) => {
+          try {
+            e.currentTarget.showPicker();
+          } catch (_) {}
+        }} // #useThePlatform (it's funny because I didn't know this existed for four hours)
         required={required}
         className="w-full pl-4 pr-2 mt-2 shadow-md rounded-2xl h-12 border border-color-text-box-border focus-visible:outline focus-visible:outline-color-focused-element focus-visible:invalid:outline-color-error-border bg-color-nearest-bg placeholder:text-color-placeholder-text invalid:border-dashed invalid:border-color-error-border"
         value={date ? dateToInputTime(date) : ""}
@@ -49,7 +53,7 @@ const InternalTimeField: React.FunctionComponent<
       <input
         type="hidden"
         name={name}
-        value={date ? zonedISOString(date) : ""}
+        value={date ? localZonedISOString(date) : ""}
       />
     </>
   );

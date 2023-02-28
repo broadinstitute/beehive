@@ -21,7 +21,7 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
-import { wrapForZonedISOString } from "~/helpers/date";
+import { dateWithCustomISOString } from "~/helpers/date";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useEnvironmentContext } from "./_layout.environments.$environmentName";
 
@@ -50,13 +50,13 @@ export async function action({ request, params }: ActionArgs) {
       formData.get("offlineScheduleBeginEnabled") === "true",
     offlineScheduleBeginTime:
       offlineScheduleBeginTime && typeof offlineScheduleBeginTime === "string"
-        ? wrapForZonedISOString(new Date(offlineScheduleBeginTime))
+        ? dateWithCustomISOString(offlineScheduleBeginTime)
         : undefined,
     offlineScheduleEndEnabled:
       formData.get("offlineScheduleEndEnabled") === "true",
     offlineScheduleEndTime:
       offlineScheduleEndTime && typeof offlineScheduleEndTime === "string"
-        ? wrapForZonedISOString(new Date(offlineScheduleEndTime))
+        ? dateWithCustomISOString(offlineScheduleEndTime)
         : undefined,
     offlineScheduleEndWeekends:
       typeof offlineScheduleEndWeekends === "string" &&
@@ -125,7 +125,8 @@ export default function Route() {
           <EnvironmentScheduleFields
             initialOfflineScheduleBeginEnabled={
               errorInfo?.formState?.offlineScheduleBeginEnabled ||
-              environment.offlineScheduleBeginEnabled
+              environment.offlineScheduleBeginEnabled ||
+              false
             }
             initialOfflineScheduleBeginTime={
               errorInfo?.formState?.offlineScheduleBeginTime ||
@@ -133,7 +134,8 @@ export default function Route() {
             }
             initialOfflineScheduleEndEnabled={
               errorInfo?.formState?.offlineScheduleEndEnabled ||
-              environment.offlineScheduleEndEnabled
+              environment.offlineScheduleEndEnabled ||
+              false
             }
             initialOfflineScheduleEndTime={
               errorInfo?.formState?.offlineScheduleEndTime ||
