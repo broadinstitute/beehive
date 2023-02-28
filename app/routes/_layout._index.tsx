@@ -38,8 +38,16 @@ export default function Route() {
           Welcome to Beehive
         </h1>
         <span className="text-lg">
-          <b className="font-semibold">New!</b> Start and stop BEEs without
-          losing state
+          <b className="font-semibold">New!</b> New BEEs made with Beehive will
+          automatically stop overnight (
+          <a
+            className="underline decoration-color-link-underline"
+            href="https://broadinstitute.slack.com/archives/C029LTN5L80/p1677615392788329"
+            target="_blank"
+          >
+            info ↗
+          </a>
+          )
         </span>
       </div>
       <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">
