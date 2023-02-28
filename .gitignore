@@ -6,9 +6,6 @@ node_modules
 /build
 /public/build
 
-# PostCSS artifacts
-/app/styles
-
 # Has secrets, should never be committed
 .env
 

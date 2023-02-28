@@ -11,7 +11,7 @@
   - The main criteria is to look very obviously different--the light and dark themes swap for prod coloring.
   - The `prod="true"` variables will technically inherit from the `prod="false"` variables, so you don't need to repeat identical declarations.
 
-2. Modify [`../app/components/logic/theme.tsx`](../app/components/logic/theme.tsx)'s `Theme` enum to add your theme's name. The new key doesn't matter but the new value must exactly match the `data-theme` attribute value that activates your theme.
+2. Modify [`../components/logic/theme.tsx`](../components/logic/theme.tsx)'s `Theme` enum to add your theme's name. The new key doesn't matter but the new value must exactly match the `data-theme` attribute value that activates your theme.
 
 In theory, that's it. The build should pick everything up and your theme should show up in the homepage dropdown.
 
