@@ -3,12 +3,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "run-s \"build:*\"",
-    "build:css": "npm run generate:css -- --env production",
     "build:remix": "remix build --sourcemap",
     "dev": "run-p \"dev:*\"",
-    "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "remix dev",
-    "generate:css": "postcss styles --base styles --dir app/styles",
     "start": "remix-serve build",
     "typecheck": "npx tsc -b",
     "prepare": "husky install"

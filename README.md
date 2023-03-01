@@ -93,7 +93,7 @@ Beehive has a theming system. This isn't just a vanity feature, it is used to va
 
 To support this, use the colors defined in [our Tailwind configuration](./tailwind.config.js) (e.g. use `bg-color-near-bg` instead of `bg-white`).
 
-If you want to add a new theme, see [./themes](./themes).
+If you want to add a new theme, see [./app/themes](./app/themes).
 
 ### Icons
 

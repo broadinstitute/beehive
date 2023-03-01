@@ -8,8 +8,8 @@ module.exports = {
     require("tailwindcss"),
     // Add browser prefixes to CSS to improve compatibility
     require("autoprefixer"),
-    // If building for production, minify everything
-    ...(process.env.NODE_ENV === "production" ? [require("cssnano")] : []),
+    // Minify everything
+    require("cssnano"),
     // Don't swallow warnings in any of the above
     require("postcss-fail-on-warn"),
   ],
