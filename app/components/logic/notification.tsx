@@ -112,15 +112,6 @@ export const NotificationComponent: React.FunctionComponent<{
   );
 };
 
-export const NotificationID = (notification: Notification): string => {
-  switch (notification.type) {
-    case "gha":
-      return notification.url;
-    default:
-      return notification.text;
-  }
-};
-
 // This function exists because strongly-typing notifications is actually somewhat unintuitive.
 // TypeScript doesn't have great JSX syntax for "I want to create an object matching this type";
 // the `as` syntax is a type assertion that ignores checking on the object itself. Calling this

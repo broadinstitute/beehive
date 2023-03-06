@@ -6,7 +6,6 @@ import { Header } from "~/components/layout/header";
 import {
   Notification,
   NotificationComponent,
-  NotificationID as notificationID,
 } from "~/components/logic/notification";
 import { commitSession, getSession, sessionFields } from "~/session.server";
 
@@ -53,7 +52,7 @@ const LayoutRoute: React.FunctionComponent = () => {
             ...Array.from(
               notificationsToFlash.map(
                 (notification): [string, Notification] => [
-                  notificationID(notification),
+                  new Date().toISOString(),
                   notification,
                 ]
               )
