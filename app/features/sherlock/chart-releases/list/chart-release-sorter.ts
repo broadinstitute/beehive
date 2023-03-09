@@ -9,7 +9,9 @@ export function chartReleaseSorter(
     liveEnvironmentValuesNameOrder.indexOf(a.environmentInfo?.valuesName || "");
   const bLiveEnvironmentValuesNameOrder =
     liveEnvironmentValuesNameOrder.indexOf(b.environmentInfo?.valuesName || "");
-  if (
+  if (aLiveEnvironmentValuesNameOrder === bLiveEnvironmentValuesNameOrder) {
+    return (a.name || "").localeCompare(b.name || "");
+  } else if (
     aLiveEnvironmentValuesNameOrder > -1 &&
     bLiveEnvironmentValuesNameOrder > -1
   ) {
