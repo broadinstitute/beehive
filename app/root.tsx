@@ -16,6 +16,7 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
+import { UsersApi } from "@sherlock-js-client/sherlock";
 import React from "react";
 import favicon from "./assets/favicon.svg";
 import { CsrfTokenContext } from "./components/logic/csrf-token";
@@ -23,6 +24,10 @@ import { LoadScroller } from "./components/logic/load-scroller";
 import { PagerdutyTokenContext } from "./components/logic/pagerduty-token";
 import { LoadThemeSetter } from "./components/logic/theme";
 import { PanelErrorBoundary } from "./errors/components/error-boundary";
+import {
+  forwardIAP,
+  SherlockConfiguration,
+} from "./features/sherlock/sherlock.server";
 import { generateNonce } from "./helpers/nonce.server";
 import { commitSession, getSession, sessionFields } from "./session.server";
 import beehiveLoadingStyles from "./styles/beehive-loading.css";
@@ -151,6 +156,27 @@ export async function loader({ request }: LoaderArgs) {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   }
+
+  // Update Google/GitHub account linking in Sherlock but don't await it!
+  // We don't need the output of this at all, we just want it to happen at
+  // some point.
+  new UsersApi(SherlockConfiguration)
+    .apiV2ProceduresUsersLinkGithubPost(
+      {
+        githubAccessPayloadRequest: {
+          githubAccessToken: session.get(sessionFields.githubAccessToken),
+        },
+      },
+      forwardIAP(request)
+    )
+    .then(
+      (user) =>
+        console.log(
+          `updated Sherlock account linking, ${user.email} = ${user.githubUsername}`
+        ),
+      (reason) =>
+        console.log(`failed to update Sherlock account linking, ${reason}`)
+    );
 
   // Update tokens
   session.set(sessionFields.csrfToken, generateNonce());
