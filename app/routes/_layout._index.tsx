@@ -37,7 +37,7 @@ export default function Route() {
         <h1 className="text-4xl md:text-5xl xl:text-6xl xl:text-7xl 2xl:text-8xl font-extralight xl:font-thin shrink-0 text-center text-color-header-text min-h-0 mt-4">
           Welcome to Beehive
         </h1>
-        <span className="text-lg">
+        <span className="text-lg text-center">
           <b className="font-semibold">New!</b> New BEEs made with Beehive will
           automatically stop overnight (
           <a
