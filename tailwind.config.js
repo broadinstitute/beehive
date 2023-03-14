@@ -37,8 +37,8 @@ module.exports = {
           "app-version-border",
           "chart-version-bg",
           "chart-version-border",
-          "pagerduty-integration-bg",
-          "pagerduty-integration-border",
+          "misc-type-bg",
+          "misc-type-border",
 
           "error-bg",
           "error-border",
