@@ -78,15 +78,16 @@ export const EnvironmentDetails: React.FunctionComponent<
     )}
     {environment.lifecycle !== "template" && environment.defaultNamespace && (
       <div className="flex flex-col space-y-4">
-        {environment.lifecycle === "dynamic" && (
-          <a
-            href={`https://kibana.bee.envs-terra.bio/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(message,kubernetes.deployment.name),filters:!(),index:filebeat-data-view,interval:auto,query:(language:kuery,query:'kubernetes.namespace:%22${environment.defaultNamespace}%22'),sort:!(!('@timestamp',desc)))`}
-            target="_blank"
-            className="underline decoration-color-link-underline w-fit"
-          >
-            <b className="font-medium">New!</b> View Logs in Kibana ↗
-          </a>
-        )}
+        {environment.lifecycle === "dynamic" &&
+          environment.defaultCluster === "terra-qa-bees" && (
+            <a
+              href={`https://kibana.bee.envs-terra.bio/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(message,kubernetes.deployment.name),filters:!(),index:filebeat-data-view,interval:auto,query:(language:kuery,query:'kubernetes.namespace:%22${environment.defaultNamespace}%22'),sort:!(!('@timestamp',desc)))`}
+              target="_blank"
+              className="underline decoration-color-link-underline w-fit"
+            >
+              <b className="font-medium">New!</b> View Logs in Kibana ↗
+            </a>
+          )}
         <a
           href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications?namespace=${environment.defaultNamespace}`}
           target="_blank"
