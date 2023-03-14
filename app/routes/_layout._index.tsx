@@ -38,14 +38,14 @@ export default function Route() {
           Welcome to Beehive
         </h1>
         <span className="text-lg text-center">
-          <b className="font-semibold">New!</b> New BEEs made with Beehive will
-          automatically stop overnight (
+          <b className="font-semibold">New!</b> View BEE logs in our new Kibana
+          instance! (
           <a
             className="underline decoration-color-link-underline"
-            href="https://broadinstitute.slack.com/archives/C029LTN5L80/p1677615392788329"
+            href="https://kibana.bee.envs-terra.bio/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(message,kubernetes.deployment.name),filters:!(),index:filebeat-data-view,interval:auto,query:(language:kuery,query:'kubernetes.namespace:%22terra-msft-dev%22'),sort:!(!('@timestamp',desc)))"
             target="_blank"
           >
-            info ↗
+            example ↗
           </a>
           )
         </span>

@@ -1,4 +1,4 @@
-import { LoaderArgs } from "@remix-run/node";
+import { json, LoaderArgs } from "@remix-run/node";
 import https from "https";
 import { forwardIAP } from "~/features/sherlock/sherlock.server";
 
@@ -11,6 +11,9 @@ import { forwardIAP } from "~/features/sherlock/sherlock.server";
 // Similar for pass-through to Sherlock, it's important that ARGOCD_BASE_URL be
 // set to enable in-cluster communication.
 export async function loader({ request }: LoaderArgs) {
+  if (process.env.NODE_ENV === "development") {
+    throw json("unsupported", 400);
+  }
   return fetch(
     `${
       process.env.ARGOCD_BASE_URL ||
