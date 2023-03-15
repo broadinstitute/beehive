@@ -7,6 +7,14 @@ import { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { EnvironmentColors } from "../environment-colors";
 import { SidebarSelectEnvironment } from "../set/sidebar-select-environment";
 
+function templateEnvironmentListDecorator(
+  entry: SerializeFrom<V2controllersEnvironment>
+): string | undefined {
+  if (entry.name === "swatomation") {
+    return "Good Default!";
+  }
+}
+
 export interface EnvironmentCreatableFieldsProps {
   environment?:
     | V2controllersEnvironment
@@ -52,6 +60,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
                     setTemplateEnvironment(value);
                     setSidebar();
                   }}
+                  extraTextGenerator={templateEnvironmentListDecorator}
                 />
               ));
             } else {
@@ -95,6 +104,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
                     setTemplateEnvironment(value);
                     setSidebar();
                   }}
+                  extraTextGenerator={templateEnvironmentListDecorator}
                 />
               ));
             }}

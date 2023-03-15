@@ -21,7 +21,15 @@ export function environmentSorter(
     return -1;
   } else if (a.base !== "live" && b.base === "live") {
     return 1;
+  } else if (a.lifecycle === "dynamic" && b.lifecycle !== "dynamic") {
+    return -1;
+  } else if (a.lifecycle !== "dynamic" && b.lifecycle === "dynamic") {
+    return 1;
+  } else if (a.lifecycle === "template" && b.lifecycle !== "template") {
+    return -1;
+  } else if (a.lifecycle !== "template" && b.lifecycle === "template") {
+    return 1;
   } else {
-    return 0;
+    return (a.name || "").localeCompare(b.name || "");
   }
 }
