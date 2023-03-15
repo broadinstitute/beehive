@@ -291,7 +291,8 @@ export default function Route() {
                         <p>
                           When creating, a GitHub Action will be kicked off to
                           both provision the BEE in our infrastructure and seed
-                          it with some initial data.
+                          it with some initial data. When the action is done,
+                          the BEE will be started and ready to use.
                         </p>
                         <p>
                           The seeding process is modeled after legacy FiaB
@@ -309,14 +310,17 @@ export default function Route() {
                       <p>
                         When creating, a GitHub Action will be kicked off to
                         provision the BEE in our infrastructure. The BEE will
-                        not receive legacy FiaB-style seeding.
+                        not receive legacy FiaB-style seeding. When the action
+                        is done, the BEE will be started and ready to use.
                       </p>
                     )}
                     {actionToRun === "none" && (
                       <p>
                         When creating, no GitHub Action will be kicked off.
                         Manual intervention will be required to bring the BEE
-                        online, for example via "thelma bee provision."
+                        online, for example via "thelma bee provision." In other
+                        words, not only will the BEE not be started, it won't
+                        even exist in our infrastructure in the first place.
                       </p>
                     )}
                   </div>
