@@ -10,11 +10,15 @@ export const SidebarSelectEnvironment: React.FunctionComponent<{
   fieldValue: string;
   setFieldValue: (value: string) => void;
   title?: string;
+  extraTextGenerator?: (
+    entry: SerializeFrom<V2controllersEnvironment>
+  ) => string | undefined;
 }> = ({
   environments,
   fieldValue,
   setFieldValue,
   title = "Select Environment",
+  extraTextGenerator,
 }) => (
   <SidebarFilterControlledList
     title={title}
@@ -23,9 +27,16 @@ export const SidebarSelectEnvironment: React.FunctionComponent<{
     filter={matchEnvironment}
     handleListButtonClick={(entry) => setFieldValue(entry.name || "")}
     detectListButtonActive={(entry) => entry.name === fieldValue}
-    listButtonTextFactory={(entry) => (
-      <ListEnvironmentButtonText environment={entry} />
-    )}
+    listButtonTextFactory={
+      extraTextGenerator
+        ? (entry) => (
+            <ListEnvironmentButtonText
+              environment={entry}
+              extraText={extraTextGenerator(entry)}
+            />
+          )
+        : (entry) => <ListEnvironmentButtonText environment={entry} />
+    }
     {...EnvironmentColors}
   />
 );
