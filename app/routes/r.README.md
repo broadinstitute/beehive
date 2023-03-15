@@ -9,3 +9,5 @@ The basic construction is like `/r/$type/$selector`, where the selector gets res
 There's also a special `/r/git/$selector` that redirects to the app image GitHub repo for a given chart.
 
 There's also a special `/r/endpoint/$selector` that redirects to the endpoint for a given chart instance.
+
+There's also a special `/r/user/$selector` that attempts to resolve the User selector and falls back to a simple search over all users.

@@ -13,7 +13,7 @@ export const UserDetails: React.FunctionComponent<{
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-2">
-        <h2 className="font-light text-2xl">Google Account</h2>
+        <h2 className="font-light text-2xl">Google Identity</h2>
         <h1 className="font-light text-4xl">{user.email}</h1>
         <p>
           This information is sourced from Google-generated ID tokens from
@@ -37,7 +37,7 @@ export const UserDetails: React.FunctionComponent<{
       <div className="flex flex-col gap-2">
         {user.githubUsername ? (
           <>
-            <h2 className="font-light text-2xl">GitHub Account</h2>
+            <h2 className="font-light text-2xl">GitHub Identity</h2>
             <h1 className="font-light text-4xl">{user.githubUsername}</h1>
             <p>
               This information is sourced from the GitHub access the user grants
@@ -56,7 +56,7 @@ export const UserDetails: React.FunctionComponent<{
           </>
         ) : (
           <>
-            <h2 className="font-light text-2xl">No Linked GitHub Account</h2>
+            <h2 className="font-light text-2xl">No Linked GitHub Identity</h2>
             {isServiceAccount ? (
               <p>
                 Service accounts won't generally have a linked GitHub account.
