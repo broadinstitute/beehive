@@ -100,6 +100,17 @@ export const ChartReleaseDetails: React.FunctionComponent<
     {chartRelease.cluster &&
       chartRelease.environmentInfo?.lifecycle !== "template" && (
         <div className="flex flex-col space-y-4">
+          {chartRelease.environmentInfo?.lifecycle === "dynamic" &&
+            chartRelease.cluster === "terra-qa-bees" &&
+            chartRelease.environmentInfo.defaultNamespace && (
+              <a
+                href={`https://kibana.bee.envs-terra.bio/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(message,kubernetes.deployment.name),filters:!(),index:filebeat-data-view,interval:auto,query:(language:kuery,query:'kubernetes.namespace:%22${chartRelease.environmentInfo.defaultNamespace}%22%20and%20kubernetes.labels.app_kubernetes_io%2Fname:%22${chartRelease.chart}%22'),sort:!(!('@timestamp',desc)))`}
+                target="_blank"
+                className="underline decoration-color-link-underline w-fit"
+              >
+                <b className="font-medium">New!</b> View Logs in Kibana ↗
+              </a>
+            )}
           <a
             href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications/ap-argocd/${chartRelease.name}`}
             target="_blank"
