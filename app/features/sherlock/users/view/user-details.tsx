@@ -63,8 +63,9 @@ export const UserDetails: React.FunctionComponent<{
               </p>
             ) : (
               <p>
-                GitHub account linking will automatically occur if user signs
-                into Beehive.
+                GitHub account linking will automatically occur in the
+                background if user signs into Beehive. You can refresh the page
+                to pull the latest info.
               </p>
             )}
           </>
