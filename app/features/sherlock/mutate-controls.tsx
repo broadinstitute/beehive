@@ -2,7 +2,7 @@ import { NavButton } from "~/components/interactivity/nav-button";
 import { ColorProps } from "~/features/color-class-names";
 
 export interface MutateControlsProps {
-  name: string;
+  name?: string;
   colors: ColorProps;
   toChangeVersions?: string;
   toChangeVersionsText?: string;

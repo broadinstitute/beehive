@@ -81,6 +81,10 @@ export default function Route() {
         </IndexNavButton>
       </div>
       <div className="flex flex-col items-center xl:flex-row gap-2 justify-center font-light">
+        <NavLink to="/users" prefetch="intent">
+          View Users
+        </NavLink>
+        <span className="hidden xl:inline xl:last:hidden">•</span>
         <NavLink to="/pagerduty-integrations" prefetch="intent">
           Manage PagerDuty
         </NavLink>
