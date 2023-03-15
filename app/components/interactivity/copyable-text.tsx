@@ -14,9 +14,10 @@ export const CopyableText: React.FunctionComponent<{
             type="button"
             className="underline decoration-color-link-underline"
             onClick={() =>
-              navigator.clipboard
-                .writeText(text)
-                .then(() => setButtonText("copied!"))
+              navigator.clipboard.writeText(text).then(
+                () => setButtonText("copied!"),
+                () => setButtonText("unsupported 😕")
+              )
             }
           >
             ({buttonText})
