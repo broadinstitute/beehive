@@ -5,12 +5,13 @@ export function matchUser(
   user: SerializeFrom<V2controllersUser>,
   matchText: string
 ): boolean {
+  matchText = matchText.toLowerCase();
   return (
-    user.email?.includes(matchText) ||
-    user.googleID?.includes(matchText) ||
-    user.githubUsername?.includes(matchText) ||
-    user.githubID?.includes(matchText) ||
-    user.name?.includes(matchText) ||
+    user.email?.toLowerCase()?.includes(matchText) ||
+    user.googleID?.toLowerCase()?.includes(matchText) ||
+    user.githubUsername?.toLowerCase()?.includes(matchText) ||
+    user.githubID?.toLowerCase()?.includes(matchText) ||
+    user.name?.toLowerCase()?.includes(matchText) ||
     false
   );
 }
