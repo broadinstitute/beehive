@@ -26,6 +26,7 @@ import {
   errorResponseThrower,
   makeErrorResponseReturner,
 } from "~/errors/helpers/error-response-handlers";
+import { runGha } from "~/features/github/run-gha";
 import { AppVersionPicker } from "~/features/sherlock/app-versions/set/app-version-picker";
 import { ChartReleaseCreatableClusterFields } from "~/features/sherlock/chart-releases/add/chart-release-creatable-cluster-fields";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
@@ -39,6 +40,7 @@ import {
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useSidebar } from "~/hooks/use-sidebar";
+import { commitSession } from "~/session.server";
 import { useClusterChartReleasesAddContext } from "./_layout.clusters.$clusterName.($filterNamespace).chart-releases.add";
 
 export const handle = {
@@ -94,7 +96,7 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export async function action({ request, params }: ActionArgs) {
-  await getValidSession(request);
+  const session = await getValidSession(request);
 
   const formData = await request.formData();
   const chartReleaseRequest: V2controllersChartRelease = {
@@ -112,13 +114,28 @@ export async function action({ request, params }: ActionArgs) {
       { chartRelease: chartReleaseRequest },
       forwardIAP(request)
     )
-    .then(
-      (chartRelease) =>
-        redirect(
-          `/clusters/${params.clusterName}/chart-releases/${chartRelease.namespace}/${chartRelease.chart}`
-        ),
-      makeErrorResponseReturner(chartReleaseRequest)
-    );
+    .then(async (chartRelease) => {
+      if (chartRelease.environmentInfo?.lifecycle === "dynamic") {
+        runGha(
+          session,
+          {
+            workflow_id: "./github/workflows/bee-sync.yaml",
+            inputs: {
+              "bee-name": chartRelease.environmentInfo?.name || "",
+            },
+          },
+          "sync your BEE"
+        );
+      }
+      return redirect(
+        `/clusters/${params.clusterName}/chart-releases/${chartRelease.namespace}/${chartRelease.chart}`,
+        {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      );
+    }, makeErrorResponseReturner(chartReleaseRequest));
 }
 
 export const ErrorBoundary = PanelErrorBoundary;

@@ -3,6 +3,7 @@ import { NavLink, Params, useActionData } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
+import { runGha } from "~/features/github/run-gha";
 import { ChartReleaseDeletePanel } from "~/features/sherlock/chart-releases/delete/chart-release-delete-panel";
 import {
   forwardIAP,
@@ -10,6 +11,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useClusterChartReleaseContext } from "~/routes/_layout.clusters.$clusterName.($filterNamespace).chart-releases.$namespace.$chartName";
+import { commitSession } from "~/session.server";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
@@ -28,7 +30,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function action({ request, params }: ActionArgs) {
-  await getValidSession(request);
+  const session = await getValidSession(request);
 
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorDelete(
@@ -37,10 +39,25 @@ export async function action({ request, params }: ActionArgs) {
       },
       forwardIAP(request)
     )
-    .then(
-      () => redirect(`/clusters/${params.clusterName}/chart-releases`),
-      makeErrorResponseReturner()
-    );
+    .then(async (chartRelease) => {
+      if (chartRelease.environmentInfo?.lifecycle === "dynamic") {
+        runGha(
+          session,
+          {
+            workflow_id: "./github/workflows/bee-sync.yaml",
+            inputs: {
+              "bee-name": chartRelease.environmentInfo?.name || "",
+            },
+          },
+          "sync your BEE"
+        );
+      }
+      return redirect(`/clusters/${params.clusterName}/chart-releases`, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }, makeErrorResponseReturner());
 }
 
 export const ErrorBoundary = PanelErrorBoundary;

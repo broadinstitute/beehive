@@ -1,22 +1,18 @@
-import { Octokit } from "@octokit/rest";
 import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
-import {
-  buildNotifications,
-  Notification,
-} from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
+import { runGha } from "~/features/github/run-gha";
 import { EnvironmentDeleteDescription } from "~/features/sherlock/environments/delete/environment-delete-description";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
-import { commitSession, sessionFields } from "~/session.server";
+import { commitSession } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
 import { makeErrorResponseReturner } from "../errors/helpers/error-response-handlers";
@@ -47,39 +43,15 @@ export async function action({ request, params }: ActionArgs) {
     )
     .then(async (environment) => {
       if (environment.lifecycle === "dynamic") {
-        const payload = {
-          owner: "broadinstitute",
-          repo: "terra-github-workflows",
-          workflow_id: ".github/workflows/bee-destroy.yaml",
-          ref: "main",
-          inputs: {
-            "bee-name": environment.name || "",
+        runGha(
+          session,
+          {
+            workflow_id: ".github/workflows/bee-destroy.yaml",
+            inputs: {
+              "bee-name": environment.name || "",
+            },
           },
-        };
-        console.log(
-          `environment delete workflow dispatch: ${JSON.stringify(payload)}`
-        );
-        const notification = await new Octokit({
-          auth: session.get(sessionFields.githubAccessToken),
-        }).actions
-          .createWorkflowDispatch(payload)
-          .then(
-            (): Notification => ({
-              type: "gha",
-              text: "A GitHub Action has been started to delete your BEE",
-              url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/bee-destroy.yaml",
-            }),
-            (rejected): Notification => ({
-              type: "error",
-              text: `There was a problem calling the GitHub Action to delete your BEE: ${JSON.stringify(
-                rejected
-              )}`,
-              error: true,
-            })
-          );
-        session.flash(
-          sessionFields.flashNotifications,
-          buildNotifications(notification)
+          "delete your BEE"
         );
         return redirect("/environments", {
           headers: { "Set-Cookie": await commitSession(session) },

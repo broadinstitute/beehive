@@ -20,6 +20,7 @@ import {
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
+import { runGha } from "~/features/github/run-gha";
 import { ChartReleaseCreatableEnvironmentFields } from "~/features/sherlock/chart-releases/add/chart-release-creatable-environment-fields";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { ChartReleaseEditableFields } from "~/features/sherlock/chart-releases/edit/chart-release-editable-fields";
@@ -29,6 +30,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { useSidebar } from "~/hooks/use-sidebar";
+import { commitSession } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
 import {
@@ -92,7 +94,7 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export async function action({ request, params }: ActionArgs) {
-  await getValidSession(request);
+  const session = await getValidSession(request);
 
   const formData = await request.formData();
   const chartReleaseRequest: V2controllersChartRelease = {
@@ -110,13 +112,28 @@ export async function action({ request, params }: ActionArgs) {
       { chartRelease: chartReleaseRequest },
       forwardIAP(request)
     )
-    .then(
-      () =>
-        redirect(
-          `/environments/${params.environmentName}/chart-releases/${params.chartName}`
-        ),
-      makeErrorResponseReturner(chartReleaseRequest)
-    );
+    .then(async (chartRelease) => {
+      if (chartRelease.environmentInfo?.lifecycle === "dynamic") {
+        runGha(
+          session,
+          {
+            workflow_id: "./github/workflows/bee-sync.yaml",
+            inputs: {
+              "bee-name": chartRelease.environmentInfo?.name || "",
+            },
+          },
+          "sync your BEE"
+        );
+      }
+      return redirect(
+        `/environments/${params.environmentName}/chart-releases/${params.chartName}`,
+        {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      );
+    }, makeErrorResponseReturner(chartReleaseRequest));
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
