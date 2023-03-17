@@ -1,0 +1,90 @@
+@layer base {
+  /* 
+  colors mostly from Tailwind 
+  https://tailwindcss.com/docs/customizing-colors#default-color-palette
+  */
+  [data-theme="extra-dark"] [data-theme-prod="false"] {
+    color-scheme: dark; /* make browser elements dark mode */
+
+    --color-far-bg: 0 0 0; /* black */
+    --color-near-bg: 24 24 27; /* zinc-900 */
+    --color-nearest-bg: 30 30 33; /* zinc-850ish */
+
+    --color-header-text: 244 244 245; /* zinc-100 */
+    --color-body-text: 228 228 231; /* zinc-200 */
+    --color-placeholder-text: 161 161 170; /* zinc-400 */
+    --color-link-underline: 59 130 246; /* blue-500 */
+
+    --color-focused-element: 59 130 246; /* blue-500 */
+    --color-divider-line: 113 113 122; /* zinc-500 */
+    --color-neutral-soft-border: 113 113 122; /* zinc-500 */
+    --color-neutral-hard-border: 244 244 245; /* zinc-100 */
+    --color-text-box-border: 113 113 122; /* zinc-500 */
+
+    --color-button-down: 30 30 33; /* zinc-850ish */
+    --color-icon-button-down: 82 82 91; /* zinc-600 */
+    --color-icon-button-hover: 113 113 122; /* zinc-500 */
+
+    --color-cluster-bg: 20 83 45; /* green-900 */
+    --color-cluster-border: 34 197 94; /* green-500 */
+    --color-environment-bg: 113 63 18; /* yellow-900 */
+    --color-environment-border: 234 179 8; /* yellow-500 */
+    --color-chart-bg: 12 74 110; /* sky-900 */
+    --color-chart-border: 14 165 233; /* sky-500 */
+    --color-app-version-bg: 136 19 55; /* rose-900 */
+    --color-app-version-border: 244 63 94; /* rose-500 */
+    --color-chart-version-bg: 76 29 149; /* violet-900 */
+    --color-chart-version-border: 139 92 246; /* violet-500 */
+    --color-misc-type-bg: 63 63 70; /* zinc-700 */
+    --color-misc-type-border: 113 113 122; /* zinc-500 */
+
+    --color-error-bg: 127 29 29; /* red-900 */
+    --color-error-button: 153 27 27; /* red-800 */
+    --color-error-border: 248 113 113; /* red-400 */
+
+    --color-beehive-logo: 234 179 8; /* yellow-500 */
+  }
+
+  /* light theme for prod */
+  [data-theme="extra-dark"] [data-theme-prod="true"] {
+    color-scheme: light; /* make browser elements light mode */
+
+    --color-far-bg: 244 244 245; /* zinc-100 */
+    --color-near-bg: 255 255 255; /* white */
+    --color-nearest-bg: 255 255 255; /* white */
+
+    --color-header-text: 0 0 0; /* black */
+    --color-body-text: 24 24 27; /* zinc-900 */
+    --color-placeholder-text: 113 113 122; /* zinc-500 */
+    --color-link-underline: 59 130 246; /* blue-500 */
+
+    --color-focused-element: 59 130 246; /* blue-500 */
+    --color-divider-line: 161 161 170; /* zinc-400 */
+    --color-neutral-soft-border: 212 212 216; /* zinc-300 */
+    --color-neutral-hard-border: 0 0 0; /* black */
+    --color-text-box-border: 161 161 170; /* zinc-400 */
+
+    --color-button-down: 244 244 245; /* zinc-100 */
+    --color-icon-button-down: 212 212 216; /* zinc-300 */
+    --color-icon-button-hover: 228 228 231; /* zinc-200 */
+
+    --color-cluster-bg: 240 253 244; /* green-50 */
+    --color-cluster-border: 134 239 172; /* green-300 */
+    --color-environment-bg: 255 251 235; /* amber-50 */
+    --color-environment-border: 252 211 77; /* amber-300 */
+    --color-chart-bg: 240 249 255; /* sky-50 */
+    --color-chart-border: 125 211 252; /* sky-300 */
+    --color-app-version-bg: 255 241 242; /* rose-50 */
+    --color-app-version-border: 253 164 175; /* rose-300 */
+    --color-chart-version-bg: 245 243 255; /* violet-50 */
+    --color-chart-version-border: 196 181 253; /* violet-300 */
+    --color-misc-type-bg: 236 236 238; /* zinc-150ish */
+    --color-misc-type-border: 212 212 216; /* zinc-300 */
+
+    --color-error-bg: 254 242 242; /* red-50 */
+    --color-error-border: 239 68 68; /* red-500 */
+    --color-error-button: 254 226 226; /* red-100 */
+
+    --color-beehive-logo: 252 211 77; /* amber-300 */
+  }
+}
