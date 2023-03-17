@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 enum Theme {
   LIGHT = "light",
   DARK = "dark",
+  EXTRA_LIGHT = "extra-light",
+  EXTRA_DARK = "extra-dark",
 }
 
 const defaultTheme: Theme = Theme.LIGHT;
@@ -34,7 +36,7 @@ export const ThemeDropdown: React.FunctionComponent = () => {
     >
       <span className="align-middle">Theme: </span>
       <select
-        className="text-center align-middle bg-color-far-bg border rounded-md border-color-text-box-border border-opacity-50 focus-visible:outline focus-visible:outline-color-focused-element"
+        className="px-1 text-center align-middle bg-color-far-bg border rounded-md border-color-text-box-border border-opacity-50 focus-visible:outline focus-visible:outline-color-focused-element"
         value={dropdownValue}
         onChange={(e) => {
           let themeToSet = e.target.value;
