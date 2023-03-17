@@ -20,14 +20,12 @@ import {
 import { useState } from "react";
 import { ActionButton } from "~/components/interactivity/action-button";
 import { EnumSelect } from "~/components/interactivity/enum-select";
-import { ListControls } from "~/components/interactivity/list-controls";
 import { TextField } from "~/components/interactivity/text-field";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
-import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { ActionBox } from "~/components/panel-structures/action-box";
-import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
+import { SidebarSelectMultipleChartReleases } from "~/features/sherlock/chart-releases/set/sidebar-select-multiple-chart-releases";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
   forwardIAP,
@@ -42,7 +40,6 @@ import {
   makeErrorResponseReturner,
 } from "../errors/helpers/error-response-handlers";
 import { chartReleaseSorter } from "../features/sherlock/chart-releases/list/chart-release-sorter";
-import { matchChartRelease } from "../features/sherlock/chart-releases/list/match-chart-release";
 import { ChangeEnvironmentVersionsSidebarModes } from "../features/sherlock/environments/change-versions/change-environment-versions-sidebar-modes";
 import { environmentSorter } from "../features/sherlock/environments/list/environment-sorter";
 import { ListEnvironmentButtonText } from "../features/sherlock/environments/list/list-environment-button-text";
@@ -160,12 +157,12 @@ export default function Route() {
     useState("exact");
   const [includedCharts, setIncludedCharts] = useState<Map<string, boolean>>(
     new Map(
-      chartReleases
-        .filter(
-          (chartRelease): chartRelease is { chart: string } =>
-            chartRelease.chart !== undefined
-        )
-        .map((chartRelease) => [chartRelease.chart, true])
+      chartReleases.map((chartRelease) => [
+        chartRelease.chart || "",
+        chartRelease.includedInBulkChangesets === undefined
+          ? true
+          : chartRelease.includedInBulkChangesets,
+      ])
     )
   );
   const [chartFilterText, setChartFilterText] = useState("");
@@ -282,9 +279,24 @@ export default function Route() {
               ? "copy versions from the environment above and "
               : ""}
             refresh all the included charts in this environment. You can select
-            which charts you'd like to be included. If a chart isn't highlighted
-            in the list, it won't be affected at all.
+            which charts you'd like to be included. If a chart isn't checked in
+            the list, it won't be affected at all.
           </p>
+          {Array.from(includedCharts.values()).find(
+            (value) => value === false
+          ) !== undefined && (
+            <p>
+              <b className="font-bold">
+                The default selected charts to the right have been intentionally
+                customized by folks using the "Adjust Monolith / Bulk Update
+                Defaults" button to the left.
+              </b>{" "}
+              You can change the default selection if you'd like, but especially
+              for live environments keep in mind that teams who independently
+              release their apps may not want them to be deployed to production
+              by monolith.
+            </p>
+          )}
           <ActionButton
             type="button"
             sizeClassName=""
@@ -333,52 +345,13 @@ export default function Route() {
           />
         )}
         {sidebar === "select included charts" && (
-          <InteractiveList
+          <SidebarSelectMultipleChartReleases
             title="Select Charts to Include"
-            {...ChartReleaseColors}
-          >
-            <ListControls
-              setFilterText={setChartFilterText}
-              {...ChartReleaseColors}
-            />
-            <MemoryFilteredList
-              entries={chartReleases}
-              filterText={chartFilterText}
-              filter={matchChartRelease}
-            >
-              {(chartRelease, index) => (
-                <ActionButton
-                  key={index}
-                  isActive={includedCharts.get(chartRelease.chart || "")}
-                  onClick={() => {
-                    setIncludedCharts(
-                      (previous) =>
-                        new Map([
-                          ...previous,
-                          [
-                            chartRelease.chart || "",
-                            !previous.get(chartRelease.chart || ""),
-                          ],
-                        ])
-                    );
-                  }}
-                  {...ChartReleaseColors}
-                >
-                  <h2 className="font-light">
-                    <input
-                      className="w-4 h-4 mr-2"
-                      type="checkbox"
-                      checked={includedCharts.get(chartRelease.chart || "")}
-                      readOnly
-                    />
-                    <span className="font-medium">{chartRelease.chart}</span>
-                    {chartRelease.appVersionResolver !== "none" &&
-                      ` (app @ ${chartRelease.appVersionExact})`}
-                  </h2>
-                </ActionButton>
-              )}
-            </MemoryFilteredList>
-          </InteractiveList>
+            chartReleases={chartReleases}
+            chartMap={includedCharts}
+            setChartMap={setIncludedCharts}
+            includeAppVersions
+          />
         )}
       </InsetPanel>
     </>

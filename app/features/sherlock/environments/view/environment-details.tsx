@@ -22,6 +22,7 @@ export interface EnvironmentDetailsProps {
   toEdit?: string;
   toSchedule?: string;
   toLinkPagerduty?: string;
+  toAdjustBulkUpdateDefaults?: string;
   toDelete?: string;
 }
 
@@ -34,6 +35,7 @@ export const EnvironmentDetails: React.FunctionComponent<
   toEdit,
   toSchedule,
   toLinkPagerduty,
+  toAdjustBulkUpdateDefaults,
   toDelete,
 }) => (
   <div className="flex flex-col space-y-10">
@@ -121,7 +123,8 @@ export const EnvironmentDetails: React.FunctionComponent<
       toSchedule ||
       toLinkPagerduty ||
       toDelete ||
-      toChangeVersions) && (
+      toChangeVersions ||
+      toAdjustBulkUpdateDefaults) && (
       <MutateControls
         name={environment.name || ""}
         colors={EnvironmentColors}
@@ -142,6 +145,7 @@ export const EnvironmentDetails: React.FunctionComponent<
             ? toDelete
             : undefined
         }
+        toAdjustBulkUpdateDefaults={toAdjustBulkUpdateDefaults}
       />
     )}
   </div>

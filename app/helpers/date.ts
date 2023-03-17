@@ -1,4 +1,4 @@
-function pad(num: Number) {
+function pad(num: number) {
   return (num < 10 ? "0" : "") + num;
 }
 
