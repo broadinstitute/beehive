@@ -110,7 +110,7 @@ export async function action({ request }: ActionArgs) {
         environment.lifecycle === "dynamic" &&
         formData.get("action") !== "none"
       ) {
-        runGha(
+        await runGha(
           session,
           {
             workflow_id: "./github/workflows/bee-provision.yaml",

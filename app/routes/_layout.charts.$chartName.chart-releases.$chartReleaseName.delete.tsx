@@ -41,7 +41,7 @@ export async function action({ request, params }: ActionArgs) {
     )
     .then(async (chartRelease) => {
       if (chartRelease.environmentInfo?.lifecycle === "dynamic") {
-        runGha(
+        await runGha(
           session,
           {
             workflow_id: "./github/workflows/bee-sync.yaml",

@@ -97,7 +97,7 @@ export async function action({ request }: ActionArgs) {
           .filter((value): value is string => typeof value === "string")
           .length > 0
       ) {
-        runGha(
+        await runGha(
           session,
           {
             workflow_id: ".github/workflows/sync-release.yaml",

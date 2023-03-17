@@ -43,7 +43,7 @@ export async function action({ request, params }: ActionArgs) {
     )
     .then(async (environment) => {
       if (environment.lifecycle === "dynamic") {
-        runGha(
+        await runGha(
           session,
           {
             workflow_id: ".github/workflows/bee-destroy.yaml",
