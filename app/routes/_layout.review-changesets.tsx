@@ -1,4 +1,3 @@
-import { Octokit } from "@octokit/rest";
 import {
   ActionArgs,
   LoaderArgs,
@@ -18,12 +17,9 @@ import { ListControls } from "~/components/interactivity/list-controls";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
-import {
-  buildNotifications,
-  Notification,
-} from "~/components/logic/notification";
 import { BigActionBox } from "~/components/panel-structures/big-action-box";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
+import { runGha } from "~/features/github/run-gha";
 import { ChangesetEntry } from "~/features/sherlock/changesets/list/changeset-entry";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
@@ -33,7 +29,7 @@ import {
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
-import { commitSession, sessionFields } from "~/session.server";
+import { commitSession } from "~/session.server";
 import { ProdFlag } from "../components/layout/prod-flag";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
@@ -101,44 +97,20 @@ export async function action({ request }: ActionArgs) {
           .filter((value): value is string => typeof value === "string")
           .length > 0
       ) {
-        const payload = {
-          owner: "broadinstitute",
-          repo: "terra-github-workflows",
-          workflow_id: ".github/workflows/sync-release.yaml",
-          ref: "main",
-          inputs: {
-            // Get this from hidden fields on the form so that we can filter out what is and isn't a template easily
-            "chart-release-names": formData
-              .getAll("sync")
-              .filter((value): value is string => typeof value === "string")
-              .join(","),
-            "refresh-only": (formData.get("action") === "refresh").toString(),
+        await runGha(
+          session,
+          {
+            workflow_id: ".github/workflows/sync-release.yaml",
+            inputs: {
+              // Get this from hidden fields on the form so that we can filter out what is and isn't a template easily
+              "chart-release-names": formData
+                .getAll("sync")
+                .filter((value): value is string => typeof value === "string")
+                .join(","),
+              "refresh-only": (formData.get("action") === "refresh").toString(),
+            },
           },
-        };
-        console.log(
-          `review-changesets workflow dispatch: ${JSON.stringify(payload)}`
-        );
-        const notification = await new Octokit({
-          auth: session.get(sessionFields.githubAccessToken),
-        }).actions
-          .createWorkflowDispatch(payload)
-          .then(
-            (): Notification => ({
-              type: "gha",
-              text: "A GitHub Action has been started to sync your changes",
-              url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/sync-release.yaml",
-            }),
-            (rejected): Notification => ({
-              type: "error",
-              text: `There was a problem calling the GitHub Action to sync your changes: ${JSON.stringify(
-                rejected
-              )}`,
-              error: true,
-            })
-          );
-        session.flash(
-          sessionFields.flashNotifications,
-          buildNotifications(notification)
+          "sync your changes"
         );
       }
       return redirect(

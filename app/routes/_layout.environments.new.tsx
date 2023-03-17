@@ -1,4 +1,3 @@
-import { Octokit } from "@octokit/rest";
 import {
   ActionArgs,
   LoaderArgs,
@@ -16,12 +15,9 @@ import { EnumInputSelect } from "~/components/interactivity/enum-select";
 
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
-import {
-  buildNotifications,
-  Notification,
-} from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
+import { runGha } from "~/features/github/run-gha";
 import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit/environment-editable-fields";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
@@ -36,7 +32,7 @@ import {
 import { dateWithCustomISOString } from "~/helpers/date";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { useSidebar } from "~/hooks/use-sidebar";
-import { commitSession, sessionFields } from "~/session.server";
+import { commitSession } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
 import {
@@ -114,42 +110,18 @@ export async function action({ request }: ActionArgs) {
         environment.lifecycle === "dynamic" &&
         formData.get("action") !== "none"
       ) {
-        const payload = {
-          owner: "broadinstitute",
-          repo: "terra-github-workflows",
-          workflow_id: ".github/workflows/bee-provision.yaml",
-          ref: "main",
-          inputs: {
-            "bee-name": environment.name || "",
-            "provision-only": (
-              formData.get("action") === "provision"
-            ).toString(),
+        await runGha(
+          session,
+          {
+            workflow_id: "./github/workflows/bee-provision.yaml",
+            inputs: {
+              "bee-name": environment.name || "",
+              "provision-only": (
+                formData.get("action") === "provision"
+              ).toString(),
+            },
           },
-        };
-        console.log(
-          `environment create workflow dispatch: ${JSON.stringify(payload)}`
-        );
-        const notification = await new Octokit({
-          auth: session.get(sessionFields.githubAccessToken),
-        }).actions
-          .createWorkflowDispatch(payload)
-          .then(
-            (): Notification => ({
-              type: "gha",
-              text: "A GitHub Action has been started to provision your BEE",
-              url: "https://github.com/broadinstitute/terra-github-workflows/actions/workflows/bee-provision.yaml",
-            }),
-            (rejected): Notification => ({
-              type: "error",
-              text: `There was a problem calling the GitHub Action to provision your BEE: ${JSON.stringify(
-                rejected
-              )}`,
-              error: true,
-            })
-          );
-        session.flash(
-          sessionFields.flashNotifications,
-          buildNotifications(notification)
+          "provision your BEE"
         );
       }
       return redirect(`/environments/${environment.name}`, {
