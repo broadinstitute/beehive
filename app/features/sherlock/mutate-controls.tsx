@@ -11,6 +11,7 @@ export interface MutateControlsProps {
   toEdit?: string;
   toSchedule?: string;
   toLinkPagerduty?: string;
+  toAdjustBulkUpdateDefaults?: string;
   toDelete?: string;
 }
 
@@ -24,6 +25,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   toEdit,
   toSchedule,
   toLinkPagerduty,
+  toAdjustBulkUpdateDefaults,
   toDelete,
 }) => (
   <div className="flex flex-col space-y-12">
@@ -65,6 +67,11 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         {toLinkPagerduty && (
           <NavButton to={toLinkPagerduty} {...colors}>
             Configure PagerDuty Link
+          </NavButton>
+        )}
+        {toAdjustBulkUpdateDefaults && (
+          <NavButton to={toAdjustBulkUpdateDefaults} {...colors}>
+            Adjust Monolith / Bulk Update Defaults
           </NavButton>
         )}
         {toDelete && (

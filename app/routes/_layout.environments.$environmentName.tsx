@@ -79,6 +79,7 @@ export default function Route() {
             //   environment.lifecycle == "static" ? "./link-pagerduty" : ""
             // }
             toDelete={"./delete"}
+            toAdjustBulkUpdateDefaults="./adjust-bulk-update-defaults"
           />
         </ItemDetails>
       </OutsetPanel>
