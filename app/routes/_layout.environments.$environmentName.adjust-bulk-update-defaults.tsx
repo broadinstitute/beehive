@@ -126,10 +126,10 @@ export default function Route() {
             to bulk-update the versions in this environment.
           </p>
           <p>
-            When someone clicks the "Bulk Version Update" button to the left,
-            that screen will let them customize which charts (which apps) will
-            be included. This page lets you change what everyone sees as default
-            state of that list, just for this environment.
+            When someone clicks the "Monolith / Bulk Version Update" button to
+            the left, that screen will let them customize which charts (which
+            apps) will be included. This page lets you change what everyone sees
+            as default state of that list, just for this environment.
           </p>
           <p>
             Why is that useful?{" "}
