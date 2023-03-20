@@ -117,7 +117,7 @@ export default function Route() {
     <>
       <OutsetPanel>
         <ActionBox
-          title={`Now Adjusting Bulk Update Behavior for ${environment.name}`}
+          title={`Now Adjusting Monolith / Bulk Update Behavior for ${environment.name}`}
           submitText="Click to Save New Defaults"
           {...EnvironmentColors}
         >
