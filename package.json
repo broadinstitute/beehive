@@ -14,7 +14,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.21.1",
+    "@floating-ui/react": "^0.22.0",
     "@octokit/rest": "^19.0.7",
     "@react-hook/resize-observer": "^1.2.6",
     "@remix-run/node": "^1.14.3",
