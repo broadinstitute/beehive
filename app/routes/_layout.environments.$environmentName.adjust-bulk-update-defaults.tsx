@@ -117,7 +117,7 @@ export default function Route() {
     <>
       <OutsetPanel>
         <ActionBox
-          title={`Now Adjusting Bulk Update Behavior for ${environment.name}`}
+          title={`Now Adjusting Monolith / Bulk Update Behavior for ${environment.name}`}
           submitText="Click to Save New Defaults"
           {...EnvironmentColors}
         >
@@ -140,6 +140,26 @@ export default function Route() {
             Just uncheck your apps from the list to the right and hit save
             below.
           </p>
+          {environment.lifecycle === "static" &&
+            environment.base === "live" && (
+              <div className="w-full rounded-2xl bg-color-near-bg px-4 pt-3 pb-2 border-2 border-color-environment-border border-dashed flex flex-col gap-4">
+                <p>
+                  This is a live environment, so Jenkins may be used to run
+                  monolith deployments here, instead of Beehive.{" "}
+                  <b className="font-bold">
+                    The selections here will still take effect when monolith is
+                    done from Jenkins.
+                  </b>
+                </p>
+                <p>
+                  The easiest way to think about it is that this panel lets you
+                  control the default monolith behavior no matter how monolith
+                  is run. When someone runs monolith from Beehive, they could
+                  override those defaults. When someone runs monolith from
+                  Jenkins, they can't override the defaults.
+                </p>
+              </div>
+            )}
           {Array.from(chartReleaseSettings).map(([chartName, included]) => (
             <input
               type="hidden"
