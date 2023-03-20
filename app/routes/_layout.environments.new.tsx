@@ -31,6 +31,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { dateWithCustomISOString } from "~/helpers/date";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { getUserEmail } from "~/helpers/get-user-email.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { commitSession } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -57,9 +58,7 @@ export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
   const preconfiguredLifecycle = url.searchParams.get("lifecycle");
   return Promise.all([
-    // https://cloud.google.com/iap/docs/identity-howto#getting_the_users_identity_with_signed_headers
-    request.headers.get("X-Goog-Authenticated-User-Email")?.split(":").at(-1) ||
-      null,
+    getUserEmail(request),
     new ClustersApi(SherlockConfiguration)
       .apiV2ClustersGet({}, forwardIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
