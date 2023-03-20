@@ -119,7 +119,7 @@ export async function action({ request, params }: ActionArgs) {
         await runGha(
           session,
           {
-            workflow_id: "./github/workflows/bee-sync.yaml",
+            workflow_id: ".github/workflows/bee-sync.yaml",
             inputs: {
               "bee-name": chartRelease.environmentInfo?.name || "",
             },

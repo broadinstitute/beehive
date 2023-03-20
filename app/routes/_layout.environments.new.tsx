@@ -113,7 +113,7 @@ export async function action({ request }: ActionArgs) {
         await runGha(
           session,
           {
-            workflow_id: "./github/workflows/bee-provision.yaml",
+            workflow_id: ".github/workflows/bee-provision.yaml",
             inputs: {
               "bee-name": environment.name || "",
               "provision-only": (
