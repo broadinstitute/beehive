@@ -149,7 +149,7 @@ export default function Route() {
                   <b className="font-bold">
                     The selections here will still take effect when monolith is
                     done from Jenkins.
-                  </b>{" "}
+                  </b>
                 </p>
                 <p>
                   The easiest way to think about it is that this panel lets you
