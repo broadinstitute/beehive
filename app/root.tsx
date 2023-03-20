@@ -125,6 +125,30 @@ export async function loader({ request }: LoaderArgs) {
             );
           } else {
             session.set(sessionFields.githubAccessToken, data.access_token);
+
+            // Update Google/GitHub account linking in Sherlock but don't await it!
+            // We don't need the output of this at all, we just want it to happen at
+            // some point.
+            new UsersApi(SherlockConfiguration)
+              .apiV2ProceduresUsersLinkGithubPost(
+                {
+                  githubAccessPayloadRequest: {
+                    githubAccessToken: data.access_token,
+                  },
+                },
+                forwardIAP(request)
+              )
+              .then(
+                (user) =>
+                  console.log(
+                    `updated Sherlock account linking, ${user.email} = ${user.githubUsername}`
+                  ),
+                (reason) =>
+                  console.log(
+                    `failed to update Sherlock account linking, ${reason}`
+                  )
+              );
+
             requestUrl.searchParams.delete("code");
             requestUrl.searchParams.delete("state");
             return redirect(requestUrl.href, {
@@ -136,8 +160,8 @@ export async function loader({ request }: LoaderArgs) {
   }
 
   // Start GitHub OAuth
-  session.set(sessionFields.githubOAuthState, generateNonce());
   if (!session.has(sessionFields.githubAccessToken)) {
+    session.set(sessionFields.githubOAuthState, generateNonce());
     const githubAuthorizeURL = new URL(
       "https://github.com/login/oauth/authorize"
     );
@@ -157,30 +181,14 @@ export async function loader({ request }: LoaderArgs) {
     });
   }
 
-  // Update Google/GitHub account linking in Sherlock but don't await it!
-  // We don't need the output of this at all, we just want it to happen at
-  // some point.
-  new UsersApi(SherlockConfiguration)
-    .apiV2ProceduresUsersLinkGithubPost(
-      {
-        githubAccessPayloadRequest: {
-          githubAccessToken: session.get(sessionFields.githubAccessToken),
-        },
-      },
-      forwardIAP(request)
-    )
-    .then(
-      (user) =>
-        console.log(
-          `updated Sherlock account linking, ${user.email} = ${user.githubUsername}`
-        ),
-      (reason) =>
-        console.log(`failed to update Sherlock account linking, ${reason}`)
-    );
-
   // Update tokens
-  session.set(sessionFields.csrfToken, generateNonce());
-  session.set(sessionFields.pdToken, generateNonce());
+  if (!session.has(sessionFields.csrfToken)) {
+    session.set(sessionFields.csrfToken, generateNonce());
+  }
+  if (!session.has(sessionFields.pdToken)) {
+    session.set(sessionFields.pdToken, generateNonce());
+  }
+
   return json(
     {
       csrfToken: session.get(sessionFields.csrfToken),
