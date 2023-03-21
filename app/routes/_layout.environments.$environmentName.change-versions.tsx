@@ -299,7 +299,7 @@ export default function Route() {
           )}
           <ActionButton
             type="button"
-            sizeClassName=""
+            size="fill"
             isActive={sidebar === "select included charts"}
             onClick={(e) => {
               setSidebar("select included charts");

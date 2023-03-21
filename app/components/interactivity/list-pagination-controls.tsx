@@ -1,26 +1,27 @@
+import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { InactiveNavButton } from "./inactive-nav-button";
 
 export const ListPaginationControls: React.FunctionComponent<{
+  size?: PanelSize;
   filterText?: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
   beforeBorderClassName: string;
   offset: number;
   limit: number;
   currentCount: number;
-  doubleWidth?: boolean;
 }> = ({
+  size = "one-third",
   filterText,
   setFilterText,
   beforeBorderClassName,
   offset,
   limit,
   currentCount,
-  doubleWidth = false,
 }) => (
   <div
-    className={`w-[90vw] ${
-      doubleWidth ? "xl:w-[60vw]" : "xl:w-[30vw]"
-    } flex flex-row gap-4 flex-wrap xl:flex-nowrap`}
+    className={`${panelSizeToInnerClassName(
+      size
+    )} flex flex-row gap-4 flex-wrap xl:flex-nowrap`}
   >
     {offset > 0 && (
       <InactiveNavButton

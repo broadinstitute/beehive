@@ -1,8 +1,10 @@
 import { forwardRef } from "react";
+import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { BeehiveIcon } from "../assets/beehive-icon";
 
 export interface ActionButtonProps {
   type?: "submit" | "reset" | "button";
+  size?: PanelSize;
   sizeClassName?: string;
   beforeBorderClassName?: string;
   textAlignment?: string;
@@ -19,7 +21,8 @@ export const ActionButton = forwardRef<HTMLDivElement, ActionButtonProps>(
   (
     {
       type,
-      sizeClassName = "w-[90vw] xl:w-[30vw]",
+      size = "one-third",
+      sizeClassName,
       beforeBorderClassName,
       textAlignment = "text-left",
       children,
@@ -36,7 +39,7 @@ export const ActionButton = forwardRef<HTMLDivElement, ActionButtonProps>(
       <button
         type={type}
         className={`flex flex-row items-center bg-color-nearest-bg active:bg-color-button-down rounded-2xl min-h-[3rem] ${
-          sizeClassName || "w-full"
+          sizeClassName || panelSizeToInnerClassName(size)
         } focus-visible:outline focus-visible:outline-color-focused-element before:w-full before:h-full before:block before:absolute before:rounded-2xl ${
           isActive ? "before:border-r-[2rem] before:hover:border-r-[2rem]" : ""
         } ${activeOnHover ? "before:hover:border-r-[2rem]" : ""} ${

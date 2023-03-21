@@ -4,7 +4,7 @@ import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environmen
 
 export default function Route() {
   return (
-    <InsetPanel largeScreenOnly doubleWidth>
+    <InsetPanel largeScreenOnly size="fill">
       <FillerText title="Environments">
         <EnvironmentHelpCopy />
       </FillerText>

@@ -364,16 +364,16 @@ export default function Route() {
         </BigActionBox>
       </OutsetPanel>
 
-      <InsetPanel doubleWidth>
+      <InsetPanel size="fill">
         <InteractiveList
           title="Changes to Be Applied"
-          doubleWidth
+          size="two-thirds"
           {...ChartReleaseColors}
         >
           <ListControls
             filterText={filterText}
             setFilterText={setFilterText}
-            doubleWidth
+            size="two-thirds"
             {...returnColors}
           />
           <MemoryFilteredList

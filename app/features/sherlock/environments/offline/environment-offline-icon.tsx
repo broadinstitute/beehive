@@ -63,7 +63,7 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
         <input type="hidden" name="offline" value={(!offline).toString()} />
         <input type="hidden" name="environment" value={environmentName} />
         <ActionButton
-          sizeClassName="w-full"
+          size="fill"
           type="submit"
           isLoading={fetcher.state !== "idle"}
           {...EnvironmentColors}

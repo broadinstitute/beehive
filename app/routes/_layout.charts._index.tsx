@@ -4,7 +4,7 @@ import { ChartHelpCopy } from "~/features/sherlock/charts/chart-help-copy";
 
 export default function Route() {
   return (
-    <InsetPanel largeScreenOnly doubleWidth>
+    <InsetPanel largeScreenOnly size="fill">
       <FillerText title="Charts">
         <ChartHelpCopy />
       </FillerText>

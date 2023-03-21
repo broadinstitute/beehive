@@ -11,7 +11,7 @@ export const ItemDetails: React.FunctionComponent<ItemDetailsProps> = ({
   title,
   icon,
 }) => (
-  <div className="w-screen xl:w-[33vw] flex flex-col space-y-4 p-8 pt-4 text-color-body-text">
+  <div className="flex flex-col space-y-4 p-8 pt-4 text-color-body-text">
     <div>
       {subtitle && (
         <h2 className="text-2xl font-light text-color-header-text">
