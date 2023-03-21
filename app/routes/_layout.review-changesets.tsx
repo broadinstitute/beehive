@@ -367,13 +367,13 @@ export default function Route() {
       <InsetPanel size="fill">
         <InteractiveList
           title="Changes to Be Applied"
-          size="two-thirds"
+          size="almost-fill"
           {...ChartReleaseColors}
         >
           <ListControls
             filterText={filterText}
             setFilterText={setFilterText}
-            size="two-thirds"
+            size="fill"
             {...returnColors}
           />
           <MemoryFilteredList
@@ -397,6 +397,7 @@ export default function Route() {
           >
             {(changeset, index) => (
               <ChangesetEntry
+                size="fill"
                 changeset={changeset}
                 key={index}
                 includedCheckboxValue={

@@ -21,7 +21,7 @@ export const ListPaginationControls: React.FunctionComponent<{
   <div
     className={`${panelSizeToInnerClassName(
       size
-    )} flex flex-row gap-4 flex-wrap xl:flex-nowrap`}
+    )} flex flex-row gap-4 flex-wrap laptop:flex-nowrap`}
   >
     {offset > 0 && (
       <InactiveNavButton

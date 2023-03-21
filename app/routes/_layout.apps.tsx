@@ -45,9 +45,13 @@ export default function Route() {
   const [filterText, setFilterText] = useState("");
   return (
     <>
-      <InsetPanel alwaysShowScrollbar>
-        <InteractiveList title="Apps" {...ChartColors}>
-          <ListControls setFilterText={setFilterText} {...ChartColors} />
+      <InsetPanel alwaysShowScrollbar size="one-fourth">
+        <InteractiveList title="Apps" size="one-fourth" {...ChartColors}>
+          <ListControls
+            setFilterText={setFilterText}
+            size="one-fourth"
+            {...ChartColors}
+          />
           <MemoryFilteredList
             entries={charts}
             filterText={filterText}

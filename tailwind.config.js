@@ -5,6 +5,12 @@ module.exports = {
     hoverOnlyWhenSupported: true,
   },
   theme: {
+    screens: {
+      tablet: "750px",
+      laptop: "1250px",
+      desktop: "1750px",
+      ultrawide: "2750px",
+    },
     extend: {
       colors: Object.fromEntries(
         [

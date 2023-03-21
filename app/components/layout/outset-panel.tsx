@@ -14,7 +14,7 @@ export const OutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({
 }) => (
   <div
     className={`snap-end w-screen ${panelSizeToOuterClassName(size)} ${
-      largeScreenOnly ? "hidden xl:block" : ""
+      largeScreenOnly ? "hidden laptop:block" : ""
     } shrink-0 h-full relative bg-color-near-bg ${
       borderClassName ? `border-l-4 ${borderClassName}` : ""
     }`}

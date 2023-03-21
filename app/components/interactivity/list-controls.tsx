@@ -21,7 +21,7 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
   <div
     className={`${panelSizeToInnerClassName(
       size
-    )} flex flex-row-reverse gap-4 flex-wrap xl:flex-nowrap`}
+    )} flex flex-row-reverse gap-4 flex-wrap laptop:flex-nowrap`}
   >
     {toCreate && (
       <NavButton
