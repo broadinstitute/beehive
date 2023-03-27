@@ -4,12 +4,13 @@ export interface PrettyPrintDescriptionProps {
   description: string;
   repo?: string;
   jira?: string;
+  className?: string;
 }
 
 export const PrettyPrintDescription: React.FunctionComponent<
   PrettyPrintDescriptionProps
-> = ({ description, repo, jira = "broadworkbench" }) => (
-  <span>
+> = ({ description, repo, jira = "broadworkbench", className }) => (
+  <span className={className}>
     {description
       .split(
         /((?:\[?[A-Z]+-[0-9]+\]?)|(?:\(?#[0-9]+\)?)|(?:\[[^\]]+\]\(https?:\/\/[\w\d./?\-=#&]+\)))/g

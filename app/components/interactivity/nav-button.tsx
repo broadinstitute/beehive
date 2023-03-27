@@ -1,10 +1,13 @@
 import { NavLink } from "@remix-run/react";
+import { RemixNavLinkProps } from "@remix-run/react/dist/components";
 
 export interface NavButtonProps {
   to: string;
   beforeBorderClassName: string;
   textAlignment?: string;
   children: React.ReactNode;
+  icon?: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   disabled?: boolean;
   prod?: boolean;
   grow?: boolean;
@@ -12,16 +15,22 @@ export interface NavButtonProps {
   forceActive?: boolean;
 }
 
-export const NavButton: React.FunctionComponent<NavButtonProps> = ({
+export const NavButton: React.FunctionComponent<
+  NavButtonProps & Pick<RemixNavLinkProps, "prefetch">
+> = ({
   to,
   beforeBorderClassName,
   textAlignment = "text-left",
   children,
+  icon,
+  onClick,
   disabled,
   prod,
   grow,
   end,
   forceActive,
+
+  prefetch = "intent",
 }) => (
   <div
     data-theme-prod={prod}
@@ -30,9 +39,10 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
     }`}
   >
     <NavLink
-      prefetch="intent"
+      prefetch={prefetch}
       to={to}
       end={end}
+      onClick={onClick}
       className={({ isActive }) =>
         `flex flex-row items-center bg-color-nearest-bg active:bg-color-button-down rounded-2xl min-h-[3rem] focus-visible:outline focus-visible:outline-color-focused-element before:w-full before:h-full before:block before:absolute before:rounded-2xl ${
           isActive || forceActive
@@ -46,10 +56,11 @@ export const NavButton: React.FunctionComponent<NavButtonProps> = ({
       }
     >
       <div
-        className={`shrink-0 flex flex-row justify-between items-center h-full w-full pl-4 pr-16 py-2 ${
+        className={`shrink-0 flex flex-row gap-2 justify-between items-center h-full w-full pl-4 pr-16 py-2 ${
           disabled ? "opacity-50" : ""
         }`}
       >
+        {icon}
         <div
           className={`grow text-xl font-medium text-color-body-text ${textAlignment}`}
         >

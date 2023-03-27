@@ -3,7 +3,7 @@ import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 export interface InteractiveListProps {
   size?: PanelSize;
   children: React.ReactNode;
-  title: string;
+  title: React.ReactNode;
   borderClassName: string;
 }
 
@@ -13,9 +13,11 @@ export const InteractiveList: React.FunctionComponent<InteractiveListProps> = ({
   title,
   borderClassName,
 }) => (
-  <div className="flex flex-col items-center pb-4">
+  <div className="min-h-full flex flex-col items-center pb-4">
     <div
-      className={`flex flex-col space-y-4 ${panelSizeToInnerClassName(size)}`}
+      className={`grow flex flex-col space-y-4 ${panelSizeToInnerClassName(
+        size
+      )}`}
     >
       <div
         className={`${panelSizeToInnerClassName(

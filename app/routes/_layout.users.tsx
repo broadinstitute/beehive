@@ -64,8 +64,9 @@ export default function Route() {
       </OutsetPanel>
       <InsetPanel>
         <InteractiveList title="Users" {...UserColors}>
-          <div className="text-center text">
-            You can search by email, GitHub username, Google or GitHub ID, etc.
+          <div className="text-center text-color-body-text">
+            You can search by name, email, GitHub username, Google or GitHub ID,
+            etc.
           </div>
           <ListControls
             filterText={filterText}

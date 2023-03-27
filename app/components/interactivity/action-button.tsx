@@ -9,6 +9,7 @@ export interface ActionButtonProps {
   beforeBorderClassName?: string;
   textAlignment?: string;
   children: React.ReactNode;
+  icon?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isActive?: boolean;
   isHovered?: boolean;
@@ -26,6 +27,7 @@ export const ActionButton = forwardRef<HTMLDivElement, ActionButtonProps>(
       beforeBorderClassName,
       textAlignment = "text-left",
       children,
+      icon,
       onClick,
       isActive = false,
       isHovered = false,
@@ -52,7 +54,8 @@ export const ActionButton = forwardRef<HTMLDivElement, ActionButtonProps>(
         onClick={onClick}
         disabled={isLoading}
       >
-        <div className="shrink-0 flex flex-row justify-between items-center h-full w-full px-[1rem] py-2">
+        <div className="shrink-0 flex flex-row gap-2 justify-between items-center h-full w-full px-[1rem] py-2">
+          {icon}
           <div
             className={`grow text-xl font-medium text-color-body-text ${textAlignment}`}
           >

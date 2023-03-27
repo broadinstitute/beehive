@@ -194,8 +194,8 @@ export default function Route() {
             <p className="mb-2">
               For every chart instance included in this "{environment.name}"{" "}
               environment, if there is an instance of that chart in the
-              environment referenced here, use the versions of that other chart
-              instance.
+              environment referenced here, it will use the versions of that
+              other chart instance.
             </p>
             <p>
               For example, if you wanted your BEE to have the same versions as

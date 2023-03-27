@@ -1,4 +1,5 @@
 import { Form, useNavigation } from "@remix-run/react";
+import { Rocket } from "lucide-react";
 import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { ActionButton } from "../interactivity/action-button";
 import { CsrfTokenInput } from "../logic/csrf-token";

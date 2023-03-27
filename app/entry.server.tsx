@@ -3,7 +3,6 @@ import { Response } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { renderToPipeableStream } from "react-dom/server";
 import { PassThrough } from "stream";
-import { getContentSecurityPolicy } from "./csp.server";
 
 const ABORT_DELAY = 5000;
 
@@ -26,10 +25,10 @@ export default function handleRequest(
         onShellReady: () => {
           let body = new PassThrough();
 
-          responseHeaders.set(
-            "Content-Security-Policy",
-            getContentSecurityPolicy(nonce)
-          );
+          // responseHeaders.set(
+          //   "Content-Security-Policy",
+          //   getContentSecurityPolicy(nonce)
+          // );
 
           responseHeaders.set("Content-Type", "text/html");
           responseHeaders.set("Cache-Control", "no-cache");
