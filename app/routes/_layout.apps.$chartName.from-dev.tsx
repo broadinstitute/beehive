@@ -196,7 +196,7 @@ export default function Route() {
               isLoading={navigation.state === "submitting"}
               icon={<Rocket className="stroke-color-body-text" />}
             >
-              <h2 className="font-medium">Click to Review</h2>
+              <h2 className="font-medium">Review and Ship</h2>
             </ActionButton>
           </Form>
           {changelog.versions.map((entry) => (
