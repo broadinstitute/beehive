@@ -15,24 +15,27 @@ import {
 } from "@floating-ui/react";
 import { useRef } from "react";
 import { ColorProps } from "~/features/color-class-names";
+import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 
-export const Popover: React.FunctionComponent<
-  {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    openButton: (
-      // The render prop should handle these arguments like `ref={ref} {...props()}`
-      ref: React.Ref<HTMLDivElement>,
-      props: ReturnType<typeof useInteractions>["getReferenceProps"]
-    ) => React.ReactNode;
-    initialPlacement?: Placement;
-    children: React.ReactNode;
-  } & ColorProps
-> = ({
+export type PopoverProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  openButton: (
+    // The render prop should handle these arguments like `ref={ref} {...props()}`
+    ref: React.Ref<HTMLButtonElement>,
+    props: ReturnType<typeof useInteractions>["getReferenceProps"]
+  ) => React.ReactNode;
+  initialPlacement?: Placement;
+  size?: PanelSize;
+  children: React.ReactNode;
+} & ColorProps;
+
+export const Popover: React.FunctionComponent<PopoverProps> = ({
   open,
   onOpenChange,
   openButton,
   initialPlacement = "bottom",
+  size = "one-third",
   children,
   ...colors
 }) => {
@@ -57,10 +60,13 @@ export const Popover: React.FunctionComponent<
   } = useFloating({
     open,
     onOpenChange,
+    strategy: "fixed",
     placement: initialPlacement,
     middleware: [
       offset(20),
-      flip(),
+      flip({
+        fallbackPlacements: ["bottom", "left", "right", "top"],
+      }),
       shift({
         padding: 10,
         limiter: limitShift(),
@@ -154,7 +160,11 @@ export const Popover: React.FunctionComponent<
             />
             <div
               className={
-                `flex flex-col gap-4 p-6 w-[80vw] xl:w-[25vw] bg-color-nearest-bg rounded-2xl border-4 ${colors.borderClassName} ` +
+                `overflow-x-clip overflow-y-auto max-h-[95svh] flex flex-col gap-4 p-6 ${panelSizeToInnerClassName(
+                  size
+                )} bg-color-nearest-bg rounded-2xl border-4 ${
+                  colors.borderClassName
+                } ` +
                 `before:block before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:-z-20 before:rounded-2xl before:shadow-2xl before:drop-shadow-xl`
               }
             >

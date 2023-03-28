@@ -1,26 +1,27 @@
+import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { NavButton } from "./nav-button";
 
 export interface ListControlsProps {
+  size?: PanelSize;
   filterText?: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
   beforeBorderClassName: string;
   toCreateText?: string;
   toCreate?: string;
-  doubleWidth?: boolean;
 }
 
 export const ListControls: React.FunctionComponent<ListControlsProps> = ({
+  size = "one-third",
   filterText,
   setFilterText,
   beforeBorderClassName,
   toCreateText = "Create New",
   toCreate,
-  doubleWidth,
 }) => (
   <div
-    className={`w-[90vw] ${
-      doubleWidth ? "xl:w-[60vw]" : "xl:w-[30vw]"
-    } flex flex-row-reverse gap-4 flex-wrap xl:flex-nowrap`}
+    className={`${panelSizeToInnerClassName(
+      size
+    )} flex flex-row-reverse gap-4 flex-wrap laptop:flex-nowrap`}
   >
     {toCreate && (
       <NavButton

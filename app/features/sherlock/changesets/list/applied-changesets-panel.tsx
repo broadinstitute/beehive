@@ -17,15 +17,15 @@ export const AppliedChangesetsPanel: React.FunctionComponent<{
 }> = ({ changesets, offset, limit, colors }) => {
   const [filterText, setFilterText] = useState("");
   return (
-    <InsetPanel doubleWidth>
-      <InteractiveList title="Version History" doubleWidth {...colors}>
+    <InsetPanel size="two-thirds">
+      <InteractiveList title="Version History" size="two-thirds" {...colors}>
         <ListPaginationControls
           filterText={filterText}
           setFilterText={setFilterText}
           offset={offset}
           limit={limit}
           currentCount={changesets.length}
-          doubleWidth
+          size="two-thirds"
           {...colors}
         />
         <MemoryFilteredList
@@ -50,7 +50,7 @@ export const AppliedChangesetsPanel: React.FunctionComponent<{
             offset={offset}
             limit={limit}
             currentCount={changesets.length}
-            doubleWidth
+            size="two-thirds"
             {...colors}
           />
         )}

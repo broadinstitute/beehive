@@ -25,7 +25,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
   const safeReturnPath = safeRedirectPath(returnPath);
   const transition = useNavigation();
   return (
-    <div className="w-screen xl:w-[33vw] h-full flex flex-col space-y-8 p-8 pt-4 text-color-body-text">
+    <div className="h-full flex flex-col space-y-8 p-8 pt-4 text-color-body-text">
       <div>
         <h1 className="text-5xl font-medium text-color-header-text">{title}</h1>
       </div>
@@ -43,7 +43,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
           <>
             <br />
             <ActionButton
-              sizeClassName="w-full"
+              size="fill"
               beforeBorderClassName={beforeBorderClassName}
               type="submit"
               isLoading={transition.state === "submitting"}

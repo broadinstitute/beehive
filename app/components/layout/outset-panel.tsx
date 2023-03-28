@@ -1,3 +1,4 @@
+import { panelSizeToOuterClassName } from "~/helpers/panel-size";
 import { InsetPanelProps } from "./inset-panel";
 
 export interface OutsetPanelProps extends InsetPanelProps {
@@ -7,15 +8,13 @@ export interface OutsetPanelProps extends InsetPanelProps {
 export const OutsetPanel: React.FunctionComponent<OutsetPanelProps> = ({
   children,
   borderClassName,
-  doubleWidth,
   largeScreenOnly,
   alwaysShowScrollbar,
+  size = "one-third",
 }) => (
   <div
-    className={`snap-end w-screen ${
-      doubleWidth ? "xl:w-[66vw]" : "xl:w-[33vw]"
-    } ${
-      largeScreenOnly ? "hidden xl:block" : ""
+    className={`snap-end w-screen ${panelSizeToOuterClassName(size)} ${
+      largeScreenOnly ? "hidden laptop:block" : ""
     } shrink-0 h-full relative bg-color-near-bg ${
       borderClassName ? `border-l-4 ${borderClassName}` : ""
     }`}

@@ -364,16 +364,16 @@ export default function Route() {
         </BigActionBox>
       </OutsetPanel>
 
-      <InsetPanel doubleWidth>
+      <InsetPanel size="fill">
         <InteractiveList
           title="Changes to Be Applied"
-          doubleWidth
+          size="almost-fill"
           {...ChartReleaseColors}
         >
           <ListControls
             filterText={filterText}
             setFilterText={setFilterText}
-            doubleWidth
+            size="fill"
             {...returnColors}
           />
           <MemoryFilteredList
@@ -397,6 +397,7 @@ export default function Route() {
           >
             {(changeset, index) => (
               <ChangesetEntry
+                size="fill"
                 changeset={changeset}
                 key={index}
                 includedCheckboxValue={

@@ -72,7 +72,7 @@ export const ChartEditableFields: React.FunctionComponent<
         </label>
       </div>
       <div>
-        <h2 className="font-light text-2xl">Chart Exposes Endpoint?</h2>
+        <h2 className="font-light text-2xl">Chart Exposes Web Address?</h2>
         <p>
           If this chart hosts some sort of web address, that information can be
           provided here to help automatically generate links.

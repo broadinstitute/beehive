@@ -1,5 +1,6 @@
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import { panelSizeToOuterClassName } from "~/helpers/panel-size";
 import { isErrorResponseFromSherlock } from "../helpers/is-error-response-from-sherlock";
 import { BackButton, ReloadButton } from "./error-buttons";
 
@@ -7,7 +8,11 @@ export const PanelErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError();
   const { title, body, status } = parseRouteError(error);
   return (
-    <div className="snap-end bg-color-error-bg border-color-error-border text-color-body-text border-2 rounded-lg p-1 border-dashed grow w-[100vw] xl:w-[33vw]">
+    <div
+      className={`snap-end bg-color-error-bg border-color-error-border text-color-body-text border-2 rounded-lg p-1 border-dashed grow ${panelSizeToOuterClassName(
+        "one-third"
+      )}`}
+    >
       <h3 className="font-semibold text-color-header-text">{title}</h3>
       {status === 404 && <BackButton />}
       {status === 422 && <ReloadButton />}

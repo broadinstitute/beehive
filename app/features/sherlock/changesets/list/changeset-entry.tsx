@@ -5,6 +5,7 @@ import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
+import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 import { ChartLinkChip } from "../../charts/chart-link-chip";
 import {
@@ -14,6 +15,7 @@ import {
 import { EnvironmentLinkChip } from "../../environments/environment-link-chip";
 
 export const ChangesetEntry: React.FunctionComponent<{
+  size?: PanelSize;
   changeset: V2controllersChangeset | SerializeFrom<V2controllersChangeset>;
   disableTitle?: boolean;
   fadeIfUnappliable?: boolean;
@@ -21,6 +23,7 @@ export const ChangesetEntry: React.FunctionComponent<{
   setIncludedCheckboxValue?: (value: boolean) => void;
   startMinimized?: boolean;
 }> = ({
+  size = "two-thirds",
   changeset,
   disableTitle = false,
   fadeIfUnappliable = true,
@@ -82,7 +85,11 @@ export const ChangesetEntry: React.FunctionComponent<{
         changeset.chartReleaseInfo?.environment === "prod" ||
         changeset.chartReleaseInfo?.cluster === "terra-prod"
       }
-      className={`relative h-fit w-[90vw] xl:w-[60vw] bg-color-near-bg rounded-2xl shadow-md border-2 ${ChartReleaseColors.borderClassName} flex flex-col gap-2 px-6 py-4 text-color-body-text`}
+      className={`relative h-fit ${panelSizeToInnerClassName(
+        size
+      )} bg-color-near-bg rounded-2xl shadow-md border-2 ${
+        ChartReleaseColors.borderClassName
+      } flex flex-col gap-2 px-6 py-4 text-color-body-text`}
     >
       <div
         className="flex flex-row gap-4 font-light cursor-pointer"

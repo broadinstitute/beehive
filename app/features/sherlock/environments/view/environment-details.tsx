@@ -17,6 +17,8 @@ export interface EnvironmentDetailsProps {
   environment:
     | V2controllersEnvironment
     | SerializeFrom<V2controllersEnvironment>;
+  selfLinkChip?: boolean;
+  linkChipArrows?: boolean;
   toChartReleases?: string;
   toChangeVersions?: string;
   toEdit?: string;
@@ -30,6 +32,8 @@ export const EnvironmentDetails: React.FunctionComponent<
   EnvironmentDetailsProps
 > = ({
   environment,
+  selfLinkChip,
+  linkChipArrows,
   toChartReleases,
   toChangeVersions,
   toEdit,
@@ -41,20 +45,32 @@ export const EnvironmentDetails: React.FunctionComponent<
   <div className="flex flex-col space-y-10">
     <div className="flex flex-col space-y-4">
       <div className="flex flex-row gap-3 flex-wrap pb-2">
+        {selfLinkChip && environment.name && (
+          <EnvironmentLinkChip
+            environment={environment.name}
+            arrow={linkChipArrows}
+          />
+        )}
         {environment.templateEnvironment && (
           <EnvironmentLinkChip
             environment={environment.templateEnvironment}
+            arrow={linkChipArrows}
             justTemplate
           />
         )}
         {environment.defaultCluster && (
           <>
-            <ClusterLinkChip cluster={environment.defaultCluster} justDefault />
+            <ClusterLinkChip
+              cluster={environment.defaultCluster}
+              arrow={linkChipArrows}
+              justDefault
+            />
             {environment.defaultNamespace &&
               environment.lifecycle != "template" && (
                 <NamespaceLinkChip
                   cluster={environment.defaultCluster}
                   namespace={environment.defaultNamespace}
+                  arrow={linkChipArrows}
                 />
               )}
           </>
@@ -63,6 +79,7 @@ export const EnvironmentDetails: React.FunctionComponent<
           <PagerdutyIntegrationLinkChip
             to={`/trigger-incident/${environment.name}`}
             pagerdutyIntegrationName={environment.pagerdutyIntegrationInfo.name}
+            arrow={linkChipArrows}
           />
         )}
       </div>

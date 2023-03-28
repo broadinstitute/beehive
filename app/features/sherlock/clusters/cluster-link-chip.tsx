@@ -4,10 +4,12 @@ import { ClusterColors } from "./cluster-colors";
 export const ClusterLinkChip: React.FunctionComponent<{
   cluster: string;
   justDefault?: boolean;
-}> = ({ cluster, justDefault = false }) => (
+  arrow?: boolean;
+}> = ({ cluster, justDefault = false, arrow }) => (
   <LinkChip
     text={`${justDefault ? "Default " : ""}Cluster: ${cluster}`}
     to={`/clusters/${cluster}`}
+    arrow={arrow}
     {...ClusterColors}
   />
 );
@@ -15,10 +17,12 @@ export const ClusterLinkChip: React.FunctionComponent<{
 export const NamespaceLinkChip: React.FunctionComponent<{
   cluster: string;
   namespace: string;
-}> = ({ cluster, namespace }) => (
+  arrow?: boolean;
+}> = ({ cluster, namespace, arrow }) => (
   <LinkChip
     text={`Namespace: ${namespace}`}
     to={`/clusters/${cluster}/${namespace}/chart-releases`}
+    arrow={arrow}
     {...ClusterColors}
   />
 );

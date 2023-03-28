@@ -4,7 +4,7 @@ import { IncidentHelpCopy } from "~/features/sherlock/pagerduty-integrations/tri
 
 export default function Route() {
   return (
-    <InsetPanel largeScreenOnly doubleWidth>
+    <InsetPanel largeScreenOnly size="one-third">
       <FillerText title="Trigger Incident">
         <IncidentHelpCopy />
       </FillerText>
