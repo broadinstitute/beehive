@@ -22,6 +22,7 @@ export interface ChartReleaseDetailsProps {
   toEdit?: string;
   toLinkPagerduty?: string;
   toDelete?: string;
+  showChips?: boolean;
 }
 
 export const ChartReleaseDetails: React.FunctionComponent<
@@ -33,40 +34,43 @@ export const ChartReleaseDetails: React.FunctionComponent<
   toEdit,
   toLinkPagerduty,
   toDelete,
+  showChips = true,
 }) => (
   <div className="flex flex-col space-y-10">
-    <div className="flex flex-row gap-3 flex-wrap">
-      {chartRelease.chart && <ChartLinkChip chart={chartRelease.chart} />}
-      {chartRelease.environment && (
-        <EnvironmentLinkChip environment={chartRelease.environment} />
-      )}
-      {chartRelease.cluster && (
-        <>
-          <ClusterLinkChip cluster={chartRelease.cluster} />
-          {chartRelease.namespace && (
-            <NamespaceLinkChip
-              cluster={chartRelease.cluster}
-              namespace={chartRelease.namespace}
+    {showChips && (
+      <div className="flex flex-row gap-3 flex-wrap">
+        {chartRelease.chart && <ChartLinkChip chart={chartRelease.chart} />}
+        {chartRelease.environment && (
+          <EnvironmentLinkChip environment={chartRelease.environment} />
+        )}
+        {chartRelease.cluster && (
+          <>
+            <ClusterLinkChip cluster={chartRelease.cluster} />
+            {chartRelease.namespace && (
+              <NamespaceLinkChip
+                cluster={chartRelease.cluster}
+                namespace={chartRelease.namespace}
+              />
+            )}
+          </>
+        )}
+        {chartRelease.environment &&
+          chartRelease.pagerdutyIntegration &&
+          chartRelease.pagerdutyIntegrationInfo?.name && (
+            <PagerdutyIntegrationLinkChip
+              to={`/trigger-incident/${chartRelease.environment}/chart-releases/${chartRelease.chart}`}
+              pagerdutyIntegrationName={
+                chartRelease.pagerdutyIntegrationInfo.name
+              }
             />
           )}
-        </>
-      )}
-      {chartRelease.environment &&
-        chartRelease.pagerdutyIntegration &&
-        chartRelease.pagerdutyIntegrationInfo?.name && (
-          <PagerdutyIntegrationLinkChip
-            to={`/trigger-incident/${chartRelease.environment}/chart-releases/${chartRelease.chart}`}
-            pagerdutyIntegrationName={
-              chartRelease.pagerdutyIntegrationInfo.name
-            }
-          />
-        )}
-      {chartRelease.name &&
-        chartRelease.cluster &&
-        chartRelease.environmentInfo?.lifecycle !== "template" && (
-          <ArgoLinkChip chartRelease={chartRelease.name} />
-        )}
-    </div>
+        {chartRelease.name &&
+          chartRelease.cluster &&
+          chartRelease.environmentInfo?.lifecycle !== "template" && (
+            <ArgoLinkChip chartRelease={chartRelease.name} />
+          )}
+      </div>
+    )}
     {chartRelease.appVersionResolver &&
       chartRelease.appVersionResolver != "none" && (
         <AppVersionSummary
@@ -120,7 +124,11 @@ export const ChartReleaseDetails: React.FunctionComponent<
           </a>
         </div>
       )}
-    {(toEdit || toLinkPagerduty || toDelete || toChangeVersions) && (
+    {(toEdit ||
+      toLinkPagerduty ||
+      toDelete ||
+      toChangeVersions ||
+      toVersionHistory) && (
       <MutateControls
         name={chartRelease.name || ""}
         colors={ChartReleaseColors}

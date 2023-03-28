@@ -1,11 +1,13 @@
 import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
+import { GithubLinkChip } from "~/features/github/github-link-chip";
 import { AppVersionColors } from "../../app-versions/app-version-colors";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 import { ChartVersionColors } from "../../chart-versions/chart-version-colors";
 import { MutateControls } from "../../mutate-controls";
 import { ChartColors } from "../chart-colors";
+import { ChartLinkChip } from "../chart-link-chip";
 
 export interface ChartDetailsProps {
   chart: V2controllersChart | SerializeFrom<V2controllersChart>;
@@ -14,6 +16,8 @@ export interface ChartDetailsProps {
   toChartReleases?: string;
   toEdit?: string;
   toDelete?: string;
+  showChips?: boolean;
+  phraseAsApp?: boolean;
 }
 
 export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
@@ -23,11 +27,27 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
   toChartReleases,
   toEdit,
   toDelete,
+  showChips = true,
+  phraseAsApp = false,
 }) => (
   <div className="flex flex-col space-y-10">
+    {showChips && (
+      <div className="flex flex-row gap-3 flex-wrap">
+        {chart.appImageGitRepo && (
+          <GithubLinkChip repo={chart.appImageGitRepo} />
+        )}
+        {chart.name && phraseAsApp && (
+          <ChartLinkChip chart={chart.name} arrow />
+        )}
+      </div>
+    )}
     {chart.appImageGitRepo && (
       <div className="flex flex-col space-y-2">
-        <p>This Helm Chart deploys a specific application:</p>
+        <p>
+          {phraseAsApp
+            ? "This application's code is in the following GitHub repo:"
+            : "This Helm Chart deploys a specific application:"}
+        </p>
         <a
           href={`https://github.com/${chart.appImageGitRepo}`}
           className="font-light text-4xl decoration-color-link-underline underline text-color-header-text"
@@ -70,7 +90,11 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
     <div className="flex flex-col space-y-2">
       {(chart.chartRepo == "terra-helm" && (
         <div className="flex flex-col space-y-2">
-          <p>This Helm Chart's source code is managed by DevOps:</p>
+          <p>
+            {phraseAsApp
+              ? "This application is deployed to Kubernetes via a Helm Chart managed by DevOps:"
+              : "This Helm Chart's source code is managed by DevOps:"}
+          </p>
           <a
             href={`https://github.com/broadinstitute/terra-helmfile/tree/master/charts/${chart.name}`}
             className="font-light text-4xl decoration-color-link-underline underline text-color-header-text"
@@ -91,8 +115,10 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         </div>
       )) || (
         <p>
-          This Helm Chart's source code isn't managed directly by DevOps, but we
-          still track the versions we deploy in our systems.
+          {phraseAsApp
+            ? "This application is deployed to Kubernetes via a Helm Chat not managed directly by DevOps, "
+            : "This Helm Chart's source code isn't managed directly by DevOps, "}
+          but we still track the versions we deploy in our systems.
         </p>
       )}
       {toChartVersions && (
