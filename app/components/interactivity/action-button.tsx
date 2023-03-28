@@ -18,7 +18,7 @@ export interface ActionButtonProps {
   prod?: boolean;
 }
 
-export const ActionButton = forwardRef<HTMLDivElement, ActionButtonProps>(
+export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
   (
     {
       type,
@@ -37,8 +37,9 @@ export const ActionButton = forwardRef<HTMLDivElement, ActionButtonProps>(
     },
     ref
   ) => (
-    <div data-theme-prod={prod} className="relative shrink-0" ref={ref}>
+    <div data-theme-prod={prod} className="relative shrink-0">
       <button
+        ref={ref}
         type={type}
         className={`flex flex-row items-center bg-color-nearest-bg active:bg-color-button-down rounded-2xl min-h-[3rem] ${
           sizeClassName || panelSizeToInnerClassName(size)

@@ -26,7 +26,7 @@ export const InterleavedVersionEntry: React.FunctionComponent<{
       } flex flex-col gap-2 px-4 py-2 text-color-body-text`}
       style={{
         // @ts-expect-error
-        "view-transition-name": `${entry.type}${entry.version.id}`,
+        viewTransitionName: `${entry.type}${entry.version.id}`,
       }}
     >
       <div

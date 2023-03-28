@@ -5,7 +5,7 @@ export default function Route() {
   return (
     <InsetPanel largeScreenOnly size="fill">
       <FillerText title="Apps">
-        <p>Filler text here</p>
+        <p>Select an app to the left to get started</p>
       </FillerText>
     </InsetPanel>
   );

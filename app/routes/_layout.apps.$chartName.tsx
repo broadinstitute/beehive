@@ -16,10 +16,12 @@ import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { ArrowDown, Clock2 } from "lucide-react";
 import { useMemo } from "react";
 import { promiseHash } from "remix-utils";
+import { InlinePopover } from "~/components/interactivity/inline-popover";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
+import { AppPopoverContents } from "~/features/sherlock/charts/view/app-popover-contents";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
   forwardIAP,
@@ -30,7 +32,6 @@ import { transitionView } from "~/helpers/transition-view";
 import { loader as parentLoader } from "~/routes/_layout.apps";
 import { AppInstanceEntry } from "../features/sherlock/chart-releases/view/app-instance-entry";
 import { AppInstanceEntryInfo } from "../features/sherlock/chart-releases/view/app-instance-entry-info";
-import { AppInfoIcon } from "../features/sherlock/charts/view/app-info-icon";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
@@ -124,19 +125,24 @@ export default function Route() {
         <div
           className={`${panelSizeToInnerClassName(
             "almost-fill"
-          )} flex flex-col items-end gap-4 pb-4 laptop:pb-0`}
+          )} flex flex-col gap-4 pb-4 laptop:pb-0`}
         >
           <div
             className={`relative ${panelSizeToInnerClassName(
               "fill"
             )} bg-color-nearest-bg p-3 pt-4 mb-10 shadow-md rounded-2xl rounded-t-none border-2 border-t-0 ${
               ChartColors.borderClassName
-            } flex flex-row items-start gap-4`}
+            } flex flex-row gap-4`}
           >
-            {chartInfo && <AppInfoIcon chart={chartInfo} />}
-            <h1 className="text-color-header-text text-5xl font-medium pt-1">
-              {chartInfo?.name}
-            </h1>
+            {chartInfo && (
+              <InlinePopover
+                inlineText={chartInfo?.name || ""}
+                className="text-color-header-text text-5xl font-medium"
+                {...ChartColors}
+              >
+                <AppPopoverContents chart={chartInfo} />
+              </InlinePopover>
+            )}
             <div
               className={`${panelSizeToInnerClassName(
                 "one-fourth"

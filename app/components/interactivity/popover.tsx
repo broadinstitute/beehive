@@ -17,20 +17,20 @@ import { useRef } from "react";
 import { ColorProps } from "~/features/color-class-names";
 import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 
-export const Popover: React.FunctionComponent<
-  {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    openButton: (
-      // The render prop should handle these arguments like `ref={ref} {...props()}`
-      ref: React.Ref<HTMLDivElement>,
-      props: ReturnType<typeof useInteractions>["getReferenceProps"]
-    ) => React.ReactNode;
-    initialPlacement?: Placement;
-    size?: PanelSize;
-    children: React.ReactNode;
-  } & ColorProps
-> = ({
+export type PopoverProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  openButton: (
+    // The render prop should handle these arguments like `ref={ref} {...props()}`
+    ref: React.Ref<HTMLButtonElement>,
+    props: ReturnType<typeof useInteractions>["getReferenceProps"]
+  ) => React.ReactNode;
+  initialPlacement?: Placement;
+  size?: PanelSize;
+  children: React.ReactNode;
+} & ColorProps;
+
+export const Popover: React.FunctionComponent<PopoverProps> = ({
   open,
   onOpenChange,
   openButton,
@@ -60,6 +60,7 @@ export const Popover: React.FunctionComponent<
   } = useFloating({
     open,
     onOpenChange,
+    strategy: "fixed",
     placement: initialPlacement,
     middleware: [
       offset(20),
