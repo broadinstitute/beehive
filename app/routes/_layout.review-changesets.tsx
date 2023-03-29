@@ -364,7 +364,7 @@ export default function Route() {
         </BigActionBox>
       </OutsetPanel>
 
-      <InsetPanel size="fill">
+      <InsetPanel size="two-thirds">
         <InteractiveList
           title="Changes to Be Applied"
           size="almost-fill"
