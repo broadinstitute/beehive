@@ -1,5 +1,4 @@
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
-import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 
 export const AppInstanceEntry: React.FunctionComponent<{
   prod?: boolean;
@@ -16,11 +15,7 @@ export const AppInstanceEntry: React.FunctionComponent<{
   >
     {children}
     {promoteButton && (
-      <div
-        className={`${panelSizeToInnerClassName(
-          "one-fourth"
-        )} absolute -bottom-10 right-5`}
-      >
+      <div className="w-[70vw] laptop:w-[22vw] ultrawide:w-[13vw] absolute -bottom-10 right-5">
         {promoteButton}
       </div>
     )}

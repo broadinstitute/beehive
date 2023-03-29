@@ -1,5 +1,5 @@
 import { LoaderArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
   AppVersionsApi,
   ChartsApi,
@@ -57,9 +57,15 @@ export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const recentVersions = useLoaderData<typeof loader>();
-
+  const { forceShowRecentVersions } = useOutletContext<{
+    forceShowRecentVersions: boolean;
+  }>();
   return (
-    <InsetPanel size="one-fourth" alwaysShowScrollbar>
+    <InsetPanel
+      size="one-fourth"
+      alwaysShowScrollbar
+      largeScreenOnly={!forceShowRecentVersions}
+    >
       <InteractiveList
         title="Recent Versions"
         size="one-fourth"

@@ -7,6 +7,7 @@ import {
 } from "@remix-run/node";
 import {
   Form,
+  useActionData,
   useLoaderData,
   useNavigation,
   useOutletContext,
@@ -25,7 +26,11 @@ import { InsetPanel } from "~/components/layout/inset-panel";
 import { CsrfTokenInput } from "~/components/logic/csrf-token";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
-import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
+import { FormErrorDisplay } from "~/errors/components/form-error-display";
+import {
+  isReturnedErrorInfo,
+  makeErrorResponseReturner,
+} from "~/errors/helpers/error-response-handlers";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { interleaveVersionPromises } from "~/features/sherlock/interleaved-versions/interleave-version-promises";
 import { InterleavedVersionEntry } from "~/features/sherlock/interleaved-versions/interleaved-version-entry";
@@ -122,7 +127,7 @@ export async function action({ request, params }: ActionArgs) {
                 `return=${encodeURIComponent(`/apps/${params.chartName}`)}`,
               ].join("&")}`
             )
-          : json("nothing"),
+          : json({}),
       makeErrorResponseReturner()
     );
 }
@@ -131,6 +136,11 @@ export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const changelog = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
+  const errorSummary =
+    actionData && isReturnedErrorInfo(actionData)
+      ? actionData.errorSummary
+      : undefined;
 
   const { inAlpha, inStaging } =
     useOutletContext<SerializeFrom<typeof parentLoader>>();
@@ -199,6 +209,13 @@ export default function Route() {
               <h2 className="font-medium">Review and Ship</h2>
             </ActionButton>
           </Form>
+          {actionData && !errorSummary && (
+            <p className="text-center text-color-body-text">
+              Possible race condition... a promotion might've just happened, try
+              refreshing this page.
+            </p>
+          )}
+          {errorSummary && <FormErrorDisplay {...errorSummary} />}
           {changelog.versions.map((entry) => (
             <InterleavedVersionEntry
               entry={entry}
