@@ -4,6 +4,7 @@ export async function transitionView(updateDOM: () => void) {
   if (
     !window ||
     window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    !window.matchMedia("(min-width: 1250px)").matches ||
     !document ||
     // @ts-expect-error
     !document.startViewTransition

@@ -14,7 +14,7 @@ import {
 } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { ArrowDown, Clock2 } from "lucide-react";
-import { useMemo } from "react";
+import { useState } from "react";
 import { promiseHash } from "remix-utils";
 import { InlinePopover } from "~/components/interactivity/inline-popover";
 import { NavButton } from "~/components/interactivity/nav-button";
@@ -86,18 +86,18 @@ export default function Route() {
 
   const navigate = useNavigate();
 
-  useMemo(() => {
-    environments.forEach((environment) => {
-      if (inDev && environment.name === "dev")
-        inDev.environmentInfo = environment;
-      if (inAlpha && environment.name === "alpha")
-        inAlpha.environmentInfo = environment;
-      if (inStaging && environment.name === "staging")
-        inStaging.environmentInfo = environment;
-      if (inProd && environment.name === "prod")
-        inProd.environmentInfo = environment;
-    });
-  }, [inDev, inAlpha, inStaging, inProd, environments]);
+  const [forceShowRecentVersions, setForceShowRecentVersions] = useState(false);
+
+  environments.forEach((environment) => {
+    if (inDev && environment.name === "dev")
+      inDev.environmentInfo = environment;
+    if (inAlpha && environment.name === "alpha")
+      inAlpha.environmentInfo = environment;
+    if (inStaging && environment.name === "staging")
+      inStaging.environmentInfo = environment;
+    if (inProd && environment.name === "prod")
+      inProd.environmentInfo = environment;
+  });
 
   const chartInfo =
     inDev?.chartInfo ||
@@ -124,7 +124,7 @@ export default function Route() {
       <InsetPanel size="one-half">
         <div
           className={`${panelSizeToInnerClassName(
-            "almost-fill"
+            "one-half"
           )} flex flex-col gap-4 pb-4 laptop:pb-0 text-color-body-text`}
         >
           <div
@@ -143,11 +143,7 @@ export default function Route() {
                 <AppPopoverContents chart={chartInfo} />
               </InlinePopover>
             )}
-            <div
-              className={`${panelSizeToInnerClassName(
-                "one-fourth"
-              )} absolute -bottom-10 right-5`}
-            >
+            <div className="w-[70vw] laptop:w-[30vw] desktop:w-[22vw] ultrawide:w-[13vw] absolute -bottom-10 right-5">
               <NavButton
                 icon={<Clock2 className="stroke-color-header-text" />}
                 to="."
@@ -155,6 +151,7 @@ export default function Route() {
                 prefetch="render"
                 onClick={(e) => {
                   e.stopPropagation();
+                  setForceShowRecentVersions(true);
                   transitionView(() => navigate("."));
                 }}
                 {...ChartColors}
@@ -219,7 +216,9 @@ export default function Route() {
           )}
         </div>
       </InsetPanel>
-      <Outlet context={{ inDev, inAlpha, inStaging, inProd }} />
+      <Outlet
+        context={{ inDev, inAlpha, inStaging, inProd, forceShowRecentVersions }}
+      />
     </>
   );
 }

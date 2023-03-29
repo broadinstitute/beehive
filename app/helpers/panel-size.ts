@@ -46,6 +46,6 @@ export function panelSizeToInnerClassName(panelSize: PanelSize): string {
     case "fill":
       return "w-full";
     case "almost-fill":
-      return "w-full px-[1vw]";
+      return "w-[90vw] laptop:w-[90%]";
   }
 }
