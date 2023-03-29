@@ -21,11 +21,13 @@ export const InlinePopover: React.FunctionComponent<
             {inlineText}
             {"\u00A0\u00A0\u00A0\u00A0"}
           </span>
-          <ChevronRight
-            className={`stroke-color-header-text absolute right-0 bottom-[5%] w-fit h-[90%] transition-transform ${
-              open ? "rotate-90" : "group-hover:rotate-90 "
-            }`}
-          />
+          <div className="absolute inset-y-0 right-0 aspect-square">
+            <ChevronRight
+              className={`stroke-color-header-text h-full w-full transition-transform ${
+                open ? "rotate-90" : "group-hover:rotate-90"
+              }`}
+            />
+          </div>
         </button>
       )}
       {...props}

@@ -125,7 +125,7 @@ export default function Route() {
         <div
           className={`${panelSizeToInnerClassName(
             "almost-fill"
-          )} flex flex-col gap-4 pb-4 laptop:pb-0`}
+          )} flex flex-col gap-4 pb-4 laptop:pb-0 text-color-body-text`}
         >
           <div
             className={`relative ${panelSizeToInnerClassName(

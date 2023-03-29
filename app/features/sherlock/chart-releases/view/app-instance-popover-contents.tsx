@@ -4,6 +4,7 @@ import { ClusterLinkChip } from "../../clusters/cluster-link-chip";
 import { EnvironmentLinkChip } from "../../environments/environment-link-chip";
 import { PagerdutyIntegrationLinkChip } from "../../pagerduty-integrations/pagerduty-integration-link-chip";
 import { ArgoLinkChip, ChartReleaseLinkChip } from "../chart-release-link-chip";
+import { ChartReleaseDetails } from "./chart-release-details";
 
 export const AppInstancePopoverContents: React.FunctionComponent<{
   chartRelease: SerializeFrom<V2controllersChartRelease>;
@@ -50,5 +51,11 @@ export const AppInstancePopoverContents: React.FunctionComponent<{
       )}
       {chartRelease.name && <ArgoLinkChip chartRelease={chartRelease.name} />}
     </div>
+    <ChartReleaseDetails
+      chartRelease={chartRelease}
+      showChips={false}
+      toChangeVersions={`/environments/${chartRelease.environment}/charts/${chartRelease.chart}/change-versions`}
+      toVersionHistory={`/environments/${chartRelease.environment}/charts/${chartRelease.chart}/version-history`}
+    />
   </>
 );

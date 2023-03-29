@@ -54,7 +54,7 @@ export const ArgoLinkChip: React.FunctionComponent<{
     <a href={href} target="_blank">
       <img
         src={`/api/argocd/badge?name=${chartRelease}`}
-        className="h-8 w-fit rounded-xl hover:shadow-md motion-safe:transition-all"
+        className="h-8 w-full rounded-xl hover:shadow-md motion-safe:transition-all"
         onError={() => setErrored(true)}
       />
     </a>
