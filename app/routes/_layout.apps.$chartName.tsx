@@ -143,7 +143,7 @@ export default function Route() {
                 <AppPopoverContents chart={chartInfo} />
               </InlinePopover>
             )}
-            <div className="w-[70vw] laptop:w-[22vw] ultrawide:w-[13vw] absolute -bottom-10 right-5">
+            <div className="w-[70vw] laptop:w-[30vw] desktop:w-[22vw] ultrawide:w-[13vw] absolute -bottom-10 right-5">
               <NavButton
                 icon={<Clock2 className="stroke-color-header-text" />}
                 to="."
