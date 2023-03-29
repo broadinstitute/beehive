@@ -122,98 +122,100 @@ export default function Route() {
   return (
     <>
       <InsetPanel size="one-half">
-        <div
-          className={`${panelSizeToInnerClassName(
-            "one-half"
-          )} flex flex-col gap-4 pb-4 laptop:pb-0 text-color-body-text`}
-        >
+        <div className="flex flex-col items-center">
           <div
-            className={`relative ${panelSizeToInnerClassName(
-              "fill"
-            )} bg-color-nearest-bg p-3 pt-4 mb-10 shadow-md rounded-2xl rounded-t-none border-2 border-t-0 ${
-              ChartColors.borderClassName
-            } flex flex-row gap-4`}
+            className={`${panelSizeToInnerClassName(
+              "one-half"
+            )} flex flex-col gap-4 pb-4 laptop:pb-0 text-color-body-text`}
           >
-            {chartInfo && (
-              <InlinePopover
-                inlineText={chartInfo?.name || ""}
-                className="text-color-header-text text-5xl font-medium"
-                {...ChartColors}
-              >
-                <AppPopoverContents chart={chartInfo} />
-              </InlinePopover>
-            )}
-            <div className="w-[70vw] laptop:w-[30vw] desktop:w-[22vw] ultrawide:w-[13vw] absolute -bottom-10 right-5">
-              <NavButton
-                icon={<Clock2 className="stroke-color-header-text" />}
-                to="."
-                end
-                prefetch="render"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setForceShowRecentVersions(true);
-                  transitionView(() => navigate("."));
-                }}
-                {...ChartColors}
-              >
-                <span className="font-medium">Recent Versions</span>
-              </NavButton>
-            </div>
-          </div>
-          {inDev && (
-            <AppInstanceEntry
-              promoteButton={
-                promotionFromDevPossible && (
-                  <NavButton
-                    icon={<ArrowDown className="stroke-color-header-text" />}
-                    to="./from-dev"
-                    prefetch="render"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      transitionView(() => navigate("./from-dev"));
-                    }}
-                    {...EnvironmentColors}
-                  >
-                    <span className="font-medium">Preview Promotion</span>
-                  </NavButton>
-                )
-              }
+            <div
+              className={`relative ${panelSizeToInnerClassName(
+                "fill"
+              )} bg-color-nearest-bg p-3 pt-4 mb-10 shadow-md rounded-2xl rounded-t-none border-2 border-t-0 ${
+                ChartColors.borderClassName
+              } flex flex-row gap-4`}
             >
-              <AppInstanceEntryInfo chartRelease={inDev} />
-            </AppInstanceEntry>
-          )}
-          {(inAlpha || inStaging) && (
-            <AppInstanceEntry
-              promoteButton={
-                promotionFromStagingPossible && (
-                  <NavButton
-                    icon={<ArrowDown className="stroke-color-header-text" />}
-                    to="./from-staging"
-                    prefetch="render"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      transitionView(() => navigate("./from-staging"));
-                    }}
-                    {...EnvironmentColors}
-                  >
-                    <span className="font-medium">Preview Promotion</span>
-                  </NavButton>
-                )
-              }
-            >
-              {inAlpha && <AppInstanceEntryInfo chartRelease={inAlpha} />}
-              {inAlpha && inStaging && (
-                <div className="grow pt-2 mb-2 mx-1 border-b border-color-divider-line" />
+              {chartInfo && (
+                <InlinePopover
+                  inlineText={chartInfo?.name || ""}
+                  className="text-color-header-text text-5xl font-medium"
+                  {...ChartColors}
+                >
+                  <AppPopoverContents chart={chartInfo} />
+                </InlinePopover>
               )}
-              {inStaging && <AppInstanceEntryInfo chartRelease={inStaging} />}
-            </AppInstanceEntry>
-          )}
+              <div className="w-[70vw] laptop:w-[30vw] desktop:w-[22vw] ultrawide:w-[13vw] absolute -bottom-10 right-5">
+                <NavButton
+                  icon={<Clock2 className="stroke-color-header-text" />}
+                  to="."
+                  end
+                  prefetch="render"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setForceShowRecentVersions(true);
+                    transitionView(() => navigate("."));
+                  }}
+                  {...ChartColors}
+                >
+                  <span className="font-medium">Recent Versions</span>
+                </NavButton>
+              </div>
+            </div>
+            {inDev && (
+              <AppInstanceEntry
+                promoteButton={
+                  promotionFromDevPossible && (
+                    <NavButton
+                      icon={<ArrowDown className="stroke-color-header-text" />}
+                      to="./from-dev"
+                      prefetch="render"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        transitionView(() => navigate("./from-dev"));
+                      }}
+                      {...EnvironmentColors}
+                    >
+                      <span className="font-medium">Preview Promotion</span>
+                    </NavButton>
+                  )
+                }
+              >
+                <AppInstanceEntryInfo chartRelease={inDev} />
+              </AppInstanceEntry>
+            )}
+            {(inAlpha || inStaging) && (
+              <AppInstanceEntry
+                promoteButton={
+                  promotionFromStagingPossible && (
+                    <NavButton
+                      icon={<ArrowDown className="stroke-color-header-text" />}
+                      to="./from-staging"
+                      prefetch="render"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        transitionView(() => navigate("./from-staging"));
+                      }}
+                      {...EnvironmentColors}
+                    >
+                      <span className="font-medium">Preview Promotion</span>
+                    </NavButton>
+                  )
+                }
+              >
+                {inAlpha && <AppInstanceEntryInfo chartRelease={inAlpha} />}
+                {inAlpha && inStaging && (
+                  <div className="grow pt-2 mb-2 mx-1 border-b border-color-divider-line" />
+                )}
+                {inStaging && <AppInstanceEntryInfo chartRelease={inStaging} />}
+              </AppInstanceEntry>
+            )}
 
-          {inProd && (
-            <AppInstanceEntry>
-              <AppInstanceEntryInfo chartRelease={inProd} />
-            </AppInstanceEntry>
-          )}
+            {inProd && (
+              <AppInstanceEntry>
+                <AppInstanceEntryInfo chartRelease={inProd} />
+              </AppInstanceEntry>
+            )}
+          </div>
         </div>
       </InsetPanel>
       <Outlet

@@ -18,7 +18,7 @@ export const InsetPanel: React.FunctionComponent<InsetPanelProps> = ({
       largeScreenOnly ? "hidden laptop:block" : ""
     } shrink-0 h-full bg-color-far-bg ${
       alwaysShowScrollbar ? "overflow-y-scroll" : "overflow-y-auto"
-    } overflow-x-clip flex flex-col items-center`}
+    } overflow-x-clip`}
   >
     {children}
   </div>
