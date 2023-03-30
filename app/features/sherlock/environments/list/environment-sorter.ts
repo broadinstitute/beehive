@@ -6,6 +6,7 @@ export const liveEnvironmentValuesNameOrder = [
   "alpha",
   "staging",
   "prod",
+  "ddp-azure-prod",
 ];
 
 export function environmentSorter(
