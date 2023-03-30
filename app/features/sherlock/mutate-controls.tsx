@@ -9,6 +9,7 @@ export interface MutateControlsProps {
   changeVersionText?: string;
   toVersionHistory?: string;
   toEdit?: string;
+  toDatabaseInstance?: string;
   toSchedule?: string;
   toLinkPagerduty?: string;
   toAdjustBulkUpdateDefaults?: string;
@@ -23,6 +24,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   changeVersionText,
   toVersionHistory,
   toEdit,
+  toDatabaseInstance,
   toSchedule,
   toLinkPagerduty,
   toAdjustBulkUpdateDefaults,
@@ -57,6 +59,11 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         {toEdit && (
           <NavButton to={toEdit} {...colors}>
             Edit Metadata
+          </NavButton>
+        )}
+        {toDatabaseInstance && (
+          <NavButton to={toDatabaseInstance} {...colors}>
+            Edit Database Metadata
           </NavButton>
         )}
         {toSchedule && (
