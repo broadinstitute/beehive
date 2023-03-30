@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ["./app/**/*.{ts,tsx,jsx,js}"],
   future: {
     hoverOnlyWhenSupported: true,
@@ -58,5 +58,4 @@ module.exports = {
       ),
     },
   },
-  plugins: [require("@tailwindcss/line-clamp")],
 };

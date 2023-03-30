@@ -9,7 +9,11 @@ export const Header: FunctionComponent = () => {
     <div className="h-14 bg-color-nearest-bg text-color-header-text flex gap-2 shadow-md shrink-0 z-20">
       <NavLink to="/" className="flex items-center gap-2 ml-2">
         <BeehiveIcon className="h-9 w-9" />
-        <span className="hidden laptop:block font-medium text-3xl laptop:pb-1 px-1">
+        <span
+          className={`${
+            breadcrumbs.length > 0 ? "hidden" : "block"
+          } laptop:block font-medium text-3xl laptop:pb-1 px-1`}
+        >
           Beehive
         </span>
       </NavLink>

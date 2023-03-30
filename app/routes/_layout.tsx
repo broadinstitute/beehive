@@ -1,30 +1,49 @@
 import useResizeObserver from "@react-hook/resize-observer";
 import { json, LoaderArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import { UsersApi } from "@sherlock-js-client/sherlock";
 import { useEffect, useRef, useState } from "react";
 import { Header } from "~/components/layout/header";
 import {
   Notification,
   NotificationComponent,
 } from "~/components/logic/notification";
+import { SelfUserContext } from "~/contexts";
+import { PanelErrorBoundary } from "~/errors/components/error-boundary";
+import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
+import {
+  forwardIAP,
+  SherlockConfiguration,
+} from "~/features/sherlock/sherlock.server";
 import { commitSession, getSession, sessionFields } from "~/session.server";
 
 export async function loader({ request }: LoaderArgs) {
   // We can't use getValidSession here because this is a loader -- no form was
   // submitted, there's nothing to validate.
   const session = await getSession(request.headers.get("Cookie"));
-  const notificationsToFlash: Array<Notification> | null =
+  const flashNotifications: Array<Notification> | null =
     session.get(sessionFields.flashNotifications) || null;
-  if (notificationsToFlash) {
-    return json(notificationsToFlash, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  } else {
-    return json(null);
-  }
+
+  const selfUser = await new UsersApi(SherlockConfiguration)
+    .apiV2ProceduresUsersMeGet(forwardIAP(request))
+    .catch(errorResponseThrower);
+
+  return json(
+    {
+      flashNotifications,
+      selfUser,
+    },
+    flashNotifications
+      ? {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      : {}
+  );
 }
+
+export const ErrorBoundary = PanelErrorBoundary;
 
 // Extracted so the LoadScroller can reference it
 export const scrollDivID: string = "scroll-control";
@@ -39,31 +58,29 @@ const LayoutRoute: React.FunctionComponent = () => {
     });
   });
 
-  const notificationsToFlash = useLoaderData<typeof loader>();
+  const { flashNotifications, selfUser } = useLoaderData<typeof loader>();
   const [notifications, setNotifications] = useState(
     new Map<string, null | Notification>()
   );
   useEffect(() => {
-    if (notificationsToFlash !== null) {
+    if (flashNotifications !== null) {
       setNotifications(
         (previous) =>
           new Map([
             ...previous,
             ...Array.from(
-              notificationsToFlash.map(
-                (notification): [string, Notification] => [
-                  new Date().toISOString(),
-                  notification,
-                ]
-              )
+              flashNotifications.map((notification): [string, Notification] => [
+                new Date().toISOString(),
+                notification,
+              ])
             ),
           ])
       );
     }
-  }, [notificationsToFlash]);
+  }, [flashNotifications]);
 
   return (
-    <>
+    <SelfUserContext.Provider value={selfUser}>
       <Header />
       <div className="absolute right-10 bottom-10 z-50 flex flex-col space-y-6">
         {Array.from(notifications.entries()).map(
@@ -90,7 +107,7 @@ const LayoutRoute: React.FunctionComponent = () => {
           <Outlet />
         </div>
       </div>
-    </>
+    </SelfUserContext.Provider>
   );
 };
 
