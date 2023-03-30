@@ -367,7 +367,7 @@ export default function Route() {
       <InsetPanel size="two-thirds">
         <InteractiveList
           title="Changes to Be Applied"
-          size="almost-fill"
+          size="two-thirds"
           {...ChartReleaseColors}
         >
           <ListControls
