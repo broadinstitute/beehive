@@ -326,7 +326,7 @@ export default function Route() {
                 templateInUse={lifecycle === "dynamic"}
                 defaultCluster={defaultCluster}
                 setDefaultCluster={setDefaultCluster}
-                userEmail={userEmail}
+                selfEmail={userEmail}
               />
             </div>
           </details>

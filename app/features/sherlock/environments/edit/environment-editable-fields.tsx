@@ -29,7 +29,7 @@ export interface EnvironmentEditableFieldsProps {
   templateInUse?: boolean;
   defaultCluster: string;
   setDefaultCluster: (value: string) => void;
-  userEmail?: string | null;
+  selfEmail?: string | null;
 }
 
 export const EnvironmentEditableFields: React.FunctionComponent<
@@ -45,14 +45,14 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   templateInUse,
   defaultCluster,
   setDefaultCluster,
-  userEmail,
+  selfEmail,
 }) => {
   const [requiresSuitability, setRequiresSuitability] = useState(
     environment?.requiresSuitability != null
       ? environment.requiresSuitability.toString()
       : "false"
   );
-  const [owner, setOwner] = useState(environment?.owner || userEmail || "");
+  const [owner, setOwner] = useState(environment?.owner || selfEmail || "");
   const [namePrefixesDomain, setNamePrefixesDomain] = useState(
     environment?.namePrefixesDomain != null
       ? environment.namePrefixesDomain.toString()
@@ -97,7 +97,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         <TextField
           name="owner"
           placeholder={
-            userEmail || (creating ? "(defaults to your email)" : "Search...")
+            selfEmail || (creating ? "(defaults to your email)" : "Search...")
           }
           value={owner}
           onChange={(e) => {
@@ -109,6 +109,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
               <SidebarSelectUser
                 users={users}
                 fieldValue={filterText}
+                selfEmail={selfEmail ? selfEmail : undefined}
                 setFieldValue={(value) => {
                   setOwner(value);
                   setSidebar();
