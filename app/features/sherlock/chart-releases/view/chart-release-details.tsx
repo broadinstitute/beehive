@@ -20,6 +20,7 @@ export interface ChartReleaseDetailsProps {
   toChangeVersions?: string;
   toVersionHistory?: string;
   toEdit?: string;
+  toDatabaseInstance?: string;
   toLinkPagerduty?: string;
   toDelete?: string;
   showChips?: boolean;
@@ -32,6 +33,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
   toChangeVersions,
   toVersionHistory,
   toEdit,
+  toDatabaseInstance,
   toLinkPagerduty,
   toDelete,
   showChips = true,
@@ -125,6 +127,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
         </div>
       )}
     {(toEdit ||
+      toDatabaseInstance ||
       toLinkPagerduty ||
       toDelete ||
       toChangeVersions ||
@@ -135,6 +138,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
         toChangeVersions={toChangeVersions}
         toVersionHistory={toVersionHistory}
         toEdit={toEdit}
+        toDatabaseInstance={toDatabaseInstance}
         toLinkPagerduty={toLinkPagerduty}
         toDelete={toDelete}
       />

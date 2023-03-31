@@ -8,7 +8,6 @@ import { ActionBoxProps } from "./action-box";
 export interface BigActionBoxProps extends ActionBoxProps {
   returnPath: string;
   returnText: string;
-  hideButton?: boolean;
 }
 
 export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({

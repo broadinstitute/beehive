@@ -74,6 +74,7 @@ export default function Route() {
             toChangeVersions="./change-versions"
             toVersionHistory="./applied-changesets"
             toEdit="./edit"
+            toDatabaseInstance="./database-instance"
             // toLinkPagerduty={
             //   chartRelease.environmentInfo?.pagerdutyIntegration
             //     ? "./link-pagerduty"
