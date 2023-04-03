@@ -13,6 +13,7 @@ import {
 import {
   ClustersApi,
   EnvironmentsApi,
+  UsersApi,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -27,7 +28,9 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
+import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { getUserEmail } from "~/helpers/get-user-email.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
@@ -50,9 +53,17 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request }: LoaderArgs) {
-  return new ClustersApi(SherlockConfiguration)
-    .apiV2ClustersGet({}, forwardIAP(request))
-    .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower);
+  return Promise.all([
+    new ClustersApi(SherlockConfiguration)
+      .apiV2ClustersGet({}, forwardIAP(request))
+      .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
+    new UsersApi(SherlockConfiguration)
+      .apiV2UsersGet({}, forwardIAP(request))
+      .then(
+        (users) => users.sort(makeUserSorter(getUserEmail(request))),
+        errorResponseThrower
+      ),
+  ]);
 }
 
 export async function action({ request, params }: ActionArgs) {
@@ -83,7 +94,7 @@ export async function action({ request, params }: ActionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const clusters = useLoaderData<typeof loader>();
+  const [clusters, users] = useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const { environment } = useEnvironmentContext();
 
@@ -110,6 +121,7 @@ export default function Route() {
             setSidebar={setSidebar}
             setSidebarFilterText={setSidebarFilterText}
             clusters={clusters}
+            users={users}
             environment={errorInfo?.formState || environment}
             defaultCluster={defaultCluster}
             setDefaultCluster={setDefaultCluster}

@@ -8,6 +8,7 @@ import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
 import {
   ClustersApi,
   EnvironmentsApi,
+  UsersApi,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useMemo, useState } from "react";
@@ -29,6 +30,7 @@ import {
   forwardIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
+import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
 import { dateWithCustomISOString } from "~/helpers/date";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getUserEmail } from "~/helpers/get-user-email.server";
@@ -57,11 +59,18 @@ export const meta: V2_MetaFunction = () => [
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
   const preconfiguredLifecycle = url.searchParams.get("lifecycle");
+  const selfUserEmail = getUserEmail(request);
   return Promise.all([
-    getUserEmail(request),
+    selfUserEmail,
     new ClustersApi(SherlockConfiguration)
       .apiV2ClustersGet({}, forwardIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
+    new UsersApi(SherlockConfiguration)
+      .apiV2UsersGet({}, forwardIAP(request))
+      .then(
+        (users) => users.sort(makeUserSorter(selfUserEmail)),
+        errorResponseThrower
+      ),
     preconfiguredLifecycle,
   ]);
 }
@@ -134,7 +143,7 @@ export async function action({ request }: ActionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const [userEmail, clusters, preconfiguredLifecycle] =
+  const [userEmail, clusters, users, preconfiguredLifecycle] =
     useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const { environments } = useEnvironmentsContext();
@@ -311,12 +320,13 @@ export default function Route() {
                 setSidebar={setSidebar}
                 setSidebarFilterText={setSidebarFilterText}
                 clusters={clusters}
+                users={users}
                 environment={errorInfo?.formState}
                 creating={true}
                 templateInUse={lifecycle === "dynamic"}
                 defaultCluster={defaultCluster}
                 setDefaultCluster={setDefaultCluster}
-                userEmail={userEmail}
+                selfEmail={userEmail}
               />
             </div>
           </details>

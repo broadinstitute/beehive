@@ -2,6 +2,7 @@ import { SerializeFrom } from "@remix-run/node";
 import {
   V2controllersCluster,
   V2controllersEnvironment,
+  V2controllersUser,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -10,6 +11,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectCluster } from "../../clusters/set/sidebar-select-cluster";
+import { SidebarSelectUser } from "../../users/set/sidebar-select-user";
 import { EnvironmentColors } from "../environment-colors";
 
 export interface EnvironmentEditableFieldsProps {
@@ -17,6 +19,7 @@ export interface EnvironmentEditableFieldsProps {
     | V2controllersEnvironment
     | SerializeFrom<V2controllersEnvironment>;
   clusters: SerializeFrom<V2controllersCluster[]>;
+  users: SerializeFrom<V2controllersUser[]>;
   // When we're creating an environment, we don't want to try to replicate Sherlock's
   // advanced template-default behavior, so this flag tells us to let the user pass
   // empty values for fields where we might otherwise block it.
@@ -26,9 +29,7 @@ export interface EnvironmentEditableFieldsProps {
   templateInUse?: boolean;
   defaultCluster: string;
   setDefaultCluster: (value: string) => void;
-  // We don't actually *use* this value but it looks slick if we show it to the user
-  // as the placeholder for an empty owner field during creation.
-  userEmail?: string | null;
+  selfEmail?: string | null;
 }
 
 export const EnvironmentEditableFields: React.FunctionComponent<
@@ -39,17 +40,19 @@ export const EnvironmentEditableFields: React.FunctionComponent<
 
   environment,
   clusters,
+  users,
   creating,
   templateInUse,
   defaultCluster,
   setDefaultCluster,
-  userEmail,
+  selfEmail,
 }) => {
   const [requiresSuitability, setRequiresSuitability] = useState(
     environment?.requiresSuitability != null
       ? environment.requiresSuitability.toString()
       : "false"
   );
+  const [owner, setOwner] = useState(environment?.owner || selfEmail || "");
   const [namePrefixesDomain, setNamePrefixesDomain] = useState(
     environment?.namePrefixesDomain != null
       ? environment.namePrefixesDomain.toString()
@@ -94,10 +97,26 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         <TextField
           name="owner"
           placeholder={
-            userEmail ||
-            (creating ? "(defaults to your email)" : "(can be left blank)")
+            selfEmail || (creating ? "(defaults to your email)" : "Search...")
           }
-          defaultValue={environment?.owner}
+          value={owner}
+          onChange={(e) => {
+            setOwner(e.currentTarget.value);
+            setSidebarFilterText(e.currentTarget.value);
+          }}
+          onFocus={() => {
+            setSidebar(({ filterText }) => (
+              <SidebarSelectUser
+                users={users}
+                fieldValue={filterText}
+                selfEmail={selfEmail ? selfEmail : undefined}
+                setFieldValue={(value) => {
+                  setOwner(value);
+                  setSidebar();
+                }}
+              />
+            ));
+          }}
         />
       </label>
       <label>
