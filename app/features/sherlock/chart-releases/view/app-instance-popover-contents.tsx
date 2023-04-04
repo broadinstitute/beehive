@@ -54,8 +54,8 @@ export const AppInstancePopoverContents: React.FunctionComponent<{
     <ChartReleaseDetails
       chartRelease={chartRelease}
       showChips={false}
-      toChangeVersions={`/environments/${chartRelease.environment}/charts/${chartRelease.chart}/change-versions`}
-      toVersionHistory={`/environments/${chartRelease.environment}/charts/${chartRelease.chart}/version-history`}
+      toChangeVersions={`/environments/${chartRelease.environment}/chart-releases/${chartRelease.chart}/change-versions`}
+      toVersionHistory={`/environments/${chartRelease.environment}/chart-releases/${chartRelease.chart}/version-history`}
     />
   </>
 );
