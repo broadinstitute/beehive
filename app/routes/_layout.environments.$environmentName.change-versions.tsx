@@ -165,7 +165,6 @@ export default function Route() {
       ])
     )
   );
-  const [chartFilterText, setChartFilterText] = useState("");
 
   const includedList = Array.from(includedCharts)
     .filter(([_, included]) => included)
@@ -282,8 +281,8 @@ export default function Route() {
             which charts you'd like to be included. If a chart isn't checked in
             the list, it won't be affected at all.
           </p>
-          {Array.from(includedCharts.values()).find(
-            (value) => value === false
+          {chartReleases.find(
+            (chartRelease) => chartRelease.includedInBulkChangesets === false
           ) !== undefined && (
             <p>
               <b className="font-bold">

@@ -7,7 +7,8 @@ import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 import { ChartVersionColors } from "../../chart-versions/chart-version-colors";
 import { MutateControls } from "../../mutate-controls";
 import { ChartColors } from "../chart-colors";
-import { ChartLinkChip } from "../chart-link-chip";
+import { ChartLinkChip, PlaybookLinkChip } from "../chart-link-chip";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 
 export interface ChartDetailsProps {
   chart: V2controllersChart | SerializeFrom<V2controllersChart>;
@@ -39,7 +40,15 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         {chart.name && phraseAsApp && (
           <ChartLinkChip chart={chart.name} arrow />
         )}
+        {chart.playbookURL && (
+          <PlaybookLinkChip playbookURL={chart.playbookURL} />
+        )}
       </div>
+    )}
+    {chart.description && (
+      <h3 className="text-2xl text-color-header-text">
+        <PrettyPrintDescription description={chart.description} />
+      </h3>
     )}
     {chart.appImageGitRepo && (
       <div className="flex flex-col space-y-2">
