@@ -102,7 +102,7 @@ export const ChangesetEntry: React.FunctionComponent<{
           !changeset.appliedAt && (
             <input
               type="checkbox"
-              className="w-9"
+              className="w-9 shrink-0"
               title="Include in the changes to apply?"
               checked={includedCheckboxValue}
               onChange={() => {
