@@ -2,7 +2,9 @@ import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
+import { TextAreaField } from "~/components/interactivity/text-area-field";
 import { TextField } from "~/components/interactivity/text-field";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { ChartColors } from "../chart-colors";
 
 export interface ChartEditableFieldsProps {
@@ -21,8 +23,40 @@ export const ChartEditableFields: React.FunctionComponent<
   const [legacyConfigsEnabled, setLegacyConfigsEnabled] = useState(
     chart?.legacyConfigsEnabled === true ? "true" : "false"
   );
+  const [description, setDescription] = useState(chart?.description || "");
   return (
     <div className="flex flex-col space-y-4">
+      <label>
+        <h2 className="font-light text-2xl">Description</h2>
+        <p className="mb-2">
+          This is the description of this chart/app. It should describe what it
+          does and who is responsible for it.
+        </p>
+        <TextAreaField
+          name="description"
+          value={description}
+          onChange={(e) => setDescription(e.currentTarget.value)}
+          placeholder="(can be left empty)"
+          wrap="soft"
+        />
+      </label>
+      {description && (
+        <p className="w-full pb-4">
+          Preview: <PrettyPrintDescription description={description} />
+        </p>
+      )}
+      <label>
+        <h2 className="font-light text-2xl">Playbook URL</h2>
+        <p>
+          A link to the playbook or emergency documentation for this chart/app.
+        </p>
+        <TextField
+          name="playbookURL"
+          defaultValue={chart?.playbookURL}
+          pattern="https://.*"
+          placeholder="https://..."
+        />
+      </label>
       <label>
         <h2 className="font-light text-2xl">Chart Repo</h2>
         <p>

@@ -21,6 +21,7 @@ import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
+import { SonarCloudLinkChip } from "~/features/sherlock/charts/chart-link-chip";
 import { AppPopoverContents } from "~/features/sherlock/charts/view/app-popover-contents";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
@@ -133,7 +134,7 @@ export default function Route() {
                 "fill"
               )} bg-color-nearest-bg p-3 pt-4 mb-10 shadow-md rounded-2xl rounded-t-none border-2 border-t-0 ${
                 ChartColors.borderClassName
-              } flex flex-row gap-4`}
+              } flex flex-row justify-between items-center gap-4`}
             >
               {chartInfo && (
                 <InlinePopover
@@ -143,6 +144,9 @@ export default function Route() {
                 >
                   <AppPopoverContents chart={chartInfo} />
                 </InlinePopover>
+              )}
+              {chartInfo?.appImageGitRepo && (
+                <SonarCloudLinkChip repo={chartInfo.appImageGitRepo} />
               )}
               <div className="w-[70vw] laptop:w-[30vw] desktop:w-[22vw] ultrawide:w-[13vw] absolute -bottom-10 right-5">
                 <NavButton
