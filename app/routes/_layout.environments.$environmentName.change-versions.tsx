@@ -97,6 +97,9 @@ export async function action({ request, params }: ActionArgs) {
     includeCharts: formData
       .getAll("includeChart")
       .filter((value): value is string => typeof value === "string"),
+    excludeCharts: formData
+      .getAll("excludeChart")
+      .filter((value): value is string => typeof value === "string"),
     useExactVersionsFromOtherEnvironment:
       typeof useExactVersionsFromOtherEnvironment === "string" &&
       useExactVersionsFromOtherEnvironment.length > 0
@@ -165,10 +168,6 @@ export default function Route() {
       ])
     )
   );
-
-  const includedList = Array.from(includedCharts)
-    .filter(([_, included]) => included)
-    .map(([chart, _]) => chart);
 
   const [sidebar, setSidebar] = useState<ChangeEnvironmentVersionsSidebarModes>(
     "select included charts"
@@ -309,11 +308,11 @@ export default function Route() {
           >
             Select Charts to Include
           </ActionButton>
-          {includedList.map((chartName) => (
+          {Array.from(includedCharts).map(([chartName, included]) => (
             <input
               type="hidden"
               key={chartName}
-              name="includeChart"
+              name={included ? "includeChart" : "excludeChart"}
               value={chartName}
             />
           ))}
