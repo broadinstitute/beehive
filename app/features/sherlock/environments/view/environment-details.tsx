@@ -1,5 +1,7 @@
 import { SerializeFrom } from "@remix-run/node";
 import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import { TerraIcon } from "~/components/assets/terra-icon";
+import { ExternalNavButton } from "~/components/interactivity/external-nav-button";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
@@ -19,6 +21,7 @@ export interface EnvironmentDetailsProps {
     | SerializeFrom<V2controllersEnvironment>;
   selfLinkChip?: boolean;
   linkChipArrows?: boolean;
+  toTerraUI?: string | null;
   toChartReleases?: string;
   toChangeVersions?: string;
   toEdit?: string;
@@ -34,6 +37,7 @@ export const EnvironmentDetails: React.FunctionComponent<
   environment,
   selfLinkChip,
   linkChipArrows,
+  toTerraUI,
   toChartReleases,
   toChangeVersions,
   toEdit,
@@ -88,6 +92,15 @@ export const EnvironmentDetails: React.FunctionComponent<
         <NavButton to={toChartReleases} {...ChartReleaseColors}>
           <h2>View Charts in This Environment</h2>
         </NavButton>
+      )}
+      {toTerraUI && environment.offline !== true && (
+        <ExternalNavButton
+          icon={<TerraIcon className="h-[1.75rem]" />}
+          to={toTerraUI}
+          beforeBorderClassName="before:border-[#73ad43]"
+        >
+          <h2>Visit Terra UI</h2>
+        </ExternalNavButton>
       )}
     </div>
     {environment.description && (
