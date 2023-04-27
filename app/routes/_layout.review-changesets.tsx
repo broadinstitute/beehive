@@ -269,7 +269,7 @@ export default function Route() {
                         }}
                         name="changeset"
                         value={changesetLookup.get(name)?.id}
-                        className="align-middle mr-3"
+                        className="align-middle mr-3 cursor-pointer"
                       />
                       <span className="align-middle">{name}</span>
                     </label>
