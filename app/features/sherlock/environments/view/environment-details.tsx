@@ -93,7 +93,7 @@ export const EnvironmentDetails: React.FunctionComponent<
           <h2>View Charts in This Environment</h2>
         </NavButton>
       )}
-      {toTerraUI && (
+      {toTerraUI && environment.offline !== true && (
         <ExternalNavButton
           icon={<TerraIcon className="h-[1.75rem]" />}
           to={toTerraUI}
