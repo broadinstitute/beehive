@@ -92,7 +92,7 @@ export const ChangesetEntry: React.FunctionComponent<{
       } flex flex-col gap-2 px-6 py-4 text-color-body-text`}
     >
       <div
-        className="flex flex-row gap-4 font-light cursor-pointer"
+        className="flex flex-row gap-4 items-start font-light cursor-pointer"
         onClick={() => setMinimized(!minimized)}
       >
         {appliable &&
@@ -102,7 +102,7 @@ export const ChangesetEntry: React.FunctionComponent<{
           !changeset.appliedAt && (
             <input
               type="checkbox"
-              className="w-9"
+              className="w-9 h-9 mt-1 shrink-0 cursor-pointer"
               title="Include in the changes to apply?"
               checked={includedCheckboxValue}
               onChange={() => {
