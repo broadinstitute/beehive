@@ -6,15 +6,19 @@ import {
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
+import {
+  ChartReleasesApi,
+  EnvironmentsApi,
+} from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
+import { chartReleaseUrl } from "~/features/sherlock/chart-releases/chart-release-url";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/offline/environment-offline-icon";
 import { EnvironmentDetails } from "~/features/sherlock/environments/view/environment-details";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  forwardIAP,
 } from "~/features/sherlock/sherlock.server";
 import { toTitleCase } from "~/helpers/strings";
 import { ProdFlag } from "../components/layout/prod-flag";
@@ -34,18 +38,26 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsSelectorGet(
-      { selector: params.environmentName || "" },
-      forwardIAP(request)
-    )
-    .catch(errorResponseThrower);
+  return Promise.all([
+    new EnvironmentsApi(SherlockConfiguration)
+      .apiV2EnvironmentsSelectorGet(
+        { selector: params.environmentName || "" },
+        forwardIAP(request)
+      )
+      .catch(errorResponseThrower),
+    new ChartReleasesApi(SherlockConfiguration)
+      .apiV2ChartReleasesSelectorGet(
+        { selector: `${params.environmentName}/terraui` },
+        forwardIAP(request)
+      )
+      .catch(() => null),
+  ]);
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const environment = useLoaderData<typeof loader>();
+  const [environment, terrauiInstance] = useLoaderData<typeof loader>();
   return (
     <ProdFlag prod={environment.name === "prod"}>
       <OutsetPanel {...EnvironmentColors}>
@@ -71,6 +83,7 @@ export default function Route() {
         >
           <EnvironmentDetails
             environment={environment}
+            toTerraUI={chartReleaseUrl(terrauiInstance)}
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
             toEdit="./edit"
