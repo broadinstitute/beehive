@@ -267,16 +267,22 @@ export default function Route() {
                               ])
                           );
                         }}
-                        name="changeset"
-                        value={changesetLookup.get(name)?.id}
                         className="align-middle mr-3 cursor-pointer"
                       />
                       <span className="align-middle">{name}</span>
                     </label>
-                    {changesetLookup.get(name)?.chartReleaseInfo
-                      ?.environmentInfo?.lifecycle === "template" || (
-                      <input type="hidden" name="sync" value={name} />
+                    {included && (
+                      <input
+                        type="hidden"
+                        name="changeset"
+                        value={changesetLookup.get(name)?.id}
+                      />
                     )}
+                    {included &&
+                      changesetLookup.get(name)?.chartReleaseInfo
+                        ?.environmentInfo?.lifecycle !== "template" && (
+                        <input type="hidden" name="sync" value={name} />
+                      )}
                   </li>
                 ))}
               </ul>
