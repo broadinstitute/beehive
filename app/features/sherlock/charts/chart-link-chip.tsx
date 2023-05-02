@@ -42,10 +42,12 @@ export const SonarCloudLinkChip: React.FunctionComponent<{
     <a
       href={`https://sonarcloud.io/summary/new_code?id=${projectKey}`}
       target="_blank"
+      rel="noreferrer"
     >
       <img
         src={`https://sonarcloud.io/api/project_badges/measure?project=${projectKey}&metric=alert_status`}
         className="h-8 w-full rounded-xl hover:shadow-md motion-safe:transition-shadow"
+        alt="SonarCloud Alert Status"
       />
     </a>
   );
