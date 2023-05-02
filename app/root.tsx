@@ -214,43 +214,41 @@ export const App: React.FunctionComponent = () => {
   }
   const transition = useNavigation();
   return (
-    <React.StrictMode>
-      <CsrfTokenContext.Provider value={csrfToken}>
-        <PagerdutyTokenContext.Provider value={pdToken}>
-          <html
-            lang="en"
-            // suppressHydrationWarning to allow LoadThemeSetter's manipulation of the
-            // document's data-theme attribute. Suppressing is okay because it only
-            // works at this level (it doesn't cascade).
-            suppressHydrationWarning={true}
+    <CsrfTokenContext.Provider value={csrfToken}>
+      <PagerdutyTokenContext.Provider value={pdToken}>
+        <html
+          lang="en"
+          // suppressHydrationWarning to allow LoadThemeSetter's manipulation of the
+          // document's data-theme attribute. Suppressing is okay because it only
+          // works at this level (it doesn't cascade).
+          suppressHydrationWarning={true}
+        >
+          <head>
+            <meta charSet="utf-8" />
+            <meta
+              name="viewport"
+              content="width=device-width,initial-scale=1,viewport-fit=cover"
+            />
+            <Meta />
+            <Links />
+            <LoadThemeSetter nonce={cspScriptNonce} />
+          </head>
+          <body
+            data-theme-prod={false}
+            className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-[100dvh] w-full ${
+              transition.state != "idle" ? "cursor-progress" : ""
+            }`}
           >
-            <head>
-              <meta charSet="utf-8" />
-              <meta
-                name="viewport"
-                content="width=device-width,initial-scale=1,viewport-fit=cover"
-              />
-              <Meta />
-              <Links />
-              <LoadThemeSetter nonce={cspScriptNonce} />
-            </head>
-            <body
-              data-theme-prod={false}
-              className={`bg-color-far-bg overflow-hidden flex flex-col min-w-screen h-[100dvh] w-full ${
-                transition.state != "idle" ? "cursor-progress" : ""
-              }`}
-            >
-              <Outlet />
+            <Outlet />
 
-              <LoadScroller nonce={cspScriptNonce} />
-              <ScrollRestoration nonce={cspScriptNonce} />
-              <Scripts nonce={cspScriptNonce} />
-              <LiveReload nonce={cspScriptNonce} />
-            </body>
-          </html>
-        </PagerdutyTokenContext.Provider>
-      </CsrfTokenContext.Provider>
-    </React.StrictMode>
+            <LoadScroller nonce={cspScriptNonce} />
+            <ScrollRestoration nonce={cspScriptNonce} />
+            <Scripts nonce={cspScriptNonce} />
+            <LiveReload nonce={cspScriptNonce} />
+          </body>
+        </html>
+      </PagerdutyTokenContext.Provider>
+    </CsrfTokenContext.Provider>
   );
 };
 
