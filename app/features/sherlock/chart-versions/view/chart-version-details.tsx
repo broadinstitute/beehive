@@ -56,7 +56,7 @@ export const ChartVersionDetails: React.FunctionComponent<
                 ).chartVersion
               }
             </span>{" "}
-            wherever chartlicable, like for calculcating version diffs.
+            wherever applicable, like for calculcating version diffs.
           </p>
           <NavButton
             to={`../${
