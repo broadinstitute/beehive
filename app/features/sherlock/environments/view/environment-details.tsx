@@ -98,8 +98,9 @@ export const EnvironmentDetails: React.FunctionComponent<
           icon={<TerraIcon className="h-[1.75rem]" />}
           to={toTerraUI}
           beforeBorderClassName="before:border-[#73ad43]"
+          target="_blank"
         >
-          <h2>Visit Terra UI</h2>
+          <h2>Visit Terra UI ↗</h2>
         </ExternalNavButton>
       )}
     </div>
