@@ -1,6 +1,9 @@
-import { NavButtonProps } from "./nav-button";
+import type { ComponentProps } from "react";
+import type { NavButtonProps } from "./nav-button";
 
-export const ExternalNavButton: React.FunctionComponent<NavButtonProps> = ({
+export const ExternalNavButton: React.FunctionComponent<
+  NavButtonProps & Pick<ComponentProps<"a">, "target">
+> = ({
   to,
   beforeBorderClassName,
   textAlignment = "text-left",
@@ -8,6 +11,7 @@ export const ExternalNavButton: React.FunctionComponent<NavButtonProps> = ({
   children,
   disabled,
   prod,
+  target,
 }) => (
   <div
     data-theme-prod={prod}
@@ -22,6 +26,7 @@ export const ExternalNavButton: React.FunctionComponent<NavButtonProps> = ({
           ? "before:border-color-neutral-soft-border"
           : beforeBorderClassName
       } motion-safe:transition-all before:motion-safe:transition-all`}
+      target={target}
     >
       <div
         className={`shrink-0 flex flex-row gap-2 justify-between items-center h-full w-full pl-4 pr-16 py-2 ${
