@@ -100,7 +100,7 @@ export const EnvironmentDetails: React.FunctionComponent<
           beforeBorderClassName="before:border-[#73ad43]"
           target="_blank"
         >
-          <h2>Visit Terra UI</h2>
+          <h2>Visit Terra UI ↗</h2>
         </ExternalNavButton>
       )}
     </div>
