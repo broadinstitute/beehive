@@ -15,8 +15,8 @@ import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { ClusterDetails } from "~/features/sherlock/clusters/view/cluster-details";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -35,7 +35,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ClustersApi(SherlockConfiguration)
     .apiV2ClustersSelectorGet(
       { selector: params.clusterName || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

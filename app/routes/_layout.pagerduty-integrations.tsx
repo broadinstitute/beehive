@@ -9,8 +9,8 @@ import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { PagerdutyIntegrationColors } from "~/features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
@@ -29,7 +29,7 @@ export const meta: V2_MetaFunction = () => [
 
 export async function loader({ request }: LoaderArgs) {
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
-    .apiV2PagerdutyIntegrationsGet({}, forwardIAP(request))
+    .apiV2PagerdutyIntegrationsGet({}, handleIAP(request))
     .catch(errorResponseThrower);
 }
 

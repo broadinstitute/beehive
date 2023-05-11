@@ -11,7 +11,7 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { ChartDeleteDescription } from "~/features/sherlock/charts/delete/chart-delete-description";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -33,7 +33,7 @@ export async function action({ request, params }: ActionArgs) {
   return new ChartsApi(SherlockConfiguration)
     .apiV2ChartsSelectorDelete(
       { selector: params.chartName || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(() => redirect("/charts"), makeErrorResponseReturner());
 }

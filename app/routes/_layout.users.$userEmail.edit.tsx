@@ -10,7 +10,7 @@ import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { UserEditableFields } from "~/features/sherlock/users/edit/user-editable-fields";
@@ -47,7 +47,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.userEmail || "",
         user: userRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(() =>
       api.apiV2ProceduresUsersLinkGithubPost(
@@ -56,7 +56,7 @@ export async function action({ request, params }: ActionArgs) {
             githubAccessToken: session.get(sessionFields.githubAccessToken),
           },
         },
-        forwardIAP(request)
+        handleIAP(request)
       )
     )
     .then(

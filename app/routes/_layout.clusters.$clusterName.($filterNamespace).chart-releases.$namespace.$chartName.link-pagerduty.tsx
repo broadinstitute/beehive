@@ -24,7 +24,7 @@ import {
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { LinkPagerdutyPanel } from "~/features/sherlock/pagerduty-integrations/link-pagerduty/link-pagerduty-panel";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -50,7 +50,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     new PagerdutyIntegrationsApi(SherlockConfiguration)
-      .apiV2PagerdutyIntegrationsGet({}, forwardIAP(request))
+      .apiV2PagerdutyIntegrationsGet({}, handleIAP(request))
       .catch(errorResponseThrower),
     getPdAppIdFromEnv(),
   ]);
@@ -70,7 +70,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: `${params.environmentName}/${params.chartName}`,
         chartRelease: chartReleaseRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       () =>

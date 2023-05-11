@@ -19,7 +19,7 @@ import {
   V2controllersChangesetPlanRequestChartReleaseEntry,
 } from "@sherlock-js-client/sherlock";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -56,7 +56,7 @@ export function loader({ request, params }: LoaderArgs) {
   const preconfiguredOtherEnvironment = url.searchParams.get("from");
   return Promise.all([
     new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesGet({ chart: params.chartName }, forwardIAP(request))
+      .apiV2ChartReleasesGet({ chart: params.chartName }, handleIAP(request))
       .then(
         (chartReleases) =>
           Array.from(
@@ -72,13 +72,13 @@ export function loader({ request, params }: LoaderArgs) {
     new AppVersionsApi(SherlockConfiguration)
       .apiV2AppVersionsGet(
         { chart: params.chartName, limit: 25 },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
       .apiV2ChartVersionsGet(
         { chart: params.chartName, limit: 25 },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     preconfiguredAppVersionExact,
@@ -103,7 +103,7 @@ export async function action({ request, params }: ActionArgs) {
           chartReleases: [changesetRequest],
         },
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (changesets) =>

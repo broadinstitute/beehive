@@ -12,8 +12,8 @@ import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { UserColors } from "~/features/sherlock/users/user-colors";
 import { UserDetails } from "~/features/sherlock/users/view/user-details";
@@ -33,7 +33,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new UsersApi(SherlockConfiguration)
     .apiV2UsersSelectorGet(
       { selector: params.userEmail || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

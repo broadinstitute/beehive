@@ -28,13 +28,13 @@ import { EnvironmentColors } from "~/features/sherlock/environments/environment-
 import { interleaveVersionPromises } from "~/features/sherlock/interleaved-versions/interleave-version-promises";
 import { InterleavedVersionEntry } from "~/features/sherlock/interleaved-versions/interleaved-version-entry";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 
 export async function loader({ request, params }: LoaderArgs) {
-  const forwardedIAP = forwardIAP(request);
+  const forwardedIAP = handleIAP(request);
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
   return promiseHash({
     inStaging: chartReleasesApi
@@ -95,7 +95,7 @@ export async function action({ request, params }: ActionArgs) {
             ),
         },
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (changesets) =>

@@ -19,8 +19,8 @@ import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-c
 import { ListAppVersionButtonText } from "~/features/sherlock/app-versions/list/list-app-version-button-text";
 import { matchAppVersion } from "~/features/sherlock/app-versions/list/match-app-version";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { useChartContext } from "~/routes/_layout.charts.$chartName";
 
@@ -40,7 +40,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 
 export async function loader({ request, params }: LoaderArgs) {
   return new AppVersionsApi(SherlockConfiguration)
-    .apiV2AppVersionsGet({ chart: params.chartName || "" }, forwardIAP(request))
+    .apiV2AppVersionsGet({ chart: params.chartName || "" }, handleIAP(request))
     .catch(errorResponseThrower);
 }
 

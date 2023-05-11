@@ -12,8 +12,8 @@ import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PagerdutyIntegrationColors } from "~/features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
 import { PagerdutyIntegrationDetails } from "~/features/sherlock/pagerduty-integrations/view/pagerduty-integration-details";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { ProdFlag } from "../components/layout/prod-flag";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderArgs) {
       {
         selector: `pd-id/${params.pagerdutyID}`,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

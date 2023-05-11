@@ -13,7 +13,7 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
 import { AppVersionEditableFields } from "~/features/sherlock/app-versions/edit/app-version-editable-fields";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -52,7 +52,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: `${params.chartName}/${params.appVersion}`,
         appVersion: appVersionRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (appVersion) =>

@@ -2,8 +2,8 @@ import { LoaderArgs, redirect } from "@remix-run/node";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { verifySessionPagerdutyToken } from "~/components/logic/pagerduty-token";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { getSession } from "~/session.server";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
@@ -48,7 +48,7 @@ export async function loader({ request }: LoaderArgs) {
               type: k.type,
             },
           },
-          forwardIAP(request)
+          handleIAP(request)
         )
         .catch(errorResponseThrower)
     )

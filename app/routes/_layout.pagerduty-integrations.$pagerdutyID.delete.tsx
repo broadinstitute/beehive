@@ -8,7 +8,7 @@ import { ActionBox } from "~/components/panel-structures/action-box";
 import { PagerdutyIntegrationDeleteDescription } from "~/features/sherlock/pagerduty-integrations/delete/pagerduty-integration-delete-description";
 import { PagerdutyIntegrationColors } from "~/features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -35,7 +35,7 @@ export async function action({ request, params }: ActionArgs) {
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
     .apiV2PagerdutyIntegrationsSelectorDelete(
       { selector: `pd-id/${params.pagerdutyID}` },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       () => redirect("/pagerduty-integrations"),

@@ -45,10 +45,18 @@ export const SherlockConfiguration = new Configuration({
 
 const IapJwtHeader = "x-goog-iap-jwt-assertion";
 
-export function forwardIAP(request: Request): RequestInit {
-  return {
-    headers: request.headers.has(IapJwtHeader)
-      ? { [IapJwtHeader]: request.headers.get(IapJwtHeader)! }
-      : undefined,
-  };
+export function handleIAP(request: Request): RequestInit {
+  if (request.headers.has(IapJwtHeader)) {
+    // Request looks like post-IAP, so forward the header
+    return { headers: { [IapJwtHeader]: request.headers.get(IapJwtHeader)! } };
+  }
+  if (
+    process.env.NODE_ENV !== "production" &&
+    process.env.SHERLOCK_BASE_URL?.startsWith("https") &&
+    process.env.IAP_TOKEN
+  ) {
+    // Not in production mode, talking to a real instance, and we were given a token, so use it
+    return { headers: { Authorization: `Bearer ${process.env.IAP_TOKEN}` } };
+  }
+  return {};
 }

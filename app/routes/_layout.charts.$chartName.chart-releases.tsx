@@ -20,8 +20,8 @@ import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/char
 import { ListChartReleaseButtonText } from "~/features/sherlock/chart-releases/list/list-chart-release-button-text";
 import { matchChartRelease } from "~/features/sherlock/chart-releases/list/match-chart-release";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
       { chart: params.chartName || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (chartReleases) => chartReleases.sort(chartReleaseSorter),

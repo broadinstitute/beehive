@@ -26,7 +26,7 @@ import {
 import { ChangeChartReleaseVersionsPanel } from "~/features/sherlock/chart-releases/change-versions/change-chart-release-versions-panel";
 import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/chart-release-sorter";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -55,7 +55,7 @@ export function loader({ request, params }: LoaderArgs) {
   const preconfiguredChartVersionExact = url.searchParams.get("chart");
   return Promise.all([
     new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesGet({ chart: params.chartName }, forwardIAP(request))
+      .apiV2ChartReleasesGet({ chart: params.chartName }, handleIAP(request))
       .then(
         (chartReleases) =>
           Array.from(
@@ -71,13 +71,13 @@ export function loader({ request, params }: LoaderArgs) {
     new AppVersionsApi(SherlockConfiguration)
       .apiV2AppVersionsGet(
         { chart: params.chartName, limit: 25 },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
       .apiV2ChartVersionsGet(
         { chart: params.chartName, limit: 25 },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     preconfiguredAppVersionExact,
@@ -101,7 +101,7 @@ export async function action({ request, params }: ActionArgs) {
           chartReleases: [changesetRequest],
         },
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then((changesets) => {
       return changesets.length > 0

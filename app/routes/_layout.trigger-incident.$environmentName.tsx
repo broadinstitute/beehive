@@ -13,8 +13,8 @@ import { ItemDetails } from "~/components/panel-structures/item-details";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
@@ -35,7 +35,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new EnvironmentsApi(SherlockConfiguration)
     .apiV2EnvironmentsSelectorGet(
       { selector: params.environmentName || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

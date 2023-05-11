@@ -7,8 +7,8 @@ import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { AppliedChangesetsPanel } from "~/features/sherlock/changesets/list/applied-changesets-panel";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { useChartChartReleaseContext } from "~/routes/_layout.charts.$chartName.chart-releases.$chartReleaseName";
 
@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderArgs) {
           offset: offset,
           limit: limit,
         },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     offset,

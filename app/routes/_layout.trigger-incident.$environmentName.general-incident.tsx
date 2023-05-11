@@ -9,7 +9,7 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -50,7 +50,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.environmentName || "",
         summary: summaryRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then((response) => {
       console.log(response);

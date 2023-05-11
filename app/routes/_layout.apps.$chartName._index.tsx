@@ -2,8 +2,8 @@ import { LoaderArgs } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
   AppVersionsApi,
-  ChartsApi,
   ChartVersionsApi,
+  ChartsApi,
 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
@@ -12,12 +12,12 @@ import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { interleaveVersionPromises } from "~/features/sherlock/interleaved-versions/interleave-version-promises";
 import { InterleavedVersionEntry } from "~/features/sherlock/interleaved-versions/interleaved-version-entry";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export async function loader({ request, params }: LoaderArgs) {
-  const forwardedIAP = forwardIAP(request);
+  const forwardedIAP = handleIAP(request);
 
   return new ChartsApi(SherlockConfiguration)
     .apiV2ChartsSelectorGet(

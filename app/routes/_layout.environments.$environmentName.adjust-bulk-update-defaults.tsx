@@ -20,7 +20,7 @@ import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/char
 import { SidebarSelectMultipleChartReleases } from "~/features/sherlock/chart-releases/set/sidebar-select-multiple-chart-releases";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -51,7 +51,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
       { environment: params.environmentName },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (chartReleases) => chartReleases.sort(chartReleaseSorter),
@@ -84,7 +84,7 @@ export async function action({ request, params }: ActionArgs) {
             includedInBulkChangesets: included,
           },
         },
-        forwardIAP(request)
+        handleIAP(request)
       )
     )
   ).then(

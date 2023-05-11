@@ -20,8 +20,8 @@ import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/char
 import { ListChartReleaseButtonText } from "~/features/sherlock/chart-releases/list/list-chart-release-button-text";
 import { matchChartRelease } from "~/features/sherlock/chart-releases/list/match-chart-release";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { useClusterContext } from "~/routes/_layout.clusters.$clusterName";
 
@@ -54,7 +54,7 @@ export async function loader({ request, params }: LoaderArgs) {
         cluster: params.clusterName || "",
         namespace: params.filterNamespace || undefined,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       // Sherlock's API doesn't really have a great mechanism for

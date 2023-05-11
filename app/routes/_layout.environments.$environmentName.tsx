@@ -18,7 +18,7 @@ import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/offline
 import { EnvironmentDetails } from "~/features/sherlock/environments/view/environment-details";
 import {
   SherlockConfiguration,
-  forwardIAP,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { toTitleCase } from "~/helpers/strings";
 import { ProdFlag } from "../components/layout/prod-flag";
@@ -42,13 +42,13 @@ export async function loader({ request, params }: LoaderArgs) {
     new EnvironmentsApi(SherlockConfiguration)
       .apiV2EnvironmentsSelectorGet(
         { selector: params.environmentName || "" },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     new ChartReleasesApi(SherlockConfiguration)
       .apiV2ChartReleasesSelectorGet(
         { selector: `${params.environmentName}/terraui` },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(() => null),
   ]);

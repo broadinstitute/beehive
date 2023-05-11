@@ -14,8 +14,8 @@ import { chartSorter } from "~/features/sherlock/charts/list/chart-sorter";
 import { ListChartButtonText } from "~/features/sherlock/charts/list/list-chart-button-text";
 import { matchChart } from "~/features/sherlock/charts/list/match-chart";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -30,7 +30,7 @@ export const meta: V2_MetaFunction = () => [
 
 export async function loader({ request }: LoaderArgs) {
   return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsGet({}, forwardIAP(request))
+    .apiV2ChartsGet({}, handleIAP(request))
     .then((charts) => charts.sort(chartSorter), errorResponseThrower);
 }
 

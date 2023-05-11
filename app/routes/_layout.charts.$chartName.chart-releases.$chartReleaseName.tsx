@@ -17,8 +17,8 @@ import { ChartReleaseDetails } from "~/features/sherlock/chart-releases/view/cha
 import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/offline/environment-offline-icon";
 import { ProdWarning } from "~/features/sherlock/prod-warning";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -43,7 +43,7 @@ export async function loader({ request, params }: LoaderArgs) {
       {
         selector: params.chartReleaseName || "",
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

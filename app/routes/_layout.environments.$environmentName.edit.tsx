@@ -25,7 +25,7 @@ import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
@@ -55,10 +55,10 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     new ClustersApi(SherlockConfiguration)
-      .apiV2ClustersGet({}, forwardIAP(request))
+      .apiV2ClustersGet({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
     new UsersApi(SherlockConfiguration)
-      .apiV2UsersGet({}, forwardIAP(request))
+      .apiV2UsersGet({}, handleIAP(request))
       .then(
         (users) => users.sort(makeUserSorter(getUserEmail(request))),
         errorResponseThrower
@@ -83,7 +83,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.environmentName || "",
         environment: environmentRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (environment) => redirect(`/environments/${environment.name}`),

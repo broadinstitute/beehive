@@ -7,8 +7,8 @@ import { json } from "react-router";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { runGha } from "~/features/github/run-gha";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { commitSession } from "~/session.server";
@@ -27,7 +27,7 @@ export async function action({ request }: ActionArgs) {
         selector: typeof environmentName === "string" ? environmentName : "",
         environment: environmentRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(async (environment) => {
       await runGha(

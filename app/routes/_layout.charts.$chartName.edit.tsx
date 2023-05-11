@@ -10,7 +10,7 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { ChartEditableFields } from "~/features/sherlock/charts/edit/chart-editable-fields";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -46,7 +46,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.chartName || "",
         chart: chartRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (chart) => redirect(`/charts/${chart.name}`),

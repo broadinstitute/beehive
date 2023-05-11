@@ -6,7 +6,7 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { runGha } from "~/features/github/run-gha";
 import { ChartReleaseDeletePanel } from "~/features/sherlock/chart-releases/delete/chart-release-delete-panel";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -37,7 +37,7 @@ export async function action({ request, params }: ActionArgs) {
       {
         selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(async (chartRelease) => {
       if (chartRelease.environmentInfo?.lifecycle === "dynamic") {

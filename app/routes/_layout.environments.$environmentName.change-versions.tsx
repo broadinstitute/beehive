@@ -28,7 +28,7 @@ import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-rel
 import { SidebarSelectMultipleChartReleases } from "~/features/sherlock/chart-releases/set/sidebar-select-multiple-chart-releases";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { SidebarFilterControlledList } from "../components/panel-structures/sidebar-filter-controlled-list";
@@ -64,7 +64,7 @@ export async function loader({ request, params }: LoaderArgs) {
   const preconfiguredOtherEnvironment = url.searchParams.get("from");
   return Promise.all([
     new EnvironmentsApi(SherlockConfiguration)
-      .apiV2EnvironmentsGet({}, forwardIAP(request))
+      .apiV2EnvironmentsGet({}, handleIAP(request))
       .then(
         (environments) => environments.sort(environmentSorter),
         errorResponseThrower
@@ -72,7 +72,7 @@ export async function loader({ request, params }: LoaderArgs) {
     new ChartReleasesApi(SherlockConfiguration)
       .apiV2ChartReleasesGet(
         { environment: params.environmentName },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .then(
         (chartReleases) => chartReleases.sort(chartReleaseSorter),
@@ -119,7 +119,7 @@ export async function action({ request, params }: ActionArgs) {
           environments: [changesetRequest],
         },
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (changesets) =>
