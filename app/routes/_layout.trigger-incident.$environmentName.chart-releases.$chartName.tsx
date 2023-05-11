@@ -19,7 +19,7 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -52,7 +52,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorGet(
       { selector: `${params.environmentName}/${params.chartName}` },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 };
@@ -71,7 +71,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: `${params.environmentName}/${params.chartName}`,
         summary: summaryRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then((response) => {
       console.log(response);

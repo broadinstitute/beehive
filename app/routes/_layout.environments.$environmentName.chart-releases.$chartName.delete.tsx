@@ -3,7 +3,7 @@ import { NavLink, Params, useActionData } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { runGha } from "~/features/github/run-gha";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { commitSession } from "~/session.server";
@@ -35,7 +35,7 @@ export async function action({ request, params }: ActionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorDelete(
       { selector: `${params.environmentName}/${params.chartName}` },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(async (chartRelease) => {
       if (chartRelease.environmentInfo?.lifecycle === "dynamic") {

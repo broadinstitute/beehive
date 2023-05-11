@@ -18,7 +18,7 @@ import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import { DatabaseInstancePanel } from "~/features/sherlock/database-instances/database-instance-panel";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -45,7 +45,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new DatabaseInstancesApi(SherlockConfiguration)
     .apiV2DatabaseInstancesSelectorGet(
       { selector: `chart-release/${params.chartReleaseName}` },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(() => null);
 }
@@ -64,7 +64,7 @@ export async function action({ request, params }: ActionArgs) {
         databaseInstance: databaseInstanceRequest,
         selector: `chart-release/${params.chartReleaseName}`,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       () =>

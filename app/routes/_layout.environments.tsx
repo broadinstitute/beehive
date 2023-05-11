@@ -15,8 +15,8 @@ import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
@@ -36,7 +36,7 @@ export const meta: V2_MetaFunction = () => [
 
 export async function loader({ request }: LoaderArgs) {
   return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsGet({}, forwardIAP(request))
+    .apiV2EnvironmentsGet({}, handleIAP(request))
     .then(
       (environments) => environments.sort(environmentSorter),
       errorResponseThrower

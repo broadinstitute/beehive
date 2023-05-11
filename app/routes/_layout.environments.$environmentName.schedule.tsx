@@ -19,8 +19,8 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentScheduleFields } from "~/features/sherlock/environments/offline/environment-schedule-fields";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { dateWithCustomISOString } from "~/helpers/date";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -71,7 +71,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.environmentName || "",
         environment: environmentRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (environment) => redirect(`/environments/${environment.name}`),

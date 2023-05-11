@@ -9,7 +9,7 @@ import { runGha } from "~/features/github/run-gha";
 import { EnvironmentDeleteDescription } from "~/features/sherlock/environments/delete/environment-delete-description";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { commitSession } from "~/session.server";
@@ -39,7 +39,7 @@ export async function action({ request, params }: ActionArgs) {
   return environmentsApi
     .apiV2EnvironmentsSelectorGet(
       { selector: params.environmentName || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(async (environment) => {
       if (environment.lifecycle === "dynamic") {
@@ -60,7 +60,7 @@ export async function action({ request, params }: ActionArgs) {
         return await environmentsApi
           .apiV2EnvironmentsSelectorDelete(
             { selector: params.environmentName || "" },
-            forwardIAP(request)
+            handleIAP(request)
           )
           .then(() => redirect("/environments"), makeErrorResponseReturner());
       }

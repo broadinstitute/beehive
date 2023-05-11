@@ -6,8 +6,8 @@ import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { useEnvironmentChartReleaseContext } from "~/routes/_layout.environments.$environmentName.chart-releases.$chartName";
 import { AppliedChangesetsPanel } from "../features/sherlock/changesets/list/applied-changesets-panel";
@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderArgs) {
           offset: offset,
           limit: limit,
         },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     offset,

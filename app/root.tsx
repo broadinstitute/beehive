@@ -25,7 +25,7 @@ import { PagerdutyTokenContext } from "./components/logic/pagerduty-token";
 import { LoadThemeSetter } from "./components/logic/theme";
 import { PanelErrorBoundary } from "./errors/components/error-boundary";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "./features/sherlock/sherlock.server";
 import { generateNonce } from "./helpers/nonce.server";
@@ -136,7 +136,7 @@ export async function loader({ request }: LoaderArgs) {
                     githubAccessToken: data.access_token,
                   },
                 },
-                forwardIAP(request)
+                handleIAP(request)
               )
               .then(
                 (user) =>

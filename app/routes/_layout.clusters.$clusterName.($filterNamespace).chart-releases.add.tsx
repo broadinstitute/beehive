@@ -19,8 +19,8 @@ import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { chartSorter } from "~/features/sherlock/charts/list/chart-sorter";
 import { environmentSorter } from "~/features/sherlock/environments/list/environment-sorter";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { useClusterContext } from "~/routes/_layout.clusters.$clusterName";
 
@@ -41,13 +41,13 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     new ChartsApi(SherlockConfiguration)
-      .apiV2ChartsGet({}, forwardIAP(request))
+      .apiV2ChartsGet({}, handleIAP(request))
       .then((charts) => charts.sort(chartSorter), errorResponseThrower),
     // We don't actually need the environments here, but loading them here and passing
     // them down through via context means we won't be loading them repeatedly on
     // the next page if the user is browsing charts to deploy by clicking on them.
     new EnvironmentsApi(SherlockConfiguration)
-      .apiV2EnvironmentsGet({}, forwardIAP(request))
+      .apiV2EnvironmentsGet({}, handleIAP(request))
       .then(
         (environments) => environments.sort(environmentSorter),
         errorResponseThrower

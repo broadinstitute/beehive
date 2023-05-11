@@ -16,8 +16,8 @@ import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
@@ -44,7 +44,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
       { environment: params.environmentName || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (chartReleases) => chartReleases.sort(chartReleaseSorter),

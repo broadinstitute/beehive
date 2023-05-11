@@ -2,7 +2,7 @@ import { json, LoaderArgs, redirect } from "@remix-run/node";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
@@ -11,7 +11,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorGet(
       { selector: params["*"] || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then((chartRelease) => {
       const protocol =

@@ -12,7 +12,7 @@ import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { ChartEditableFields } from "~/features/sherlock/charts/edit/chart-editable-fields";
 import { ChartCreatableFields } from "~/features/sherlock/charts/new/chart-creatable-fields";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -43,7 +43,7 @@ export async function action({ request }: ActionArgs) {
   };
 
   return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsPost({ chart: chartRequest }, forwardIAP(request))
+    .apiV2ChartsPost({ chart: chartRequest }, handleIAP(request))
     .then(
       (chart) => redirect(`/charts/${chart.name}`),
       makeErrorResponseReturner(chartRequest)

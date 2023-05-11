@@ -14,8 +14,8 @@ import { clusterSorter } from "~/features/sherlock/clusters/list/cluster-sorter"
 import { ListClusterButtonText } from "~/features/sherlock/clusters/list/list-cluster-button-text";
 import { matchCluster } from "~/features/sherlock/clusters/list/match-cluster";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -30,7 +30,7 @@ export const meta: V2_MetaFunction = () => [
 
 export async function loader({ request }: LoaderArgs) {
   return new ClustersApi(SherlockConfiguration)
-    .apiV2ClustersGet({}, forwardIAP(request))
+    .apiV2ClustersGet({}, handleIAP(request))
     .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower);
 }
 

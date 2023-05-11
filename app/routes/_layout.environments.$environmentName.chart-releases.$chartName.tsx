@@ -13,8 +13,8 @@ import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-rel
 import { ChartReleaseDetails } from "~/features/sherlock/chart-releases/view/chart-release-details";
 import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/offline/environment-offline-icon";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorGet(
       { selector: `${params.environmentName}/${params.chartName}` },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

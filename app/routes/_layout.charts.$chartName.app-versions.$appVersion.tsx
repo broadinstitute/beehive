@@ -14,8 +14,8 @@ import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
 import { AppVersionDetails } from "~/features/sherlock/app-versions/view/app-version-details";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { useChartContext } from "~/routes/_layout.charts.$chartName";
 
@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new AppVersionsApi(SherlockConfiguration)
     .apiV2AppVersionsSelectorGet(
       { selector: `${params.chartName}/${params.appVersion}` },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

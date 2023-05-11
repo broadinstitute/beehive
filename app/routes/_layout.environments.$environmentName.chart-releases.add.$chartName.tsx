@@ -25,7 +25,7 @@ import { ChartReleaseCreatableEnvironmentFields } from "~/features/sherlock/char
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { ChartReleaseEditableFields } from "~/features/sherlock/chart-releases/edit/chart-release-editable-fields";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -63,11 +63,11 @@ export async function loader({ request, params }: LoaderArgs) {
     new ChartsApi(SherlockConfiguration)
       .apiV2ChartsSelectorGet(
         { selector: params.chartName || "" },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesGet({ chart: params.chartName }, forwardIAP(request))
+      .apiV2ChartReleasesGet({ chart: params.chartName }, handleIAP(request))
       .then(
         (chartReleases) =>
           Array.from(
@@ -81,13 +81,13 @@ export async function loader({ request, params }: LoaderArgs) {
     new AppVersionsApi(SherlockConfiguration)
       .apiV2AppVersionsGet(
         { chart: params.chartName, limit: 25 },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
       .apiV2ChartVersionsGet(
         { chart: params.chartName, limit: 25 },
-        forwardIAP(request)
+        handleIAP(request)
       )
       .catch(errorResponseThrower),
   ]);
@@ -110,7 +110,7 @@ export async function action({ request, params }: ActionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesPost(
       { chartRelease: chartReleaseRequest },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(async (chartRelease) => {
       if (chartRelease.environmentInfo?.lifecycle === "dynamic") {

@@ -25,7 +25,7 @@ import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-rel
 import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
@@ -59,7 +59,7 @@ export async function loader({ request }: LoaderArgs) {
   return Promise.all(
     changesetIDs.map(async (id) => {
       const changeset = await changesetsApi
-        .apiV2ChangesetsSelectorGet({ selector: id }, forwardIAP(request))
+        .apiV2ChangesetsSelectorGet({ selector: id }, handleIAP(request))
         .catch(errorResponseThrower);
       // We need two levels deep, not one like Sherlock gives us by default,
       // so we fill the chartReleaseInfo ourselves with a followup request.
@@ -68,7 +68,7 @@ export async function loader({ request }: LoaderArgs) {
           {
             selector: changeset.chartRelease || "",
           },
-          forwardIAP(request)
+          handleIAP(request)
         )
         .catch(errorResponseThrower);
       return changeset;
@@ -87,7 +87,7 @@ export async function action({ request }: ActionArgs) {
           .getAll("changeset")
           .filter((value): value is string => typeof value === "string"),
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(async () => {
       if (

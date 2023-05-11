@@ -9,7 +9,7 @@ import {
 } from "~/components/logic/csrf-token";
 import { ThemeDropdown } from "~/components/logic/theme";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { getSession, sessionFields } from "~/session.server";
@@ -33,10 +33,10 @@ export async function loader({ request }: LoaderArgs) {
   return defer({
     beehiveVersion: process.env.BUILD_VERSION || "development",
     sherlockVersionPromise: sherlock
-      .versionGet(forwardIAP(request))
+      .versionGet(handleIAP(request))
       .then((versionResponse) => versionResponse),
     mySherlockUserPromise: sherlock
-      .myUserGet(forwardIAP(request))
+      .myUserGet(handleIAP(request))
       .then((myUserResponse) => myUserResponse),
     myGitHubUserPromise: octokit.users
       .getAuthenticated()

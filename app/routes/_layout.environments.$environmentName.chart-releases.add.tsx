@@ -15,8 +15,8 @@ import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
@@ -43,13 +43,13 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     new ChartsApi(SherlockConfiguration)
-      .apiV2ChartsGet({}, forwardIAP(request))
+      .apiV2ChartsGet({}, handleIAP(request))
       .then((charts) => charts.sort(chartSorter), errorResponseThrower),
     // We don't actually need the clusters here, but loading them here and passing
     // them down through via context means we won't be loading them repeatedly on
     // the next page if the user is browsing charts to deploy by clicking on them.
     new ClustersApi(SherlockConfiguration)
-      .apiV2ClustersGet({}, forwardIAP(request))
+      .apiV2ClustersGet({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
   ]);
 }

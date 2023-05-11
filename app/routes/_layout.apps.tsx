@@ -18,7 +18,7 @@ import { matchChartRelease } from "~/features/sherlock/chart-releases/list/match
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { ListChartButtonText } from "~/features/sherlock/charts/list/list-chart-button-text";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 
@@ -33,7 +33,7 @@ export const meta: V2_MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderArgs) {
-  const forwardedIAP = forwardIAP(request);
+  const forwardedIAP = handleIAP(request);
   return json(
     await promiseHash({
       chartReleases: new ChartReleasesApi(SherlockConfiguration)

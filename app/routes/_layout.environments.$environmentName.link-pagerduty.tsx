@@ -18,7 +18,7 @@ import {
 import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -46,7 +46,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     new PagerdutyIntegrationsApi(SherlockConfiguration)
-      .apiV2PagerdutyIntegrationsGet({}, forwardIAP(request))
+      .apiV2PagerdutyIntegrationsGet({}, handleIAP(request))
       .catch(errorResponseThrower),
     getPdAppIdFromEnv(),
   ]);
@@ -66,7 +66,7 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.environmentName || "",
         environment: environmentRequest,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (environment) => redirect(`/environments/${environment.name}`),

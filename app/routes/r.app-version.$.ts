@@ -2,15 +2,15 @@ import { LoaderArgs, redirect } from "@remix-run/node";
 import { AppVersionsApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export async function loader({ request, params }: LoaderArgs) {
   return new AppVersionsApi(SherlockConfiguration)
     .apiV2AppVersionsSelectorGet(
       { selector: params["*"] || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(
       (appVersion) =>

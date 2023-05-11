@@ -27,7 +27,7 @@ import { EnvironmentAdvancedCreatableFields } from "~/features/sherlock/environm
 import { EnvironmentCreatableFields } from "~/features/sherlock/environments/new/environment-creatable-fields";
 import { EnvironmentScheduleFields } from "~/features/sherlock/environments/offline/environment-schedule-fields";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
@@ -63,10 +63,10 @@ export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     selfUserEmail,
     new ClustersApi(SherlockConfiguration)
-      .apiV2ClustersGet({}, forwardIAP(request))
+      .apiV2ClustersGet({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
     new UsersApi(SherlockConfiguration)
-      .apiV2UsersGet({}, forwardIAP(request))
+      .apiV2UsersGet({}, handleIAP(request))
       .then(
         (users) => users.sort(makeUserSorter(selfUserEmail)),
         errorResponseThrower
@@ -111,7 +111,7 @@ export async function action({ request }: ActionArgs) {
   return new EnvironmentsApi(SherlockConfiguration)
     .apiV2EnvironmentsPost(
       { environment: environmentRequest },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .then(async (environment) => {
       if (

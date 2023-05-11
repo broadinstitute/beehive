@@ -15,7 +15,7 @@ import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { ClusterEditableFields } from "~/features/sherlock/clusters/edit/cluster-editable-fields";
 import { ClusterCreatableFields } from "~/features/sherlock/clusters/new/cluster-creatable-fields";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -41,7 +41,7 @@ export async function action({ request }: ActionArgs) {
   };
 
   return new ClustersApi(SherlockConfiguration)
-    .apiV2ClustersPost({ cluster: clusterRequest }, forwardIAP(request))
+    .apiV2ClustersPost({ cluster: clusterRequest }, handleIAP(request))
     .then(
       (cluster) => redirect(`/clusters/${cluster.name}`),
       makeErrorResponseReturner(clusterRequest)

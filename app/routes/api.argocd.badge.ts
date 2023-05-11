@@ -1,6 +1,6 @@
 import { json, LoaderArgs } from "@remix-run/node";
 import https from "https";
-import { forwardIAP } from "~/features/sherlock/sherlock.server";
+import { handleIAP } from "~/features/sherlock/sherlock.server";
 
 // IAP pass-through to ArgoCD's /badge endpoint. This endpoint on ArgoCD doesn't
 // require any authentication, but we wrap it in IAP so we actually do still
@@ -20,7 +20,7 @@ export async function loader({ request }: LoaderArgs) {
       "https://ap-argocd.dsp-devops.broadinstitute.org"
     }/api/badge?name=${new URL(request.url).searchParams.get("name")}`,
     {
-      ...forwardIAP(request),
+      ...handleIAP(request),
       // We don't do TLS hostname validation when the hostname is in the
       // same cluster and is using TLS.
       // @ts-expect-error

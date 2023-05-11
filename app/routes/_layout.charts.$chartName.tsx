@@ -14,8 +14,8 @@ import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { ChartDetails } from "~/features/sherlock/charts/view/chart-details";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -32,7 +32,7 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ChartsApi(SherlockConfiguration)
     .apiV2ChartsSelectorGet(
       { selector: params.chartName || "" },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

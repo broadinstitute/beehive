@@ -25,7 +25,7 @@ import { SonarCloudLinkChip } from "~/features/sherlock/charts/chart-link-chip";
 import { AppPopoverContents } from "~/features/sherlock/charts/view/app-popover-contents";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { panelSizeToInnerClassName } from "~/helpers/panel-size";
@@ -45,7 +45,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  const forwardedIAP = forwardIAP(request);
+  const forwardedIAP = handleIAP(request);
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
   return json(
     await promiseHash({

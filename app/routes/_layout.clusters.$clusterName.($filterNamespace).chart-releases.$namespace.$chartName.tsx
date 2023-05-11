@@ -15,8 +15,8 @@ import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-rel
 import { ChartReleaseDetails } from "~/features/sherlock/chart-releases/view/chart-release-details";
 import { EnvironmentOfflineIcon } from "~/features/sherlock/environments/offline/environment-offline-icon";
 import {
-  forwardIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -41,7 +41,7 @@ export async function loader({ request, params }: LoaderArgs) {
       {
         selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
       },
-      forwardIAP(request)
+      handleIAP(request)
     )
     .catch(errorResponseThrower);
 }

@@ -12,7 +12,7 @@ import { SelfUserContext } from "~/contexts";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import {
-  forwardIAP,
+  handleIAP,
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { commitSession, getSession, sessionFields } from "~/session.server";
@@ -25,7 +25,7 @@ export async function loader({ request }: LoaderArgs) {
     session.get(sessionFields.flashNotifications) || null;
 
   const selfUser = await new UsersApi(SherlockConfiguration)
-    .apiV2ProceduresUsersMeGet(forwardIAP(request))
+    .apiV2ProceduresUsersMeGet(handleIAP(request))
     .catch(errorResponseThrower);
 
   return json(
