@@ -17,6 +17,7 @@
 You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up. You may want to dump a copy of Sherlock's database into your local one to have some data to play with.
 
 > **Note**
+>
 > If you don't want to run a local Sherlock but you have a copy of Thelma, you can run Beehive against Sherlock's dev instance like this:
 >
 > ```bash
@@ -24,6 +25,7 @@ You'll probably want a local instance of Sherlock running -- `make local-up` fro
 > ```
 
 > **Warning**
+>
 > If you want to do the above but against Sherlock's prod instance (careful!):
 >
 > ```bash
