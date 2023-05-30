@@ -52,14 +52,11 @@ export async function action({ request, params }: ActionArgs) {
           "sync your BEE"
         );
       }
-      return redirect(
-        `/environments/${params.environmentName}/chart-releases`,
-        {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
+      return redirect(`/charts/${params.chartName}/chart-releases`, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
     }, makeErrorResponseReturner());
 }
 
