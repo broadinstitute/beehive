@@ -53,7 +53,7 @@ export async function action({ request, params }: ActionArgs) {
         );
       }
       return redirect(
-        `/environments/${params.environmentName}/chart-releases`,
+        `/charts/${params.chartName}/chart-releases/${params.chartReleaseName}`,
         {
           headers: {
             "Set-Cookie": await commitSession(session),
