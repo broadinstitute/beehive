@@ -533,7 +533,7 @@ export const ChangesetEntry: React.FunctionComponent<{
         </div>
       )}
       {(changeset.supersededAt || changeset.appliedAt) && (
-        <div className="flex flex-row justify-between items-end pt-4">
+        <div className="flex flex-col laptop:flex-row gap-2 justify-between items-end pt-4">
           {changeset.supersededAt && (
             <h1 className="text-2xl font-light">
               This proposed change is out of date as of{" "}
