@@ -14,10 +14,10 @@ export const EnvironmentOfflineIcon: React.FunctionComponent<{
 
   const fetcher = useFetcher();
   useEffect(() => {
-    if (fetcher.type === "done") {
+    if (fetcher.state === "idle" && fetcher.data != null) {
       onOpenChange(false);
     }
-  }, [fetcher.type]);
+  }, [fetcher.state, fetcher.data]);
 
   return (
     <Popover

@@ -1,8 +1,6 @@
-import { ActionArgs } from "@remix-run/node";
-import {
-  EnvironmentsApi,
-  V2controllersEnvironment,
-} from "@sherlock-js-client/sherlock";
+import type { ActionArgs } from "@remix-run/node";
+import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { json } from "react-router";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { runGha } from "~/features/github/run-gha";

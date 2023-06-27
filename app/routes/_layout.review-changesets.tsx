@@ -130,7 +130,7 @@ export default function Route() {
   const changesets = useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const [searchParams] = useSearchParams();
-  let returnURL: string = "";
+  let returnURL = "";
   ((value) => {
     if (value) {
       returnURL = decodeURIComponent(value);
@@ -143,7 +143,9 @@ export default function Route() {
     ? ChartReleaseColors
     : returnURL.includes("clusters")
     ? ClusterColors
-    : EnvironmentColors;
+    : returnURL.includes("environments")
+    ? EnvironmentColors
+    : ChartReleaseColors;
 
   const [filterText, setFilterText] = useState("");
   const [actionToRun, setActionToRun] = useState("sync");
