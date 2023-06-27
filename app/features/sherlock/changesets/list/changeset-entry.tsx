@@ -13,6 +13,7 @@ import {
   NamespaceLinkChip,
 } from "../../clusters/cluster-link-chip";
 import { EnvironmentLinkChip } from "../../environments/environment-link-chip";
+import { ChangsetRecreateButton } from "../recreate/changeset-recreate-button";
 
 export const ChangesetEntry: React.FunctionComponent<{
   size?: PanelSize;
@@ -532,7 +533,7 @@ export const ChangesetEntry: React.FunctionComponent<{
         </div>
       )}
       {(changeset.supersededAt || changeset.appliedAt) && (
-        <div className="flex flex-col items-start pt-4">
+        <div className="flex flex-row justify-between items-end pt-4">
           {changeset.supersededAt && (
             <h1 className="text-2xl font-light">
               This proposed change is out of date as of{" "}
@@ -540,10 +541,22 @@ export const ChangesetEntry: React.FunctionComponent<{
             </h1>
           )}
           {changeset.appliedAt && (
-            <h1 className="text-2xl font-light">
-              Applied at <PrettyPrintTime time={changeset.appliedAt} /> (local
-              time)
-            </h1>
+            <>
+              <h1 className="text-2xl font-light">
+                Applied at <PrettyPrintTime time={changeset.appliedAt} /> (local
+                time)
+              </h1>
+              {(changeset.chartReleaseInfo?.appVersionExact !=
+                changeset.toAppVersionExact ||
+                changeset.chartReleaseInfo?.chartVersionExact !=
+                  changeset.toChartVersionExact ||
+                changeset.chartReleaseInfo?.helmfileRef !=
+                  changeset.toHelmfileRef ||
+                changeset.chartReleaseInfo?.firecloudDevelopRef !=
+                  changeset.toFirecloudDevelopRef) && (
+                <ChangsetRecreateButton changeset={changeset} />
+              )}
+            </>
           )}
         </div>
       )}
