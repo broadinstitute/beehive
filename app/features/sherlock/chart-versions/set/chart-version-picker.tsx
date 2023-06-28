@@ -95,9 +95,13 @@ export const ChartVersionPicker: React.FunctionComponent<
         {chartVersionResolver === "exact" && (
           <label>
             <h2 className="font-light text-2xl">Set Exact Version</h2>
-            <p>
+            <p className="mb-2">
               An exact value will always persist until explicitly changed. It
               won't be affected by refreshes.
+            </p>
+            <p>
+              This must be the semver version of a published chart. You should
+              be able to find it in the list on the right.
             </p>
             <TextField
               name={
@@ -105,6 +109,7 @@ export const ChartVersionPicker: React.FunctionComponent<
                   ? "toChartVersionExact"
                   : "chartVersionExact"
               }
+              pattern="\d+\.\d+.\d+.*"
               value={chartVersionExact}
               onChange={(e) => {
                 setChartVersionExact(e.currentTarget.value);
