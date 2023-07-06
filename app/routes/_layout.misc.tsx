@@ -1,7 +1,8 @@
 import { Octokit } from "@octokit/rest";
-import { defer, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { defer } from "@remix-run/node";
 import { Await, Link, NavLink, useLoaderData } from "@remix-run/react";
-import { MiscApi } from "@sherlock-js-client/sherlock";
+import { MiscApi, UsersApi } from "@sherlock-js-client/sherlock";
 import { Suspense } from "react";
 import {
   CsrfTokenContext,
@@ -9,8 +10,8 @@ import {
 } from "~/components/logic/csrf-token";
 import { ThemeDropdown } from "~/components/logic/theme";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { getSession, sessionFields } from "~/session.server";
 
@@ -27,6 +28,7 @@ export const meta: V2_MetaFunction = () => [
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const sherlock = new MiscApi(SherlockConfiguration);
+  const sherlockUsers = new UsersApi(SherlockConfiguration);
   const octokit = new Octokit({
     auth: session.get(sessionFields.githubAccessToken),
   });
@@ -35,9 +37,9 @@ export async function loader({ request }: LoaderArgs) {
     sherlockVersionPromise: sherlock
       .versionGet(handleIAP(request))
       .then((versionResponse) => versionResponse),
-    mySherlockUserPromise: sherlock
-      .myUserGet(handleIAP(request))
-      .then((myUserResponse) => myUserResponse),
+    mySherlockUserPromise: sherlockUsers.apiV2ProceduresUsersMeGet(
+      handleIAP(request)
+    ),
     myGitHubUserPromise: octokit.users
       .getAuthenticated()
       .then((response) => response.data),
@@ -93,9 +95,8 @@ export default function Route() {
           errorElement={<p>Error loading Sherlock user info!</p>}
         >
           {(mySherlockUser) => (
-            <p title={JSON.stringify(mySherlockUser.rawInfo, null, 2)}>
+            <p>
               You are <span className="font-mono"> {mySherlockUser.email}</span>
-              ; {mySherlockUser.suitability}
             </p>
           )}
         </Await>
