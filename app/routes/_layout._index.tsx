@@ -93,7 +93,7 @@ export default function Route() {
         </NavLink>
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/r" prefetch="intent">
-          Redirects
+          Short-Links
         </NavLink>
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/misc" prefetch="intent">
