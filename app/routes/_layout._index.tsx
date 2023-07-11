@@ -92,6 +92,10 @@ export default function Route() {
           Charts
         </NavLink>
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
+        <NavLink to="/r" prefetch="intent">
+          Redirects
+        </NavLink>
+        <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/misc" prefetch="intent">
           Misc
         </NavLink>

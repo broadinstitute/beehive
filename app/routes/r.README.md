@@ -11,3 +11,5 @@ There's also a special `/r/git/$selector` that redirects to the app image GitHub
 There's also a special `/r/endpoint/$selector` that redirects to the endpoint for a given chart instance.
 
 There's also a special `/r/user/$selector` that attempts to resolve the User selector and falls back to a simple search over all users.
+
+It's helpful to use these with the `broad.io/beehive` shortlink, like `broad.io/beehive/r/environment/prod`.
