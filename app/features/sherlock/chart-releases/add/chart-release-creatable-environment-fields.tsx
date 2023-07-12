@@ -28,7 +28,7 @@ export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<
         <h2 className="font-light text-2xl">Name</h2>
         <p>
           This name should be globally unique for our tooling to work correctly.
-          The default below is will work but you can change it if you like.
+          The default below will work but you can change it if you like.
         </p>
         <TextField
           name="name"
