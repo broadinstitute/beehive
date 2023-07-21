@@ -293,15 +293,7 @@ const CiRunResourceLoadedWidget: React.FunctionComponent<{
                 ↗
               </a>
               <span>
-                {ciRun.terminalAt ? (
-                  <>
-                    Finished at <PrettyPrintTime time={ciRun.terminalAt} />
-                  </>
-                ) : (
-                  <>
-                    Started at <PrettyPrintTime time={ciRun.startedAt} />
-                  </>
-                )}
+                Started at <PrettyPrintTime time={ciRun.startedAt} />
                 {ciRun.githubActionsAttemptNumber &&
                 ciRun.githubActionsAttemptNumber > 1
                   ? ` • Attempt ${ciRun.githubActionsAttemptNumber}`
