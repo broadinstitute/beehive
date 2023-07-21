@@ -1,13 +1,15 @@
-import { SerializeFrom } from "@remix-run/node";
+import type { SerializeFrom } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { V2controllersChangeset } from "@sherlock-js-client/sherlock";
+import type { V2controllersChangeset } from "@sherlock-js-client/sherlock";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 import { ChartLinkChip } from "../../charts/chart-link-chip";
+import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import {
   ClusterLinkChip,
   NamespaceLinkChip,
@@ -87,7 +89,7 @@ export const ChangesetEntry: React.FunctionComponent<{
         changeset.chartReleaseInfo?.cluster === "terra-prod"
       }
       className={`relative h-fit ${panelSizeToInnerClassName(
-        size
+        size,
       )} bg-color-near-bg rounded-2xl shadow-md border-2 ${
         ChartReleaseColors.borderClassName
       } flex flex-col gap-2 px-6 py-4 text-color-body-text`}
@@ -157,6 +159,14 @@ export const ChangesetEntry: React.FunctionComponent<{
             )}
         </div>
       )}
+      {changeset.appliedAt && (
+        <CiRunResourceStatusWidget
+          ciIdentifier={
+            changeset.ciIdentifier?.id || `changeset/${changeset.id}`
+          }
+          poll={false}
+        />
+      )}
       {minimized || (
         <div
           className={`overflow-x-auto grid grid-cols-2 pt-2 gap-y-1 gap-x-4 ${
@@ -201,7 +211,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                     <p>
                       {`From commit ${changeset.fromAppVersionCommit.substring(
                         0,
-                        7
+                        7,
                       )} to ${changeset.toAppVersionCommit.substring(0, 7)}`}
                       {changeset.chartReleaseInfo?.chartInfo
                         ?.appImageGitRepo && (
@@ -211,6 +221,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                             href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/compare/${changeset.fromAppVersionCommit}...${changeset.toAppVersionCommit}`}
                             className="underline decoration-color-link-underline"
                             target="_blank"
+                            rel="noreferrer"
                           >
                             git diff ↗
                           </a>
@@ -246,6 +257,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                                 href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/commit/${appVersion.gitCommit}`}
                                 target="_blank"
                                 className="underline decoration-color-link-underline"
+                                rel="noreferrer"
                               >
                                 {`${appVersion.gitCommit?.substring(0, 7)} ↗`}
                               </a>
@@ -370,6 +382,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                       href={`https://github.com/broadinstitute/firecloud-develop/compare/${changeset.fromFirecloudDevelopRef}...${changeset.toFirecloudDevelopRef}`}
                       target="_blank"
                       className="underline decoration-color-link-underline"
+                      rel="noreferrer"
                     >
                       git diff ↗
                     </a>
@@ -407,6 +420,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                     href={`https://github.com/broadinstitute/terra-helmfile/compare/charts/${changeset.chartReleaseInfo.chart}-${changeset.fromChartVersionExact}...charts/${changeset.chartReleaseInfo.chart}-${changeset.toChartVersionExact}`}
                     className="underline decoration-color-link-underline"
                     target="_blank"
+                    rel="noreferrer"
                   >
                     git diff ↗
                   </a>
@@ -523,6 +537,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                   href={`https://github.com/broadinstitute/terra-helmfile/compare/${changeset.fromHelmfileRef}...${changeset.toHelmfileRef}`}
                   target="_blank"
                   className="underline decoration-color-link-underline"
+                  rel="noreferrer"
                 >
                   git diff ↗
                 </a>

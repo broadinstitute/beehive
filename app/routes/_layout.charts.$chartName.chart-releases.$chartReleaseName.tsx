@@ -1,12 +1,20 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import type {
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from "@remix-run/node";
+import { defer } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
+import {
+  ChartReleasesApi,
+  CiIdentifiersApi,
+} from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ProdFlag } from "~/components/layout/prod-flag";
 import { ItemDetails } from "~/components/panel-structures/item-details";
@@ -38,20 +46,33 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesSelectorGet(
-      {
-        selector: params.chartReleaseName || "",
-      },
-      handleIAP(request)
-    )
-    .catch(errorResponseThrower);
+  return defer({
+    ciRuns: new CiIdentifiersApi(SherlockConfiguration)
+      .apiCiIdentifiersV3SelectorGet(
+        {
+          selector: `chart-release/${params.chartReleaseName}`,
+        },
+        handleIAP(request),
+      )
+      .then(
+        (ciIdentifier) => ciIdentifier.ciRuns,
+        () => [],
+      ),
+    chartRelease: await new ChartReleasesApi(SherlockConfiguration)
+      .apiV2ChartReleasesSelectorGet(
+        {
+          selector: params.chartReleaseName || "",
+        },
+        handleIAP(request),
+      )
+      .catch(errorResponseThrower),
+  });
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const chartRelease = useLoaderData<typeof loader>();
+  const { chartRelease, ciRuns } = useLoaderData<typeof loader>();
   const prod =
     chartRelease.environment === "prod" ||
     chartRelease.cluster === "terra-prod";
@@ -77,6 +98,7 @@ export default function Route() {
           {prod && <ProdWarning name={chartRelease.name || ""} />}
           <ChartReleaseDetails
             chartRelease={chartRelease}
+            initialCiRuns={ciRuns}
             toChangeVersions="./change-versions"
             toVersionHistory="./applied-changesets"
             toEdit="./edit"
@@ -96,5 +118,5 @@ export default function Route() {
 }
 
 export const useChartChartReleaseContext = useOutletContext<{
-  chartRelease: SerializeFrom<typeof loader>;
+  chartRelease: SerializeFrom<typeof loader>["chartRelease"];
 }>;

@@ -1,19 +1,18 @@
 import useResizeObserver from "@react-hook/resize-observer";
-import { json, LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { UsersApi } from "@sherlock-js-client/sherlock";
 import { useEffect, useRef, useState } from "react";
 import { Header } from "~/components/layout/header";
-import {
-  Notification,
-  NotificationComponent,
-} from "~/components/logic/notification";
+import type { Notification } from "~/components/logic/notification";
+import { NotificationComponent } from "~/components/logic/notification";
 import { SelfUserContext } from "~/contexts";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { commitSession, getSession, sessionFields } from "~/session.server";
 
@@ -39,7 +38,7 @@ export async function loader({ request }: LoaderArgs) {
             "Set-Cookie": await commitSession(session),
           },
         }
-      : {}
+      : {},
   );
 }
 
@@ -60,7 +59,7 @@ const LayoutRoute: React.FunctionComponent = () => {
 
   const { flashNotifications, selfUser } = useLoaderData<typeof loader>();
   const [notifications, setNotifications] = useState(
-    new Map<string, null | Notification>()
+    new Map<string, null | Notification>(),
   );
   useEffect(() => {
     if (flashNotifications !== null) {
@@ -72,9 +71,9 @@ const LayoutRoute: React.FunctionComponent = () => {
               flashNotifications.map((notification): [string, Notification] => [
                 new Date().toISOString(),
                 notification,
-              ])
+              ]),
             ),
-          ])
+          ]),
       );
     }
   }, [flashNotifications]);
@@ -91,11 +90,11 @@ const LayoutRoute: React.FunctionComponent = () => {
                 notification={notification}
                 close={() => {
                   setNotifications(
-                    (previous) => new Map([...previous, [key, null]])
+                    (previous) => new Map([...previous, [key, null]]),
                   );
                 }}
               />
-            )
+            ),
         )}
       </div>
       <div

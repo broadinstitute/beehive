@@ -1,8 +1,9 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
 import { AppVersionSummary } from "../../app-versions/view/app-version-summary";
 import { ChartVersionSummary } from "../../chart-versions/view/chart-version-summary";
 import { ChartLinkChip } from "../../charts/chart-link-chip";
+import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import {
   ClusterLinkChip,
   NamespaceLinkChip,
@@ -17,6 +18,9 @@ export interface ChartReleaseDetailsProps {
   chartRelease:
     | V2controllersChartRelease
     | SerializeFrom<V2controllersChartRelease>;
+  initialCiRuns?: React.ComponentProps<
+    typeof CiRunResourceStatusWidget
+  >["initialCiRuns"];
   toChangeVersions?: string;
   toVersionHistory?: string;
   toEdit?: string;
@@ -30,6 +34,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
   ChartReleaseDetailsProps
 > = ({
   chartRelease,
+  initialCiRuns,
   toChangeVersions,
   toVersionHistory,
   toEdit,
@@ -73,6 +78,12 @@ export const ChartReleaseDetails: React.FunctionComponent<
           )}
       </div>
     )}
+    <CiRunResourceStatusWidget
+      ciIdentifier={
+        chartRelease.ciIdentifier?.id || `chart-release/${chartRelease.id}`
+      }
+      initialCiRuns={initialCiRuns}
+    />
     {chartRelease.appVersionResolver &&
       chartRelease.appVersionResolver != "none" && (
         <AppVersionSummary
@@ -113,6 +124,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
                 href={`https://kibana.bee.envs-terra.bio/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-60m,to:now))&_a=(columns:!(message,kubernetes.deployment.name),filters:!(),index:filebeat-data-view,interval:auto,query:(language:kuery,query:'kubernetes.namespace:%22${chartRelease.environmentInfo.defaultNamespace}%22%20and%20kubernetes.labels.app_kubernetes_io%2Fname:%22${chartRelease.chart}%22'),sort:!(!('@timestamp',desc)))`}
                 target="_blank"
                 className="underline decoration-color-link-underline w-fit"
+                rel="noreferrer"
               >
                 <b className="font-medium">New!</b> View Logs in Kibana ↗
               </a>
@@ -121,6 +133,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
             href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications/ap-argocd/${chartRelease.name}`}
             target="_blank"
             className="underline decoration-color-link-underline w-fit"
+            rel="noreferrer"
           >
             View in Argo CD ↗
           </a>

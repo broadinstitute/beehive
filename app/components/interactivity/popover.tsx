@@ -1,3 +1,4 @@
+import type { Placement } from "@floating-ui/react";
 import {
   arrow,
   autoUpdate,
@@ -5,7 +6,6 @@ import {
   FloatingFocusManager,
   limitShift,
   offset,
-  Placement,
   shift,
   useClick,
   useDismiss,
@@ -14,8 +14,9 @@ import {
   useRole,
 } from "@floating-ui/react";
 import { useRef } from "react";
-import { ColorProps } from "~/features/color-class-names";
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import type { ColorProps } from "~/features/color-class-names";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 
 export type PopoverProps = {
   open: boolean;
@@ -23,7 +24,7 @@ export type PopoverProps = {
   openButton: (
     // The render prop should handle these arguments like `ref={ref} {...props()}`
     ref: React.Ref<HTMLButtonElement>,
-    props: ReturnType<typeof useInteractions>["getReferenceProps"]
+    props: ReturnType<typeof useInteractions>["getReferenceProps"],
   ) => React.ReactNode;
   initialPlacement?: Placement;
   size?: PanelSize;
@@ -140,6 +141,7 @@ export const Popover: React.FunctionComponent<PopoverProps> = ({
               position: strategy,
               top: y ?? 0,
               left: x ?? 0,
+              margin: 0,
             }}
             // The getProps functions returned by Floating UI accept some basic props that
             // they'll merge with their additions.
@@ -161,7 +163,7 @@ export const Popover: React.FunctionComponent<PopoverProps> = ({
             <div
               className={
                 `overflow-x-clip overflow-y-auto max-h-[95svh] flex flex-col gap-4 p-6 ${panelSizeToInnerClassName(
-                  size
+                  size,
                 )} bg-color-nearest-bg rounded-2xl border-4 ${
                   colors.borderClassName
                 } ` +

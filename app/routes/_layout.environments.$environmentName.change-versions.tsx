@@ -36,7 +36,7 @@ import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
 import {
   errorResponseThrower,
-  isReturnedErrorInfo,
+  isReturnedFormErrorInfo,
   makeErrorResponseReturner,
 } from "../errors/helpers/error-response-handlers";
 import { chartReleaseSorter } from "../features/sherlock/chart-releases/list/chart-release-sorter";
@@ -67,16 +67,16 @@ export async function loader({ request, params }: LoaderArgs) {
       .apiV2EnvironmentsGet({}, handleIAP(request))
       .then(
         (environments) => environments.sort(environmentSorter),
-        errorResponseThrower
+        errorResponseThrower,
       ),
     new ChartReleasesApi(SherlockConfiguration)
       .apiV2ChartReleasesGet(
         { environment: params.environmentName },
-        handleIAP(request)
+        handleIAP(request),
       )
       .then(
         (chartReleases) => chartReleases.sort(chartReleaseSorter),
-        errorResponseThrower
+        errorResponseThrower,
       ),
     preconfiguredOtherEnvironment,
   ]);
@@ -87,10 +87,10 @@ export async function action({ request, params }: ActionArgs) {
 
   const formData = await request.formData();
   const useExactVersionsFromOtherEnvironment = formData.get(
-    "useExactVersionsFromOtherEnvironment"
+    "useExactVersionsFromOtherEnvironment",
   );
   const followVersionsFromOtherEnvironment = formData.get(
-    "followVersionsFromOtherEnvironment"
+    "followVersionsFromOtherEnvironment",
   );
   const changesetRequest: V2controllersChangesetPlanRequestEnvironmentEntry = {
     environment: params.environmentName,
@@ -119,7 +119,7 @@ export async function action({ request, params }: ActionArgs) {
           environments: [changesetRequest],
         },
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (changesets) =>
@@ -128,12 +128,12 @@ export async function action({ request, params }: ActionArgs) {
               `/review-changesets?${[
                 ...changesets.map((c) => `changeset=${c.id}`),
                 `return=${encodeURIComponent(
-                  `/environments/${params.environmentName}/chart-releases`
+                  `/environments/${params.environmentName}/chart-releases`,
                 )}`,
-              ].join("&")}`
+              ].join("&")}`,
             )
           : json({ formState: changesetRequest }),
-      makeErrorResponseReturner(changesetRequest)
+      makeErrorResponseReturner(changesetRequest),
     );
 }
 
@@ -146,7 +146,7 @@ export default function Route() {
   const { environment } = useEnvironmentContext();
   const actionData = useActionData<typeof action>();
   const errorSummary =
-    actionData && isReturnedErrorInfo(actionData)
+    actionData && isReturnedFormErrorInfo(actionData)
       ? actionData.errorSummary
       : undefined;
   const formState = actionData?.formState;
@@ -154,7 +154,7 @@ export default function Route() {
   const [otherEnvironment, setOtherEnvironment] = useState(
     formState?.useExactVersionsFromOtherEnvironment ||
       preconfiguredOtherEnvironment ||
-      ""
+      "",
   );
   const [otherEnvironmentBehavior, setOtherEnvironmentBehavior] =
     useState("exact");
@@ -165,12 +165,12 @@ export default function Route() {
         chartRelease.includedInBulkChangesets === undefined
           ? true
           : chartRelease.includedInBulkChangesets,
-      ])
-    )
+      ]),
+    ),
   );
 
   const [sidebar, setSidebar] = useState<ChangeEnvironmentVersionsSidebarModes>(
-    "select included charts"
+    "select included charts",
   );
 
   return (
@@ -281,7 +281,7 @@ export default function Route() {
             the list, it won't be affected at all.
           </p>
           {chartReleases.find(
-            (chartRelease) => chartRelease.includedInBulkChangesets === false
+            (chartRelease) => chartRelease.includedInBulkChangesets === false,
           ) !== undefined && (
             <p>
               <b className="font-bold">

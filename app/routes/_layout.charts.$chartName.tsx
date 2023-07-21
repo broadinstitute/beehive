@@ -1,4 +1,9 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import {
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+  defer,
+} from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -6,7 +11,7 @@ import {
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { ChartsApi } from "@sherlock-js-client/sherlock";
+import { ChartsApi, CiIdentifiersApi } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -29,18 +34,31 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsSelectorGet(
-      { selector: params.chartName || "" },
-      handleIAP(request)
-    )
-    .catch(errorResponseThrower);
+  return defer({
+    ciRuns: new CiIdentifiersApi(SherlockConfiguration)
+      .apiCiIdentifiersV3SelectorGet(
+        {
+          selector: `chart/${params.chartName}`,
+        },
+        handleIAP(request),
+      )
+      .then(
+        (ciIdentifier) => ciIdentifier.ciRuns,
+        () => [],
+      ),
+    chart: await new ChartsApi(SherlockConfiguration)
+      .apiV2ChartsSelectorGet(
+        { selector: params.chartName || "" },
+        handleIAP(request),
+      )
+      .catch(errorResponseThrower),
+  });
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const chart = useLoaderData<typeof loader>();
+  const { chart, ciRuns } = useLoaderData<typeof loader>();
   return (
     <>
       <OutsetPanel {...ChartColors}>
@@ -50,6 +68,7 @@ export default function Route() {
         >
           <ChartDetails
             chart={chart}
+            initialCiRuns={ciRuns}
             toChartVersions="./chart-versions"
             toAppVersions="./app-versions"
             toChartReleases="./chart-releases"
@@ -64,5 +83,5 @@ export default function Route() {
 }
 
 export const useChartContext = useOutletContext<{
-  chart: SerializeFrom<typeof loader>;
+  chart: SerializeFrom<typeof loader>["chart"];
 }>;

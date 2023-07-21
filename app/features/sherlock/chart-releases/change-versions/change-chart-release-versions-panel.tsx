@@ -12,8 +12,8 @@ import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
 import {
-  isReturnedErrorInfo,
   ReturnedErrorInfo,
+  isReturnedFormErrorInfo,
 } from "~/errors/helpers/error-response-handlers";
 import { ChartReleaseChangeVersionHelpCopy } from "~/features/sherlock/chart-releases/change-versions/chart-release-change-version-help-copy";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
@@ -50,12 +50,12 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
   actionData,
 }) => {
   const errorSummary =
-    actionData && isReturnedErrorInfo(actionData)
+    actionData && isReturnedFormErrorInfo(actionData)
       ? actionData.errorSummary
       : undefined;
   const formState = actionData?.formState;
   const preconfiguredVersions = Boolean(
-    preconfiguredAppVersionExact || preconfiguredChartVersionExact
+    preconfiguredAppVersionExact || preconfiguredChartVersionExact,
   );
 
   const {
@@ -72,7 +72,7 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
     formState?.useExactVersionsFromOtherChartRelease ||
       (preconfiguredOtherEnvironment
         ? `${preconfiguredOtherEnvironment}/${chartRelease.chart}`
-        : "")
+        : ""),
   );
 
   return (
