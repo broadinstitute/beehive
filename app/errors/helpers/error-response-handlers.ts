@@ -19,10 +19,10 @@ export interface ReturnedErrorInfo<T> {
 }
 
 export function makeErrorResponseReturner<T>(
-  formState?: T
+  formState?: T,
 ): (reason: any) => Promise<TypedResponse<ReturnedErrorInfo<T>>> {
   return async function (
-    reason: any
+    reason: any,
   ): Promise<TypedResponse<ReturnedErrorInfo<T>>> {
     if (reason instanceof ResponseError) {
       return json<ReturnedErrorInfo<T>>({
@@ -53,12 +53,16 @@ export function makeErrorResponseReturner<T>(
 //
 // (Yes, this seems simple--the function certainly is--but the types get super complex
 // and this pattern brings it back down to earth)
-export function isReturnedErrorInfo<T>(
+export function isReturnedFormErrorInfo<T>(
   data:
     | ReturnedErrorInfo<T>
     | {
         formState?: T;
-      }
+      },
 ): data is ReturnedErrorInfo<T> {
+  return data.hasOwnProperty("errorSummary");
+}
+
+export function isReturnedErrorInfo(data: any): data is ReturnedErrorInfo<any> {
   return data.hasOwnProperty("errorSummary");
 }

@@ -1,10 +1,11 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { TerraIcon } from "~/components/assets/terra-icon";
 import { ExternalNavButton } from "~/components/interactivity/external-nav-button";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
+import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import {
   ClusterLinkChip,
   NamespaceLinkChip,
@@ -19,6 +20,9 @@ export interface EnvironmentDetailsProps {
   environment:
     | V2controllersEnvironment
     | SerializeFrom<V2controllersEnvironment>;
+  initialCiRuns?: React.ComponentProps<
+    typeof CiRunResourceStatusWidget
+  >["initialCiRuns"];
   selfLinkChip?: boolean;
   linkChipArrows?: boolean;
   toTerraUI?: string | null;
@@ -35,6 +39,7 @@ export const EnvironmentDetails: React.FunctionComponent<
   EnvironmentDetailsProps
 > = ({
   environment,
+  initialCiRuns,
   selfLinkChip,
   linkChipArrows,
   toTerraUI,
@@ -88,6 +93,12 @@ export const EnvironmentDetails: React.FunctionComponent<
         )}
       </div>
       {environment.name === "prod" && <ProdWarning name={environment.name} />}
+      <CiRunResourceStatusWidget
+        ciIdentifier={
+          environment.ciIdentifier?.id || `environment/${environment.name}`
+        }
+        initialCiRuns={initialCiRuns}
+      />
       {toChartReleases && (
         <NavButton to={toChartReleases} {...ChartReleaseColors}>
           <h2>View Charts in This Environment</h2>
@@ -117,6 +128,7 @@ export const EnvironmentDetails: React.FunctionComponent<
               href={`https://kibana.bee.envs-terra.bio/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(message,kubernetes.deployment.name),filters:!(),index:filebeat-data-view,interval:auto,query:(language:kuery,query:'kubernetes.namespace:%22${environment.defaultNamespace}%22'),sort:!(!('@timestamp',desc)))`}
               target="_blank"
               className="underline decoration-color-link-underline w-fit"
+              rel="noreferrer"
             >
               <b className="font-medium">New!</b> View Logs in Kibana ↗
             </a>
@@ -125,6 +137,7 @@ export const EnvironmentDetails: React.FunctionComponent<
           href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications?namespace=${environment.defaultNamespace}`}
           target="_blank"
           className="underline decoration-color-link-underline w-fit"
+          rel="noreferrer"
         >
           View in Argo CD ↗
         </a>
@@ -135,6 +148,7 @@ export const EnvironmentDetails: React.FunctionComponent<
               href={`https://console.cloud.google.com/kubernetes/workload/overview?project=${environment.defaultClusterInfo.googleProject}&pageState=("savedViews":("c":%5B"gke%2Fus-central1-a%2F${environment.defaultCluster}"%5D,"n":%5B"${environment.defaultNamespace}"%5D))`}
               target="_blank"
               className="underline decoration-color-link-underline w-fit"
+              rel="noreferrer"
             >
               View in Google Cloud Platform ↗
             </a>
@@ -144,6 +158,7 @@ export const EnvironmentDetails: React.FunctionComponent<
             href={`https://grafana.dsp-devops.broadinstitute.org/d/Uh_BPk2Vz/v2-accelerate-metrics-per-environment?var-environment=${environment.name}`}
             target="_blank"
             className="underline decoration-color-link-underline w-fit"
+            rel="noreferrer"
           >
             View Accelerate Metrics in Grafana ↗
           </a>

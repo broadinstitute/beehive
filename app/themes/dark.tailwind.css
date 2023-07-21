@@ -35,6 +35,8 @@
     --color-app-version-border: 244 63 94; /* rose-500 */
     --color-chart-version-bg: 76 29 149; /* violet-900 */
     --color-chart-version-border: 139 92 246; /* violet-500 */
+    --color-ci-bg: 24 24 27; /* zinc-900 */
+    --color-ci-border: 212 212 216; /* zinc-300 */
     --color-misc-type-bg: 63 63 70; /* zinc-700 */
     --color-misc-type-border: 113 113 122; /* zinc-500 */
 
@@ -43,6 +45,11 @@
     --color-error-border: 248 113 113; /* red-400 */
 
     --color-beehive-logo: 234 179 8; /* yellow-500 */
+
+    --color-status-red: 239 68 68; /* red-500 */
+    --color-status-green: 74 222 128; /* green-400 */
+    --color-status-yellow: 251 191 36; /* amber-400 */
+    --color-status-gray: 212 212 216; /* zinc-300 */
   }
 
   /* light theme for prod */
@@ -78,6 +85,8 @@
     --color-app-version-border: 253 164 175; /* rose-300 */
     --color-chart-version-bg: 245 243 255; /* violet-50 */
     --color-chart-version-border: 196 181 253; /* violet-300 */
+    --color-ci-bg: 244 244 245; /* zinc-100 */
+    --color-ci-border: 63 63 70; /* zinc-700 */
     --color-misc-type-bg: 236 236 238; /* zinc-150ish */
     --color-misc-type-border: 212 212 216; /* zinc-300 */
 
@@ -86,5 +95,10 @@
     --color-error-button: 254 226 226; /* red-100 */
 
     --color-beehive-logo: 252 211 77; /* amber-300 */
+
+    --color-status-red: 220 38 38; /* red-600 */
+    --color-status-green: 21 128 61; /* green-700 */
+    --color-status-yellow: 245 158 11; /* amber-500 */
+    --color-status-gray: 82 82 91; /* zinc-500 */
   }
 }
