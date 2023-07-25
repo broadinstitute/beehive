@@ -11,4 +11,4 @@ This project isn't offered as an independent product and we only formally suppor
 
 ## Reporting a Vulnerability
 
-Please send information on any vulnerabilities to `security@firecloud.org`.
+Please send information on any vulnerabilities to `infosec@broadinstitute.org`.
