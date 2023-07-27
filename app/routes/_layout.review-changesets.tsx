@@ -1,9 +1,5 @@
-import {
-  ActionArgs,
-  LoaderArgs,
-  redirect,
-  V2_MetaFunction,
-} from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   useActionData,
   useLoaderData,
@@ -25,8 +21,8 @@ import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-rel
 import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
 import { commitSession } from "~/session.server";
