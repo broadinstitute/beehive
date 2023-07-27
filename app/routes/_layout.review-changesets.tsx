@@ -68,11 +68,11 @@ export async function loader({ request }: LoaderArgs) {
           {
             selector: changeset.chartRelease || "",
           },
-          handleIAP(request)
+          handleIAP(request),
         )
         .catch(errorResponseThrower);
       return changeset;
-    })
+    }),
   );
 }
 
@@ -87,7 +87,7 @@ export async function action({ request }: ActionArgs) {
           .getAll("changeset")
           .filter((value): value is string => typeof value === "string"),
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async () => {
       if (
@@ -107,10 +107,14 @@ export async function action({ request }: ActionArgs) {
                 .getAll("sync")
                 .filter((value): value is string => typeof value === "string")
                 .join(","),
+              "changeset-ids": formData
+                .getAll("sync-changeset")
+                .filter((value): value is string => typeof value === "string")
+                .join(","),
               "refresh-only": (formData.get("action") === "refresh").toString(),
             },
           },
-          "sync your changes"
+          "sync your changes",
         );
       }
       return redirect(
@@ -119,7 +123,7 @@ export async function action({ request }: ActionArgs) {
           headers: {
             "Set-Cookie": await commitSession(session),
           },
-        }
+        },
       );
     }, makeErrorResponseReturner());
 }
@@ -153,9 +157,12 @@ export default function Route() {
   const changesetLookup = useMemo(
     () =>
       new Map(
-        changesets.map((changeset) => [changeset.chartRelease || "", changeset])
+        changesets.map((changeset) => [
+          changeset.chartRelease || "",
+          changeset,
+        ]),
       ),
-    [changesets]
+    [changesets],
   );
   const [includedChangesets, setIncludedChangesets] = useState<
     Map<string, boolean>
@@ -166,14 +173,14 @@ export default function Route() {
           (changeset): changeset is { chartRelease: string } =>
             !changeset.appliedAt &&
             !changeset.supersededAt &&
-            changeset.chartRelease !== undefined
+            changeset.chartRelease !== undefined,
         )
-        .map((changeset) => [changeset.chartRelease, true])
-    )
+        .map((changeset) => [changeset.chartRelease, true]),
+    ),
   );
 
   const includedCount = Array.from(includedChangesets).filter(
-    ([_, included]) => included
+    ([_, included]) => included,
   ).length;
 
   let includesProd = false;
@@ -266,7 +273,7 @@ export default function Route() {
                               new Map([
                                 ...previous,
                                 [name, !(previous.get(name) || false)],
-                              ])
+                              ]),
                           );
                         }}
                         className="align-middle mr-3 cursor-pointer"
@@ -283,7 +290,21 @@ export default function Route() {
                     {included &&
                       changesetLookup.get(name)?.chartReleaseInfo
                         ?.environmentInfo?.lifecycle !== "template" && (
-                        <input type="hidden" name="sync" value={name} />
+                        <>
+                          {/* 
+                          These two inputs are basically passed verbatim to the GitHub Action that will sync 
+                          or refresh changes. We're indeed potentially passing the changeset ID again, but 
+                          it helps the Remix action know what to do. The 'changeset' list from above are the 
+                          changesets to apply, while 'sync-changeset' is a similar list but lacking templates
+                          so it makes sense to be passed to the sync GHA.
+                          */}
+                          <input type="hidden" name="sync" value={name} />
+                          <input
+                            type="hidden"
+                            name="sync-changeset"
+                            value={changesetLookup.get(name)?.id}
+                          />
+                        </>
                       )}
                   </li>
                 ))}
@@ -299,11 +320,22 @@ export default function Route() {
               />
               {changesets.at(0)?.chartReleaseInfo?.environmentInfo
                 ?.lifecycle === "template" || (
-                <input
-                  type="hidden"
-                  name="sync"
-                  value={changesets.at(0)?.chartRelease || ""}
-                />
+                <>
+                  {/*
+                  Same as the above comment here, just in a different form because we're in a different
+                  (single change) case where the HTML is structured differently.
+                  */}
+                  <input
+                    type="hidden"
+                    name="sync"
+                    value={changesets.at(0)?.chartRelease || ""}
+                  />
+                  <input
+                    type="hidden"
+                    name="sync-changeset"
+                    value={changesets.at(0)?.id}
+                  />
+                </>
               )}
             </>
           )}
@@ -394,11 +426,11 @@ export default function Route() {
               changeset.chartReleaseInfo?.cluster?.includes(filterText) ||
               changeset.chartReleaseInfo?.namespace?.includes(filterText) ||
               changeset.chartReleaseInfo?.appVersionExact?.includes(
-                filterText
+                filterText,
               ) ||
               changeset.toAppVersionResolver?.includes(filterText) ||
               changeset.chartReleaseInfo?.chartVersionExact?.includes(
-                filterText
+                filterText,
               ) ||
               changeset.toChartVersionResolver?.includes(filterText)
             }
@@ -411,7 +443,7 @@ export default function Route() {
                 includedCheckboxValue={
                   changesets.length > 1
                     ? includedChangesets.get(
-                        changeset.chartRelease as string
+                        changeset.chartRelease as string,
                       ) || false
                     : undefined
                 }
@@ -421,7 +453,7 @@ export default function Route() {
                       new Map([
                         ...previous,
                         [changeset.chartRelease as string, value],
-                      ])
+                      ]),
                   )
                 }
                 startMinimized={changesets.length > 1}
