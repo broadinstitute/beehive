@@ -162,7 +162,7 @@ export default function Route() {
           environment.owner === userEmail &&
           environment.templateEnvironment === templateEnvironment,
       ),
-    [userEmail, environments, lifecycle, templateEnvironment],
+    [userEmail, environments, templateEnvironment],
   );
 
   const [actionToRun, setActionToRun] = useState("provision-seed");
