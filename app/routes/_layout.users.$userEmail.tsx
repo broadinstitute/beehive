@@ -1,8 +1,12 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import type {
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
@@ -31,9 +35,9 @@ export const meta: V2_MetaFunction = ({ params }) => [
 
 export async function loader({ request, params }: LoaderArgs) {
   return new UsersApi(SherlockConfiguration)
-    .apiV2UsersSelectorGet(
+    .apiUsersV3SelectorGet(
       { selector: params.userEmail || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .catch(errorResponseThrower);
 }

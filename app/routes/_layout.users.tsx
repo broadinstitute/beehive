@@ -1,4 +1,8 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import type {
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -41,9 +45,9 @@ export async function loader({ request }: LoaderArgs) {
   const api = new UsersApi(SherlockConfiguration);
   const [selfUser, allUsers] = await Promise.all([
     api
-      .apiV2ProceduresUsersMeGet(handleIAP(request))
+      .apiUsersV3SelectorGet({ selector: "self" }, handleIAP(request))
       .catch(errorResponseThrower),
-    api.apiV2UsersGet({}, handleIAP(request)).catch(errorResponseThrower),
+    api.apiUsersV3Get({}, handleIAP(request)).catch(errorResponseThrower),
   ]);
   return {
     selfEmail: selfUser.email,

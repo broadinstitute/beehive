@@ -1,15 +1,15 @@
-import { SerializeFrom } from "@remix-run/node";
-import {
+import type { SerializeFrom } from "@remix-run/node";
+import type {
+  SherlockUserV3,
   V2controllersCluster,
   V2controllersEnvironment,
-  V2controllersUser,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
 import { TextField } from "~/components/interactivity/text-field";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
-import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectCluster } from "../../clusters/set/sidebar-select-cluster";
 import { SidebarSelectUser } from "../../users/set/sidebar-select-user";
 import { EnvironmentColors } from "../environment-colors";
@@ -19,7 +19,7 @@ export interface EnvironmentEditableFieldsProps {
     | V2controllersEnvironment
     | SerializeFrom<V2controllersEnvironment>;
   clusters: SerializeFrom<V2controllersCluster[]>;
-  users: SerializeFrom<V2controllersUser[]>;
+  users: SerializeFrom<SherlockUserV3[]>;
   // When we're creating an environment, we don't want to try to replicate Sherlock's
   // advanced template-default behavior, so this flag tells us to let the user pass
   // empty values for fields where we might otherwise block it.
@@ -50,21 +50,21 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   const [requiresSuitability, setRequiresSuitability] = useState(
     environment?.requiresSuitability != null
       ? environment.requiresSuitability.toString()
-      : "false"
+      : "false",
   );
   const [owner, setOwner] = useState(environment?.owner || selfEmail || "");
   const [namePrefixesDomain, setNamePrefixesDomain] = useState(
     environment?.namePrefixesDomain != null
       ? environment.namePrefixesDomain.toString()
-      : "true"
+      : "true",
   );
   const [description, setDescription] = useState(
-    environment?.description || ""
+    environment?.description || "",
   );
   const [preventDeletion, setPreventDeletion] = useState(
     environment?.preventDeletion != null
       ? environment.preventDeletion.toString()
-      : "false"
+      : "false",
   );
   return (
     <div className="flex flex-col space-y-4">
