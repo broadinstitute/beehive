@@ -92,5 +92,5 @@ export default function Route() {
 export const useChartChartVersionContext = useOutletContext<
   {
     chartVersion: SerializeFrom<typeof loader>["chartVersion"];
-  } & ReturnType<typeof useChartContext>[]
+  } & ReturnType<typeof useChartContext>
 >;
