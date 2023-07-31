@@ -24,7 +24,7 @@ export async function loader({ request }: LoaderArgs) {
     session.get(sessionFields.flashNotifications) || null;
 
   const selfUser = await new UsersApi(SherlockConfiguration)
-    .apiV2ProceduresUsersMeGet(handleIAP(request))
+    .apiUsersV3SelectorGet({ selector: "self" }, handleIAP(request))
     .catch(errorResponseThrower);
 
   return json(

@@ -1,17 +1,60 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersUser } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
+import { AlertTriangle, BadgeCheck } from "lucide-react";
 import { CopyableText } from "~/components/interactivity/copyable-text";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { MutateControls } from "../../mutate-controls";
 import { UserColors } from "../user-colors";
 
 export const UserDetails: React.FunctionComponent<{
-  user: V2controllersUser | SerializeFrom<V2controllersUser>;
+  user: SherlockUserV3 | SerializeFrom<SherlockUserV3>;
   isServiceAccount?: boolean;
   toEdit?: string;
 }> = ({ user, isServiceAccount, toEdit }) => {
   return (
     <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-2">
+        <h2 className="font-light text-2xl">Security</h2>
+        <div className="flex flex-row gap-2">
+          {user.suitable ? (
+            <>
+              <BadgeCheck className="stroke-color-status-green shrink-0 h-12 w-12" />
+              <p>
+                <b className="font-strong">This user is production-suitable</b>{" "}
+                according to our platform. That means they can directly access
+                and impact production.
+              </p>
+            </>
+          ) : (
+            <>
+              <AlertTriangle className="stroke-color-status-yellow shrink-0 h-12 w-12" />
+              <div>
+                <p className="pb-2">
+                  <b className="font-strong">
+                    This user currently lacks production suitability
+                  </b>{" "}
+                  according to our platform. That means they'll likely be
+                  prevented from directly accessing or impacting production.
+                </p>
+                <p>
+                  If the user isn't suitable at all, they potentially shouldn't
+                  be allowed to view sensitive data. Feel free to ask DevOps or
+                  InfoSec for clarification.
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+        {!user.suitable && (
+          <>
+            <p className="pt-4">
+              In case it's helpful for debugging, here's Sherlock's automatic
+              assessment of the user's suitability:
+            </p>
+            <p>"{user.suitabilityDescription}"</p>
+          </>
+        )}
+      </div>
       <div className="flex flex-col gap-2">
         <h2 className="font-light text-2xl">Google Identity</h2>
         <h1 className="font-light text-4xl">{user.email}</h1>

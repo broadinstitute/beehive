@@ -1,10 +1,10 @@
-import {
-  json,
+import type {
   LinksFunction,
   LoaderArgs,
-  redirect,
   V2_MetaFunction,
 } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import type { ShouldRevalidateFunction } from "@remix-run/react";
 import {
   Links,
   LiveReload,
@@ -12,7 +12,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  ShouldRevalidateFunction,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
@@ -25,8 +24,8 @@ import { PagerdutyTokenContext } from "./components/logic/pagerduty-token";
 import { LoadThemeSetter } from "./components/logic/theme";
 import { PanelErrorBoundary } from "./errors/components/error-boundary";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "./features/sherlock/sherlock.server";
 import { generateNonce } from "./helpers/nonce.server";
 import { commitSession, getSession, sessionFields } from "./session.server";
@@ -130,11 +129,9 @@ export async function loader({ request }: LoaderArgs) {
             // We don't need the output of this at all, we just want it to happen at
             // some point.
             new UsersApi(SherlockConfiguration)
-              .apiV2ProceduresUsersLinkGithubPost(
+              .apiUsersV3Put(
                 {
-                  githubAccessPayloadRequest: {
-                    githubAccessToken: data.access_token,
-                  },
+                  user: { githubAccessToken: data.access_token },
                 },
                 handleIAP(request),
               )

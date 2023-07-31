@@ -1,6 +1,6 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersUser } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
 import { createContext } from "react";
 
 export const SelfUserContext =
-  createContext<SerializeFrom<V2controllersUser> | null>(null);
+  createContext<SerializeFrom<SherlockUserV3> | null>(null);

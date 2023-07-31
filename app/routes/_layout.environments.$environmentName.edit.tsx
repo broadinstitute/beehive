@@ -1,20 +1,12 @@
-import {
-  ActionArgs,
-  LoaderArgs,
-  redirect,
-  V2_MetaFunction,
-} from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import {
   ClustersApi,
   EnvironmentsApi,
   UsersApi,
-  V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -25,8 +17,8 @@ import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
@@ -58,10 +50,10 @@ export async function loader({ request }: LoaderArgs) {
       .apiV2ClustersGet({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
     new UsersApi(SherlockConfiguration)
-      .apiV2UsersGet({}, handleIAP(request))
+      .apiUsersV3Get({}, handleIAP(request))
       .then(
         (users) => users.sort(makeUserSorter(getUserEmail(request))),
-        errorResponseThrower
+        errorResponseThrower,
       ),
   ]);
 }
@@ -83,11 +75,11 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.environmentName || "",
         environment: environmentRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (environment) => redirect(`/environments/${environment.name}`),
-      makeErrorResponseReturner(environmentRequest)
+      makeErrorResponseReturner(environmentRequest),
     );
 }
 
@@ -99,7 +91,7 @@ export default function Route() {
   const { environment } = useEnvironmentContext();
 
   const [defaultCluster, setDefaultCluster] = useState(
-    errorInfo?.formState?.defaultCluster || environment.defaultCluster || ""
+    errorInfo?.formState?.defaultCluster || environment.defaultCluster || "",
   );
 
   const {
