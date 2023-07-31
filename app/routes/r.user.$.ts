@@ -9,7 +9,7 @@ import {
 export async function loader({ request, params }: LoaderArgs) {
   const search = params["*"] || "";
   return new UsersApi(SherlockConfiguration)
-    .apiV2UsersSelectorGet({ selector: search }, handleIAP(request))
+    .apiUsersV3SelectorGet({ selector: search }, handleIAP(request))
     .then(
       (user) => redirect(`/users/${user.email}`),
       () => redirect(`/users?search=${search.split("/").pop()}`),
