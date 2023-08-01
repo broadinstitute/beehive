@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: beehive
+  description: |
+    Beehive is a UI for managing DSPs kubernetes deployments in both BEE and live environments
+  tags:
+    - typescript
+    - remix
+    - beehive
+    - kubernetes
+    - dsp-devops
+spec:
+  type: service
+  lifecycle: production
+  owner: dsp-devops
