@@ -17,6 +17,6 @@ spec:
   lifecycle: production
   owner: dsp-devops
   dependsOn:
-    - sherlock
+    - component:sherlock
   consumesApis:
     - sherlock-api
