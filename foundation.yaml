@@ -10,7 +10,13 @@ metadata:
     - beehive
     - kubernetes
     - dsp-devops
+  annotations:
+    github.com/project-slug: broadinstitute/beehive
 spec:
   type: service
   lifecycle: production
   owner: dsp-devops
+  dependsOn:
+    - sherlock
+  consumesApis:
+    - sherlock-api
