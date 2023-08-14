@@ -4,14 +4,18 @@ import { ChartReleaseColors } from "./chart-release-colors";
 
 export const ChartReleaseLinkChip: React.FunctionComponent<{
   chartRelease: string;
-  chart: string;
-  environment: string;
+  chart?: string;
+  environment?: string;
   arrow?: boolean;
 }> = ({ chartRelease, chart, environment, arrow }) => (
   <LinkChip
-    text={`Chart Release: ${chartRelease}`}
+    text={`Chart Instance: ${chartRelease}`}
     arrow={arrow}
-    to={`/environments/${environment}/chart-releases/${chart}`}
+    to={
+      chart && environment
+        ? `/environments/${environment}/chart-releases/${chart}`
+        : `/r/chart-release/${chartRelease}`
+    }
     {...ChartReleaseColors}
   />
 );
@@ -42,7 +46,7 @@ export const ArgoLinkChip: React.FunctionComponent<{
                 controller?.abort();
               }
             },
-            { signal: controller?.signal }
+            { signal: controller?.signal },
           );
         }}
       >

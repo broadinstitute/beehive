@@ -8,6 +8,7 @@ import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import type { PanelSize } from "~/helpers/panel-size";
 import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
+import { ChartReleaseLinkChip } from "../../chart-releases/chart-release-link-chip";
 import { ChartLinkChip } from "../../charts/chart-link-chip";
 import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import {
@@ -21,7 +22,6 @@ export const ChangesetEntry: React.FunctionComponent<{
   size?: PanelSize;
   changeset: V2controllersChangeset | SerializeFrom<V2controllersChangeset>;
   disableTitle?: boolean;
-  fadeIfUnappliable?: boolean;
   includedCheckboxValue?: boolean;
   setIncludedCheckboxValue?: (value: boolean) => void;
   startMinimized?: boolean;
@@ -29,7 +29,6 @@ export const ChangesetEntry: React.FunctionComponent<{
   size = "two-thirds",
   changeset,
   disableTitle = false,
-  fadeIfUnappliable = true,
   includedCheckboxValue,
   setIncludedCheckboxValue,
   startMinimized = false,
@@ -134,11 +133,14 @@ export const ChangesetEntry: React.FunctionComponent<{
         </button>
       </div>
       {disableTitle || minimized || (
-        <div
-          className={`pt-2 flex flex-row gap-3 max-h-full flex-wrap ${
-            appliable ? "" : "opacity-50 pointer-events-none"
-          }`}
-        >
+        <div className="pt-2 flex flex-row gap-3 max-h-full flex-wrap">
+          {changeset.chartReleaseInfo?.name && (
+            <ChartReleaseLinkChip
+              chartRelease={changeset.chartReleaseInfo.name}
+              chart={changeset.chartReleaseInfo.chart}
+              environment={changeset.chartReleaseInfo.environment}
+            />
+          )}
           {changeset.chartReleaseInfo?.chart && (
             <ChartLinkChip chart={changeset.chartReleaseInfo?.chart} />
           )}
@@ -168,11 +170,7 @@ export const ChangesetEntry: React.FunctionComponent<{
         />
       )}
       {minimized || (
-        <div
-          className={`overflow-x-auto grid grid-cols-2 pt-2 gap-y-1 gap-x-4 ${
-            !appliable && fadeIfUnappliable ? "opacity-50" : ""
-          }`}
-        >
+        <div className="overflow-x-auto grid grid-cols-2 pt-2 gap-y-1 gap-x-4">
           <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
             {appliable ? "Current" : "Before"}
           </h2>
