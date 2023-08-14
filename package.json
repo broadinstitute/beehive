@@ -34,7 +34,7 @@
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.15",
     "cssnano": "^6.0.1",
-    "eslint": "^8.46.0",
+    "eslint": "^8.47.0",
     "eslint-config-prettier": "^8.9.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
