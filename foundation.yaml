@@ -10,6 +10,7 @@ metadata:
     - beehive
     - kubernetes
     - dsp-devops
+    - dsp-tools
   annotations:
     github.com/project-slug: broadinstitute/beehive
 spec:
@@ -18,5 +19,6 @@ spec:
   owner: dsp-devops
   dependsOn:
     - component:sherlock
+    - component:sherlock-typescript-client-lib
   consumesApis:
     - sherlock-api
