@@ -17,6 +17,7 @@ spec:
   type: service
   lifecycle: production
   owner: dsp-devops
+  system: platform
   dependsOn:
     - component:sherlock
     - component:sherlock-typescript-client-lib
