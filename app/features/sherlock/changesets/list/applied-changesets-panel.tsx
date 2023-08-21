@@ -38,7 +38,6 @@ export const AppliedChangesetsPanel: React.FunctionComponent<{
               changeset={changeset}
               key={index}
               disableTitle={true}
-              fadeIfUnappliable={false}
               startMinimized={true}
             />
           )}
