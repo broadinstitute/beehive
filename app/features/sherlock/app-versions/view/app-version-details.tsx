@@ -14,11 +14,12 @@ export interface AppVersionDetailsProps {
     typeof CiRunResourceStatusWidget
   >["initialCiRuns"];
   toEdit?: string;
+  toTimeline?: string;
 }
 
 export const AppVersionDetails: React.FunctionComponent<
   AppVersionDetailsProps
-> = ({ appVersion, initialCiRuns, toEdit }) => (
+> = ({ appVersion, initialCiRuns, toEdit, toTimeline }) => (
   <div className="flex flex-col space-y-10">
     <div className="flex flex-row gap-3 flex-wrap">
       {appVersion.chart && <ChartLinkChip chart={appVersion.chart} />}
@@ -66,6 +67,11 @@ export const AppVersionDetails: React.FunctionComponent<
         "None"
       )}
     </p>
+    {toTimeline && (
+      <NavButton to={toTimeline} {...AppVersionColors}>
+        Deployment Timeline
+      </NavButton>
+    )}
     {appVersion.parentAppVersion &&
       appVersion.parentAppVersionInfo &&
       appVersion.parentAppVersionInfo.hasOwnProperty("appVersion") && (
