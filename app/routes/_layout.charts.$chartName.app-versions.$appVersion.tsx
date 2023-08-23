@@ -78,6 +78,7 @@ export default function Route() {
             appVersion={appVersion}
             initialCiRuns={ciRuns}
             toEdit="./edit"
+            toTimeline="./timeline"
           />
         </ItemDetails>
       </OutsetPanel>

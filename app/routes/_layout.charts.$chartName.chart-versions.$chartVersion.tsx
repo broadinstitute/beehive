@@ -81,6 +81,7 @@ export default function Route() {
             chartVersion={chartVersion}
             initialCiRuns={ciRuns}
             toEdit="./edit"
+            toTimeline="./timeline"
           />
         </ItemDetails>
       </OutsetPanel>
