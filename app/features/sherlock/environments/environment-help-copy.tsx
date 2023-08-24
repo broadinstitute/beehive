@@ -8,18 +8,16 @@ export const EnvironmentHelpCopy: React.FunctionComponent = () => (
       name from their ability to use app versions from an unmerged pull request
       you might have open. The Interactive Analysis team has some{" "}
       <b className="font-semibold">
-        {" "}
-        more in-depth docs{" "}
         <a
           className="decoration-color-link-underline underline"
           href="https://broadworkbench.atlassian.net/wiki/spaces/IA/pages/2839576631/How+to+BEE"
           target="_blank"
           rel="noreferrer"
         >
-          here ↗
+          more in-depth docs here ↗
         </a>
-        .
       </b>
+      .
     </p>
     <p>
       A <b className="font-semibold">BEE template</b> is where all the
