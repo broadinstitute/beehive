@@ -146,7 +146,8 @@ export const ChartReleaseDetails: React.FunctionComponent<
       toLinkPagerduty ||
       toDelete ||
       toChangeVersions ||
-      toVersionHistory) && (
+      toVersionHistory ||
+      toEditDeployHooks) && (
       <MutateControls
         name={chartRelease.name || ""}
         colors={ChartReleaseColors}
