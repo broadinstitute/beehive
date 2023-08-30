@@ -24,7 +24,8 @@ export const GithubActionsDeployHookEditPanel: React.FunctionComponent<{
   errorInfo?: SerializeFrom<
     ReturnedErrorInfo<SherlockGithubActionsDeployHookV3>
   >;
-}> = ({ githubActionsHook, githubInfo, errorInfo }) => {
+  showRefBehaviorField?: boolean;
+}> = ({ githubActionsHook, githubInfo, errorInfo, showRefBehaviorField }) => {
   const [searchParams] = useSearchParams();
 
   const {
@@ -59,6 +60,7 @@ export const GithubActionsDeployHookEditPanel: React.FunctionComponent<{
           <GithubActionsDeployHookEditableFields
             existing={errorInfo?.formState ?? githubActionsHook}
             githubInfo={githubInfo}
+            showRefBehaviorField={showRefBehaviorField}
             provideFileUrl={setGithubActionsFileUrl}
             provideFileName={setGithubActionsFileName}
             setSidebar={setSidebar}

@@ -23,12 +23,13 @@ export const DeployHooksNewPanel: React.FunctionComponent<{
       SherlockSlackDeployHookV3 | SherlockGithubActionsDeployHookV3
     >
   >;
+  showRefBehaviorField?: boolean;
   githubInfo: {
     [key: string]: {
       [key: string]: string[];
     };
   };
-}> = ({ errorInfo, githubInfo }) => {
+}> = ({ errorInfo, showRefBehaviorField, githubInfo }) => {
   const {
     setSidebarFilterText,
     setSidebar,
@@ -97,20 +98,21 @@ export const DeployHooksNewPanel: React.FunctionComponent<{
             {type === "github-actions" && (
               <>
                 <p>
-                  Beehive will run a GitHub Action workflow (via{" "}
+                  Beehive will run a GitHub Action workflow (via "
                   <a
                     href="https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/"
                     target="_blank"
                     rel="noreferrer"
                     className="underline decoration-color-link-underline"
                   >
-                    "workflow dispatch"
+                    workflow dispatch
                   </a>
-                  ) with configuration provided here.
+                  ") with configuration provided here.
                 </p>
                 <GithubActionsDeployHookEditableFields
                   existing={errorInfo?.formState}
                   githubInfo={githubInfo}
+                  showRefBehaviorField={showRefBehaviorField}
                   provideFileUrl={setGithubActionsFileUrl}
                   provideFileName={setGithubActionsFileName}
                   setSidebar={setSidebar}

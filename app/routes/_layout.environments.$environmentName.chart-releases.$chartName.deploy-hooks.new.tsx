@@ -49,5 +49,11 @@ export default function Route() {
   const githubInfo = useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
 
-  return <DeployHooksNewPanel githubInfo={githubInfo} errorInfo={errorInfo} />;
+  return (
+    <DeployHooksNewPanel
+      githubInfo={githubInfo}
+      errorInfo={errorInfo}
+      showRefBehaviorField
+    />
+  );
 }

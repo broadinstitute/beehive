@@ -39,11 +39,11 @@ export const MemoryFilteredList = <T extends unknown>({
     filterText === ""
   ) {
     return (
-      <div className="text-color-body-text/70">{`(There's nothing here)`}</div>
+      <div className="text-color-body-text/70 text-center">{`(There's nothing here)`}</div>
     );
   } else {
     return (
-      <div className="text-color-body-text/70">{`(There's nothing here matching ${filterText})`}</div>
+      <div className="text-color-body-text/70 text-center">{`(There's nothing here matching ${filterText})`}</div>
     );
   }
 };

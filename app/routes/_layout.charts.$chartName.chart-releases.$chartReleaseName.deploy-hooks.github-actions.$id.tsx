@@ -68,6 +68,7 @@ export default function Route() {
         githubActionsHook={githubActionsHook}
         githubInfo={githubInfo}
         errorInfo={errorInfo}
+        showRefBehaviorField
       />
       <Outlet />
     </>
