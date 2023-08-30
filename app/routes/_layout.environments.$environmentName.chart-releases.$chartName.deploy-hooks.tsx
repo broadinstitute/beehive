@@ -35,9 +35,12 @@ export async function loader({ request, params }: LoaderArgs) {
       },
       handleIAP(request),
     ),
-    deployHooksApi.apiDeployHooksSlackV3Get({
-      onChartRelease: `${params.environmentName}/${params.chartName}`,
-    }),
+    deployHooksApi.apiDeployHooksSlackV3Get(
+      {
+        onChartRelease: `${params.environmentName}/${params.chartName}`,
+      },
+      handleIAP(request),
+    ),
   ]).catch(errorResponseThrower);
 }
 
