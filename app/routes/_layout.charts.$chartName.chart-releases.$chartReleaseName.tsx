@@ -103,7 +103,6 @@ export default function Route() {
             toVersionHistory="./applied-changesets"
             toEdit="./edit"
             toDatabaseInstance="./database-instance"
-            toEditDeployHooks="./deploy-hooks"
             // toLinkPagerduty={
             //   chartRelease.environmentInfo?.pagerdutyIntegration
             //     ? "./link-pagerduty"

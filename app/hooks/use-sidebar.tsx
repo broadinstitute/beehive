@@ -67,11 +67,6 @@ export function useSidebar() {
   const [SidebarPartial, setSidebarPartial] = useState<
     SidebarPartial | undefined
   >();
-  const isSidebarPresent = SidebarPartial !== undefined;
-  const [wasSidebarPresent, setWasSidebarPresent] = useState(isSidebarPresent);
-  if (isSidebarPresent && !wasSidebarPresent) {
-    setWasSidebarPresent(true);
-  }
 
   const setSidebar = useCallback(
     (sidebar?: SidebarPartial, initialFilterText?: string) => {
@@ -86,21 +81,20 @@ export function useSidebar() {
         setSidebarFilterText("");
       }
     },
-    [setSidebarPartial, setSidebarFilterText],
+    [setSidebarPartial, setSidebarFilterText]
   );
 
   const SidebarComponent = useMemo<React.FunctionComponent>(
     () => () =>
       (SidebarPartial && <SidebarPartial filterText={sidebarFilterText} />) ||
       null,
-    [sidebarFilterText, SidebarPartial],
+    [sidebarFilterText, SidebarPartial]
   );
 
   return {
     setSidebarFilterText,
     setSidebar,
-    isSidebarPresent,
-    wasSidebarPresent,
+    isSidebarPresent: SidebarPartial !== undefined,
     SidebarComponent,
   };
 }

@@ -1,5 +1,5 @@
-import type { Session } from "@remix-run/node";
-import { createContext, useContext } from "react";
+import { Session } from "@remix-run/node";
+import { createContext } from "react";
 import { sessionFields } from "~/session.server";
 
 export const CsrfTokenContext = createContext("");
@@ -12,28 +12,24 @@ export const CsrfTokenInput: React.FunctionComponent = () => (
   </CsrfTokenContext.Consumer>
 );
 
-export function useCsrfToken() {
-  return useContext(CsrfTokenContext);
-}
-
 export const verifySessionCsrfToken = async (
   request: Request,
-  session: Session,
+  session: Session
 ) => {
   if (request.bodyUsed) {
     throw new Error(
-      "Request body consumed before validating CSRF token - this indicates a Beehive source code issue",
+      "Request body consumed before validating CSRF token - this indicates a Beehive source code issue"
     );
   }
   if (!session.has(sessionFields.csrfToken)) {
     throw new Error(
-      "Session did not contain a CSRF token - this indicates an issue on Beehive's end setting the cookie",
+      "Session did not contain a CSRF token - this indicates an issue on Beehive's end setting the cookie"
     );
   }
   const formData = await request.clone().formData();
   if (!formData.get(csrfTokenInputName)) {
     throw new Error(
-      "Request body did not contain a CSRF token - this indicates an issue on Beehive's end constructing the form",
+      "Request body did not contain a CSRF token - this indicates an issue on Beehive's end constructing the form"
     );
   }
   if (
@@ -41,7 +37,7 @@ export const verifySessionCsrfToken = async (
   ) {
     throw new Response(
       "CSRF protection tripped; token in cookie was inconsistent with token in the form",
-      { status: 422 },
+      { status: 422 }
     );
   }
 };

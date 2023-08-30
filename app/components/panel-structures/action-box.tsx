@@ -1,6 +1,5 @@
 import { Form, useNavigation } from "@remix-run/react";
-import type { PanelSize } from "~/helpers/panel-size";
-import { panelSizeToInnerClassName } from "~/helpers/panel-size";
+import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { ActionButton } from "../interactivity/action-button";
 import { CsrfTokenInput } from "../logic/csrf-token";
 
@@ -13,8 +12,6 @@ export interface ActionBoxProps {
   beforeBorderClassName: string;
   backgroundClassName: string;
   hideButton?: boolean;
-  saved?: boolean;
-  belowComponent?: React.ReactNode;
 }
 
 export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
@@ -26,8 +23,6 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
   beforeBorderClassName,
   backgroundClassName,
   hideButton = false,
-  saved = false,
-  belowComponent,
 }) => {
   const transition = useNavigation();
   return (
@@ -38,7 +33,7 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
       <Form
         method="post"
         className={`${panelSizeToInnerClassName(
-          size,
+          size
         )} flex flex-col gap-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
       >
         <fieldset
@@ -61,11 +56,7 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
             <CsrfTokenInput />
           </>
         )}
-        {transition.state === "idle" && saved && (
-          <p className="font-semibold">Saved!</p>
-        )}
       </Form>
-      <div className={panelSizeToInnerClassName(size)}>{belowComponent}</div>
     </div>
   );
 };

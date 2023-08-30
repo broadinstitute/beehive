@@ -56,7 +56,6 @@ export const AppInstancePopoverContents: React.FunctionComponent<{
       showChips={false}
       toChangeVersions={`/environments/${chartRelease.environment}/chart-releases/${chartRelease.chart}/change-versions`}
       toVersionHistory={`/environments/${chartRelease.environment}/chart-releases/${chartRelease.chart}/applied-changesets`}
-      toEditDeployHooks={`/environments/${chartRelease.environment}/chart-releases/${chartRelease.chart}/deploy-hooks`}
     />
   </>
 );

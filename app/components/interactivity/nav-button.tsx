@@ -56,7 +56,7 @@ export const NavButton: React.FunctionComponent<
       }
     >
       <div
-        className={`shrink-0 flex flex-row gap-2 justify-between items-center h-full w-full pl-4 pr-12 py-2 ${
+        className={`shrink-0 flex flex-row gap-2 justify-between items-center h-full w-full pl-4 pr-16 py-2 ${
           disabled ? "opacity-50" : ""
         }`}
       >

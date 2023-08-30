@@ -115,7 +115,6 @@ export default function Route() {
             // }
             toDelete={"./delete"}
             toAdjustBulkUpdateDefaults="./adjust-bulk-update-defaults"
-            toEditDeployHooks="./deploy-hooks"
           />
         </ItemDetails>
       </OutsetPanel>

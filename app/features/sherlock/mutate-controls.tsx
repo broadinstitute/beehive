@@ -14,7 +14,6 @@ export interface MutateControlsProps {
   toLinkPagerduty?: string;
   toAdjustBulkUpdateDefaults?: string;
   toDelete?: string;
-  toEditDeployHooks?: string;
 }
 
 export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
@@ -30,7 +29,6 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   toLinkPagerduty,
   toAdjustBulkUpdateDefaults,
   toDelete,
-  toEditDeployHooks,
 }) => (
   <div className="flex flex-col space-y-12">
     {(toChangeVersions || toVersionHistory) && (
@@ -76,11 +74,6 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         {toLinkPagerduty && (
           <NavButton to={toLinkPagerduty} {...colors}>
             Configure PagerDuty Link
-          </NavButton>
-        )}
-        {toEditDeployHooks && (
-          <NavButton to={toEditDeployHooks} {...colors}>
-            Edit Deploy Hooks
           </NavButton>
         )}
         {toAdjustBulkUpdateDefaults && (

@@ -20,7 +20,6 @@ import { ActionButton } from "~/components/interactivity/action-button";
 import { Popover } from "~/components/interactivity/popover";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { isReturnedErrorInfo } from "~/errors/helpers/error-response-handlers";
-import { githubWorkflowNameFromPath } from "~/features/github/workflow-name-from-path";
 import type { ProxiedGetCiIdentifier } from "~/routes/api.sherlock.get-ci-identifier.$";
 import { isProxiedCiIdentifier } from "~/routes/api.sherlock.get-ci-identifier.$";
 import { CiColors } from "../ci-colors";
@@ -422,6 +421,16 @@ function mergeAndSortCiRuns(
   }
   // Otherwise, return the old list so we don't re-render
   return existing;
+}
+
+function githubWorkflowNameFromPath(path?: string, truncate?: boolean): string {
+  const split = (path ?? "").split("/");
+  const toReturn = split[split.length - 1].replace(/\.[^/.]+$/, "");
+  if (truncate && toReturn.length > 23) {
+    return toReturn.slice(0, 20) + "...";
+  } else {
+    return toReturn;
+  }
 }
 
 function prettyStatus(status?: string): string {

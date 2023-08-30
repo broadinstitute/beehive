@@ -1,10 +1,9 @@
-export interface EnumInputSelectProps<T extends string>
-  extends EnumSelectProps<T> {
+export interface EnumInputSelectProps extends EnumSelectProps<string> {
   name: string;
 }
 
-export const EnumInputSelect = <T extends string>(
-  props: EnumInputSelectProps<T>,
+export const EnumInputSelect: React.FunctionComponent<EnumInputSelectProps> = (
+  props
 ) => (
   <>
     <input type="hidden" name={props.name} value={props.fieldValue} />
@@ -21,7 +20,7 @@ export interface EnumSelectProps<T> {
   bigButtons?: boolean;
 }
 
-export const EnumSelect = <T,>({
+export const EnumSelect = <T extends any>({
   className,
   fieldValue,
   setFieldValue,
@@ -44,10 +43,10 @@ export const EnumSelect = <T,>({
             bigButtons ? "text-xl" : ""
           }
     before:w-full before:h-full before:block before:absolute ${beforeBorderClassName} ${
-      valueToSet === fieldValue
-        ? "bg-color-nearest-bg before:border-4 font-medium"
-        : "bg-color-nearest-bg/50 before:border-2 before:hover:border-4"
-    } motion-safe:transition-all before:motion-safe:transition-all`}
+            valueToSet === fieldValue
+              ? "bg-color-nearest-bg before:border-4 font-medium"
+              : "bg-color-nearest-bg/50 before:border-2 before:hover:border-4"
+          } motion-safe:transition-all before:motion-safe:transition-all`}
           onClickCapture={(e) => {
             setFieldValue(valueToSet);
             e.preventDefault();
