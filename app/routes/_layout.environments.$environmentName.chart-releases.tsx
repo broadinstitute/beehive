@@ -44,11 +44,11 @@ export async function loader({ request, params }: LoaderArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
       { environment: params.environmentName || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (chartReleases) => chartReleases.sort(chartReleaseSorter),
-      errorResponseThrower
+      errorResponseThrower,
     );
 }
 
@@ -61,7 +61,7 @@ export default function Route() {
   const [filterText, setFilterText] = useState("");
   return (
     <>
-      <InsetPanel>
+      <InsetPanel alwaysShowScrollbar>
         <InteractiveList
           title={`Charts in ${params.environmentName}`}
           {...ChartReleaseColors}

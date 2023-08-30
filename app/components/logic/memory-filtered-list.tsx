@@ -7,7 +7,7 @@ export interface MemoryFilteredListProps<T> {
   filter?: (entry: T, filterText: string) => boolean | undefined;
   children: (
     entry: T,
-    index: number
+    index: number,
   ) => React.ReactElement<NavButtonProps | ActionButtonProps>;
 }
 
@@ -25,7 +25,7 @@ export const MemoryFilteredList = <T extends unknown>({
           filterText === "" ||
           filter(entry, filterText) ||
           false) &&
-        children(entry, index)
+        children(entry, index),
     )
     // We actually *do* the filtering in the map so that the indexes stay constant--this avoids
     // re-rendering and improves the animations a bit. The `false` values wouldn't get rendered
@@ -39,11 +39,11 @@ export const MemoryFilteredList = <T extends unknown>({
     filterText === ""
   ) {
     return (
-      <div className="text-color-body-text/70">{`(There's nothing here)`}</div>
+      <div className="text-color-body-text/70 text-center">{`(There's nothing here)`}</div>
     );
   } else {
     return (
-      <div className="text-color-body-text/70">{`(There's nothing here matching ${filterText})`}</div>
+      <div className="text-color-body-text/70 text-center">{`(There's nothing here matching ${filterText})`}</div>
     );
   }
 };
