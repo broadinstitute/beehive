@@ -33,6 +33,7 @@ export interface EnvironmentDetailsProps {
   toLinkPagerduty?: string;
   toAdjustBulkUpdateDefaults?: string;
   toDelete?: string;
+  toEditDeployHooks?: string;
 }
 
 export const EnvironmentDetails: React.FunctionComponent<
@@ -50,6 +51,7 @@ export const EnvironmentDetails: React.FunctionComponent<
   toLinkPagerduty,
   toAdjustBulkUpdateDefaults,
   toDelete,
+  toEditDeployHooks,
 }) => (
   <div className="flex flex-col space-y-10">
     <div className="flex flex-col space-y-4">
@@ -170,7 +172,8 @@ export const EnvironmentDetails: React.FunctionComponent<
       toLinkPagerduty ||
       toDelete ||
       toChangeVersions ||
-      toAdjustBulkUpdateDefaults) && (
+      toAdjustBulkUpdateDefaults ||
+      toEditDeployHooks) && (
       <MutateControls
         name={environment.name || ""}
         colors={EnvironmentColors}
@@ -192,6 +195,7 @@ export const EnvironmentDetails: React.FunctionComponent<
             : undefined
         }
         toAdjustBulkUpdateDefaults={toAdjustBulkUpdateDefaults}
+        toEditDeployHooks={toEditDeployHooks}
       />
     )}
   </div>
