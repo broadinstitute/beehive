@@ -27,6 +27,7 @@ export interface ChartReleaseDetailsProps {
   toDatabaseInstance?: string;
   toLinkPagerduty?: string;
   toDelete?: string;
+  toEditDeployHooks?: string;
   showChips?: boolean;
 }
 
@@ -41,6 +42,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
   toDatabaseInstance,
   toLinkPagerduty,
   toDelete,
+  toEditDeployHooks,
   showChips = true,
 }) => (
   <div className="flex flex-col space-y-10">
@@ -153,6 +155,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
         toEdit={toEdit}
         toDatabaseInstance={toDatabaseInstance}
         toLinkPagerduty={toLinkPagerduty}
+        toEditDeployHooks={toEditDeployHooks}
         toDelete={toDelete}
       />
     )}
