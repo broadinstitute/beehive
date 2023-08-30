@@ -53,7 +53,11 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         )}
       </div>
     )}
-    {(toEdit || toSchedule || toLinkPagerduty || toDelete) && (
+    {(toEdit ||
+      toSchedule ||
+      toLinkPagerduty ||
+      toDelete ||
+      toEditDeployHooks) && (
       <div className="flex flex-col space-y-4">
         <h2 className="text-2xl font-light text-color-header-text">
           Make Changes
