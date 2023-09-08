@@ -5,6 +5,7 @@ import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
+import { SelfUserContext } from "~/contexts";
 import type { PanelSize } from "~/helpers/panel-size";
 import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
@@ -16,6 +17,7 @@ import {
   NamespaceLinkChip,
 } from "../../clusters/cluster-link-chip";
 import { EnvironmentLinkChip } from "../../environments/environment-link-chip";
+import { UserLink } from "../../users/view/user-link";
 import { ChangsetRecreateButton } from "../recreate/changeset-recreate-button";
 
 export const ChangesetEntry: React.FunctionComponent<{
@@ -550,14 +552,27 @@ export const ChangesetEntry: React.FunctionComponent<{
           {changeset.supersededAt && (
             <h1 className="text-2xl font-light">
               This proposed change is out of date as of{" "}
-              <PrettyPrintTime time={changeset.supersededAt} /> (local time)
+              <PrettyPrintTime time={changeset.supersededAt} />
             </h1>
           )}
           {changeset.appliedAt && (
             <>
               <h1 className="text-2xl font-light">
-                Applied at <PrettyPrintTime time={changeset.appliedAt} /> (local
-                time)
+                Applied at <PrettyPrintTime time={changeset.appliedAt} />
+                {changeset.appliedByInfo && (
+                  <>
+                    {" "}
+                    by <UserLink user={changeset.appliedByInfo} />
+                  </>
+                )}
+                {changeset.plannedByInfo &&
+                  changeset.plannedByInfo.email !=
+                    changeset.appliedByInfo?.email && (
+                    <>
+                      {" "}
+                      (planned by <UserLink user={changeset.plannedByInfo} />)
+                    </>
+                  )}
               </h1>
               {(changeset.chartReleaseInfo?.appVersionExact !=
                 changeset.toAppVersionExact ||
@@ -572,6 +587,23 @@ export const ChangesetEntry: React.FunctionComponent<{
             </>
           )}
         </div>
+      )}
+      {!changeset.appliedAt && changeset.plannedByInfo && (
+        <SelfUserContext.Consumer>
+          {(selfUser) =>
+            selfUser?.email !== changeset.plannedByInfo?.email ? (
+              <h1 className="text-2xl font-light">
+                Planned at <PrettyPrintTime time={changeset.createdAt} />
+                {changeset.plannedByInfo && (
+                  <>
+                    {" "}
+                    by <UserLink user={changeset.plannedByInfo} />
+                  </>
+                )}
+              </h1>
+            ) : null
+          }
+        </SelfUserContext.Consumer>
       )}
     </div>
   );
