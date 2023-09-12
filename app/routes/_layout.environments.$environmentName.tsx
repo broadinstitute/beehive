@@ -1,15 +1,22 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import type {
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from "@remix-run/node";
+import { defer } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
 import {
   ChartReleasesApi,
+  CiIdentifiersApi,
   EnvironmentsApi,
 } from "@sherlock-js-client/sherlock";
+import { promiseHash } from "remix-utils";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { chartReleaseUrl } from "~/features/sherlock/chart-releases/chart-release-url";
@@ -38,26 +45,40 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  return Promise.all([
-    new EnvironmentsApi(SherlockConfiguration)
-      .apiV2EnvironmentsSelectorGet(
-        { selector: params.environmentName || "" },
-        handleIAP(request)
+  return defer({
+    ciRuns: new CiIdentifiersApi(SherlockConfiguration)
+      .apiCiIdentifiersV3SelectorGet(
+        {
+          selector: `environment/${params.environmentName}`,
+        },
+        handleIAP(request),
       )
-      .catch(errorResponseThrower),
-    new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesSelectorGet(
-        { selector: `${params.environmentName}/terraui` },
-        handleIAP(request)
-      )
-      .catch(() => null),
-  ]);
+      .then(
+        (ciIdentifier) => ciIdentifier.ciRuns,
+        () => [],
+      ),
+    ...(await promiseHash({
+      environment: new EnvironmentsApi(SherlockConfiguration)
+        .apiV2EnvironmentsSelectorGet(
+          { selector: params.environmentName || "" },
+          handleIAP(request),
+        )
+        .catch(errorResponseThrower),
+      terrauiInstance: new ChartReleasesApi(SherlockConfiguration)
+        .apiV2ChartReleasesSelectorGet(
+          { selector: `${params.environmentName}/terraui` },
+          handleIAP(request),
+        )
+        .catch(() => null),
+    })),
+  });
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const [environment, terrauiInstance] = useLoaderData<typeof loader>();
+  const { environment, terrauiInstance, ciRuns } =
+    useLoaderData<typeof loader>();
   return (
     <ProdFlag prod={environment.name === "prod"}>
       <OutsetPanel {...EnvironmentColors}>
@@ -83,6 +104,7 @@ export default function Route() {
         >
           <EnvironmentDetails
             environment={environment}
+            initialCiRuns={ciRuns}
             toTerraUI={chartReleaseUrl(terrauiInstance)}
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
@@ -93,6 +115,7 @@ export default function Route() {
             // }
             toDelete={"./delete"}
             toAdjustBulkUpdateDefaults="./adjust-bulk-update-defaults"
+            toEditDeployHooks="./deploy-hooks"
           />
         </ItemDetails>
       </OutsetPanel>
@@ -102,5 +125,5 @@ export default function Route() {
 }
 
 export const useEnvironmentContext = useOutletContext<{
-  environment: SerializeFrom<typeof loader>;
+  environment: SerializeFrom<typeof loader>["environment"];
 }>;

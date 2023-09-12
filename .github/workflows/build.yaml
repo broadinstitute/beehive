@@ -19,6 +19,7 @@ on:
       - main
     paths-ignore:
       - "README.md"
+      - "foundation.yaml"
 env:
   # The project we'll be pushing artifacts to.
   GOOGLE_PROJECT: dsp-artifact-registry

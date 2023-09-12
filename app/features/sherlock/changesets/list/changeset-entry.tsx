@@ -1,25 +1,29 @@
-import { SerializeFrom } from "@remix-run/node";
+import type { SerializeFrom } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { V2controllersChangeset } from "@sherlock-js-client/sherlock";
+import type { V2controllersChangeset } from "@sherlock-js-client/sherlock";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import { SelfUserContext } from "~/contexts";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
+import { ChartReleaseLinkChip } from "../../chart-releases/chart-release-link-chip";
 import { ChartLinkChip } from "../../charts/chart-link-chip";
+import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import {
   ClusterLinkChip,
   NamespaceLinkChip,
 } from "../../clusters/cluster-link-chip";
 import { EnvironmentLinkChip } from "../../environments/environment-link-chip";
+import { UserLink } from "../../users/view/user-link";
 import { ChangsetRecreateButton } from "../recreate/changeset-recreate-button";
 
 export const ChangesetEntry: React.FunctionComponent<{
   size?: PanelSize;
   changeset: V2controllersChangeset | SerializeFrom<V2controllersChangeset>;
   disableTitle?: boolean;
-  fadeIfUnappliable?: boolean;
   includedCheckboxValue?: boolean;
   setIncludedCheckboxValue?: (value: boolean) => void;
   startMinimized?: boolean;
@@ -27,7 +31,6 @@ export const ChangesetEntry: React.FunctionComponent<{
   size = "two-thirds",
   changeset,
   disableTitle = false,
-  fadeIfUnappliable = true,
   includedCheckboxValue,
   setIncludedCheckboxValue,
   startMinimized = false,
@@ -87,7 +90,7 @@ export const ChangesetEntry: React.FunctionComponent<{
         changeset.chartReleaseInfo?.cluster === "terra-prod"
       }
       className={`relative h-fit ${panelSizeToInnerClassName(
-        size
+        size,
       )} bg-color-near-bg rounded-2xl shadow-md border-2 ${
         ChartReleaseColors.borderClassName
       } flex flex-col gap-2 px-6 py-4 text-color-body-text`}
@@ -132,11 +135,14 @@ export const ChangesetEntry: React.FunctionComponent<{
         </button>
       </div>
       {disableTitle || minimized || (
-        <div
-          className={`pt-2 flex flex-row gap-3 max-h-full flex-wrap ${
-            appliable ? "" : "opacity-50 pointer-events-none"
-          }`}
-        >
+        <div className="pt-2 flex flex-row gap-3 max-h-full flex-wrap">
+          {changeset.chartReleaseInfo?.name && (
+            <ChartReleaseLinkChip
+              chartRelease={changeset.chartReleaseInfo.name}
+              chart={changeset.chartReleaseInfo.chart}
+              environment={changeset.chartReleaseInfo.environment}
+            />
+          )}
           {changeset.chartReleaseInfo?.chart && (
             <ChartLinkChip chart={changeset.chartReleaseInfo?.chart} />
           )}
@@ -157,12 +163,16 @@ export const ChangesetEntry: React.FunctionComponent<{
             )}
         </div>
       )}
+      {changeset.appliedAt && (
+        <CiRunResourceStatusWidget
+          ciIdentifier={
+            changeset.ciIdentifier?.id || `changeset/${changeset.id}`
+          }
+          poll={false}
+        />
+      )}
       {minimized || (
-        <div
-          className={`overflow-x-auto grid grid-cols-2 pt-2 gap-y-1 gap-x-4 ${
-            !appliable && fadeIfUnappliable ? "opacity-50" : ""
-          }`}
-        >
+        <div className="overflow-x-auto grid grid-cols-2 pt-2 gap-y-1 gap-x-4">
           <h2 className="font-medium text-2xl border-b border-color-divider-line pb-1">
             {appliable ? "Current" : "Before"}
           </h2>
@@ -201,7 +211,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                     <p>
                       {`From commit ${changeset.fromAppVersionCommit.substring(
                         0,
-                        7
+                        7,
                       )} to ${changeset.toAppVersionCommit.substring(0, 7)}`}
                       {changeset.chartReleaseInfo?.chartInfo
                         ?.appImageGitRepo && (
@@ -211,6 +221,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                             href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/compare/${changeset.fromAppVersionCommit}...${changeset.toAppVersionCommit}`}
                             className="underline decoration-color-link-underline"
                             target="_blank"
+                            rel="noreferrer"
                           >
                             git diff ↗
                           </a>
@@ -246,6 +257,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                                 href={`https://github.com/${changeset.chartReleaseInfo?.chartInfo?.appImageGitRepo}/commit/${appVersion.gitCommit}`}
                                 target="_blank"
                                 className="underline decoration-color-link-underline"
+                                rel="noreferrer"
                               >
                                 {`${appVersion.gitCommit?.substring(0, 7)} ↗`}
                               </a>
@@ -370,6 +382,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                       href={`https://github.com/broadinstitute/firecloud-develop/compare/${changeset.fromFirecloudDevelopRef}...${changeset.toFirecloudDevelopRef}`}
                       target="_blank"
                       className="underline decoration-color-link-underline"
+                      rel="noreferrer"
                     >
                       git diff ↗
                     </a>
@@ -407,6 +420,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                     href={`https://github.com/broadinstitute/terra-helmfile/compare/charts/${changeset.chartReleaseInfo.chart}-${changeset.fromChartVersionExact}...charts/${changeset.chartReleaseInfo.chart}-${changeset.toChartVersionExact}`}
                     className="underline decoration-color-link-underline"
                     target="_blank"
+                    rel="noreferrer"
                   >
                     git diff ↗
                   </a>
@@ -523,6 +537,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                   href={`https://github.com/broadinstitute/terra-helmfile/compare/${changeset.fromHelmfileRef}...${changeset.toHelmfileRef}`}
                   target="_blank"
                   className="underline decoration-color-link-underline"
+                  rel="noreferrer"
                 >
                   git diff ↗
                 </a>
@@ -537,13 +552,27 @@ export const ChangesetEntry: React.FunctionComponent<{
           {changeset.supersededAt && (
             <h1 className="text-2xl font-light">
               This proposed change is out of date as of{" "}
-              <PrettyPrintTime time={changeset.supersededAt} /> (local time)
+              <PrettyPrintTime time={changeset.supersededAt} />
             </h1>
           )}
           {changeset.appliedAt && (
             <>
               <h1 className="text-2xl font-light">
                 Applied at <PrettyPrintTime time={changeset.appliedAt} />
+                {changeset.appliedByInfo && (
+                  <>
+                    {" "}
+                    by <UserLink user={changeset.appliedByInfo} />
+                  </>
+                )}
+                {changeset.plannedByInfo &&
+                  changeset.plannedByInfo.email !=
+                    changeset.appliedByInfo?.email && (
+                    <>
+                      {" "}
+                      (planned by <UserLink user={changeset.plannedByInfo} />)
+                    </>
+                  )}
               </h1>
               {(changeset.chartReleaseInfo?.appVersionExact !=
                 changeset.toAppVersionExact ||
@@ -558,6 +587,23 @@ export const ChangesetEntry: React.FunctionComponent<{
             </>
           )}
         </div>
+      )}
+      {!changeset.appliedAt && changeset.plannedByInfo && (
+        <SelfUserContext.Consumer>
+          {(selfUser) =>
+            selfUser?.email !== changeset.plannedByInfo?.email ? (
+              <h1 className="text-2xl font-light">
+                Planned at <PrettyPrintTime time={changeset.createdAt} />
+                {changeset.plannedByInfo && (
+                  <>
+                    {" "}
+                    by <UserLink user={changeset.plannedByInfo} />
+                  </>
+                )}
+              </h1>
+            ) : null
+          }
+        </SelfUserContext.Consumer>
       )}
     </div>
   );

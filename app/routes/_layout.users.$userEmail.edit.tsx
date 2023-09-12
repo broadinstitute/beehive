@@ -1,17 +1,17 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
-import {
-  UsersApi,
-  V2controllersEditableUser,
-} from "@sherlock-js-client/sherlock";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
+import type { SherlockUserV3Upsert } from "@sherlock-js-client/sherlock";
+import { UsersApi } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { UserEditableFields } from "~/features/sherlock/users/edit/user-editable-fields";
 import { UserColors } from "~/features/sherlock/users/user-colors";
@@ -34,34 +34,24 @@ export async function action({ request, params }: ActionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();
-  const userRequest: V2controllersEditableUser = {
+  const userRequest: SherlockUserV3Upsert = {
     ...formDataToObject(formData, false),
     nameInferredFromGithub: formData.get("nameInferredFromGithub") === "true",
+    githubAccessToken: session.get(sessionFields.githubAccessToken),
   };
 
   const api = new UsersApi(SherlockConfiguration);
 
   return api
-    .apiV2UsersSelectorPatch(
+    .apiUsersV3Put(
       {
-        selector: params.userEmail || "",
         user: userRequest,
       },
-      handleIAP(request)
-    )
-    .then(() =>
-      api.apiV2ProceduresUsersLinkGithubPost(
-        {
-          githubAccessPayloadRequest: {
-            githubAccessToken: session.get(sessionFields.githubAccessToken),
-          },
-        },
-        handleIAP(request)
-      )
+      handleIAP(request),
     )
     .then(
       (user) => redirect(`/users/${user.email}`),
-      makeErrorResponseReturner(userRequest)
+      makeErrorResponseReturner(userRequest),
     );
 }
 

@@ -1,9 +1,5 @@
-import {
-  ActionArgs,
-  LoaderArgs,
-  redirect,
-  V2_MetaFunction,
-} from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   useActionData,
   useLoaderData,
@@ -25,8 +21,8 @@ import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-rel
 import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
 import { commitSession } from "~/session.server";
@@ -68,11 +64,11 @@ export async function loader({ request }: LoaderArgs) {
           {
             selector: changeset.chartRelease || "",
           },
-          handleIAP(request)
+          handleIAP(request),
         )
         .catch(errorResponseThrower);
       return changeset;
-    })
+    }),
   );
 }
 
@@ -87,7 +83,7 @@ export async function action({ request }: ActionArgs) {
           .getAll("changeset")
           .filter((value): value is string => typeof value === "string"),
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async () => {
       if (
@@ -107,10 +103,13 @@ export async function action({ request }: ActionArgs) {
                 .getAll("sync")
                 .filter((value): value is string => typeof value === "string")
                 .join(","),
-              "refresh-only": (formData.get("action") === "refresh").toString(),
+              "changeset-ids": formData
+                .getAll("sync-changeset")
+                .filter((value): value is string => typeof value === "string")
+                .join(","),
             },
           },
-          "sync your changes"
+          "sync your changes",
         );
       }
       return redirect(
@@ -119,7 +118,7 @@ export async function action({ request }: ActionArgs) {
           headers: {
             "Set-Cookie": await commitSession(session),
           },
-        }
+        },
       );
     }, makeErrorResponseReturner());
 }
@@ -153,9 +152,12 @@ export default function Route() {
   const changesetLookup = useMemo(
     () =>
       new Map(
-        changesets.map((changeset) => [changeset.chartRelease || "", changeset])
+        changesets.map((changeset) => [
+          changeset.chartRelease || "",
+          changeset,
+        ]),
       ),
-    [changesets]
+    [changesets],
   );
   const [includedChangesets, setIncludedChangesets] = useState<
     Map<string, boolean>
@@ -166,14 +168,14 @@ export default function Route() {
           (changeset): changeset is { chartRelease: string } =>
             !changeset.appliedAt &&
             !changeset.supersededAt &&
-            changeset.chartRelease !== undefined
+            changeset.chartRelease !== undefined,
         )
-        .map((changeset) => [changeset.chartRelease, true])
-    )
+        .map((changeset) => [changeset.chartRelease, true]),
+    ),
   );
 
   const includedCount = Array.from(includedChangesets).filter(
-    ([_, included]) => included
+    ([_, included]) => included,
   ).length;
 
   let includesProd = false;
@@ -229,152 +231,201 @@ export default function Route() {
         <BigActionBox
           title="Review Version Changes"
           returnPath={returnURL}
-          returnText="Go Back Without Applying"
+          returnText={
+            changesets.some((c) => !c.appliedAt)
+              ? "Go Back Without Applying"
+              : "Go Home"
+          }
           submitText={`Apply ${includedCount} Change${
             includedCount == 1 ? "" : "s"
           }`}
           hideButton={includedCount == 0}
           {...returnColors}
         >
-          <p>
-            Applying these changes will immediately update our systems to
-            reflect what the versions of{" "}
-            {changesets.length > 0
-              ? "this chart instance"
-              : `these ${changesets.length} chart instances`}{" "}
-            should be.
-          </p>
-          {filterText && (
-            <p>
-              Note that this button will apply <i>all</i> the below changes, not
-              just the ones visible with your "{filterText}" filter.
-            </p>
-          )}
-          {changesets.length > 1 && (
-            <div className="flex flex-col space-y-1">
-              You can click the checkboxes to choose which changes to apply.
-              <ul>
-                {Array.from(includedChangesets).map(([name, included]) => (
-                  <li key={name}>
-                    <label className="inline-block cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={included}
-                        onChange={() => {
-                          setIncludedChangesets(
-                            (previous) =>
-                              new Map([
-                                ...previous,
-                                [name, !(previous.get(name) || false)],
-                              ])
-                          );
-                        }}
-                        className="align-middle mr-3 cursor-pointer"
-                      />
-                      <span className="align-middle">{name}</span>
-                    </label>
-                    {included && (
+          {changesets.some((c) => !c.appliedAt) ? (
+            <>
+              <p>
+                Beehive has planned out these version changes, but they're not
+                applied yet. Click the "
+                <b className="font-semibold">{`Apply ${includedCount} Change${
+                  includedCount == 1 ? "" : "s"
+                }`}</b>
+                " button below to apply these versions.
+              </p>
+              {filterText && (
+                <p>
+                  Note that this button will apply <i>all</i> the below changes,
+                  not just the ones visible with your "{filterText}" filter.
+                </p>
+              )}
+              {changesets.length > 1 && (
+                <div className="flex flex-col space-y-1">
+                  You can click the checkboxes to choose which changes to apply.
+                  <ul>
+                    {Array.from(includedChangesets).map(([name, included]) => (
+                      <li key={name}>
+                        <label className="inline-block cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={included}
+                            onChange={() => {
+                              setIncludedChangesets(
+                                (previous) =>
+                                  new Map([
+                                    ...previous,
+                                    [name, !(previous.get(name) || false)],
+                                  ]),
+                              );
+                            }}
+                            className="align-middle mr-3 cursor-pointer"
+                          />
+                          <span className="align-middle">{name}</span>
+                        </label>
+                        {included && (
+                          <input
+                            type="hidden"
+                            name="changeset"
+                            value={changesetLookup.get(name)?.id}
+                          />
+                        )}
+                        {included &&
+                          changesetLookup.get(name)?.chartReleaseInfo
+                            ?.environmentInfo?.lifecycle !== "template" && (
+                            <>
+                              {/* 
+                          These two inputs are basically passed verbatim to the GitHub Action that will sync 
+                          or refresh changes. We're indeed potentially passing the changeset ID again, but 
+                          it helps the Remix action know what to do. The 'changeset' list from above are the 
+                          changesets to apply, while 'sync-changeset' is a similar list but lacking templates
+                          so it makes sense to be passed to the sync GHA.
+                          */}
+                              <input type="hidden" name="sync" value={name} />
+                              <input
+                                type="hidden"
+                                name="sync-changeset"
+                                value={changesetLookup.get(name)?.id}
+                              />
+                            </>
+                          )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {changesets.length == 1 && (
+                <>
+                  <input
+                    type="hidden"
+                    name="changeset"
+                    value={changesets.at(0)?.id}
+                  />
+                  {changesets.at(0)?.chartReleaseInfo?.environmentInfo
+                    ?.lifecycle === "template" || (
+                    <>
+                      {/*
+                  Same as the above comment here, just in a different form because we're in a different
+                  (single change) case where the HTML is structured differently.
+                  */}
                       <input
                         type="hidden"
-                        name="changeset"
-                        value={changesetLookup.get(name)?.id}
+                        name="sync"
+                        value={changesets.at(0)?.chartRelease || ""}
                       />
-                    )}
-                    {included &&
-                      changesetLookup.get(name)?.chartReleaseInfo
-                        ?.environmentInfo?.lifecycle !== "template" && (
-                        <input type="hidden" name="sync" value={name} />
-                      )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {changesets.length == 1 && (
-            <>
-              <input
-                type="hidden"
-                name="changeset"
-                value={changesets.at(0)?.id}
-              />
-              {changesets.at(0)?.chartReleaseInfo?.environmentInfo
-                ?.lifecycle === "template" || (
-                <input
-                  type="hidden"
-                  name="sync"
-                  value={changesets.at(0)?.chartRelease || ""}
-                />
+                      <input
+                        type="hidden"
+                        name="sync-changeset"
+                        value={changesets.at(0)?.id}
+                      />
+                    </>
+                  )}
+                </>
               )}
+              <details>
+                <summary className="cursor-pointer">
+                  Click here if you'd like to set advanced or non-standard
+                  deployment options.
+                </summary>
+                <EnumInputSelect
+                  name="action"
+                  className="grid grid-cols-2 mt-2"
+                  fieldValue={actionToRun}
+                  setFieldValue={setActionToRun}
+                  enums={[
+                    ["Run Deployment", "sync"],
+                    ["Do Nothing", "none"],
+                  ]}
+                  {...returnColors}
+                />
+                <div className="mt-4 pl-6 border-l-2 border-color-divider-line flex gap-2 flex-col">
+                  {actionToRun === "sync" && (
+                    <>
+                      <p className="font-semibold">
+                        This option is the default.
+                      </p>
+                      <p>
+                        A GitHub Action will be kicked off to deploy any
+                        selected changes as soon as you apply them.
+                      </p>
+                      <p>This means it will hard-refresh and sync ArgoCD.</p>
+                      <p>
+                        When that GitHub Action completes, post-deploy hooks
+                        (like Slack notifications) will run normally.
+                      </p>
+                    </>
+                  )}
+                  {actionToRun === "none" && (
+                    <>
+                      <p>
+                        When you apply version changes, nothing will happen
+                        afterwards.
+                      </p>
+                      <p>
+                        Our platform will remember your changes, but they won't
+                        be deployed until someone/something hard-refreshes and
+                        syncs ArgoCD.
+                      </p>
+                      <p>
+                        Since no automatic deployment action will be run,
+                        post-deploy hooks (like Slack notifications) will not be
+                        run.
+                      </p>
+                      <p className="font-semibold">
+                        This option is not recommended unless you want to use
+                        ArgoCD yourself to manually deploy changes.
+                      </p>
+                    </>
+                  )}
+                  {includesTemplate && (
+                    <p>
+                      At least one of the changes you're applying is to a
+                      template, so no GitHub Action will be run for that
+                      regardless of what option you select here.
+                    </p>
+                  )}
+                </div>
+              </details>
+            </>
+          ) : (
+            <>
+              <p>These changes have already been applied.</p>
+              <p>
+                You can click the buttons in each entry to jump to that resource
+                in Beehive.
+              </p>
             </>
           )}
-          <div>
-            <h2 className="font-light text-2xl">Action to Run</h2>
-            <EnumInputSelect
-              name="action"
-              className="grid grid-cols-3 mt-2"
-              fieldValue={actionToRun}
-              setFieldValue={setActionToRun}
-              enums={[
-                ["Refresh + Sync", "sync"],
-                ["Refresh", "refresh"],
-                ["None", "none"],
-              ]}
-              {...returnColors}
-            />
-            <div className="mt-4 pl-6 border-l-2 border-color-divider-line flex flex-col">
-              {actionToRun === "sync" && (
-                <>
-                  <p className="pb-2">
-                    When applying, a GitHub Action will be kicked off to{" "}
-                    <b className="font-semibold">refresh and sync</b> ArgoCD.
-                    This will deploy the applied versions immediately.
-                  </p>
-                  <p>
-                    Note that refreshing ArgoCD just makes it notice the
-                    versions you're applying here, it won't recalculate
-                    anything.
-                  </p>
-                </>
-              )}
-              {actionToRun === "refresh" && (
-                <>
-                  <p className="pb-2">
-                    When applying, a GitHub Action will be kicked off to{" "}
-                    <b className="font-semibold">just refresh</b> ArgoCD. This
-                    will not deployed the applied versions immediately, but it
-                    will make ArgoCD say that the app is "out of sync." ArgoCD's
-                    manual sync button would then deploy the new versions.
-                  </p>
-                  <p>
-                    Note that refreshing ArgoCD just makes it notice the
-                    versions you're applying here, it won't recalculate
-                    anything.
-                  </p>
-                </>
-              )}
-              {actionToRun === "none" && (
-                <p>
-                  When applying, no GitHub Action will be kicked off. The
-                  changes won't be deployed until someone or something
-                  hard-refreshes and syncs ArgoCD.
-                </p>
-              )}
-              {includesTemplate && (
-                <p className="mt-4">
-                  {
-                    "At least one of the changes you're applying is to a template, so no GitHub Actions will be run for that regardless of what option you select here."
-                  }
-                </p>
-              )}
-            </div>
-          </div>
+
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </BigActionBox>
       </OutsetPanel>
 
       <InsetPanel size="two-thirds">
         <InteractiveList
-          title="Changes to Be Applied"
+          title={
+            changesets.some((c) => !c.appliedAt)
+              ? "Changes to Be Applied"
+              : "Applied Changes"
+          }
           size="two-thirds"
           {...ChartReleaseColors}
         >
@@ -394,11 +445,11 @@ export default function Route() {
               changeset.chartReleaseInfo?.cluster?.includes(filterText) ||
               changeset.chartReleaseInfo?.namespace?.includes(filterText) ||
               changeset.chartReleaseInfo?.appVersionExact?.includes(
-                filterText
+                filterText,
               ) ||
               changeset.toAppVersionResolver?.includes(filterText) ||
               changeset.chartReleaseInfo?.chartVersionExact?.includes(
-                filterText
+                filterText,
               ) ||
               changeset.toChartVersionResolver?.includes(filterText)
             }
@@ -411,7 +462,7 @@ export default function Route() {
                 includedCheckboxValue={
                   changesets.length > 1
                     ? includedChangesets.get(
-                        changeset.chartRelease as string
+                        changeset.chartRelease as string,
                       ) || false
                     : undefined
                 }
@@ -421,7 +472,7 @@ export default function Route() {
                       new Map([
                         ...previous,
                         [changeset.chartRelease as string, value],
-                      ])
+                      ]),
                   )
                 }
                 startMinimized={changesets.length > 1}

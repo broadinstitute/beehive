@@ -1,12 +1,17 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import {
+  defer,
+  type LoaderArgs,
+  type SerializeFrom,
+  type V2_MetaFunction,
+} from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { AppVersionsApi } from "@sherlock-js-client/sherlock";
+import { AppVersionsApi, CiIdentifiersApi } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -14,8 +19,8 @@ import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
 import { AppVersionDetails } from "~/features/sherlock/app-versions/view/app-version-details";
 import {
-  SherlockConfiguration,
   handleIAP,
+  SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { useChartContext } from "~/routes/_layout.charts.$chartName";
 
@@ -36,18 +41,31 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  return new AppVersionsApi(SherlockConfiguration)
-    .apiV2AppVersionsSelectorGet(
-      { selector: `${params.chartName}/${params.appVersion}` },
-      handleIAP(request)
-    )
-    .catch(errorResponseThrower);
+  return defer({
+    ciRuns: new CiIdentifiersApi(SherlockConfiguration)
+      .apiCiIdentifiersV3SelectorGet(
+        {
+          selector: `app-version/${params.chartName}/${params.appVersion}`,
+        },
+        handleIAP(request),
+      )
+      .then(
+        (ciIdentifier) => ciIdentifier.ciRuns,
+        () => [],
+      ),
+    appVersion: await new AppVersionsApi(SherlockConfiguration)
+      .apiV2AppVersionsSelectorGet(
+        { selector: `${params.chartName}/${params.appVersion}` },
+        handleIAP(request),
+      )
+      .catch(errorResponseThrower),
+  });
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const appVersion = useLoaderData<typeof loader>();
+  const { appVersion, ciRuns } = useLoaderData<typeof loader>();
   const context = useChartContext();
   return (
     <>
@@ -56,7 +74,12 @@ export default function Route() {
           subtitle={`App Version of ${appVersion.chart}`}
           title={appVersion.appVersion || ""}
         >
-          <AppVersionDetails appVersion={appVersion} toEdit="./edit" />
+          <AppVersionDetails
+            appVersion={appVersion}
+            initialCiRuns={ciRuns}
+            toEdit="./edit"
+            toTimeline="./timeline"
+          />
         </ItemDetails>
       </OutsetPanel>
       <Outlet context={{ appVersion, ...context }} />
@@ -66,6 +89,6 @@ export default function Route() {
 
 export const useChartAppVersionContext = useOutletContext<
   {
-    appVersion: SerializeFrom<typeof loader>;
+    appVersion: SerializeFrom<typeof loader>["appVersion"];
   } & ReturnType<typeof useChartContext>
 >;

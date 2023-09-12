@@ -1,17 +1,21 @@
 import { SerializeFrom } from "@remix-run/node";
 import { V2controllersChart } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { GithubLinkChip } from "~/features/github/github-link-chip";
 import { AppVersionColors } from "../../app-versions/app-version-colors";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 import { ChartVersionColors } from "../../chart-versions/chart-version-colors";
+import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import { MutateControls } from "../../mutate-controls";
 import { ChartColors } from "../chart-colors";
 import { ChartLinkChip, PlaybookLinkChip } from "../chart-link-chip";
-import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 
 export interface ChartDetailsProps {
   chart: V2controllersChart | SerializeFrom<V2controllersChart>;
+  initialCiRuns?: React.ComponentProps<
+    typeof CiRunResourceStatusWidget
+  >["initialCiRuns"];
   toChartVersions?: string;
   toAppVersions?: string;
   toChartReleases?: string;
@@ -23,6 +27,7 @@ export interface ChartDetailsProps {
 
 export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
   chart,
+  initialCiRuns,
   toChartVersions,
   toAppVersions,
   toChartReleases,
@@ -44,6 +49,12 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
           <PlaybookLinkChip playbookURL={chart.playbookURL} />
         )}
       </div>
+    )}
+    {!phraseAsApp && (
+      <CiRunResourceStatusWidget
+        ciIdentifier={chart.ciIdentifier?.id || `chart/${chart.id}`}
+        initialCiRuns={initialCiRuns}
+      />
     )}
     {chart.description && (
       <h3 className="text-2xl text-color-header-text">

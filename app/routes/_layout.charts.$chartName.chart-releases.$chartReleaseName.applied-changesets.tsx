@@ -4,7 +4,7 @@ import { ChangesetsApi } from "@sherlock-js-client/sherlock";
 import { useMemo } from "react";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
-import { AppliedChangesetsPanel } from "~/features/sherlock/changesets/list/applied-changesets-panel";
+import { VersionHistoryPanel } from "~/features/sherlock/changesets/list/version-history-panel";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import {
   SherlockConfiguration,
@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderArgs) {
           offset: offset,
           limit: limit,
         },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     offset,
@@ -65,7 +65,7 @@ export default function Route() {
   }, [changesets, chartRelease]);
 
   return (
-    <AppliedChangesetsPanel
+    <VersionHistoryPanel
       changesets={assembledChangesets}
       offset={offset}
       limit={limit}

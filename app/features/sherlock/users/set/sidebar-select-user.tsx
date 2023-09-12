@@ -1,12 +1,12 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersUser } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
 import { SidebarFilterControlledList } from "~/components/panel-structures/sidebar-filter-controlled-list";
 import { ListUserButtonText } from "../list/list-user-button-text";
 import { matchUser } from "../list/matchUser";
 import { UserColors } from "../user-colors";
 
 export const SidebarSelectUser: React.FunctionComponent<{
-  users: SerializeFrom<V2controllersUser[]>;
+  users: SerializeFrom<SherlockUserV3[]>;
   fieldValue: string;
   setFieldValue: (value: string) => void;
   title?: string;

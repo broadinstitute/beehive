@@ -37,8 +37,9 @@ export async function loader({ request }: LoaderArgs) {
     sherlockVersionPromise: sherlock
       .versionGet(handleIAP(request))
       .then((versionResponse) => versionResponse),
-    mySherlockUserPromise: sherlockUsers.apiV2ProceduresUsersMeGet(
-      handleIAP(request)
+    mySherlockUserPromise: sherlockUsers.apiUsersV3SelectorGet(
+      { selector: "self" },
+      handleIAP(request),
     ),
     myGitHubUserPromise: octokit.users
       .getAuthenticated()
@@ -97,6 +98,10 @@ export default function Route() {
           {(mySherlockUser) => (
             <p>
               You are <span className="font-mono"> {mySherlockUser.email}</span>
+              .{" "}
+              {mySherlockUser.suitable
+                ? "You are currently suitable."
+                : "You are not currently suitable."}
             </p>
           )}
         </Await>

@@ -1,12 +1,20 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import type {
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from "@remix-run/node";
+import { defer } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
+import {
+  ChartReleasesApi,
+  CiIdentifiersApi,
+} from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
@@ -36,18 +44,31 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesSelectorGet(
-      { selector: `${params.environmentName}/${params.chartName}` },
-      handleIAP(request)
-    )
-    .catch(errorResponseThrower);
+  return defer({
+    ciRuns: new CiIdentifiersApi(SherlockConfiguration)
+      .apiCiIdentifiersV3SelectorGet(
+        {
+          selector: `chart-release/${params.environmentName}/${params.chartName}`,
+        },
+        handleIAP(request),
+      )
+      .then(
+        (ciIdentifier) => ciIdentifier.ciRuns,
+        () => [],
+      ),
+    chartRelease: await new ChartReleasesApi(SherlockConfiguration)
+      .apiV2ChartReleasesSelectorGet(
+        { selector: `${params.environmentName}/${params.chartName}` },
+        handleIAP(request),
+      )
+      .catch(errorResponseThrower),
+  });
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const chartRelease = useLoaderData<typeof loader>();
+  const { chartRelease, ciRuns } = useLoaderData<typeof loader>();
   return (
     <>
       <OutsetPanel {...ChartReleaseColors}>
@@ -69,10 +90,12 @@ export default function Route() {
         >
           <ChartReleaseDetails
             chartRelease={chartRelease}
+            initialCiRuns={ciRuns}
             toChangeVersions="./change-versions"
             toVersionHistory="./applied-changesets"
             toEdit="./edit"
             toDatabaseInstance="./database-instance"
+            toEditDeployHooks="./deploy-hooks"
             // toLinkPagerduty={
             //   chartRelease.environmentInfo?.pagerdutyIntegration
             //     ? "./link-pagerduty"
@@ -88,5 +111,5 @@ export default function Route() {
 }
 
 export const useEnvironmentChartReleaseContext = useOutletContext<{
-  chartRelease: SerializeFrom<typeof loader>;
+  chartRelease: SerializeFrom<typeof loader>["chartRelease"];
 }>;
