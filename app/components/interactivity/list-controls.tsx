@@ -1,4 +1,5 @@
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { NavButton } from "./nav-button";
 
 export interface ListControlsProps {
@@ -20,8 +21,8 @@ export const ListControls: React.FunctionComponent<ListControlsProps> = ({
 }) => (
   <div
     className={`${panelSizeToInnerClassName(
-      size
-    )} flex flex-row-reverse gap-4 flex-wrap laptop:flex-nowrap`}
+      size,
+    )} flex flex-row-reverse gap-4 flex-wrap`}
   >
     {toCreate && (
       <NavButton

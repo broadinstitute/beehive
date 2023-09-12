@@ -10,7 +10,7 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { useEnvironmentChartReleaseContext } from "~/routes/_layout.environments.$environmentName.chart-releases.$chartName";
-import { AppliedChangesetsPanel } from "../features/sherlock/changesets/list/applied-changesets-panel";
+import { VersionHistoryPanel } from "../features/sherlock/changesets/list/version-history-panel";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderArgs) {
           offset: offset,
           limit: limit,
         },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     offset,
@@ -65,7 +65,7 @@ export default function Route() {
   }, [changesets, chartRelease]);
 
   return (
-    <AppliedChangesetsPanel
+    <VersionHistoryPanel
       changesets={assembledChangesets}
       offset={offset}
       limit={limit}

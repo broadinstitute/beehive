@@ -1,13 +1,17 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersCluster } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { V2controllersCluster } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
+import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import { MutateControls } from "../../mutate-controls";
 import { ProdWarning } from "../../prod-warning";
 import { ClusterColors } from "../cluster-colors";
 
 export interface ClusterDetailsProps {
   cluster: V2controllersCluster | SerializeFrom<V2controllersCluster>;
+  initialCiRuns?: React.ComponentProps<
+    typeof CiRunResourceStatusWidget
+  >["initialCiRuns"];
   toChartReleases?: string;
   toEdit?: string;
   toDelete?: string;
@@ -15,12 +19,17 @@ export interface ClusterDetailsProps {
 
 export const ClusterDetails: React.FunctionComponent<ClusterDetailsProps> = ({
   cluster,
+  initialCiRuns,
   toChartReleases,
   toEdit,
   toDelete,
 }) => (
   <div className="flex flex-col space-y-10">
     {cluster.name === "terra-prod" && <ProdWarning name={cluster.name} />}
+    <CiRunResourceStatusWidget
+      ciIdentifier={cluster.ciIdentifier?.id || `cluster/${cluster.id}`}
+      initialCiRuns={initialCiRuns}
+    />
     {toChartReleases && (
       <NavButton to={toChartReleases} {...ChartReleaseColors}>
         <h2>View Charts in This Cluster</h2>

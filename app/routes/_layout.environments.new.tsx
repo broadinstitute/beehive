@@ -1,15 +1,11 @@
-import {
-  ActionArgs,
-  LoaderArgs,
-  redirect,
-  V2_MetaFunction,
-} from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import {
   ClustersApi,
   EnvironmentsApi,
   UsersApi,
-  V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useMemo, useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -66,10 +62,10 @@ export async function loader({ request }: LoaderArgs) {
       .apiV2ClustersGet({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
     new UsersApi(SherlockConfiguration)
-      .apiV2UsersGet({}, handleIAP(request))
+      .apiUsersV3Get({}, handleIAP(request))
       .then(
         (users) => users.sort(makeUserSorter(selfUserEmail)),
-        errorResponseThrower
+        errorResponseThrower,
       ),
     preconfiguredLifecycle,
   ]);
@@ -111,7 +107,7 @@ export async function action({ request }: ActionArgs) {
   return new EnvironmentsApi(SherlockConfiguration)
     .apiV2EnvironmentsPost(
       { environment: environmentRequest },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async (environment) => {
       if (
@@ -129,7 +125,7 @@ export async function action({ request }: ActionArgs) {
               ).toString(),
             },
           },
-          "provision your BEE"
+          "provision your BEE",
         );
       }
       return redirect(`/environments/${environment.name}`, {
@@ -149,13 +145,13 @@ export default function Route() {
   const { environments } = useEnvironmentsContext();
 
   const [lifecycle, setLifecycle] = useState(
-    errorInfo?.formState?.lifecycle || preconfiguredLifecycle || "dynamic"
+    errorInfo?.formState?.lifecycle || preconfiguredLifecycle || "dynamic",
   );
   const [templateEnvironment, setTemplateEnvironment] = useState(
-    errorInfo?.formState?.templateEnvironment || ""
+    errorInfo?.formState?.templateEnvironment || "",
   );
   const [defaultCluster, setDefaultCluster] = useState(
-    errorInfo?.formState?.defaultCluster || ""
+    errorInfo?.formState?.defaultCluster || "",
   );
 
   let potentialDuplicates = useMemo(
@@ -164,9 +160,9 @@ export default function Route() {
         (environment) =>
           environment.lifecycle === "dynamic" &&
           environment.owner === userEmail &&
-          environment.templateEnvironment === templateEnvironment
+          environment.templateEnvironment === templateEnvironment,
       ),
-    [userEmail, environments, lifecycle, templateEnvironment]
+    [userEmail, environments, templateEnvironment],
   );
 
   const [actionToRun, setActionToRun] = useState("provision-seed");
@@ -191,7 +187,7 @@ export default function Route() {
             setSidebarFilterText={setSidebarFilterText}
             environment={errorInfo?.formState}
             templateEnvironments={environments.filter(
-              (environment) => environment.lifecycle === "template"
+              (environment) => environment.lifecycle === "template",
             )}
             lifecycle={lifecycle}
             setLifecycle={setLifecycle}
@@ -336,7 +332,7 @@ export default function Route() {
               <DuplicateBeeWarning
                 template={templateEnvironment}
                 matchingEnvironmentNames={potentialDuplicates.map(
-                  (environment) => environment.name || ""
+                  (environment) => environment.name || "",
                 )}
               />
             )}

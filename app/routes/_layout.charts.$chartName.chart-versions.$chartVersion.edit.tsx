@@ -1,9 +1,9 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
-import {
-  ChartVersionsApi,
-  V2controllersChartVersion,
-} from "@sherlock-js-client/sherlock";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
+import type { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
+import { ChartVersionsApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -13,8 +13,8 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { ChartVersionColors } from "~/features/sherlock/chart-versions/chart-version-colors";
 import { ChartVersionEditableFields } from "~/features/sherlock/chart-versions/edit/chart-version-editable-fields";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -52,14 +52,14 @@ export async function action({ request, params }: ActionArgs) {
         selector: `${params.chartName}/${params.chartVersion}`,
         chartVersion: chartVersionRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (chartVersion) =>
         redirect(
-          `/charts/${params.chartName}/chart-versions/${chartVersion.chartVersion}`
+          `/charts/${params.chartName}/chart-versions/${chartVersion.chartVersion}`,
         ),
-      makeErrorResponseReturner(chartVersionRequest)
+      makeErrorResponseReturner(chartVersionRequest),
     );
 }
 

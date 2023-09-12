@@ -1,8 +1,8 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersUser } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
 
 export const ListUserButtonText: React.FunctionComponent<{
-  user: SerializeFrom<V2controllersUser>;
+  user: SerializeFrom<SherlockUserV3>;
   selfEmail?: string;
 }> = ({ user, selfEmail }) => (
   <h2 className="font-light">

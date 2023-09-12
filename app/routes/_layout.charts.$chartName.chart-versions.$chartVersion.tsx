@@ -1,12 +1,20 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import type {
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from "@remix-run/node";
+import { defer } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { ChartVersionsApi } from "@sherlock-js-client/sherlock";
+import {
+  ChartVersionsApi,
+  CiIdentifiersApi,
+} from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -36,18 +44,31 @@ export const meta: V2_MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderArgs) {
-  return new ChartVersionsApi(SherlockConfiguration)
-    .apiV2ChartVersionsSelectorGet(
-      { selector: `${params.chartName}/${params.chartVersion}` },
-      handleIAP(request)
-    )
-    .catch(errorResponseThrower);
+  return defer({
+    ciRuns: new CiIdentifiersApi(SherlockConfiguration)
+      .apiCiIdentifiersV3SelectorGet(
+        {
+          selector: `chart-version/${params.chartName}/${params.chartVersion}`,
+        },
+        handleIAP(request),
+      )
+      .then(
+        (ciIdentifier) => ciIdentifier.ciRuns,
+        () => [],
+      ),
+    chartVersion: await new ChartVersionsApi(SherlockConfiguration)
+      .apiV2ChartVersionsSelectorGet(
+        { selector: `${params.chartName}/${params.chartVersion}` },
+        handleIAP(request),
+      )
+      .catch(errorResponseThrower),
+  });
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const chartVersion = useLoaderData<typeof loader>();
+  const { chartVersion, ciRuns } = useLoaderData<typeof loader>();
   const context = useChartContext();
   return (
     <>
@@ -56,7 +77,12 @@ export default function Route() {
           subtitle={`Chart Version of ${chartVersion.chart}`}
           title={chartVersion.chartVersion || ""}
         >
-          <ChartVersionDetails chartVersion={chartVersion} toEdit="./edit" />
+          <ChartVersionDetails
+            chartVersion={chartVersion}
+            initialCiRuns={ciRuns}
+            toEdit="./edit"
+            toTimeline="./timeline"
+          />
         </ItemDetails>
       </OutsetPanel>
       <Outlet context={{ chartVersion, ...context }} />
@@ -66,6 +92,6 @@ export default function Route() {
 
 export const useChartChartVersionContext = useOutletContext<
   {
-    chartVersion: SerializeFrom<typeof loader>;
+    chartVersion: SerializeFrom<typeof loader>["chartVersion"];
   } & ReturnType<typeof useChartContext>
 >;

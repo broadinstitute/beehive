@@ -12,6 +12,9 @@ export default {
       ultrawide: "2750px",
     },
     extend: {
+      animation: {
+        "spin-slow": "spin 3s linear infinite",
+      },
       colors: Object.fromEntries(
         [
           "far-bg",
@@ -43,6 +46,8 @@ export default {
           "app-version-border",
           "chart-version-bg",
           "chart-version-border",
+          "ci-bg",
+          "ci-border",
           "misc-type-bg",
           "misc-type-border",
 
@@ -51,10 +56,15 @@ export default {
           "error-button",
 
           "beehive-logo",
+
+          "status-red",
+          "status-green",
+          "status-yellow",
+          "status-gray",
         ].map((name) => [
           `color-${name}`,
           `rgb(var(--color-${name}, 255 0 0) / <alpha-value>)`,
-        ])
+        ]),
       ),
     },
   },

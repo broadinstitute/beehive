@@ -1,12 +1,7 @@
-import {
-  AlertTriangle,
-  Github,
-  LucideProps,
-  Megaphone,
-  Wand,
-  X,
-} from "lucide-react";
-import { ReactElement, useEffect, useState } from "react";
+import type { LucideProps } from "lucide-react";
+import { AlertTriangle, Github, Megaphone, Wand, X } from "lucide-react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 
 export type Notification =
   | GitHubActionsNotification
@@ -45,7 +40,7 @@ export const NotificationComponent: React.FunctionComponent<{
   notification: Notification;
   close: () => void;
 }> = ({ notification, close }) => {
-  let Icon: (props: LucideProps) => ReactElement;
+  let Icon: (props: LucideProps) => ReactNode;
   let title: string;
   switch (notification.type) {
     case "gha":
@@ -86,6 +81,7 @@ export const NotificationComponent: React.FunctionComponent<{
         }`}
         href={notification.url}
         target="_blank"
+        rel="noreferrer"
       >
         <div className="p-6 pt-6">
           <div className="flex flex-row space-x-2 mb-4">

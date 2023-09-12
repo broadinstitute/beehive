@@ -1,8 +1,8 @@
-import { V2controllersUser } from "@sherlock-js-client/sherlock";
+import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
 
 export function makeUserSorter(
-  emailToComeFirst?: string | null
-): (a: V2controllersUser, b: V2controllersUser) => number {
+  emailToComeFirst?: string | null,
+): (a: SherlockUserV3, b: SherlockUserV3) => number {
   return (a, b) => {
     if (a.email === emailToComeFirst) {
       return -1;

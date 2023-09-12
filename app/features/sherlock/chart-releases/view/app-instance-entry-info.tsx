@@ -1,7 +1,8 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
 import { InlinePopover } from "~/components/interactivity/inline-popover";
 import { ArgoLinkChip } from "~/features/sherlock/chart-releases/chart-release-link-chip";
+import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
 import { EnvironmentColors } from "../../environments/environment-colors";
 import { AppInstancePopoverContents } from "./app-instance-popover-contents";
 
@@ -20,6 +21,12 @@ export const AppInstanceEntryInfo: React.FunctionComponent<{
         </InlinePopover>
       )}
       {chartRelease.name && <ArgoLinkChip chartRelease={chartRelease.name} />}
+      <CiRunResourceStatusWidget
+        ciIdentifier={
+          chartRelease.ciIdentifier?.id || `chart-release/${chartRelease.id}`
+        }
+        asChip
+      />
     </div>
     <div className="border-r border-color-divider-line"></div>
     <div className="flex flex-col gap-2 grow">

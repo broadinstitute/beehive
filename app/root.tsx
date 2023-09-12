@@ -1,10 +1,10 @@
-import {
-  json,
+import type {
   LinksFunction,
   LoaderArgs,
-  redirect,
   V2_MetaFunction,
 } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import type { ShouldRevalidateFunction } from "@remix-run/react";
 import {
   Links,
   LiveReload,
@@ -12,7 +12,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  ShouldRevalidateFunction,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
@@ -25,8 +24,8 @@ import { PagerdutyTokenContext } from "./components/logic/pagerduty-token";
 import { LoadThemeSetter } from "./components/logic/theme";
 import { PanelErrorBoundary } from "./errors/components/error-boundary";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "./features/sherlock/sherlock.server";
 import { generateNonce } from "./helpers/nonce.server";
 import { commitSession, getSession, sessionFields } from "./session.server";
@@ -68,12 +67,12 @@ export async function loader({ request }: LoaderArgs) {
     if (!requestUrl.searchParams.has("state")) {
       throw new Response(
         `GitHub OAuth issue; "code" was passed but "state" was not`,
-        { status: 400 }
+        { status: 400 },
       );
     } else if (!session.has(sessionFields.githubOAuthState)) {
       throw new Response(
         `GitHub OAuth issue; "code" was passed but "${sessionFields.githubOAuthState}" was not in the session`,
-        { status: 400 }
+        { status: 400 },
       );
     } else if (
       requestUrl.searchParams.get("state") !==
@@ -81,23 +80,23 @@ export async function loader({ request }: LoaderArgs) {
     ) {
       throw new Response(
         `GitHub OAuth issue; "code" was passed but "state" and session "${sessionFields.githubOAuthState}" didn't match`,
-        { status: 400 }
+        { status: 400 },
       );
     } else {
       const githubTokenURL = new URL(
-        "https://github.com/login/oauth/access_token"
+        "https://github.com/login/oauth/access_token",
       );
       githubTokenURL.searchParams.append(
         "client_id",
-        process.env.GITHUB_CLIENT_ID || ""
+        process.env.GITHUB_CLIENT_ID || "",
       );
       githubTokenURL.searchParams.append(
         "client_secret",
-        process.env.GITHUB_CLIENT_SECRET || ""
+        process.env.GITHUB_CLIENT_SECRET || "",
       );
       githubTokenURL.searchParams.append(
         "code",
-        requestUrl.searchParams.get("code") || ""
+        requestUrl.searchParams.get("code") || "",
       );
       return await fetch(githubTokenURL.href, {
         headers: { Accept: "application/json" },
@@ -107,7 +106,7 @@ export async function loader({ request }: LoaderArgs) {
             throw new Response(
               `GitHub OAuth issue; GitHub rejected the code with status ${
                 response.status
-              }: ${await response.text()}`
+              }: ${await response.text()}`,
             );
           } else {
             return await response.json();
@@ -117,11 +116,11 @@ export async function loader({ request }: LoaderArgs) {
           if (!data?.access_token) {
             console.log(
               `GitHub OAuth issue; GitHub didn't return an access_token: ${JSON.stringify(
-                data
-              )}`
+                data,
+              )}`,
             );
             throw new Response(
-              "GitHub OAuth issue; GitHub didn't return an access_token"
+              "GitHub OAuth issue; GitHub didn't return an access_token",
             );
           } else {
             session.set(sessionFields.githubAccessToken, data.access_token);
@@ -130,23 +129,21 @@ export async function loader({ request }: LoaderArgs) {
             // We don't need the output of this at all, we just want it to happen at
             // some point.
             new UsersApi(SherlockConfiguration)
-              .apiV2ProceduresUsersLinkGithubPost(
+              .apiUsersV3Put(
                 {
-                  githubAccessPayloadRequest: {
-                    githubAccessToken: data.access_token,
-                  },
+                  user: { githubAccessToken: data.access_token },
                 },
-                handleIAP(request)
+                handleIAP(request),
               )
               .then(
                 (user) =>
                   console.log(
-                    `updated Sherlock account linking, ${user.email} = ${user.githubUsername}`
+                    `updated Sherlock account linking, ${user.email} = ${user.githubUsername}`,
                   ),
                 (reason) =>
                   console.log(
-                    `failed to update Sherlock account linking, ${reason}`
-                  )
+                    `failed to update Sherlock account linking, ${reason}`,
+                  ),
               );
 
             requestUrl.searchParams.delete("code");
@@ -163,17 +160,17 @@ export async function loader({ request }: LoaderArgs) {
   if (!session.has(sessionFields.githubAccessToken)) {
     session.set(sessionFields.githubOAuthState, generateNonce());
     const githubAuthorizeURL = new URL(
-      "https://github.com/login/oauth/authorize"
+      "https://github.com/login/oauth/authorize",
     );
     githubAuthorizeURL.searchParams.append(
       "client_id",
-      process.env.GITHUB_CLIENT_ID || ""
+      process.env.GITHUB_CLIENT_ID || "",
     );
     githubAuthorizeURL.searchParams.append("redirect_uri", requestUrl.href);
     githubAuthorizeURL.searchParams.append("scope", "repo");
     githubAuthorizeURL.searchParams.append(
       "state",
-      session.get(sessionFields.githubOAuthState)
+      session.get(sessionFields.githubOAuthState),
     );
     githubAuthorizeURL.searchParams.append("allow_signup", "false");
     return redirect(githubAuthorizeURL.href, {
@@ -195,7 +192,7 @@ export async function loader({ request }: LoaderArgs) {
       pdToken: session.get(sessionFields.pdToken),
       cspScriptNonce: generateNonce(),
     },
-    { headers: { "Set-Cookie": await commitSession(session) } }
+    { headers: { "Set-Cookie": await commitSession(session) } },
   );
 }
 
