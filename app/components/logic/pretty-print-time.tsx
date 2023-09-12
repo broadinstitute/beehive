@@ -10,17 +10,19 @@ export const PrettyPrintTime: React.FunctionComponent<PrettyPrintTimeProps> = ({
   time,
 }) => {
   const [timeString, setTimeString] = useState(
-    time ? new Date(time).toISOString() : "None"
+    time ? new Date(time).toISOString() : "None",
   );
   useEffect(
     () =>
       setTimeString(
-        (time ? new Date(time).toLocaleString() : "None") +
-          " (local time), " +
-          timeSinceFunc(time) +
-          " ago"
+        time
+          ? new Date(time).toLocaleString() +
+              ", " +
+              timeSinceFunc(time) +
+              " ago"
+          : "None",
       ),
-    [time]
+    [time],
   );
   return (
     <span
