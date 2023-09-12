@@ -20,6 +20,7 @@ export interface ChartDetailsProps {
   toAppVersions?: string;
   toChartReleases?: string;
   toEdit?: string;
+  toContractTest?: string;
   toDelete?: string;
   showChips?: boolean;
   phraseAsApp?: boolean;
@@ -32,6 +33,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
   toAppVersions,
   toChartReleases,
   toEdit,
+  toContractTest,
   toDelete,
   showChips = true,
   phraseAsApp = false,
@@ -161,12 +163,13 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         View Accelerate Metrics in Grafana ↗
       </a>
     )}
-    {(toEdit || toDelete) && (
+    {(toEdit || toContractTest || toDelete) && (
       <MutateControls
         name={chart.name || ""}
         colors={ChartColors}
         toEdit={toEdit}
         toDelete={toDelete}
+        toContractTest={toContractTest}
       />
     )}
   </div>

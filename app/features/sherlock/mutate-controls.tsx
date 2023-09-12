@@ -6,6 +6,7 @@ export interface MutateControlsProps {
   colors: ColorProps;
   toChangeVersions?: string;
   toChangeVersionsText?: string;
+  toContractTest?: string;
   changeVersionText?: string;
   toVersionHistory?: string;
   toEdit?: string;
@@ -23,6 +24,7 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
   toChangeVersions,
   toChangeVersionsText = "Change Versions",
   changeVersionText,
+  toContractTest,
   toVersionHistory,
   toEdit,
   toDatabaseInstance,
@@ -62,6 +64,11 @@ export const MutateControls: React.FunctionComponent<MutateControlsProps> = ({
         <h2 className="text-2xl font-light text-color-header-text">
           Make Changes
         </h2>
+        {toContractTest && (
+          <NavButton to={toContractTest} {...colors}>
+            Contract Testing
+          </NavButton>
+        )}
         {toEdit && (
           <NavButton to={toEdit} {...colors}>
             Edit Metadata
