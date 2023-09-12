@@ -12,11 +12,16 @@ export const PrettyPrintTime: React.FunctionComponent<PrettyPrintTimeProps> = ({
   const [timeString, setTimeString] = useState(
     time ? new Date(time).toISOString() : "None"
   );
-  useEffect(() => {
-    const currTime = time ? new Date(time).toLocaleString() : "None";
-    setTimeString(currTime + " (local time), " + timeSinceFunc(time) + " ago"),
-      [time];
-  });
+  useEffect(
+    () =>
+      setTimeString(
+        (time ? new Date(time).toLocaleString() : "None") +
+          " (local time), " +
+          timeSinceFunc(time) +
+          " ago"
+      ),
+    [time]
+  );
   return (
     <span
       title={time ? new Date(time).toISOString() : undefined}
