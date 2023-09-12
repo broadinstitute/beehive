@@ -543,8 +543,7 @@ export const ChangesetEntry: React.FunctionComponent<{
           {changeset.appliedAt && (
             <>
               <h1 className="text-2xl font-light">
-                Applied at <PrettyPrintTime time={changeset.appliedAt} /> (local
-                time)
+                Applied at <PrettyPrintTime time={changeset.appliedAt} />
               </h1>
               {(changeset.chartReleaseInfo?.appVersionExact !=
                 changeset.toAppVersionExact ||
