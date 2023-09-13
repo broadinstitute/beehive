@@ -77,7 +77,7 @@ export async function action({ request, params }: ActionArgs) {
             sessionFields.flashNotifications,
             buildNotifications({
               type: "contract-test",
-              text: `${params.chartName}. To see it in Pact Broker`,
+              text: `To see it in Pact Broker`,
               url:
                 process.env.PACTBASEURL + "/pacticipants/" + params.chartName,
             }),

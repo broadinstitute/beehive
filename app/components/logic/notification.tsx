@@ -33,8 +33,6 @@ export interface GitHubActionsNotification extends AbstractNotification {
 export interface ContractTestEnabledNotification extends AbstractNotification {
   type: "contract-test";
   url: string;
-  clickVerb: string;
-  error: false;
 }
 
 export interface DevOpsAnnouncementNotification extends AbstractNotification {
@@ -60,7 +58,7 @@ export const NotificationComponent: React.FunctionComponent<{
   switch (notification.type) {
     case "contract-test":
       Icon = CheckCircle;
-      title = "Contract test successfully enabled!";
+      title = "Successfully enabled contract testing";
       break;
     case "gha":
       Icon = Github;
