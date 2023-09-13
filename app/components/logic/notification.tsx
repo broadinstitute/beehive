@@ -1,9 +1,17 @@
 import type { LucideProps } from "lucide-react";
-import { AlertTriangle, Github, Megaphone, Wand, X } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Github,
+  Megaphone,
+  Wand,
+  X,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 
 export type Notification =
+  | ContractTestEnabledNotification
   | GitHubActionsNotification
   | DevOpsAnnouncementNotification
   | ErrorNotification
@@ -20,6 +28,13 @@ interface AbstractNotification {
 export interface GitHubActionsNotification extends AbstractNotification {
   type: "gha";
   url: string;
+}
+
+export interface ContractTestEnabledNotification extends AbstractNotification {
+  type: "contract-test";
+  url: string;
+  clickVerb: string;
+  error: false;
 }
 
 export interface DevOpsAnnouncementNotification extends AbstractNotification {
@@ -43,6 +58,10 @@ export const NotificationComponent: React.FunctionComponent<{
   let Icon: (props: LucideProps) => ReactNode;
   let title: string;
   switch (notification.type) {
+    case "contract-test":
+      Icon = CheckCircle;
+      title = "Contract test successfully enabled!";
+      break;
     case "gha":
       Icon = Github;
       title = "From GitHub";

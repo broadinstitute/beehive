@@ -76,9 +76,10 @@ export async function action({ request, params }: ActionArgs) {
           session.flash(
             sessionFields.flashNotifications,
             buildNotifications({
-              type: "announcement",
-              text: `Successfully enabled contract testing for ${params.chartName}.`,
-              error: false,
+              type: "contract-test",
+              text: `${params.chartName}. To see it in Pact Broker`,
+              url:
+                process.env.PACTBASEURL + "/pacticipants/" + params.chartName,
             }),
           ),
         )
