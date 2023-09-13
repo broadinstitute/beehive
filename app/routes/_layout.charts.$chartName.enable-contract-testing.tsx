@@ -114,9 +114,9 @@ export default function Route() {
         >
           <p>
             Enabling contract testing allows the Pact Broker to know which
-            versions of each application are in each environment to know whether
-            a pacticular application version is safe to deploy. To learn more
-            about contract testing, checkout the contract testing{" "}
+            contract versions are in each environment. This allows Pact to know
+            whether a particular application version is safe to deploy. To learn
+            more about contract testing, checkout the contract testing{" "}
             <a
               href="https://broadworkbench.atlassian.net/wiki/spaces/IRT/pages/2660368406/Getting+Started+with+Contract+Testing+and+Pact.ioc"
               target="_blank"
