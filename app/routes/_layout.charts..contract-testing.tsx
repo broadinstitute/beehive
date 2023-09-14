@@ -68,7 +68,7 @@ export async function action({ request, params }: ActionArgs) {
     .then((response) => {
       if (response.status != 201) {
         throw new Error(
-          "Could not successfully register {params.chartName} to pact",
+          `Could not successfully register ${params.chartName} to pact`,
         );
       }
     })
