@@ -34,9 +34,15 @@ export async function action({ request, params }: ActionArgs) {
 
   const formData = await request.formData();
   const repo = formData.get("repo");
+  const mainbranch = formData.get("mainbranch");
   if (typeof repo !== "string") {
     throw new Error(
       `Repo name must be of type 'string'. Instead it's ${typeof repo}`,
+    );
+  }
+  if (typeof mainbranch !== "string") {
+    throw new Error(
+      `Git main branch name must be of type 'string'. Instead it's ${typeof mainbranch}`,
     );
   }
   const requestOptions = {
@@ -52,7 +58,10 @@ export async function action({ request, params }: ActionArgs) {
     },
     body: JSON.stringify({
       name: params.chartName,
-      repositoryUrl: repo,
+      displayName: params.chartName,
+      repositoryUrl: "https://github.com/" + repo,
+      mainBranch: mainbranch,
+      repositoryName: repo,
     }),
   };
   return fetch(process.env.PACTBASEURL + "/pacticipants", requestOptions)
@@ -109,7 +118,11 @@ export default function Route() {
         <ActionBox
           title={`Contract Testing for ${chart.name}`}
           submitText={`Click to Enable Contract Testing`}
-          hideButton={chart.pactParticipant || !chart.appImageGitRepo}
+          hideButton={
+            chart.pactParticipant ||
+            !chart.appImageGitRepo ||
+            !chart.appImageGitMainBranch
+          }
           {...ChartColors}
         >
           <p>
@@ -143,7 +156,16 @@ export default function Route() {
               value={chart.appImageGitRepo}
             ></input>
           ) : (
-            "The chart must have an app image git repo on it to enable contract testing."
+            "The chart must have an app image git repo on it to enable contract testing. "
+          )}
+          {chart.appImageGitMainBranch ? (
+            <input
+              type="hidden"
+              name="mainbranch"
+              value={chart.appImageGitMainBranch}
+            ></input>
+          ) : (
+            "The chart must have a git main branch for the app image to enable contract testing."
           )}
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
