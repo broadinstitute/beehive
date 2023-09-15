@@ -63,22 +63,22 @@ export function loader({ request, params }: LoaderArgs) {
             chartReleases
               .filter(
                 (chartRelease) =>
-                  chartRelease.environment !== params.environmentName
+                  chartRelease.environment !== params.environmentName,
               )
-              .sort(chartReleaseSorter)
+              .sort(chartReleaseSorter),
           ),
-        errorResponseThrower
+        errorResponseThrower,
       ),
     new AppVersionsApi(SherlockConfiguration)
       .apiV2AppVersionsGet(
         { chart: params.chartName, limit: 25 },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
       .apiV2ChartVersionsGet(
         { chart: params.chartName, limit: 25 },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     preconfiguredAppVersionExact,
@@ -94,6 +94,7 @@ export async function action({ request, params }: ActionArgs) {
   const changesetRequest: V2controllersChangesetPlanRequestChartReleaseEntry = {
     ...formDataToObject(formData, true),
     chartRelease: `${params.environmentName}/${params.chartName}`,
+    toHelmfileRefEnabled: formData.get("toHelmfileRefEnabled") === "true",
   };
 
   return new ChangesetsApi(SherlockConfiguration)
@@ -103,7 +104,7 @@ export async function action({ request, params }: ActionArgs) {
           chartReleases: [changesetRequest],
         },
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (changesets) =>
@@ -112,12 +113,12 @@ export async function action({ request, params }: ActionArgs) {
               `/review-changesets?${[
                 ...changesets.map((c) => `changeset=${c.id}`),
                 `return=${encodeURIComponent(
-                  `/environments/${params.environmentName}/chart-releases/${params.chartName}`
+                  `/environments/${params.environmentName}/chart-releases/${params.chartName}`,
                 )}`,
-              ].join("&")}`
+              ].join("&")}`,
             )
           : json({ formState: changesetRequest }),
-      makeErrorResponseReturner(changesetRequest)
+      makeErrorResponseReturner(changesetRequest),
     );
 }
 

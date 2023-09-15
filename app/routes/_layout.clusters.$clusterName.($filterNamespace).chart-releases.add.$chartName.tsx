@@ -64,7 +64,7 @@ export async function loader({ request, params }: LoaderArgs) {
     new ChartsApi(SherlockConfiguration)
       .apiV2ChartsSelectorGet(
         { selector: params.chartName || "" },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     new ChartReleasesApi(SherlockConfiguration)
@@ -75,21 +75,21 @@ export async function loader({ request, params }: LoaderArgs) {
             .filter(
               (chartRelease) =>
                 chartRelease.cluster !== params.clusterName &&
-                chartRelease.namespace !== params.namespace
+                chartRelease.namespace !== params.namespace,
             )
             .sort(chartReleaseSorter),
-        errorResponseThrower
+        errorResponseThrower,
       ),
     new AppVersionsApi(SherlockConfiguration)
       .apiV2AppVersionsGet(
         { chart: params.chartName, limit: 25 },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
       .apiV2ChartVersionsGet(
         { chart: params.chartName, limit: 25 },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
   ]);
@@ -105,14 +105,14 @@ export async function action({ request, params }: ActionArgs) {
     cluster: params.clusterName,
     port: ((port) =>
       typeof port === "string" && port !== "" ? parseInt(port) : undefined)(
-      formData.get("port")
+      formData.get("port"),
     ),
   };
 
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesPost(
       { chartRelease: chartReleaseRequest },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async (chartRelease) => {
       if (chartRelease.environmentInfo?.lifecycle === "dynamic") {
@@ -124,7 +124,7 @@ export async function action({ request, params }: ActionArgs) {
               "bee-name": chartRelease.environmentInfo?.name || "",
             },
           },
-          "sync your BEE"
+          "sync your BEE",
         );
       }
       return redirect(
@@ -133,7 +133,7 @@ export async function action({ request, params }: ActionArgs) {
           headers: {
             "Set-Cookie": await commitSession(session),
           },
-        }
+        },
       );
     }, makeErrorResponseReturner(chartReleaseRequest));
 }
@@ -216,6 +216,9 @@ export default function Route() {
               errorInfo?.formState?.chartVersionFollowChartRelease || ""
             }
             initialHelmfileRef={errorInfo?.formState?.helmfileRef || "HEAD"}
+            initialHelmfileRefEnabled={String(
+              errorInfo?.formState?.helmfileRefEnabled || false,
+            )}
           />
           <details className="pt-2">
             <summary className="cursor-pointer font-medium">

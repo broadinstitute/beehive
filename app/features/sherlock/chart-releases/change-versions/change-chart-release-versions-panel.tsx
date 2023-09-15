@@ -190,6 +190,11 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
                 initialHelmfileRef={
                   formState?.toHelmfileRef || chartRelease.helmfileRef || "HEAD"
                 }
+                initialHelmfileRefEnabled={String(
+                  formState?.toHelmfileRefEnabled ||
+                    chartRelease.helmfileRefEnabled ||
+                    false,
+                )}
               />
             </>
           )) || (
