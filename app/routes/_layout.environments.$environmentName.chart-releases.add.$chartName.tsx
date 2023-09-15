@@ -105,6 +105,7 @@ export async function action({ request, params }: ActionArgs) {
       typeof port === "string" && port !== "" ? parseInt(port) : undefined)(
       formData.get("port"),
     ),
+    helmfileRefEnabled: formData.get("helmfileRefEnabled") === "true",
   };
 
   return new ChartReleasesApi(SherlockConfiguration)
