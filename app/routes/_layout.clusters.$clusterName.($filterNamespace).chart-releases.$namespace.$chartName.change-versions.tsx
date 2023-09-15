@@ -62,22 +62,22 @@ export function loader({ request, params }: LoaderArgs) {
             chartReleases.filter(
               (chartRelease) =>
                 chartRelease.cluster !== params.clusterName &&
-                chartRelease.namespace !== params.namespace
-            )
+                chartRelease.namespace !== params.namespace,
+            ),
           ),
-        errorResponseThrower
+        errorResponseThrower,
       )
       .then((chartReleases) => chartReleases.sort(chartReleaseSorter)),
     new AppVersionsApi(SherlockConfiguration)
       .apiV2AppVersionsGet(
         { chart: params.chartName, limit: 25 },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
       .apiV2ChartVersionsGet(
         { chart: params.chartName, limit: 25 },
-        handleIAP(request)
+        handleIAP(request),
       )
       .catch(errorResponseThrower),
     preconfiguredAppVersionExact,
@@ -92,6 +92,7 @@ export async function action({ request, params }: ActionArgs) {
   const changesetRequest: V2controllersChangesetPlanRequestChartReleaseEntry = {
     ...formDataToObject(formData, true),
     chartRelease: `${params.clusterName}/${params.namespace}/${params.chartName}`,
+    toHelmfileRefEnabled: formData.get("toHelmfileRefEnabled") === "true",
   };
 
   return new ChangesetsApi(SherlockConfiguration)
@@ -101,7 +102,7 @@ export async function action({ request, params }: ActionArgs) {
           chartReleases: [changesetRequest],
         },
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then((changesets) => {
       return changesets.length > 0
@@ -109,9 +110,9 @@ export async function action({ request, params }: ActionArgs) {
             `/review-changesets?${[
               ...changesets.map((c) => `changeset=${c.id}`),
               `return=${encodeURIComponent(
-                `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`
+                `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`,
               )}`,
-            ].join("&")}`
+            ].join("&")}`,
           )
         : json({ formState: changesetRequest });
     }, makeErrorResponseReturner(changesetRequest));

@@ -21,6 +21,7 @@ export const ChartVersionPicker: React.FunctionComponent<
     initialChartVersionExact: string;
     initialChartVersionFollowChartRelease: string;
     initialHelmfileRef: string;
+    initialHelmfileRefEnabled: string;
   } & SetsSidebarProps
 > = ({
   setSidebarFilterText,
@@ -32,15 +33,19 @@ export const ChartVersionPicker: React.FunctionComponent<
   initialChartVersionExact,
   initialChartVersionFollowChartRelease,
   initialHelmfileRef,
+  initialHelmfileRefEnabled,
 }) => {
   const [chartVersionResolver, setChartVersionResolver] = useState(
-    initialChartVersionResolver
+    initialChartVersionResolver,
   );
   const [chartVersionExact, setChartVersionExact] = useState(
-    initialChartVersionExact
+    initialChartVersionExact,
   );
   const [chartVersionFollowChartRelease, setChartVersionFollowChartRelease] =
     useState(initialChartVersionFollowChartRelease);
+  const [helmfileRefEnabled, setHelmfileRefEnabled] = useState(
+    initialHelmfileRefEnabled,
+  );
   return (
     <div className="flex flex-col space-y-4">
       <div>
@@ -175,26 +180,47 @@ export const ChartVersionPicker: React.FunctionComponent<
             automatically upon each refresh.
           </p>
         )}
-        <label>
-          <h2 className="font-light text-2xl">Helmfile Ref</h2>
-          <p>
-            This is the Git reference in{" "}
-            <a
-              href="https://github.com/broadinstitute/terra-helmfile"
-              target="_blank"
-              className="underline decoration-color-link-underline"
-            >
-              terra-helmfile
-            </a>{" "}
-            to use for configuration values.
-          </p>
-          <TextField
-            name={isTargetingChangeset ? "toHelmfileRef" : "helmfileRef"}
-            defaultValue={initialHelmfileRef}
-            required
-            placeholder="(required)"
+        <div>
+          <h2 className="font-light text-xl">Custom Helmfile Ref</h2>
+          <EnumInputSelect
+            name={
+              isTargetingChangeset
+                ? "toHelmfileRefEnabled"
+                : "helmfileRefEnabled"
+            }
+            className="grid grid-cols-2 mt-2"
+            fieldValue={helmfileRefEnabled}
+            setFieldValue={setHelmfileRefEnabled}
+            enums={[
+              ["Enabled", "true"],
+              ["Disabled", "false"],
+            ]}
+            {...ChartVersionColors}
           />
-        </label>
+        </div>
+        {helmfileRefEnabled === "true" && (
+          <label>
+            <h2 className="font-light text-xl">Helmfile Ref</h2>
+            <p>
+              This is the Git reference in{" "}
+              <a
+                href="https://github.com/broadinstitute/terra-helmfile"
+                target="_blank"
+                className="underline decoration-color-link-underline"
+              >
+                terra-helmfile
+              </a>{" "}
+              to use for Helm. Set this to the name of your PR branch to test
+              before merging.
+            </p>
+            <TextField
+              name={isTargetingChangeset ? "toHelmfileRef" : "helmfileRef"}
+              defaultValue={initialHelmfileRef}
+              required
+              placeholder="(required)"
+            />
+          </label>
+        )}
       </div>
     </div>
   );
