@@ -2,6 +2,7 @@ import type { SerializeFrom } from "@remix-run/node";
 import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
 import { AlertTriangle, BadgeCheck } from "lucide-react";
 import { CopyableText } from "~/components/interactivity/copyable-text";
+import { ExternalNavButton } from "~/components/interactivity/external-nav-button";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { MutateControls } from "../../mutate-controls";
 import { UserColors } from "../user-colors";
@@ -10,9 +11,26 @@ export const UserDetails: React.FunctionComponent<{
   user: SherlockUserV3 | SerializeFrom<SherlockUserV3>;
   isServiceAccount?: boolean;
   toEdit?: string;
-}> = ({ user, isServiceAccount, toEdit }) => {
+  slackWorkspaceID?: string;
+}> = ({ user, isServiceAccount, toEdit, slackWorkspaceID }) => {
   return (
     <div className="flex flex-col gap-10">
+      {user.slackID && slackWorkspaceID && (
+        <ExternalNavButton
+          icon={
+            <img
+              src="https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png"
+              className="h-[1.75rem]"
+              alt="Slack"
+            />
+          }
+          to={`slack://user?team=${slackWorkspaceID}&id=${user.slackID}`}
+          beforeBorderClassName="before:border-[#36C5F0]"
+          target="_blank"
+        >
+          <h2>Slack Message ↗</h2>
+        </ExternalNavButton>
+      )}
       <div className="flex flex-col gap-2">
         <h2 className="font-light text-2xl">Security</h2>
         <div className="flex flex-row gap-2">
