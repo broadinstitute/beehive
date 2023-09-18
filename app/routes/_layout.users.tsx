@@ -24,7 +24,7 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { ListUserButtonText } from "~/features/sherlock/users/list/list-user-button-text";
-import { matchUser } from "~/features/sherlock/users/list/matchUser";
+import { matchUser } from "~/features/sherlock/users/list/match-user";
 import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
 import { UserColors } from "~/features/sherlock/users/user-colors";
 import { UserGeneralDetails } from "~/features/sherlock/users/view/user-general-details";

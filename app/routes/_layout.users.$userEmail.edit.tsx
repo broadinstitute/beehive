@@ -15,7 +15,6 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { UserEditableFields } from "~/features/sherlock/users/edit/user-editable-fields";
 import { UserColors } from "~/features/sherlock/users/user-colors";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { sessionFields } from "~/session.server";
 import { useUserContext } from "./_layout.users.$userEmail";
@@ -30,13 +29,23 @@ export const meta: V2_MetaFunction = ({ params }) => [
   { title: `${params.userEmail} - User - Edit` },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request }: ActionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();
+  const nameFromField = formData.get("nameFrom");
+  const nameField = formData.get("name");
   const userRequest: SherlockUserV3Upsert = {
-    ...formDataToObject(formData, false),
-    nameInferredFromGithub: formData.get("nameInferredFromGithub") === "true",
+    // We aren't using formDataToObject here because we want different empty string
+    // handling. For nameFrom we don't want to pass an empty string, but for name we
+    // do.
+    nameFrom:
+      nameFromField === "slack" ||
+      nameFromField === "github" ||
+      nameFromField === "sherlock"
+        ? nameFromField
+        : undefined,
+    name: typeof nameField === "string" ? nameField : undefined,
     githubAccessToken: session.get(sessionFields.githubAccessToken),
   };
 

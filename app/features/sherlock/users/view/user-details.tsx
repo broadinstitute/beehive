@@ -107,8 +107,45 @@ export const UserDetails: React.FunctionComponent<{
             ) : (
               <p>
                 GitHub account linking will automatically occur in the
-                background if user signs into Beehive. You can refresh the page
-                to pull the latest info.
+                background if the user signs into Beehive. You can refresh the
+                page to pull the latest info.
+              </p>
+            )}
+          </>
+        )}
+      </div>
+      <div className="flex flex-col gap-2">
+        {user.slackUsername ? (
+          <>
+            <h2 className="font-light text-2xl">Slack Identity</h2>
+            <h1 className="font-light text-4xl">{user.slackUsername}</h1>
+            <p>
+              This information is sourced directly by Sherlock via its Slack
+              authentication.
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <div>Username</div>
+              <div className="break-words">
+                <CopyableText>{user.slackUsername}</CopyableText>
+              </div>
+              <div>User ID</div>
+              <div className="break-words">
+                <CopyableText>{user.slackID}</CopyableText>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="font-light text-2xl">No Linked Slack Identity</h2>
+            {isServiceAccount ? (
+              <p>
+                Service accounts won't generally have a linked Slack identity.
+              </p>
+            ) : (
+              <p>
+                Slack identity linking will automatically occur in the
+                background if the user signs into Beehive. You can refresh the
+                page to pull the latest info.
               </p>
             )}
           </>

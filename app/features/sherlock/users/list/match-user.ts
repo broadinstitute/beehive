@@ -12,6 +12,8 @@ export function matchUser(
     user.githubUsername?.toLowerCase()?.includes(matchText) ||
     user.githubID?.toLowerCase()?.includes(matchText) ||
     user.name?.toLowerCase()?.includes(matchText) ||
+    user.slackID?.includes(matchText) ||
+    user.slackUsername?.toLowerCase().includes(matchText) ||
     false
   );
 }
