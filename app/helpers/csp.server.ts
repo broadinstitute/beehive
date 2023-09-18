@@ -19,7 +19,7 @@ export function getContentSecurityPolicy(nonce?: string | undefined): string {
     `default-src ${self}; ` +
     `script-src ${scriptSrc}; ` +
     `style-src ${self} 'report-sample'; ` +
-    `img-src ${self} data: https://sonarcloud.io; ` +
+    `img-src ${self} data: https://sonarcloud.io https://a.slack-edge.com; ` +
     `font-src ${self}; ` +
     `connect-src ${connectSrc}; ` +
     `media-src ${self}; ` +
