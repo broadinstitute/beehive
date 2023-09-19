@@ -382,8 +382,9 @@ export default function Route() {
                             >
                               {event.summary} ↗
                             </a>{" "}
-                            from{" "}
-                            <PrettyPrintTime time={event.start?.dateTime} /> to{" "}
+                            starting at{" "}
+                            <PrettyPrintTime time={event.start?.dateTime} /> and{" "}
+                            ending at{" "}
                             <PrettyPrintTime time={event.end?.dateTime} />
                           </p>
                         ))}
