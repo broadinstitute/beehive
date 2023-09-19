@@ -64,7 +64,7 @@ export async function action({ request, params }: ActionArgs) {
       repositoryName: repo,
     }),
   };
-  return fetch(process.env.PACTBASEURL + "/pacticipants", requestOptions)
+  return fetch(process.env.PACT_BASE_URL + "/pacticipants", requestOptions)
     .then((response) => {
       if (response.status != 201) {
         throw new Error(
@@ -88,7 +88,7 @@ export async function action({ request, params }: ActionArgs) {
               type: "contract-test",
               text: `To see it in Pact Broker`,
               url:
-                process.env.PACTBASEURL + "/pacticipants/" + params.chartName,
+                process.env.PACT_BASE_URL + "/pacticipants/" + params.chartName,
             }),
           ),
         )
