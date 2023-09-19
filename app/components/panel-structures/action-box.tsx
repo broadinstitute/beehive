@@ -28,7 +28,6 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
   hideButton = false,
   saved = false,
   belowComponent,
-  disabled,
 }) => {
   const transition = useNavigation();
   return (
@@ -56,7 +55,6 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
               beforeBorderClassName={beforeBorderClassName}
               type="submit"
               isLoading={transition.state === "submitting"}
-              disabled={disabled}
             >
               <h2 className="font-medium">{submitText}</h2>
             </ActionButton>
