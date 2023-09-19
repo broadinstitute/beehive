@@ -53,7 +53,7 @@ export async function action({ request, params }: ActionArgs) {
       Authorization:
         "Basic " +
         Buffer.from(
-          process.env.PACTUSERNAME + ":" + process.env.PACTPASSWORD,
+          process.env.PACT_USERNAME + ":" + process.env.PACT_PASSWORD,
         ).toString("base64"),
     },
     body: JSON.stringify({
