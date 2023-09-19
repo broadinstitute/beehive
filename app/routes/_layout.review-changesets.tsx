@@ -1,18 +1,22 @@
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { defer, redirect } from "@remix-run/node";
 import {
+  Await,
   useActionData,
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react";
 import { ChangesetsApi, ChartReleasesApi } from "@sherlock-js-client/sherlock";
-import { useMemo, useState } from "react";
+import { AlertCircle, CheckCircle } from "lucide-react";
+import { Suspense, useMemo, useState } from "react";
+import { BeehiveIcon } from "~/components/assets/beehive-icon";
 import { ActionButton } from "~/components/interactivity/action-button";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
+import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { BigActionBox } from "~/components/panel-structures/big-action-box";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { runGha } from "~/features/github/run-gha";
@@ -24,6 +28,8 @@ import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
+import * as google from "~/helpers/google.server";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { safeRedirectPath } from "~/helpers/validate";
 import { commitSession } from "~/session.server";
 import { ProdFlag } from "../components/layout/prod-flag";
@@ -52,7 +58,7 @@ export async function loader({ request }: LoaderArgs) {
   const changesetIDs = url.searchParams.getAll("changeset");
   const changesetsApi = new ChangesetsApi(SherlockConfiguration);
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
-  return Promise.all(
+  const changesets = await Promise.all(
     changesetIDs.map(async (id) => {
       const changeset = await changesetsApi
         .apiV2ChangesetsSelectorGet({ selector: id }, handleIAP(request))
@@ -70,6 +76,61 @@ export async function loader({ request }: LoaderArgs) {
       return changeset;
     }),
   );
+
+  // If any of these changes affect prod and haven't been applied, check the release protection calendar
+  let protectionEventsPromise: Promise<google.calendar_v3.Schema$Event[]> =
+    // By default, don't load anything. We still need to set this to a promise to make Remix's typescript happy.
+    new Promise((resolve) => resolve([]));
+  if (
+    changesets.find(
+      (c) =>
+        (c.chartReleaseInfo?.environment === "prod" ||
+          c.chartReleaseInfo?.cluster === "terra-prod") &&
+        !c.appliedAt &&
+        !c.supersededAt,
+    ) &&
+    process.env.RELEASE_PROTECTION_CALENDAR_ID
+  ) {
+    // We don't care about events that ended in the past
+    const endTimeLowerBound = new Date(Date.now());
+    // We don't care about events that won't have even started an hour from now
+    const startTimeUpperBound = new Date(Date.now());
+    startTimeUpperBound.setHours(startTimeUpperBound.getHours() + 1);
+    protectionEventsPromise = google
+      .calendar({
+        version: "v3",
+        auth: new google.auth.GoogleAuth({
+          scopes: ["https://www.googleapis.com/auth/calendar"],
+        }),
+      })
+      .events.list({
+        calendarId: process.env.RELEASE_PROTECTION_CALENDAR_ID,
+        timeMin: endTimeLowerBound.toISOString(),
+        timeMax: startTimeUpperBound.toISOString(),
+        singleEvents: true, // Flatten recurring events, treat them just as individual events
+        orderBy: "startTime", // Ascending order (earliest-starting events first)
+        maxResults: 3, // Get just the first few events -- we can't just get the one because we want to ignore "transparent" ("show me as available") events
+      })
+      .then(
+        (response) =>
+          response.data.items?.filter(
+            (event) => event.transparency !== "transparent",
+          ) || [],
+        (reason) => {
+          console.error(
+            `failed to query workbench protection calendar: ${reason}`,
+          );
+          throw new Error(
+            `failed to query workbench protection calendar: ${reason}`,
+          );
+        },
+      );
+  }
+  return defer({
+    changesets,
+    protectionCalendarID: process.env.RELEASE_PROTECTION_CALENDAR_ID,
+    protectionEventsPromise,
+  });
 }
 
 export async function action({ request }: ActionArgs) {
@@ -126,7 +187,8 @@ export async function action({ request }: ActionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const changesets = useLoaderData<typeof loader>();
+  const { changesets, protectionCalendarID, protectionEventsPromise } =
+    useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const [searchParams] = useSearchParams();
   let returnURL = "";
@@ -230,6 +292,127 @@ export default function Route() {
       <OutsetPanel>
         <BigActionBox
           title="Review Version Changes"
+          leadingContent={
+            protectionCalendarID && (
+              <Suspense
+                fallback={
+                  includesProd ? (
+                    <div
+                      className={`${panelSizeToInnerClassName(
+                        "fill",
+                      )} rounded-2xl border-4 border-dashed border-color-beehive-logo flex flex-row gap-4 p-8 text-color-body-text`}
+                    >
+                      <BeehiveIcon loading className="shrink-0 h-12 w-12" />
+                      <p>
+                        Loading{" "}
+                        <a
+                          href={`https://calendar.google.com/calendar/u/0/embed?src=${protectionCalendarID}`}
+                          className="underline decoration-color-link-underline"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          release protection calendar ↗
+                        </a>{" "}
+                        events...
+                      </p>
+                    </div>
+                  ) : null
+                }
+              >
+                <Await
+                  resolve={protectionEventsPromise}
+                  errorElement={
+                    <div
+                      className={`${panelSizeToInnerClassName(
+                        "fill",
+                      )} rounded-2xl border-4 border-dashed bg-color-error-bg border-color-error-border flex flex-row gap-4 p-8 text-color-body-text`}
+                    >
+                      <AlertCircle className="shrink-0 h-12 w-12 stroke-color-status-red" />
+                      <p>
+                        There was an error fetching events from the{" "}
+                        <a
+                          href={`https://calendar.google.com/calendar/u/0/embed?src=${protectionCalendarID}`}
+                          className="underline decoration-color-link-underline"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          release protection calendar ↗
+                        </a>
+                        .
+                      </p>
+                    </div>
+                  }
+                >
+                  {(calendarEvents) =>
+                    calendarEvents.length > 0 ? (
+                      <div
+                        className={`${panelSizeToInnerClassName(
+                          "fill",
+                        )} rounded-2xl border-4 border-dashed border-color-status-red flex flex-col space-y-4 p-8 text-color-body-text`}
+                      >
+                        <h3 className="text-5xl font-medium text-color-header-text">
+                          <AlertCircle className="shrink-0 stroke-color-status-red inline-block w-12 h-12 align-bottom mr-1" />{" "}
+                          Release Protection Event
+                        </h3>
+                        <p>
+                          The{" "}
+                          <a
+                            href={`https://calendar.google.com/calendar/u/0/embed?src=${protectionCalendarID}`}
+                            className="underline decoration-color-link-underline"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            release protection calendar ↗
+                          </a>{" "}
+                          has{" "}
+                          {calendarEvents.length > 1
+                            ? "some events"
+                            : "an event"}{" "}
+                          that would potentially conflict with this release.
+                        </p>
+                        {calendarEvents.map((event) => (
+                          <p key={event.id}>
+                            <a
+                              href={event.htmlLink || undefined}
+                              className="underline decoration-color-link-underline font-semibold"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {event.summary} ↗
+                            </a>{" "}
+                            from{" "}
+                            <PrettyPrintTime time={event.start?.dateTime} /> to{" "}
+                            <PrettyPrintTime time={event.end?.dateTime} />
+                          </p>
+                        ))}
+                      </div>
+                    ) : includesProd ? (
+                      <div
+                        className={`${panelSizeToInnerClassName(
+                          "fill",
+                        )} rounded-2xl border-4 border-dashed border-color-status-green flex flex-row gap-4 p-8 text-color-body-text`}
+                      >
+                        <CheckCircle className="shrink-0 h-12 w-12 stroke-color-status-green" />
+                        <p>
+                          The{" "}
+                          <a
+                            href={`https://calendar.google.com/calendar/u/0/embed?src=${protectionCalendarID}`}
+                            className="underline decoration-color-link-underline"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            release protection calendar ↗
+                          </a>{" "}
+                          doesn't have any events that conflict with this
+                          release, you're good to go.
+                        </p>
+                      </div>
+                    ) : null
+                  }
+                </Await>
+              </Suspense>
+            )
+          }
           returnPath={returnURL}
           returnText={
             changesets.some((c) => !c.appliedAt)
