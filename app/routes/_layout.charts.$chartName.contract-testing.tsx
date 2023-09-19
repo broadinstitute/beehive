@@ -19,7 +19,7 @@ import { commitSession, sessionFields } from "~/session.server";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/charts/${params.chartName}/contractTesting`}>
+    <NavLink to={`/charts/${params.chartName}/contract-Testing`}>
       Contract Testing
     </NavLink>
   ),
@@ -35,6 +35,7 @@ export async function action({ request, params }: ActionArgs) {
   const formData = await request.formData();
   const repo = formData.get("repo");
   const mainbranch = formData.get("mainbranch");
+  console.log(process.env.PACT_BASE_URL);
   if (typeof repo !== "string") {
     throw new Error(
       `Repo name must be of type 'string'. Instead it's ${typeof repo}`,
@@ -132,7 +133,7 @@ export default function Route() {
           <p>
             Enabling contract testing allows the Pact Broker to know which
             contract versions are in each environment. This allows Pact to know
-            whether a particular application version is safe to deploy. To learn
+            whether a particular application version is safe to deploy. To learn
             more about contract testing, checkout the contract testing{" "}
             <a
               href="https://broadworkbench.atlassian.net/wiki/spaces/IRT/pages/2660368406/Getting+Started+with+Contract+Testing+and+Pact.ioc"
