@@ -100,6 +100,8 @@ export async function loader({ request }: LoaderArgs) {
       .calendar({
         version: "v3",
         auth: new google.auth.GoogleAuth({
+          // That this scope is required means that local ADC will probably fail unless you specifically do
+          // `gcloud auth application-default login --scopes=https://www.googleapis.com/auth/calendar`
           scopes: ["https://www.googleapis.com/auth/calendar"],
         }),
       })
