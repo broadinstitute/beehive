@@ -74,6 +74,7 @@ export default function Route() {
             toChartReleases="./chart-releases"
             toEdit="./edit"
             toDelete="./delete"
+            toContractTest="./contract-testing"
           />
         </ItemDetails>
       </OutsetPanel>
