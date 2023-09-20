@@ -35,7 +35,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
       activeOnHover = false,
       prod,
     },
-    ref
+    ref,
   ) => (
     <div data-theme-prod={prod} className="relative shrink-0">
       <button
@@ -70,5 +70,5 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
         </div>
       </button>
     </div>
-  )
+  ),
 );

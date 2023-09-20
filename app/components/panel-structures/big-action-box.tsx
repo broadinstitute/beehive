@@ -6,11 +6,13 @@ import { CsrfTokenInput } from "../logic/csrf-token";
 import { ActionBoxProps } from "./action-box";
 
 export interface BigActionBoxProps extends ActionBoxProps {
+  leadingContent?: React.ReactNode;
   returnPath: string;
   returnText: string;
 }
 
 export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
+  leadingContent,
   returnPath,
   returnText,
   children,
@@ -28,6 +30,7 @@ export const BigActionBox: React.FunctionComponent<BigActionBoxProps> = ({
       <div>
         <h1 className="text-5xl font-medium text-color-header-text">{title}</h1>
       </div>
+      {leadingContent}
       <Form
         method="post"
         className={`flex flex-col space-y-4 rounded-2xl p-8 border-2 ${borderClassName} ${backgroundClassName}`}
