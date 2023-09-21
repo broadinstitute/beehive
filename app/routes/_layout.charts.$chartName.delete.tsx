@@ -31,9 +31,9 @@ export async function action({ request, params }: ActionArgs) {
   await getValidSession(request);
 
   return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsSelectorDelete(
+    .apiChartsV3SelectorDelete(
       { selector: params.chartName || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(() => redirect("/charts"), makeErrorResponseReturner());
 }

@@ -20,11 +20,11 @@ export async function loader({ request, params }: LoaderArgs) {
   const forwardedIAP = handleIAP(request);
 
   return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsSelectorGet(
+    .apiChartsV3SelectorGet(
       {
         selector: params.chartName ?? "",
       },
-      forwardedIAP
+      forwardedIAP,
     )
     .then((chart) =>
       interleaveVersionPromises(
@@ -34,11 +34,11 @@ export async function loader({ request, params }: LoaderArgs) {
             limit: 10,
             gitBranch: chart.appImageGitMainBranch,
           },
-          forwardedIAP
+          forwardedIAP,
         ),
         new ChartVersionsApi(SherlockConfiguration).apiV2ChartVersionsGetRaw(
           { chart: chart.id?.toString(), limit: 10 },
-          forwardedIAP
+          forwardedIAP,
         ),
         (versions) => versions.slice(0, 10),
         (versions) => {
@@ -46,10 +46,10 @@ export async function loader({ request, params }: LoaderArgs) {
           cutOff.setDate(cutOff.getDate() - 21);
           return versions.filter(
             (version) =>
-              version.version.updatedAt && version.version.updatedAt > cutOff
+              version.version.updatedAt && version.version.updatedAt > cutOff,
           );
-        }
-      )
+        },
+      ),
     );
 }
 

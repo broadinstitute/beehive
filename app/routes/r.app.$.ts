@@ -9,9 +9,9 @@ import {
 
 export async function loader({ request, params }: LoaderArgs) {
   return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsSelectorGet({ selector: params["*"] || "" }, handleIAP(request))
+    .apiChartsV3SelectorGet({ selector: params["*"] || "" }, handleIAP(request))
     .then(
       (chart) => redirect(`/apps/${chart.name}`),
-      makeErrorResponseReturner()
+      makeErrorResponseReturner(),
     );
 }

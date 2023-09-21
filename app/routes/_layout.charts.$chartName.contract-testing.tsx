@@ -75,7 +75,7 @@ export async function action({ request, params }: ActionArgs) {
     })
     .then(() => {
       return new ChartsApi(SherlockConfiguration)
-        .apiV2ChartsSelectorPatch(
+        .apiChartsV3SelectorPatch(
           {
             selector: params.chartName || "",
             chart: { pactParticipant: true },

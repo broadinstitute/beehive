@@ -70,14 +70,14 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.chartReleaseName || "",
         chartRelease: chartReleaseRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       () =>
         redirect(
-          `/charts/${params.chartName}/chart-releases/${params.chartReleaseName}`
+          `/charts/${params.chartName}/chart-releases/${params.chartReleaseName}`,
         ),
-      makeErrorResponseReturner(chartReleaseRequest)
+      makeErrorResponseReturner(chartReleaseRequest),
     );
 }
 

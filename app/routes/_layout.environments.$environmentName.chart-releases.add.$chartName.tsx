@@ -61,7 +61,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request, params }: LoaderArgs) {
   return Promise.all([
     new ChartsApi(SherlockConfiguration)
-      .apiV2ChartsSelectorGet(
+      .apiChartsV3SelectorGet(
         { selector: params.chartName || "" },
         handleIAP(request),
       )

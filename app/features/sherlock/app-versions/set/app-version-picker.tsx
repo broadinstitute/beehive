@@ -41,28 +41,28 @@ export const AppVersionPicker: React.FunctionComponent<
   initialFirecloudDevelopRef,
 }) => {
   const [appVersionResolver, setAppVersionResolver] = useState(
-    initialAppVersionResolver
+    initialAppVersionResolver,
   );
   const [appVersionExact, setAppVersionExact] = useState(
-    initialAppVersionExact
+    initialAppVersionExact,
   );
   const [appVersionFollowChartRelease, setAppVersionFollowChartRelease] =
     useState(initialAppVersionFollowChartRelease);
   const [appVersionCommit, setAppVersionCommit] = useState(
-    initialAppVersionCommit
+    initialAppVersionCommit,
   );
   const [appVersionBranch, setAppVersionBranch] = useState(
-    initialAppVersionBranch
+    initialAppVersionBranch,
   );
 
   const reportsGit = useMemo(
     () =>
       Boolean(
         appVersions.find(
-          (appVersion) => appVersion.gitCommit && appVersion.gitBranch
-        )
+          (appVersion) => appVersion.gitCommit && appVersion.gitBranch,
+        ),
       ),
-    [appVersions]
+    [appVersions],
   );
 
   return (

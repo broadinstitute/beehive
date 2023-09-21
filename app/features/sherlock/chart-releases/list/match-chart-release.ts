@@ -3,7 +3,7 @@ import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
 
 export function matchChartRelease(
   chartRelease: SerializeFrom<V2controllersChartRelease>,
-  matchText: string
+  matchText: string,
 ): boolean {
   return (
     chartRelease.name?.includes(matchText) ||

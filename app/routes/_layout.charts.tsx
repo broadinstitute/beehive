@@ -30,7 +30,7 @@ export const meta: V2_MetaFunction = () => [
 
 export async function loader({ request }: LoaderArgs) {
   return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsGet({}, handleIAP(request))
+    .apiChartsV3Get({}, handleIAP(request))
     .then((charts) => charts.sort(chartSorter), errorResponseThrower);
 }
 

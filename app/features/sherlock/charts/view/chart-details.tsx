@@ -1,5 +1,5 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChart } from "@sherlock-js-client/sherlock";
+import { SherlockChartV3 } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { GithubLinkChip } from "~/features/github/github-link-chip";
@@ -12,7 +12,7 @@ import { ChartColors } from "../chart-colors";
 import { ChartLinkChip, PlaybookLinkChip } from "../chart-link-chip";
 
 export interface ChartDetailsProps {
-  chart: V2controllersChart | SerializeFrom<V2controllersChart>;
+  chart: SherlockChartV3 | SerializeFrom<SherlockChartV3>;
   initialCiRuns?: React.ComponentProps<
     typeof CiRunResourceStatusWidget
   >["initialCiRuns"];

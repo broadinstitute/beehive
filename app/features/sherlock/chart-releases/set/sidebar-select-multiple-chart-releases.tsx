@@ -32,7 +32,7 @@ export const SidebarSelectMultipleChartReleases: React.FunctionComponent<{
             new Map([
               ...previous,
               [entry.chart || "", !previous.get(entry.chart || "")],
-            ])
+            ]),
         )
       }
       detectListButtonActive={(entry) =>

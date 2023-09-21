@@ -1,6 +1,6 @@
 import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
-import { ChartsApi, V2controllersChart } from "@sherlock-js-client/sherlock";
+import { ChartsApi, SherlockChartV3 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -32,7 +32,7 @@ export async function action({ request }: ActionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const chartRequest: V2controllersChart = {
+  const chartRequest: SherlockChartV3 = {
     ...formDataToObject(formData, true),
     chartExposesEndpoint: formData.get("chartExposesEndpoint") === "true",
     legacyConfigsEnabled: formData.get("legacyConfigsEnabled") === "true",
@@ -43,10 +43,10 @@ export async function action({ request }: ActionArgs) {
   };
 
   return new ChartsApi(SherlockConfiguration)
-    .apiV2ChartsPost({ chart: chartRequest }, handleIAP(request))
+    .apiChartsV3Post({ chart: chartRequest }, handleIAP(request))
     .then(
       (chart) => redirect(`/charts/${chart.name}`),
-      makeErrorResponseReturner(chartRequest)
+      makeErrorResponseReturner(chartRequest),
     );
 }
 

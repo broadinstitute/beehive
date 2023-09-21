@@ -1,9 +1,9 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChart } from "@sherlock-js-client/sherlock";
+import { SherlockChartV3 } from "@sherlock-js-client/sherlock";
 
 export function matchChart(
-  chart: SerializeFrom<V2controllersChart>,
-  matchText: string
+  chart: SerializeFrom<SherlockChartV3>,
+  matchText: string,
 ): boolean {
   return (
     chart.name?.includes(matchText) ||

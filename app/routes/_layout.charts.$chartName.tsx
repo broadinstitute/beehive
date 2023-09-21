@@ -47,7 +47,7 @@ export async function loader({ request, params }: LoaderArgs) {
         () => [],
       ),
     chart: await new ChartsApi(SherlockConfiguration)
-      .apiV2ChartsSelectorGet(
+      .apiChartsV3SelectorGet(
         { selector: params.chartName || "" },
         handleIAP(request),
       )

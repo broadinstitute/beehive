@@ -1,5 +1,5 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChart } from "@sherlock-js-client/sherlock";
+import { SherlockChartV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
@@ -8,20 +8,20 @@ import { PrettyPrintDescription } from "~/components/logic/pretty-print-descript
 import { ChartColors } from "../chart-colors";
 
 export interface ChartEditableFieldsProps {
-  chart?: V2controllersChart | SerializeFrom<V2controllersChart>;
+  chart?: SherlockChartV3 | SerializeFrom<SherlockChartV3>;
 }
 
 export const ChartEditableFields: React.FunctionComponent<
   ChartEditableFieldsProps
 > = ({ chart }) => {
   const [showMainBranchBox, setShowMainBranchBox] = useState(
-    chart?.appImageGitRepo && chart.appImageGitRepo.length > 0
+    chart?.appImageGitRepo && chart.appImageGitRepo.length > 0,
   );
   const [chartExposesEndpoint, setChartExposesEndpoint] = useState(
-    chart?.chartExposesEndpoint === true ? "true" : "false"
+    chart?.chartExposesEndpoint === true ? "true" : "false",
   );
   const [legacyConfigsEnabled, setLegacyConfigsEnabled] = useState(
-    chart?.legacyConfigsEnabled === true ? "true" : "false"
+    chart?.legacyConfigsEnabled === true ? "true" : "false",
   );
   const [description, setDescription] = useState(chart?.description || "");
   return (

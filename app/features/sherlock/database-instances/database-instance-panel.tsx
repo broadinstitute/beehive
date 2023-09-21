@@ -19,7 +19,7 @@ export const DatabaseInstancePanel: React.FunctionComponent<{
   errorInfo?: SerializeFrom<ReturnedErrorInfo<V2controllersDatabaseInstance>>;
 }> = ({ chartRelease, databaseInstance, errorInfo }) => {
   const [noDatabaseInstance, setNoDatabaseInstance] = useState(
-    !databaseInstance && !errorInfo
+    !databaseInstance && !errorInfo,
   );
   const [platform, setPlatform] = useState<string>(
     errorInfo?.formState?.platform ||
@@ -28,7 +28,7 @@ export const DatabaseInstancePanel: React.FunctionComponent<{
       chartRelease.environmentInfo?.lifecycle === "template"
         ? "kubernetes"
         : chartRelease.clusterInfo?.provider) ||
-      "google"
+      "google",
   );
   return (
     <OutsetPanel>
