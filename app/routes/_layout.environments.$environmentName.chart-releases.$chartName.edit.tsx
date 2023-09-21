@@ -39,7 +39,7 @@ export async function action({ request, params }: ActionArgs) {
     ...formDataToObject(formData, false),
     port: ((port) =>
       typeof port === "string" && port !== "" ? parseInt(port) : undefined)(
-      formData.get("port")
+      formData.get("port"),
     ),
   };
 
@@ -49,14 +49,14 @@ export async function action({ request, params }: ActionArgs) {
         selector: `${params.environmentName}/${params.chartName}`,
         chartRelease: chartReleaseRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       () =>
         redirect(
-          `/environments/${params.environmentName}/chart-releases/${params.chartName}`
+          `/environments/${params.environmentName}/chart-releases/${params.chartName}`,
         ),
-      makeErrorResponseReturner(chartReleaseRequest)
+      makeErrorResponseReturner(chartReleaseRequest),
     );
 }
 

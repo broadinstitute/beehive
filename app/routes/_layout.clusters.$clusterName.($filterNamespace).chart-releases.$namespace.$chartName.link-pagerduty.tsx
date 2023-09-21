@@ -70,14 +70,14 @@ export async function action({ request, params }: ActionArgs) {
         selector: `${params.environmentName}/${params.chartName}`,
         chartRelease: chartReleaseRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       () =>
         redirect(
-          `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`
+          `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`,
         ),
-      makeErrorResponseReturner(chartReleaseRequest)
+      makeErrorResponseReturner(chartReleaseRequest),
     );
 }
 

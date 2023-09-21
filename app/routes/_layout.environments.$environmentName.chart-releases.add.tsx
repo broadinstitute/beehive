@@ -43,7 +43,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     new ChartsApi(SherlockConfiguration)
-      .apiV2ChartsGet({}, handleIAP(request))
+      .apiChartsV3Get({}, handleIAP(request))
       .then((charts) => charts.sort(chartSorter), errorResponseThrower),
     // We don't actually need the clusters here, but loading them here and passing
     // them down through via context means we won't be loading them repeatedly on
@@ -63,7 +63,7 @@ export default function Route() {
   const chartsInEnvironment = new Set<string>(
     context.chartReleases
       .map((chartRelease) => chartRelease.chart)
-      .filter((value): value is string => typeof value === "string")
+      .filter((value): value is string => typeof value === "string"),
   );
 
   const [filterText, setFilterText] = useState("");

@@ -15,7 +15,7 @@ export const ChartVersionEditableFields: React.FunctionComponent<
   ChartVersionEditableFieldsProps
 > = ({ chartVersion, repo }) => {
   const [description, setDescription] = useState(
-    chartVersion?.description || ""
+    chartVersion?.description || "",
   );
   return (
     <div className="flex flex-col space-y-4">

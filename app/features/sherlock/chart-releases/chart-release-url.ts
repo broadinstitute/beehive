@@ -5,7 +5,7 @@ export function chartReleaseUrl(
   chartRelease:
     | V2controllersChartRelease
     | SerializeFrom<V2controllersChartRelease>
-    | null
+    | null,
 ): string | null {
   if (
     !chartRelease ||

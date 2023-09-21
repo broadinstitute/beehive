@@ -39,7 +39,7 @@ export async function action({ request, params }: ActionArgs) {
     ...formDataToObject(formData, false),
     port: ((port) =>
       typeof port === "string" && port !== "" ? parseInt(port) : undefined)(
-      formData.get("port")
+      formData.get("port"),
     ),
   };
 
@@ -49,14 +49,14 @@ export async function action({ request, params }: ActionArgs) {
         selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
         chartRelease: chartReleaseRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       () =>
         redirect(
-          `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`
+          `/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}`,
         ),
-      makeErrorResponseReturner(chartReleaseRequest)
+      makeErrorResponseReturner(chartReleaseRequest),
     );
 }
 

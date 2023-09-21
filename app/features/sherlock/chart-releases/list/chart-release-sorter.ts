@@ -3,7 +3,7 @@ import { liveEnvironmentValuesNameOrder } from "../../environments/list/environm
 
 export function chartReleaseSorter(
   a: V2controllersChartRelease,
-  b: V2controllersChartRelease
+  b: V2controllersChartRelease,
 ): number {
   const aLiveEnvironmentValuesNameOrder =
     liveEnvironmentValuesNameOrder.indexOf(a.environmentInfo?.valuesName || "");

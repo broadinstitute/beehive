@@ -1,9 +1,9 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChart } from "@sherlock-js-client/sherlock";
+import { SherlockChartV3 } from "@sherlock-js-client/sherlock";
 import { ChartDetails } from "./chart-details";
 
 export const AppPopoverContents: React.FunctionComponent<{
-  chart: SerializeFrom<V2controllersChart>;
+  chart: SerializeFrom<SherlockChartV3>;
 }> = ({ chart }) => (
   <>
     <h2 className="font-light text-4xl text-color-header-text">

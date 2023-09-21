@@ -18,7 +18,7 @@ export async function interleaveVersionPromises(
   appVersionsPromise: Promise<ApiResponse<V2controllersAppVersion[]>>,
   chartVersionsPromise: Promise<ApiResponse<V2controllersChartVersion[]>>,
   ...extraProcesses: ((
-    versions: InterleavedVersion[]
+    versions: InterleavedVersion[],
   ) => InterleavedVersion[])[]
 ): Promise<{
   complete: boolean;
@@ -41,7 +41,7 @@ export async function interleaveVersionPromises(
         appVersions.map((appVersion) => ({
           type: "app" as const,
           version: appVersion,
-        }))
+        })),
       )) ?? []),
     ...((await chartVersionsResponse
       ?.value()
@@ -50,7 +50,7 @@ export async function interleaveVersionPromises(
         chartVersions.map((chartVersion) => ({
           type: "chart" as const,
           version: chartVersion,
-        }))
+        })),
       )) ?? []),
   ].sort((a, b) => +(b.version.updatedAt ?? 0) - +(a.version.updatedAt ?? 0));
 
