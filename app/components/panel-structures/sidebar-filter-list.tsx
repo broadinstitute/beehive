@@ -1,18 +1,13 @@
 import { ActionButton } from "~/components/interactivity/action-button";
-import {
-  ListControls,
-  ListControlsProps,
-} from "~/components/interactivity/list-controls";
-import {
-  MemoryFilteredList,
-  MemoryFilteredListProps,
-} from "~/components/logic/memory-filtered-list";
-import {
-  InteractiveList,
-  InteractiveListProps,
-} from "~/components/panel-structures/interactive-list";
+import type { ListControlsProps } from "~/components/interactivity/list-controls";
+import { ListControls } from "~/components/interactivity/list-controls";
+import type { MemoryFilteredListProps } from "~/components/logic/memory-filtered-list";
+import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
+import type { InteractiveListProps } from "~/components/panel-structures/interactive-list";
+import { InteractiveList } from "~/components/panel-structures/interactive-list";
 
 type SidebarFilterListProps<T> = {
+  leadingButtons?: React.ReactNode;
   handleListButtonClick: (entry: T) => void;
   detectListButtonActive: (entry: T) => boolean;
   listButtonTextFactory: (entry: T) => React.ReactNode;
@@ -20,10 +15,9 @@ type SidebarFilterListProps<T> = {
   ListControlsProps &
   Omit<MemoryFilteredListProps<T>, "children">;
 
-export const SidebarFilterList = <T extends unknown>(
-  props: SidebarFilterListProps<T>
-) => (
+export const SidebarFilterList = <T,>(props: SidebarFilterListProps<T>) => (
   <InteractiveList {...props}>
+    {props.leadingButtons}
     <ListControls {...props} />
     <MemoryFilteredList {...props}>
       {(entry, index) => (
