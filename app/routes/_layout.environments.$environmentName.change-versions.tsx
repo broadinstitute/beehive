@@ -1,21 +1,12 @@
-import {
-  ActionArgs,
-  json,
-  LoaderArgs,
-  redirect,
-  V2_MetaFunction,
-} from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { V2controllersChangesetPlanRequestEnvironmentEntry } from "@sherlock-js-client/sherlock";
 import {
   ChangesetsApi,
   ChartReleasesApi,
   EnvironmentsApi,
-  V2controllersChangesetPlanRequestEnvironmentEntry,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ActionButton } from "~/components/interactivity/action-button";
@@ -27,11 +18,12 @@ import { ActionBox } from "~/components/panel-structures/action-box";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { SidebarSelectMultipleChartReleases } from "~/features/sherlock/chart-releases/set/sidebar-select-multiple-chart-releases";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
+import { SidebarSelectEnvironment } from "~/features/sherlock/environments/set/sidebar-select-environment";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
-import { SidebarFilterControlledList } from "../components/panel-structures/sidebar-filter-controlled-list";
+import { useSidebar } from "~/hooks/use-sidebar";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
 import {
@@ -40,10 +32,7 @@ import {
   makeErrorResponseReturner,
 } from "../errors/helpers/error-response-handlers";
 import { chartReleaseSorter } from "../features/sherlock/chart-releases/list/chart-release-sorter";
-import { ChangeEnvironmentVersionsSidebarModes } from "../features/sherlock/environments/change-versions/change-environment-versions-sidebar-modes";
 import { environmentSorter } from "../features/sherlock/environments/list/environment-sorter";
-import { ListEnvironmentButtonText } from "../features/sherlock/environments/list/list-environment-button-text";
-import { matchEnvironment } from "../features/sherlock/environments/list/match-environment";
 import { getValidSession } from "../helpers/get-valid-session.server";
 import { useEnvironmentContext } from "./_layout.environments.$environmentName";
 
@@ -158,20 +147,24 @@ export default function Route() {
   );
   const [otherEnvironmentBehavior, setOtherEnvironmentBehavior] =
     useState("exact");
+  const defaultIncludedCharts = new Map(
+    chartReleases.map((chartRelease) => [
+      chartRelease.chart || "",
+      chartRelease.includedInBulkChangesets === undefined
+        ? true
+        : chartRelease.includedInBulkChangesets,
+    ]),
+  );
   const [includedCharts, setIncludedCharts] = useState<Map<string, boolean>>(
-    new Map(
-      chartReleases.map((chartRelease) => [
-        chartRelease.chart || "",
-        chartRelease.includedInBulkChangesets === undefined
-          ? true
-          : chartRelease.includedInBulkChangesets,
-      ]),
-    ),
+    new Map(defaultIncludedCharts),
   );
 
-  const [sidebar, setSidebar] = useState<ChangeEnvironmentVersionsSidebarModes>(
-    "select included charts",
-  );
+  const {
+    isSidebarPresent,
+    setSidebar,
+    setSidebarFilterText,
+    SidebarComponent,
+  } = useSidebar();
 
   return (
     <>
@@ -208,8 +201,22 @@ export default function Route() {
             )}
             <TextField
               value={otherEnvironment}
-              onChange={(e) => setOtherEnvironment(e.currentTarget.value)}
-              onFocus={() => setSidebar("select other environment")}
+              onChange={(e) => {
+                setOtherEnvironment(e.currentTarget.value);
+                setSidebarFilterText(e.currentTarget.value);
+              }}
+              onFocus={() =>
+                setSidebar(({ filterText }) => (
+                  <SidebarSelectEnvironment
+                    environments={otherEnvironments}
+                    fieldValue={filterText}
+                    setFieldValue={(value) => {
+                      setOtherEnvironment(value);
+                      setSidebar();
+                    }}
+                  />
+                ))
+              }
               placeholder="Search..."
             />
           </label>
@@ -298,9 +305,9 @@ export default function Route() {
           <ActionButton
             type="button"
             size="fill"
-            isActive={sidebar === "select included charts"}
+            isActive={!isSidebarPresent}
             onClick={(e) => {
-              setSidebar("select included charts");
+              setSidebar();
               e.preventDefault();
             }}
             activeOnHover
@@ -325,30 +332,16 @@ export default function Route() {
         </ActionBox>
       </OutsetPanel>
       <InsetPanel>
-        {sidebar === "select other environment" && (
-          <SidebarFilterControlledList
-            title="Select Other Environment"
-            entries={otherEnvironments}
-            filterText={otherEnvironment}
-            filter={matchEnvironment}
-            handleListButtonClick={(entry) => {
-              setOtherEnvironment(entry.name || "");
-              setSidebar("select included charts");
-            }}
-            detectListButtonActive={(entry) => entry.name === otherEnvironment}
-            listButtonTextFactory={(entry) => (
-              <ListEnvironmentButtonText environment={entry} />
-            )}
-            {...EnvironmentColors}
-          />
-        )}
-        {sidebar === "select included charts" && (
+        {isSidebarPresent ? (
+          <SidebarComponent />
+        ) : (
           <SidebarSelectMultipleChartReleases
             title="Select Charts to Include"
             chartReleases={chartReleases}
             chartMap={includedCharts}
             setChartMap={setIncludedCharts}
             includeAppVersions
+            defaultChartMap={defaultIncludedCharts}
           />
         )}
       </InsetPanel>
