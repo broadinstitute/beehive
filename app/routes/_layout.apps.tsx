@@ -1,9 +1,7 @@
-import { json, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
-import {
-  ChartReleasesApi,
-  EnvironmentsApi,
-} from "@sherlock-js-client/sherlock";
+import { ChartsApi, EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { promiseHash } from "remix-utils";
 import { ListControls } from "~/components/interactivity/list-controls";
@@ -13,13 +11,13 @@ import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
-import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/chart-release-sorter";
-import { matchChartRelease } from "~/features/sherlock/chart-releases/list/match-chart-release";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
+import { chartSorter } from "~/features/sherlock/charts/list/chart-sorter";
 import { ListChartButtonText } from "~/features/sherlock/charts/list/list-chart-button-text";
+import { matchChart } from "~/features/sherlock/charts/list/match-chart";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
 export const handle = {
@@ -36,36 +34,29 @@ export async function loader({ request }: LoaderArgs) {
   const forwardedIAP = handleIAP(request);
   return json(
     await promiseHash({
-      chartReleases: new ChartReleasesApi(SherlockConfiguration)
-        .apiV2ChartReleasesGet(
-          {
-            environment: "dev",
-          },
-          forwardedIAP
-        )
+      charts: new ChartsApi(SherlockConfiguration)
+        .apiChartsV3Get({}, forwardedIAP)
         .then(
-          (chartReleases) =>
-            chartReleases
-              .filter((chartRelease) => chartRelease.chartInfo?.appImageGitRepo)
-              .sort(chartReleaseSorter),
-          errorResponseThrower
+          (charts) =>
+            charts.filter((chart) => chart.appImageGitRepo).sort(chartSorter),
+          errorResponseThrower,
         ),
       environments: new EnvironmentsApi(
-        SherlockConfiguration
+        SherlockConfiguration,
       ).apiV2EnvironmentsGet(
         {
           base: "live",
         },
-        forwardedIAP
+        forwardedIAP,
       ),
-    })
+    }),
   );
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const { chartReleases, environments } = useLoaderData<typeof loader>();
+  const { charts, environments } = useLoaderData<typeof loader>();
   const [filterText, setFilterText] = useState("");
   return (
     <>
@@ -77,22 +68,17 @@ export default function Route() {
             {...ChartColors}
           />
           <MemoryFilteredList
-            entries={chartReleases}
+            entries={charts}
             filterText={filterText}
-            filter={matchChartRelease}
+            filter={matchChart}
           >
-            {(chartRelease, index) => (
+            {(chart, index) => (
               <NavButton
-                to={`./${chartRelease.chart}`}
+                to={`./${chart.name}`}
                 key={index.toString()}
                 {...ChartColors}
               >
-                {chartRelease.chartInfo && (
-                  <ListChartButtonText
-                    chart={chartRelease.chartInfo}
-                    includeChartRepo={false}
-                  />
-                )}
+                {<ListChartButtonText chart={chart} includeChartRepo={false} />}
               </NavButton>
             )}
           </MemoryFilteredList>

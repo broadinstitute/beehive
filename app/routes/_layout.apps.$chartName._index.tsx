@@ -1,4 +1,4 @@
-import { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
   AppVersionsApi,
