@@ -5,12 +5,14 @@ import {
   V2_MetaFunction,
 } from "@remix-run/node";
 import {
+  Link,
   NavLink,
   Outlet,
   Params,
   useLoaderData,
   useNavigate,
   useOutletContext,
+  useParams,
 } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { ArrowDown, Clock2 } from "lucide-react";
@@ -52,28 +54,28 @@ export async function loader({ request, params }: LoaderArgs) {
       inDev: chartReleasesApi
         .apiV2ChartReleasesSelectorGet(
           { selector: `dev/${params.chartName}` },
-          forwardedIAP
+          forwardedIAP,
         )
         .catch(() => null),
       inAlpha: chartReleasesApi
         .apiV2ChartReleasesSelectorGet(
           { selector: `alpha/${params.chartName}` },
-          forwardedIAP
+          forwardedIAP,
         )
         .catch(() => null),
       inStaging: chartReleasesApi
         .apiV2ChartReleasesSelectorGet(
           { selector: `staging/${params.chartName}` },
-          forwardedIAP
+          forwardedIAP,
         )
         .catch(() => null),
       inProd: chartReleasesApi
         .apiV2ChartReleasesSelectorGet(
           { selector: `prod/${params.chartName}` },
-          forwardedIAP
+          forwardedIAP,
         )
         .catch(() => null),
-    })
+    }),
   );
 }
 
@@ -120,18 +122,20 @@ export default function Route() {
     (inStaging.appVersionExact !== inProd.appVersionExact ||
       inStaging.chartVersionExact !== inProd.chartVersionExact);
 
+  const params = useParams();
+
   return (
     <>
       <InsetPanel size="one-half">
         <div className="flex flex-col items-center">
           <div
             className={`${panelSizeToInnerClassName(
-              "one-half"
+              "one-half",
             )} flex flex-col gap-4 pb-4 laptop:pb-0 text-color-body-text`}
           >
             <div
               className={`relative ${panelSizeToInnerClassName(
-                "fill"
+                "fill",
               )} bg-color-nearest-bg p-3 pt-4 mb-10 shadow-md rounded-2xl rounded-t-none border-2 border-t-0 ${
                 ChartColors.borderClassName
               } flex flex-row justify-between items-center gap-4`}
@@ -144,6 +148,11 @@ export default function Route() {
                 >
                   <AppPopoverContents chart={chartInfo} />
                 </InlinePopover>
+              )}
+              {!chartInfo && params.chartName && (
+                <span className="text-color-header-text text-5xl font-medium">
+                  {params.chartName}
+                </span>
               )}
               {chartInfo?.appImageGitRepo && (
                 <SonarCloudLinkChip repo={chartInfo.appImageGitRepo} />
@@ -218,6 +227,22 @@ export default function Route() {
               <AppInstanceEntry>
                 <AppInstanceEntryInfo chartRelease={inProd} />
               </AppInstanceEntry>
+            )}
+
+            {!inDev && !(inAlpha || inStaging) && !inProd && (
+              <div className="w-full text-center">
+                This service isn't in any environments this abbreviated
+                deployment view is configured for. View instances of it{" "}
+                <Link
+                  className="underline decoration-color-link-underline"
+                  to={`/charts/${
+                    chartInfo?.name || params.chartName
+                  }/chart-releases`}
+                >
+                  here
+                </Link>
+                .
+              </div>
             )}
           </div>
         </div>
