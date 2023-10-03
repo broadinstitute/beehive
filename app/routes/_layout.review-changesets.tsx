@@ -58,23 +58,29 @@ export async function loader({ request }: LoaderArgs) {
   const changesetIDs = url.searchParams.getAll("changeset");
   const changesetsApi = new ChangesetsApi(SherlockConfiguration);
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
-  const changesets = await Promise.all(
-    changesetIDs.map(async (id) => {
-      const changeset = await changesetsApi
-        .apiV2ChangesetsSelectorGet({ selector: id }, handleIAP(request))
-        .catch(errorResponseThrower);
-      // We need two levels deep, not one like Sherlock gives us by default,
-      // so we fill the chartReleaseInfo ourselves with a followup request.
-      changeset.chartReleaseInfo = await chartReleasesApi
-        .apiV2ChartReleasesSelectorGet(
-          {
-            selector: changeset.chartRelease || "",
-          },
-          handleIAP(request),
-        )
-        .catch(errorResponseThrower);
-      return changeset;
-    }),
+  const changesets = (
+    await Promise.all(
+      changesetIDs.map(async (id) => {
+        const changeset = await changesetsApi
+          .apiV2ChangesetsSelectorGet({ selector: id }, handleIAP(request))
+          .catch(errorResponseThrower);
+        // We need two levels deep, not one like Sherlock gives us by default,
+        // so we fill the chartReleaseInfo ourselves with a followup request.
+        changeset.chartReleaseInfo = await chartReleasesApi
+          .apiV2ChartReleasesSelectorGet(
+            {
+              selector: changeset.chartRelease || "",
+            },
+            handleIAP(request),
+          )
+          .catch(errorResponseThrower);
+        return changeset;
+      }),
+    )
+  ).sort((a, b) =>
+    a.chartReleaseInfo?.name && b.chartReleaseInfo?.name
+      ? a.chartReleaseInfo.name.localeCompare(b.chartReleaseInfo.name)
+      : 0,
   );
 
   // If any of these changes affect prod and haven't been applied, check the release protection calendar
