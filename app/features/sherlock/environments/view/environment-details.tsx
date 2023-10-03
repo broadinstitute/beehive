@@ -136,7 +136,7 @@ export const EnvironmentDetails: React.FunctionComponent<
             </a>
           )}
         <a
-          href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications?namespace=${environment.defaultNamespace}`}
+          href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications?namespace=${environment.defaultNamespace}&showFavorites=false&proj=&sync=&health=&cluster=&labels=`}
           target="_blank"
           className="underline decoration-color-link-underline w-fit"
           rel="noreferrer"
