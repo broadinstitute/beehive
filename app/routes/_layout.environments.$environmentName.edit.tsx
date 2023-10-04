@@ -47,7 +47,7 @@ export const meta: V2_MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     new ClustersApi(SherlockConfiguration)
-      .apiV2ClustersGet({}, handleIAP(request))
+      .apiClustersV3Get({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
     new UsersApi(SherlockConfiguration)
       .apiUsersV3Get({}, handleIAP(request))

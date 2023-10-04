@@ -1,5 +1,5 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersCluster } from "@sherlock-js-client/sherlock";
+import { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 import React, { useState } from "react";
 import { TextField } from "~/components/interactivity/text-field";
 import { SetsSidebarProps } from "~/hooks/use-sidebar";
@@ -7,7 +7,7 @@ import { SidebarSelectCluster } from "../../clusters/set/sidebar-select-cluster"
 
 export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<
   {
-    clusters: SerializeFrom<V2controllersCluster[]>;
+    clusters: SerializeFrom<SherlockClusterV3[]>;
 
     requireCluster?: boolean;
     initialName: string;

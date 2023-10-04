@@ -1,9 +1,9 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersCluster } from "@sherlock-js-client/sherlock";
+import { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 
 export function matchCluster(
-  cluster: SerializeFrom<V2controllersCluster>,
-  matchText: string
+  cluster: SerializeFrom<SherlockClusterV3>,
+  matchText: string,
 ): boolean {
   return (
     cluster.name?.includes(matchText) ||

@@ -1,7 +1,7 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type {
+  SherlockClusterV3,
   SherlockUserV3,
-  V2controllersCluster,
   V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export interface EnvironmentEditableFieldsProps {
   environment?:
     | V2controllersEnvironment
     | SerializeFrom<V2controllersEnvironment>;
-  clusters: SerializeFrom<V2controllersCluster[]>;
+  clusters: SerializeFrom<SherlockClusterV3[]>;
   users: SerializeFrom<SherlockUserV3[]>;
   // When we're creating an environment, we don't want to try to replicate Sherlock's
   // advanced template-default behavior, so this flag tells us to let the user pass

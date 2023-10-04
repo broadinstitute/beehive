@@ -49,7 +49,7 @@ export async function loader({ request }: LoaderArgs) {
     // them down through via context means we won't be loading them repeatedly on
     // the next page if the user is browsing charts to deploy by clicking on them.
     new ClustersApi(SherlockConfiguration)
-      .apiV2ClustersGet({}, handleIAP(request))
+      .apiClustersV3Get({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
   ]);
 }

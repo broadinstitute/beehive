@@ -1,9 +1,6 @@
 import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
-import {
-  ClustersApi,
-  V2controllersCluster,
-} from "@sherlock-js-client/sherlock";
+import { ClustersApi, SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -35,16 +32,16 @@ export async function action({ request }: ActionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const clusterRequest: V2controllersCluster = {
+  const clusterRequest: SherlockClusterV3 = {
     ...formDataToObject(formData, true),
     requiresSuitability: formData.get("requiresSuitability") === "true",
   };
 
   return new ClustersApi(SherlockConfiguration)
-    .apiV2ClustersPost({ cluster: clusterRequest }, handleIAP(request))
+    .apiClustersV3Post({ cluster: clusterRequest }, handleIAP(request))
     .then(
       (cluster) => redirect(`/clusters/${cluster.name}`),
-      makeErrorResponseReturner(clusterRequest)
+      makeErrorResponseReturner(clusterRequest),
     );
 }
 

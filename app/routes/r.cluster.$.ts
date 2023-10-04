@@ -8,12 +8,12 @@ import {
 
 export async function loader({ request, params }: LoaderArgs) {
   return new ClustersApi(SherlockConfiguration)
-    .apiV2ClustersSelectorGet(
+    .apiClustersV3SelectorGet(
       { selector: params["*"] || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (cluster) => redirect(`/clusters/${cluster.name}`),
-      makeErrorResponseReturner()
+      makeErrorResponseReturner(),
     );
 }
