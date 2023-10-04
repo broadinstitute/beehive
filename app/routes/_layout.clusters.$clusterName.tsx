@@ -50,7 +50,7 @@ export async function loader({ request, params }: LoaderArgs) {
         () => [],
       ),
     cluster: await new ClustersApi(SherlockConfiguration)
-      .apiV2ClustersSelectorGet(
+      .apiClustersV3SelectorGet(
         { selector: params.clusterName || "" },
         handleIAP(request),
       )

@@ -1,19 +1,19 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersCluster } from "@sherlock-js-client/sherlock";
+import { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { ClusterColors } from "../cluster-colors";
 
 export interface ClusterCreatableFieldsProps {
-  cluster?: V2controllersCluster | SerializeFrom<V2controllersCluster>;
+  cluster?: SherlockClusterV3 | SerializeFrom<SherlockClusterV3>;
 }
 
 export const ClusterCreatableFields: React.FunctionComponent<
   ClusterCreatableFieldsProps
 > = ({ cluster }) => {
   const [provider, setProvider] = useState<string>(
-    cluster?.provider || "google"
+    cluster?.provider || "google",
   );
   return (
     <div className="flex flex-col space-y-4">

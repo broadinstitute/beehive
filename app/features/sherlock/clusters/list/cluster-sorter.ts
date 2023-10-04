@@ -1,4 +1,4 @@
-import { V2controllersCluster } from "@sherlock-js-client/sherlock";
+import { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 
 const clusterBaseOrder = ["terra", "bee-cluster", "tools", "ddp", "datarepo"];
 
@@ -11,8 +11,8 @@ const terraClusterNameOrder = [
 ];
 
 export function clusterSorter(
-  a: V2controllersCluster,
-  b: V2controllersCluster
+  a: SherlockClusterV3,
+  b: SherlockClusterV3,
 ): number {
   if (a.base === b.base) {
     switch (a.base) {

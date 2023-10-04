@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { V2controllersCluster } from "@sherlock-js-client/sherlock";
+import type { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
@@ -8,7 +8,7 @@ import { ProdWarning } from "../../prod-warning";
 import { ClusterColors } from "../cluster-colors";
 
 export interface ClusterDetailsProps {
-  cluster: V2controllersCluster | SerializeFrom<V2controllersCluster>;
+  cluster: SherlockClusterV3 | SerializeFrom<SherlockClusterV3>;
   initialCiRuns?: React.ComponentProps<
     typeof CiRunResourceStatusWidget
   >["initialCiRuns"];

@@ -59,7 +59,7 @@ export async function loader({ request }: LoaderArgs) {
   return Promise.all([
     selfUserEmail,
     new ClustersApi(SherlockConfiguration)
-      .apiV2ClustersGet({}, handleIAP(request))
+      .apiClustersV3Get({}, handleIAP(request))
       .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower),
     new UsersApi(SherlockConfiguration)
       .apiUsersV3Get({}, handleIAP(request))
