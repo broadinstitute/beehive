@@ -6,6 +6,7 @@ enum Theme {
   EXTRA_LIGHT = "extra-light",
   EXTRA_DARK = "extra-dark",
   FLEXIGO_LIGHT = "flexigo-light",
+  FLEXIGO_DARK = "flexigo-dark",
 }
 
 const defaultTheme: Theme = Theme.LIGHT;
