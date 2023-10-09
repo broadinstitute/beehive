@@ -175,7 +175,7 @@ export default function Route() {
           {...EnvironmentColors}
         >
           <label>
-            <h2 className="font-light text-2xl">
+            <h2 className="font-light text-2xl text-color-header-text">
               Use Versions From Another Environment
             </h2>
             <p className="mb-2">
@@ -223,7 +223,9 @@ export default function Route() {
           {otherEnvironment && (
             <>
               <div>
-                <h2 className="font-light text-2xl">Choose Behavior</h2>
+                <h2 className="font-light text-2xl text-color-header-text">
+                  Choose Behavior
+                </h2>
                 <p>
                   Beehive will grab versions from {otherEnvironment}. Here you
                   can choose how those versions should be applied.

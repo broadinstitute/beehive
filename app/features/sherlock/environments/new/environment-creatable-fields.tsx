@@ -8,7 +8,7 @@ import { EnvironmentColors } from "../environment-colors";
 import { SidebarSelectEnvironment } from "../set/sidebar-select-environment";
 
 function templateEnvironmentListDecorator(
-  entry: SerializeFrom<V2controllersEnvironment>
+  entry: SerializeFrom<V2controllersEnvironment>,
 ): string | undefined {
   if (entry.name === "swatomation") {
     return "Good Default!";
@@ -44,7 +44,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <div>
-        <h2 className="font-light text-2xl">Type</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Type</h2>
         <EnumInputSelect
           name="lifecycle"
           className="grid grid-cols-2 mt-2"
@@ -80,7 +80,9 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
       </div>
       <div className="pl-6 border-l-2 border-color-divider-line flex flex-col">
         <label className={lifecycle !== "dynamic" ? "hidden" : "mb-4"}>
-          <h2 className="font-light text-2xl">Template</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Template
+          </h2>
           <p>
             Enter the name of the BEE template that this new BEE will be created
             from.
@@ -111,7 +113,9 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
           />
         </label>
         <label className={lifecycle === "static" ? "mb-4" : "hidden"}>
-          <h2 className="font-light text-2xl">Namespace</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Namespace
+          </h2>
           <p>
             This is the namespace that chart instances will be created in
             (regardless of cluster).
@@ -123,7 +127,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
           />
         </label>
         <label>
-          <h2 className="font-light text-2xl">Name</h2>
+          <h2 className="font-light text-2xl text-color-header-text">Name</h2>
           <p>{`The name of this new environment. ${
             lifecycle === "dynamic"
               ? "A unique name will be generated if you leave this blank."

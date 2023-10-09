@@ -247,7 +247,9 @@ export default function Route() {
               {lifecycle === "dynamic" && (
                 <>
                   <div>
-                    <h2 className="font-light text-2xl">Action to Run</h2>
+                    <h2 className="font-light text-2xl text-color-header-text">
+                      Action to Run
+                    </h2>
                     <EnumInputSelect
                       name="action"
                       className="grid grid-cols-3 mt-2"

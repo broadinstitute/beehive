@@ -281,7 +281,7 @@ const CiRunResourceLoadedWidget: React.FunctionComponent<{
                 {ciRun.githubActionsOwner}/{ciRun.githubActionsRepo}
               </span>
               <a
-                className="font-light text-2xl underline decoration-color-link-underline w-fit"
+                className="font-light text-2xl text-color-header-text underline decoration-color-link-underline w-fit"
                 href={`https://github.com/${ciRun.githubActionsOwner}/${ciRun.githubActionsRepo}/actions/runs/${ciRun.githubActionsRunID}/attempts/${ciRun.githubActionsAttemptNumber}`}
                 rel="noreferrer"
                 target="_blank"

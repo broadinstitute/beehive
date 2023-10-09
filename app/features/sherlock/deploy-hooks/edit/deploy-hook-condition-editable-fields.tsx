@@ -30,7 +30,7 @@ export const ControlledDeployHookConditionEditableFields: React.FunctionComponen
   setOnFailure: React.Dispatch<React.SetStateAction<"true" | "false">>;
 }> = ({ onSuccess, setOnSuccess, onFailure, setOnFailure }) => (
   <div>
-    <h2 className="font-light text-2xl">When to Run</h2>
+    <h2 className="font-light text-2xl text-color-header-text">When to Run</h2>
     <EnumInputSelect<"true" | "false">
       name="onSuccess"
       className="grid grid-cols-2 mt-2"

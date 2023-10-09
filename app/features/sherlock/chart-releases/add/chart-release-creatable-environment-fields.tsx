@@ -25,7 +25,7 @@ export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <label>
-        <h2 className="font-light text-2xl">Name</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Name</h2>
         <p>
           This name should be globally unique for our tooling to work correctly.
           The default below will work but you can change it if you like.
@@ -37,7 +37,7 @@ export const ChartReleaseCreatableEnvironmentFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Cluster</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Cluster</h2>
         <p>{`The actual Kubernetes cluster that this chart instance will be deployed to. ${
           requireCluster
             ? ""

@@ -59,7 +59,7 @@ export const DeployHooksNewPanel: React.FunctionComponent<{
           {...DeployHookColors}
         >
           <div>
-            <h2 className="font-light text-2xl">Type</h2>
+            <h2 className="font-light text-2xl text-color-header-text">Type</h2>
             <EnumInputSelect<"slack" | "github-actions">
               name="type"
               className="grid grid-cols-2 mt-2"

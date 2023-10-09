@@ -25,7 +25,7 @@ export const ChartReleaseCreatableClusterFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <label>
-        <h2 className="font-light text-2xl">Name</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Name</h2>
         <p>
           This name should be globally unique for our tooling to work correctly.
           The default below will work but you can change it if you like.
@@ -37,7 +37,9 @@ export const ChartReleaseCreatableClusterFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Namespace</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Namespace
+        </h2>
         <p>
           The namespace in the above cluster that this chart instance will be
           deployed to.
@@ -50,7 +52,9 @@ export const ChartReleaseCreatableClusterFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Environment</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Environment
+        </h2>
         <p className="mb-2">
           Optionally, attach this new chart instance to a particular
           environment.

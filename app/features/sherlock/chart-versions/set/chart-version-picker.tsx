@@ -49,7 +49,9 @@ export const ChartVersionPicker: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <div>
-        <h2 className="font-light text-2xl">Specify Chart Version</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Specify Chart Version
+        </h2>
         <p>You can change versions later.</p>
         <EnumInputSelect
           name={
@@ -99,7 +101,9 @@ export const ChartVersionPicker: React.FunctionComponent<
       <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
         {chartVersionResolver === "exact" && (
           <label>
-            <h2 className="font-light text-2xl">Set Exact Version</h2>
+            <h2 className="font-light text-2xl text-color-header-text">
+              Set Exact Version
+            </h2>
             <p className="mb-2">
               An exact value will always persist until explicitly changed. It
               won't be affected by refreshes.
@@ -139,7 +143,9 @@ export const ChartVersionPicker: React.FunctionComponent<
         )}
         {chartVersionResolver === "follow" && (
           <label>
-            <h2 className="font-light text-2xl">Select Other Instance</h2>
+            <h2 className="font-light text-2xl text-color-header-text">
+              Select Other Instance
+            </h2>
             <p>
               Another instance of this chart to get the chart version from. As
               long as this is set, future refreshes will grab whatever version

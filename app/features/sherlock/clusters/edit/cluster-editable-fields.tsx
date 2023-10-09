@@ -18,7 +18,9 @@ export const ClusterEditableFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <label>
-        <h2 className="font-light text-2xl">Values Base</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Values Base
+        </h2>
         <p className="mb-2">
           A cluster's configuration is based on two things: the values base
           (this field) and the name.
@@ -51,7 +53,7 @@ export const ClusterEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Address</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Address</h2>
         <p>
           The IP address of the Kubernetes Control Plane API. Our tooling
           requires this to know for certain what cluster a name refers to.
@@ -64,7 +66,7 @@ export const ClusterEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Location</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Location</h2>
         <p>
           Thelma uses the location of the cluster to help specify the proper
           connection name.
@@ -76,7 +78,9 @@ export const ClusterEditableFields: React.FunctionComponent<
         />
       </label>
       <div>
-        <h2 className="font-light text-2xl">Require Suitability?</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Require Suitability?
+        </h2>
         <p>
           DevOps's systems can require production-suitability to <b>modify</b>{" "}
           this cluster (doesn't affect access or cloud provider permissions).
@@ -94,7 +98,9 @@ export const ClusterEditableFields: React.FunctionComponent<
         />
       </div>
       <label>
-        <h2 className="font-light text-2xl">Helmfile Ref</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Helmfile Ref
+        </h2>
         <p>
           The git ref of terra-helmfile that should be used for overall cluster
           configuration. This doesn't directly configure apps or what charts

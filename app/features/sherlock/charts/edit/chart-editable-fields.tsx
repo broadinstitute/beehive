@@ -27,7 +27,9 @@ export const ChartEditableFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <label>
-        <h2 className="font-light text-2xl">Description</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Description
+        </h2>
         <p className="mb-2">
           This is the description of this chart/app. It should describe what it
           does and who is responsible for it.
@@ -46,7 +48,9 @@ export const ChartEditableFields: React.FunctionComponent<
         </p>
       )}
       <label>
-        <h2 className="font-light text-2xl">Playbook URL</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Playbook URL
+        </h2>
         <p>
           A link to the playbook or emergency documentation for this chart/app.
         </p>
@@ -58,7 +62,9 @@ export const ChartEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Chart Repo</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Chart Repo
+        </h2>
         <p>
           This is the name of the Helm Repo that the tar-balled chart artifacts
           should be downloaded from.
@@ -70,7 +76,9 @@ export const ChartEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">App GitHub Repo</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          App GitHub Repo
+        </h2>
         <p>
           This is the repo on GitHub that the app's Docker image is built from.
           This should be given in the form <b>organization-name/repo-name</b>.
@@ -91,7 +99,9 @@ export const ChartEditableFields: React.FunctionComponent<
         }`}
       >
         <label>
-          <h2 className="font-light text-2xl">Main Branch</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Main Branch
+          </h2>
           <p>
             This is the branch in the above GitHub repo that is stable and
             intended for production. If an instance of this chart is spun up and
@@ -106,7 +116,9 @@ export const ChartEditableFields: React.FunctionComponent<
         </label>
       </div>
       <div>
-        <h2 className="font-light text-2xl">Chart Exposes Web Address?</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Chart Exposes Web Address?
+        </h2>
         <p>
           If this chart hosts some sort of web address, that information can be
           provided here to help automatically generate links.
@@ -129,7 +141,9 @@ export const ChartEditableFields: React.FunctionComponent<
         }`}
       >
         <label>
-          <h2 className="font-light text-2xl">Default Subdomain</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Default Subdomain
+          </h2>
           <p>
             When the app exposes an endpoint, this is the subdomain we assume
             we'll generally make it available at (where the base domain is
@@ -142,7 +156,9 @@ export const ChartEditableFields: React.FunctionComponent<
           />
         </label>
         <label>
-          <h2 className="font-light text-2xl">Default Protocol</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Default Protocol
+          </h2>
           <p>
             When the app exposes an endpoint, this is protocol it'll be
             available over.
@@ -154,7 +170,9 @@ export const ChartEditableFields: React.FunctionComponent<
           />
         </label>
         <label>
-          <h2 className="font-light text-2xl">Default Port</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Default Port
+          </h2>
           <p>
             When the app exposes an endpoint, this is port it'll be available
             on.
@@ -167,7 +185,9 @@ export const ChartEditableFields: React.FunctionComponent<
         </label>
       </div>
       <div>
-        <h2 className="font-light text-2xl">Legacy Configs?</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Legacy Configs?
+        </h2>
         <p>
           This flag controls whether or not instances of this chart will have
           configuration from firecloud-develop.

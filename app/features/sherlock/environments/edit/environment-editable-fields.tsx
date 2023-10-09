@@ -69,7 +69,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <div>
-        <h2 className="font-light text-2xl">Require Suitability?</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Require Suitability?
+        </h2>
         <p>
           DevOps's systems can require production-suitability to{" "}
           <b className="font-semibold">modify</b> this environment (doesn't
@@ -88,7 +90,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </div>
       <label>
-        <h2 className="font-light text-2xl">Owner</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Owner</h2>
         <p>
           {`The email of the user who is responsible for this environment. ${
             creating ? "If left empty, it will be set to your email." : ""
@@ -120,7 +122,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Base Domain</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Base Domain
+        </h2>
         <p>The base domain for charts deployed in this environment.</p>
         <TextField
           name="baseDomain"
@@ -134,7 +138,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </label>
       <div>
-        <h2 className="font-light text-2xl">Name Prefixes Domain?</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Name Prefixes Domain?
+        </h2>
         <p>
           When multiple environments exist on the same base domain, the name of
           this environment can go in between the base domain and the subdomain
@@ -153,7 +159,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </div>
       <label>
-        <h2 className="font-light text-2xl">Helmfile Ref</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Helmfile Ref
+        </h2>
         <p>
           The git ref of terra-helmfile that should be used for overall
           environment configuration. This doesn't directly configure apps or
@@ -168,7 +176,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Default Cluster</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Default Cluster
+        </h2>
         <p>
           The default Kubernetes cluster that charts will be deployed to.
           Existing charts won't move if this is ever changed.
@@ -199,7 +209,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Default Firecloud Develop Ref</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Default Firecloud Develop Ref
+        </h2>
         <p className="mb-2">
           Legacy configuration from firecloud-develop doesn't work quite like
           our newer systems. All the legacy configuration in an environment
@@ -224,7 +236,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Description</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Description
+        </h2>
         <p className="mb-2">
           An extra optional note to include for this environment, just for
           display in Beehive.
@@ -256,7 +270,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
       )}
       {(creating ? templateInUse : environment?.lifecycle === "dynamic") && (
         <div>
-          <h2 className="font-light text-2xl">Prevent Deletion?</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Prevent Deletion?
+          </h2>
           <p>
             This flag prevents auto-deletion of this BEE and also hides the
             delete and stop functionality in Beehive.
