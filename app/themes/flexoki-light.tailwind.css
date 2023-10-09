@@ -44,7 +44,7 @@
     --color-error-border: 175 48 41; /* re */
     --color-error-button: 230 228 217; /* ui */
 
-    --color-beehive-logo: 252 211 77; /* amber-300 */
+    --color-beehive-logo: 252 211 77; /* tailwind's amber-300 */
 
     --color-status-red: 175 48 41; /* re */
     --color-status-green: 102 128 11; /* gr */
@@ -94,7 +94,7 @@
     --color-error-border: 209 77 65; /* re */
     --color-error-button: 40 39 38; /* ui */
 
-    --color-beehive-logo: 234 179 8; /* yellow-500 */
+    --color-beehive-logo: 234 179 8; /* tailwind's yellow-500 */
 
     --color-status-red: 209 77 65; /* re */
     --color-status-green: 135 154 57; /* gr */
