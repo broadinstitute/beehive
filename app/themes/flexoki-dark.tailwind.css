@@ -52,7 +52,7 @@
     --color-status-gray: 135 133 128; /* tx-2 */
   }
 
-  /* dark theme for prod */
+  /* light theme for prod */
   [data-theme="flexigo-dark"] [data-theme-prod="true"] {
     color-scheme: light; /* make browser elements light mode */
 

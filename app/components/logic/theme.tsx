@@ -5,6 +5,8 @@ enum Theme {
   DARK = "dark",
   EXTRA_LIGHT = "extra-light",
   EXTRA_DARK = "extra-dark",
+  SOLARIZED_LIGHT = "solarized-light",
+  SOLARIZED_DARK = "solarized-dark",
   FLEXIGO_LIGHT = "flexigo-light",
   FLEXIGO_DARK = "flexigo-dark",
 }
