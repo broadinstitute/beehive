@@ -5,6 +5,7 @@ enum Theme {
   DARK = "dark",
   EXTRA_LIGHT = "extra-light",
   EXTRA_DARK = "extra-dark",
+  FLEXIGO_LIGHT = "flexigo-light",
 }
 
 const defaultTheme: Theme = Theme.LIGHT;
@@ -53,7 +54,7 @@ export const ThemeDropdown: React.FunctionComponent = () => {
           }
           document.documentElement.setAttribute(
             documentElementAttribute,
-            themeToSet
+            themeToSet,
           );
         }}
       >
@@ -75,7 +76,7 @@ const setThemeFromLocalStorageFunctionText = ((
   localStorageKey: string,
   documentElementAttribute: string,
   defaultTheme: Theme,
-  defaultThemeForDarkOS: Theme
+  defaultThemeForDarkOS: Theme,
 ): void => {
   let themeToSet = localStorage.getItem(localStorageKey);
   if (!themeToSet) {

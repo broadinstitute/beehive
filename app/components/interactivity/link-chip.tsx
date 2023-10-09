@@ -15,7 +15,7 @@ export const LinkChip: React.FunctionComponent<{
     prefetch="intent"
     className={`shrink-0 border rounded-xl hover:shadow-md motion-safe:transition-all px-2 ${backgroundClassName} ${borderClassName} flex flex-row h-8 items-center`}
   >
-    <h2 className="text-xl font-light">
+    <h2 className="text-xl font-light text-color-header-text">
       {text}
       {arrow && " ↗"}
     </h2>

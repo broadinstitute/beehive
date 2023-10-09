@@ -1,0 +1,104 @@
+@layer base {
+  /*
+  colors from Steph Ango's Flexoki theme
+  https://stephango.com/flexoki
+  */
+  [data-theme="flexigo-light"] [data-theme-prod="false"] {
+    color-scheme: light; /* make browser elements light mode */
+
+    --color-far-bg: 242 240 229; /* bg-2 */
+    --color-near-bg: 255 252 240; /* bg */
+    --color-nearest-bg: 255 252 240; /* bg */
+
+    --color-header-text: 16 15 15; /* tx */
+    --color-body-text: 111 110 105; /* tx-2 */
+    --color-placeholder-text: 183 181 172; /* tx-3 */
+    --color-link-underline: 183 181 172; /* tx-3 */
+
+    --color-focused-element: 183 181 172; /* tx-3 */
+    --color-divider-line: 206 205 195; /* ui-3 */
+    --color-neutral-soft-border: 206 205 195; /* ui-3 */
+    --color-neutral-hard-border: 16 15 15; /* tx */
+    --color-text-box-border: 206 205 195; /* ui-3 */
+
+    --color-button-down: 242 240 229; /* bg-2 */
+    --color-icon-button-down: 206 205 195; /* ui-3 */
+    --color-icon-button-hover: 218 216 206; /* ui-2 */
+
+    --color-cluster-bg: 230 228 217; /* ui */
+    --color-cluster-border: 135 154 57; /* gr-2 */
+    --color-environment-bg: 230 228 217; /* ui */
+    --color-environment-border: 208 162 21; /* ye-2 */
+    --color-chart-bg: 230 228 217; /* ui */
+    --color-chart-border: 67 133 190; /* bl-2 */
+    --color-app-version-bg: 230 228 217; /* ui */
+    --color-app-version-border: 209 77 65; /* re-2 */
+    --color-chart-version-bg: 230 228 217; /* ui */
+    --color-chart-version-border: 139 126 200; /* pu-2 */
+    --color-ci-bg: 230 228 217; /* ui */
+    --color-ci-border: 111 110 105; /* ui-3 */
+    --color-misc-type-bg: 230 228 217; /* ui */
+    --color-misc-type-border: 183 181 172; /* tx-3 */
+
+    --color-error-bg: 242 240 229; /* bg-2 */
+    --color-error-border: 175 48 41; /* re */
+    --color-error-button: 230 228 217; /* ui */
+
+    --color-beehive-logo: 252 211 77; /* amber-300 */
+
+    --color-status-red: 175 48 41; /* re */
+    --color-status-green: 102 128 11; /* gr */
+    --color-status-yellow: 173 131 1; /* ye */
+    --color-status-gray: 111 110 105; /* tx-2 */
+  }
+
+  /* dark theme for prod */
+  [data-theme="flexigo-light"] [data-theme-prod="true"] {
+    color-scheme: dark; /* make browser elements dark mode */
+
+    --color-far-bg: 28 27 26; /* bg-2 */
+    --color-near-bg: 16 15 15; /* bg */
+    --color-nearest-bg: 16 15 15; /* bg */
+
+    --color-header-text: 206 205 195; /* tx */
+    --color-body-text: 135 133 128; /* tx-2 */
+    --color-placeholder-text: 87 86 83; /* tx-3 */
+    --color-link-underline: 87 86 83; /* tx-3 */
+
+    --color-focused-element: 87 86 83; /* tx-3 */
+    --color-divider-line: 64 62 60; /* ui-3 */
+    --color-neutral-soft-border: 64 62 60; /* ui-3 */
+    --color-neutral-hard-border: 206 205 195; /* tx */
+    --color-text-box-border: 64 62 60; /* ui-3 */
+
+    --color-button-down: 28 27 26; /* bg-2 */
+    --color-icon-button-down: 64 62 60; /* ui-3 */
+    --color-icon-button-hover: 52 51 49; /* ui-2 */
+
+    --color-cluster-bg: 40 39 38; /* ui */
+    --color-cluster-border: 102 128 11; /* gr-2 */
+    --color-environment-bg: 40 39 38; /* ui */
+    --color-environment-border: 173 131 1; /* ye-2 */
+    --color-chart-bg: 40 39 38; /* ui */
+    --color-chart-border: 32 94 166; /* bl-2 */
+    --color-app-version-bg: 40 39 38; /* ui */
+    --color-app-version-border: 174 48 41; /* re-2 */
+    --color-chart-version-bg: 40 39 38; /* ui */
+    --color-chart-version-border: 94 64 157; /* pu-2 */
+    --color-ci-bg: 40 39 38; /* ui */
+    --color-ci-border: 64 62 60; /* ui-3 */
+    --color-misc-type-bg: 40 39 38; /* ui */
+    --color-misc-type-border: 87 86 83; /* tx-3 */
+
+    --color-error-bg: 28 27 26; /* bg-2 */
+    --color-error-border: 209 77 65; /* re */
+    --color-error-button: 40 39 38; /* ui */
+
+    --color-beehive-logo: 234 179 8; /* yellow-500 */
+
+    --color-status-red: 209 77 65; /* re */
+    --color-status-green: 135 154 57; /* gr */
+    --color-status-yellow: 208 162 21; /* ye */
+    --color-status-gray: 135 133 128; /* tx-2 */
+  }
+}
