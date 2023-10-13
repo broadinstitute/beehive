@@ -1,6 +1,6 @@
 import { SerializeFrom } from "@remix-run/node";
 import {
-  V2controllersAppVersion,
+  SherlockAppVersionV3,
   V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import React, { useMemo, useState } from "react";
@@ -14,7 +14,7 @@ import { SidebarSelectAppVersionBranch } from "./sidebar-select-app-version-bran
 
 export const AppVersionPicker: React.FunctionComponent<
   {
-    appVersions: SerializeFrom<V2controllersAppVersion[]>;
+    appVersions: SerializeFrom<SherlockAppVersionV3[]>;
     chartReleases: SerializeFrom<V2controllersChartRelease[]>;
     isTargetingChangeset: boolean;
     showFirecloudDevelopRef?: boolean;

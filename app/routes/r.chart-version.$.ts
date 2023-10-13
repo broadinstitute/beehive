@@ -8,15 +8,15 @@ import {
 
 export async function loader({ request, params }: LoaderArgs) {
   return new ChartVersionsApi(SherlockConfiguration)
-    .apiV2ChartVersionsSelectorGet(
+    .apiChartVersionsV3SelectorGet(
       { selector: params["*"] || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (chartVersion) =>
         redirect(
-          `/charts/${chartVersion.chart}/chart-versions/${chartVersion.chartVersion}`
+          `/charts/${chartVersion.chart}/chart-versions/${chartVersion.chartVersion}`,
         ),
-      makeErrorResponseReturner()
+      makeErrorResponseReturner(),
     );
 }

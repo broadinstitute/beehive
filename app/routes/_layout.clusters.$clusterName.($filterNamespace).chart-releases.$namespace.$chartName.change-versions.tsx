@@ -69,13 +69,13 @@ export function loader({ request, params }: LoaderArgs) {
       )
       .then((chartReleases) => chartReleases.sort(chartReleaseSorter)),
     new AppVersionsApi(SherlockConfiguration)
-      .apiV2AppVersionsGet(
+      .apiAppVersionsV3Get(
         { chart: params.chartName, limit: 25 },
         handleIAP(request),
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
-      .apiV2ChartVersionsGet(
+      .apiChartVersionsV3Get(
         { chart: params.chartName, limit: 25 },
         handleIAP(request),
       )

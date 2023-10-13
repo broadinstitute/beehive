@@ -1,5 +1,5 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersAppVersion } from "@sherlock-js-client/sherlock";
+import { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
 import { useMemo } from "react";
 import { ActionButton } from "~/components/interactivity/action-button";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
@@ -7,7 +7,7 @@ import { InteractiveList } from "~/components/panel-structures/interactive-list"
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
 
 export const SidebarSelectAppVersionBranch: React.FunctionComponent<{
-  appVersions: SerializeFrom<V2controllersAppVersion[]>;
+  appVersions: SerializeFrom<SherlockAppVersionV3[]>;
   fieldValue: string;
   setFieldValue: (value: string) => void;
 }> = ({ appVersions, fieldValue, setFieldValue }) => {
@@ -18,10 +18,10 @@ export const SidebarSelectAppVersionBranch: React.FunctionComponent<{
         new Set(
           appVersions
             .map((a) => a.gitBranch)
-            .filter((value): value is string => typeof value === "string")
-        )
+            .filter((value): value is string => typeof value === "string"),
+        ),
       ),
-    [appVersions]
+    [appVersions],
   );
   return (
     <InteractiveList title="Recent Branches" {...AppVersionColors}>

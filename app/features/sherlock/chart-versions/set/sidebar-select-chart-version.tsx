@@ -1,12 +1,12 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
+import { SherlockChartVersionV3 } from "@sherlock-js-client/sherlock";
 import { SidebarFilterControlledList } from "~/components/panel-structures/sidebar-filter-controlled-list";
 import { ChartVersionColors } from "~/features/sherlock/chart-versions/chart-version-colors";
 import { ListChartVersionButtonText } from "../list/list-chart-version-button-text";
 import { matchChartVersion } from "../list/match-chart-version";
 
 export const SidebarSelectChartVersion: React.FunctionComponent<{
-  chartVersions: SerializeFrom<V2controllersChartVersion[]>;
+  chartVersions: SerializeFrom<SherlockChartVersionV3[]>;
   fieldValue: string;
   setFieldValue: (value: string) => void;
 }> = ({ chartVersions, fieldValue, setFieldValue }) => (

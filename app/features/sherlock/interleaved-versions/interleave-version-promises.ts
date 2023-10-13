@@ -1,22 +1,22 @@
 import {
   ApiResponse,
-  V2controllersAppVersion,
-  V2controllersChartVersion,
+  SherlockAppVersionV3,
+  SherlockChartVersionV3,
 } from "@sherlock-js-client/sherlock";
 
 export type InterleavedVersion =
   | {
       type: "app";
-      version: V2controllersAppVersion;
+      version: SherlockAppVersionV3;
     }
   | {
       type: "chart";
-      version: V2controllersChartVersion;
+      version: SherlockChartVersionV3;
     };
 
 export async function interleaveVersionPromises(
-  appVersionsPromise: Promise<ApiResponse<V2controllersAppVersion[]>>,
-  chartVersionsPromise: Promise<ApiResponse<V2controllersChartVersion[]>>,
+  appVersionsPromise: Promise<ApiResponse<SherlockAppVersionV3[]>>,
+  chartVersionsPromise: Promise<ApiResponse<SherlockChartVersionV3[]>>,
   ...extraProcesses: ((
     versions: InterleavedVersion[],
   ) => InterleavedVersion[])[]

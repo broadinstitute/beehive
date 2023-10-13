@@ -28,7 +28,7 @@ export async function loader({ request, params }: LoaderArgs) {
     )
     .then((chart) =>
       interleaveVersionPromises(
-        new AppVersionsApi(SherlockConfiguration).apiV2AppVersionsGetRaw(
+        new AppVersionsApi(SherlockConfiguration).apiAppVersionsV3GetRaw(
           {
             chart: chart.id?.toString(),
             limit: 10,
@@ -36,7 +36,7 @@ export async function loader({ request, params }: LoaderArgs) {
           },
           forwardedIAP,
         ),
-        new ChartVersionsApi(SherlockConfiguration).apiV2ChartVersionsGetRaw(
+        new ChartVersionsApi(SherlockConfiguration).apiChartVersionsV3GetRaw(
           { chart: chart.id?.toString(), limit: 10 },
           forwardedIAP,
         ),

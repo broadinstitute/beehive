@@ -81,13 +81,13 @@ export async function loader({ request, params }: LoaderArgs) {
         errorResponseThrower,
       ),
     new AppVersionsApi(SherlockConfiguration)
-      .apiV2AppVersionsGet(
+      .apiAppVersionsV3Get(
         { chart: params.chartName, limit: 25 },
         handleIAP(request),
       )
       .catch(errorResponseThrower),
     new ChartVersionsApi(SherlockConfiguration)
-      .apiV2ChartVersionsGet(
+      .apiChartVersionsV3Get(
         { chart: params.chartName, limit: 25 },
         handleIAP(request),
       )
