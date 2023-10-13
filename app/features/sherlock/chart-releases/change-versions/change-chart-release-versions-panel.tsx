@@ -1,9 +1,9 @@
 import { SerializeFrom } from "@remix-run/node";
 import {
-  V2controllersAppVersion,
+  SherlockAppVersionV3,
+  SherlockChartVersionV3,
   V2controllersChangesetPlanRequestChartReleaseEntry,
   V2controllersChartRelease,
-  V2controllersChartVersion,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -26,8 +26,8 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
   chartRelease: SerializeFrom<V2controllersChartRelease>;
 
   otherChartReleases: SerializeFrom<V2controllersChartRelease[]>;
-  appVersions: SerializeFrom<V2controllersAppVersion[]>;
-  chartVersions: SerializeFrom<V2controllersChartVersion[]>;
+  appVersions: SerializeFrom<SherlockAppVersionV3[]>;
+  chartVersions: SerializeFrom<SherlockChartVersionV3[]>;
   preconfiguredAppVersionExact?: string | null;
   preconfiguredChartVersionExact?: string | null;
   preconfiguredOtherEnvironment?: string | null;

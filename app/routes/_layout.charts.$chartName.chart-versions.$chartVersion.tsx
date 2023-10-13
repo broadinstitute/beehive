@@ -57,7 +57,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         () => undefined,
       ),
     chartVersion: await new ChartVersionsApi(SherlockConfiguration)
-      .apiV2ChartVersionsSelectorGet(
+      .apiChartVersionsV3SelectorGet(
         { selector: `${params.chartName}/${params.chartVersion}` },
         handleIAP(request),
       )

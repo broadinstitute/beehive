@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { V2controllersAppVersion } from "@sherlock-js-client/sherlock";
+import type { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
@@ -9,7 +9,7 @@ import { MutateControls } from "../../mutate-controls";
 import { AppVersionColors } from "../app-version-colors";
 
 export interface AppVersionDetailsProps {
-  appVersion: V2controllersAppVersion | SerializeFrom<V2controllersAppVersion>;
+  appVersion: SherlockAppVersionV3 | SerializeFrom<SherlockAppVersionV3>;
   initialCiRuns?: React.ComponentProps<
     typeof CiRunResourceStatusWidget
   >["initialCiRuns"];
@@ -87,7 +87,7 @@ export const AppVersionDetails: React.FunctionComponent<
             after{" "}
             <span className="font-mono">
               {
-                (appVersion.parentAppVersionInfo as V2controllersAppVersion)
+                (appVersion.parentAppVersionInfo as SherlockAppVersionV3)
                   .appVersion
               }
             </span>{" "}
@@ -95,7 +95,7 @@ export const AppVersionDetails: React.FunctionComponent<
           </p>
           <NavButton
             to={`../${
-              (appVersion.parentAppVersionInfo as V2controllersAppVersion)
+              (appVersion.parentAppVersionInfo as SherlockAppVersionV3)
                 .appVersion
             }`}
             {...AppVersionColors}

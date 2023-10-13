@@ -40,7 +40,7 @@ export const meta: MetaFunction = ({ params }) => [
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartVersionsApi(SherlockConfiguration)
-    .apiV2ChartVersionsGet(
+    .apiChartVersionsV3Get(
       { chart: params.chartName || "" },
       handleIAP(request),
     )

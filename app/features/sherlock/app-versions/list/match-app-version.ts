@@ -1,9 +1,9 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersAppVersion } from "@sherlock-js-client/sherlock";
+import { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
 
 export function matchAppVersion(
-  appVersion: SerializeFrom<V2controllersAppVersion>,
-  matchText: string
+  appVersion: SerializeFrom<SherlockAppVersionV3>,
+  matchText: string,
 ): boolean {
   return (
     appVersion.appVersion?.includes(matchText) ||
