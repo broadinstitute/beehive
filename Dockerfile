@@ -1,11 +1,12 @@
 ARG NODE_VERSION='18'
 ARG DISTRO='alpine'
+ARG BUILD_VERSION
 
 # base node image
 FROM us.gcr.io/broad-dsp-gcr-public/base/nodejs:${NODE_VERSION}-${DISTRO} as base
 
 # set for base and all layer that inherit from it
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN apk --no-cache -U upgrade
 
@@ -39,11 +40,8 @@ RUN npm run build
 # Finally, build the production image with minimal footprint
 FROM base
 
-ARG BUILD_VERSION
-
 WORKDIR /app
 
-ENV NODE_ENV=production
 ENV PORT=80
 ENV BUILD_VERSION=${BUILD_VERSION:-unknown}
 
