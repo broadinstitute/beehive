@@ -1,6 +1,5 @@
 ARG NODE_VERSION='18'
 ARG DISTRO='alpine'
-ARG BUILD_VERSION
 
 # base node image
 FROM us.gcr.io/broad-dsp-gcr-public/base/nodejs:${NODE_VERSION}-${DISTRO} as base
@@ -42,8 +41,10 @@ FROM base
 
 WORKDIR /app
 
-ENV PORT=80
+# This argo needs to be in here so that it can be referenced by the ENV
+ARG BUILD_VERSION
 ENV BUILD_VERSION=${BUILD_VERSION:-unknown}
+ENV PORT=80
 
 COPY --chown=node:node --from=production-deps /app/node_modules /app/node_modules
 
