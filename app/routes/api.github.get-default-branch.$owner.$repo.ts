@@ -1,9 +1,9 @@
 import { Octokit } from "@octokit/rest";
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { sessionFields } from "~/session.server";
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request).catch(() => null);
   let branch: string = "";
   if (session && params.owner && params.repo) {

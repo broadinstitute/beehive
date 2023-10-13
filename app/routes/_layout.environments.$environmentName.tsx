@@ -1,7 +1,7 @@
 import type {
-  LoaderArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   SerializeFrom,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import { defer } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
@@ -16,7 +16,7 @@ import {
   CiIdentifiersApi,
   EnvironmentsApi,
 } from "@sherlock-js-client/sherlock";
-import { promiseHash } from "remix-utils";
+import { promiseHash } from "remix-utils/promise";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { chartReleaseUrl } from "~/features/sherlock/chart-releases/chart-release-url";
@@ -31,7 +31,6 @@ import { toTitleCase } from "~/helpers/strings";
 import { ProdFlag } from "../components/layout/prod-flag";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
-
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink to={`/environments/${params.environmentName}`}>
@@ -40,11 +39,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.environmentName} - Environment` },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return defer({
     ciRuns: new CiIdentifiersApi(SherlockConfiguration)
       .apiCiIdentifiersV3SelectorGet(
@@ -55,7 +54,7 @@ export async function loader({ request, params }: LoaderArgs) {
       )
       .then(
         (ciIdentifier) => ciIdentifier.ciRuns,
-        () => [],
+        () => undefined,
       ),
     ...(await promiseHash({
       environment: new EnvironmentsApi(SherlockConfiguration)

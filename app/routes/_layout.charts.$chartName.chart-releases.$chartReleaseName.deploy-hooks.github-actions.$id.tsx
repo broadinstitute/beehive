@@ -1,5 +1,8 @@
-import { type ActionArgs, type LoaderArgs } from "@remix-run/node";
-import type { Params, V2_MetaFunction } from "@remix-run/react";
+import {
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
+import type { MetaFunction, Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
@@ -26,13 +29,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.chartReleaseName} - Chart Instance - Deploy Hooks - GitHub Actions Hook`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return Promise.all([
     new DeployHooksApi(SherlockConfiguration)
       .apiDeployHooksGithubActionsV3SelectorGet(
@@ -48,7 +51,7 @@ export async function loader({ request, params }: LoaderArgs) {
   ]);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   return editGithubActionsDeployHookAction(
     request,
     `/charts/${params.chartName}/chart-releases/${params.chartReleaseName}/deploy-hooks`,

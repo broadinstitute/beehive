@@ -1,10 +1,5 @@
-import {
-  NavLink,
-  Params,
-  V2_MetaFunction,
-  useActionData,
-} from "@remix-run/react";
-import { ActionArgs, redirect } from "@remix-run/server-runtime";
+import { MetaFunction, NavLink, Params, useActionData } from "@remix-run/react";
+import { ActionFunctionArgs, redirect } from "@remix-run/server-runtime";
 import {
   EnvironmentsApi,
   V2controllersEnvironment,
@@ -34,11 +29,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.environmentName} - Environment - Schedule` },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
@@ -71,11 +66,11 @@ export async function action({ request, params }: ActionArgs) {
         selector: params.environmentName || "",
         environment: environmentRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (environment) => redirect(`/environments/${environment.name}`),
-      makeErrorResponseReturner(environmentRequest)
+      makeErrorResponseReturner(environmentRequest),
     );
 }
 

@@ -1,4 +1,4 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, Params, useLoaderData } from "@remix-run/react";
 import { ChangesetsApi } from "@sherlock-js-client/sherlock";
 import { useMemo } from "react";
@@ -22,13 +22,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Instance - Version History`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const offsetString = url.searchParams.get("offset");
   const offset = offsetString ? parseInt(offsetString) : 0;

@@ -1,4 +1,4 @@
-import { LoaderArgs, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { ClustersApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
@@ -6,7 +6,7 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ClustersApi(SherlockConfiguration)
     .apiClustersV3SelectorGet(
       { selector: params["*"] || "" },

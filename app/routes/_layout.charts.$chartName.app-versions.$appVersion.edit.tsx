@@ -1,4 +1,4 @@
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import { NavLink, useActionData } from "@remix-run/react";
@@ -32,13 +32,13 @@ export const handle = {
   },
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.chartName}/${params.appVersion} - App Version - Edit`,
   },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();

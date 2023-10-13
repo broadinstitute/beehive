@@ -1,4 +1,8 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import {
+  LoaderFunctionArgs,
+  MetaFunction,
+  SerializeFrom,
+} from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -27,19 +31,19 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Details - PagerDuty Integration",
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
     .apiV2PagerdutyIntegrationsSelectorGet(
       {
         selector: `pd-id/${params.pagerdutyID}`,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .catch(errorResponseThrower);
 }

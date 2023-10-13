@@ -1,8 +1,8 @@
 import {
-  ActionArgs,
-  LoaderArgs,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   redirect,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   NavLink,
@@ -20,8 +20,8 @@ import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/char
 import { SidebarSelectMultipleChartReleases } from "~/features/sherlock/chart-releases/set/sidebar-select-multiple-chart-releases";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import {
@@ -41,25 +41,25 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName} - Environment - Adjust Bulk Update Defaults`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
       { environment: params.environmentName },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (chartReleases) => chartReleases.sort(chartReleaseSorter),
-      errorResponseThrower
+      errorResponseThrower,
     );
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
@@ -84,12 +84,12 @@ export async function action({ request, params }: ActionArgs) {
             includedInBulkChangesets: included,
           },
         },
-        handleIAP(request)
-      )
-    )
+        handleIAP(request),
+      ),
+    ),
   ).then(
     () => redirect(`/environments/${params.environmentName}`),
-    makeErrorResponseReturner()
+    makeErrorResponseReturner(),
   );
 }
 
@@ -109,8 +109,8 @@ export default function Route() {
         chartRelease.includedInBulkChangesets === undefined
           ? true
           : chartRelease.includedInBulkChangesets,
-      ])
-    )
+      ]),
+    ),
   );
 
   return (

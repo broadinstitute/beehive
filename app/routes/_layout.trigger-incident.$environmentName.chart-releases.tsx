@@ -1,4 +1,4 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, Params, useLoaderData } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -25,17 +25,17 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName} - Trigger Incident - Specific Apps`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
       { environment: params.environmentName || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (chartReleases) =>
@@ -43,10 +43,10 @@ export async function loader({ request, params }: LoaderArgs) {
           .filter(
             (chartRelease) =>
               chartRelease.pagerdutyIntegration &&
-              chartRelease.pagerdutyIntegrationInfo?.name
+              chartRelease.pagerdutyIntegrationInfo?.name,
           )
           .sort(chartReleaseSorter),
-      errorResponseThrower
+      errorResponseThrower,
     );
 }
 

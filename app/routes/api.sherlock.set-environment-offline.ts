@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { json } from "react-router";
@@ -11,7 +11,7 @@ import {
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { commitSession } from "~/session.server";
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const session = await getValidSession(request);
   const formData = await request.formData();
   const environmentRequest: V2controllersEnvironment = {
@@ -25,7 +25,7 @@ export async function action({ request }: ActionArgs) {
         selector: typeof environmentName === "string" ? environmentName : "",
         environment: environmentRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async (environment) => {
       await runGha(
@@ -37,7 +37,7 @@ export async function action({ request }: ActionArgs) {
             offline: `${environment.offline}`,
           },
         },
-        environment.offline ? "stop your BEE" : "start your BEE"
+        environment.offline ? "stop your BEE" : "start your BEE",
       );
       return json(
         {},
@@ -45,7 +45,7 @@ export async function action({ request }: ActionArgs) {
           headers: {
             "Set-Cookie": await commitSession(session),
           },
-        }
+        },
       );
     }, errorResponseThrower);
 }

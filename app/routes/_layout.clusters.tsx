@@ -1,4 +1,4 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { ClustersApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -22,13 +22,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/clusters">Clusters</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Clusters",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return new ClustersApi(SherlockConfiguration)
     .apiClustersV3Get({}, handleIAP(request))
     .then((clusters) => clusters.sort(clusterSorter), errorResponseThrower);

@@ -1,4 +1,4 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { ChartsApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -22,13 +22,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/charts">Charts</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Charts",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return new ChartsApi(SherlockConfiguration)
     .apiChartsV3Get({}, handleIAP(request))
     .then((charts) => charts.sort(chartSorter), errorResponseThrower);

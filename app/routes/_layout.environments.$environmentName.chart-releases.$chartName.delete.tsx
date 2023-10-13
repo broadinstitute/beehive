@@ -1,10 +1,10 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { runGha } from "~/features/github/run-gha";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { commitSession } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -23,19 +23,19 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName}/${params.chartName} - Chart Instance - Delete`,
   },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorDelete(
       { selector: `${params.environmentName}/${params.chartName}` },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async (chartRelease) => {
       if (chartRelease.environmentInfo?.lifecycle === "dynamic") {
@@ -47,7 +47,7 @@ export async function action({ request, params }: ActionArgs) {
               "bee-name": chartRelease.environmentInfo?.name || "",
             },
           },
-          "sync your BEE"
+          "sync your BEE",
         );
       }
       return redirect(
@@ -56,7 +56,7 @@ export async function action({ request, params }: ActionArgs) {
           headers: {
             "Set-Cookie": await commitSession(session),
           },
-        }
+        },
       );
     }, makeErrorResponseReturner());
 }

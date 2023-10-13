@@ -1,4 +1,4 @@
-import { json, LoaderArgs, redirect } from "@remix-run/node";
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
@@ -7,11 +7,11 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { safeRedirectPath } from "~/helpers/validate";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesSelectorGet(
       { selector: params["*"] || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then((chartRelease) => {
       const protocol =
@@ -28,18 +28,18 @@ export async function loader({ request, params }: LoaderArgs) {
       if (!subdomain) {
         return json(
           `The ${chartRelease.name} chart instance doesn't have a subdomain recorded, please add it by editing at https://broad.io/beehive/chart-release/${chartRelease.name}`,
-          400
+          400,
         );
       } else if (!baseDomain) {
         return json(
           `The ${chartRelease.environment} environment doesn't have a base domain recorded, please add it by editing at https://broad.io/beehive/environment/${chartRelease.environment}`,
-          400
+          400,
         );
       } else if (protocol == "https" && port == 443) {
         return redirect(safeRedirectPath(`https://${subdomain}.${baseDomain}`));
       } else {
         return redirect(
-          safeRedirectPath(`${protocol}://${subdomain}.${baseDomain}:${port}`)
+          safeRedirectPath(`${protocol}://${subdomain}.${baseDomain}:${port}`),
         );
       }
     }, makeErrorResponseReturner());

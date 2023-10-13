@@ -1,8 +1,8 @@
 import {
-  ActionArgs,
-  LoaderArgs,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   redirect,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   NavLink,
@@ -13,8 +13,8 @@ import {
 import {
   AppVersionsApi,
   ChartReleasesApi,
-  ChartsApi,
   ChartVersionsApi,
+  ChartsApi,
   V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -25,8 +25,8 @@ import { ChartReleaseCreatableEnvironmentFields } from "~/features/sherlock/char
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { ChartReleaseEditableFields } from "~/features/sherlock/chart-releases/edit/chart-release-editable-fields";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { useSidebar } from "~/hooks/use-sidebar";
@@ -52,13 +52,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName} - Environment - Add Chart - ${params.chartName}`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return Promise.all([
     new ChartsApi(SherlockConfiguration)
       .apiChartsV3SelectorGet(
@@ -93,7 +93,7 @@ export async function loader({ request, params }: LoaderArgs) {
   ]);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();

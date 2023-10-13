@@ -1,4 +1,4 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -21,13 +21,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/trigger-incident">Trigger Incident</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Trigger Incident",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return new EnvironmentsApi(SherlockConfiguration)
     .apiV2EnvironmentsGet({}, handleIAP(request))
     .then(
@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderArgs) {
         environments
           .filter((environment) => environment.pagerdutyIntegration)
           .sort(environmentSorter),
-      errorResponseThrower
+      errorResponseThrower,
     );
 }
 

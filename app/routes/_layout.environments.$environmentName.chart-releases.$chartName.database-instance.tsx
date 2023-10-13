@@ -1,8 +1,8 @@
 import {
-  ActionArgs,
-  LoaderArgs,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   redirect,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   NavLink,
@@ -18,8 +18,8 @@ import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import { DatabaseInstancePanel } from "~/features/sherlock/database-instances/database-instance-panel";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -35,24 +35,24 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName}/${params.chartName} - Chart Instance - Database Metadata`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new DatabaseInstancesApi(SherlockConfiguration)
     .apiV2DatabaseInstancesSelectorGet(
       {
         selector: `chart-release/${params.environmentName}/${params.chartName}`,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .catch(() => null);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
@@ -66,14 +66,14 @@ export async function action({ request, params }: ActionArgs) {
         databaseInstance: databaseInstanceRequest,
         selector: `chart-release/${params.environmentName}/${params.chartName}`,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       () =>
         redirect(
-          `/environments/${params.environmentName}/chart-releases/${params.chartName}`
+          `/environments/${params.environmentName}/chart-releases/${params.chartName}`,
         ),
-      makeErrorResponseReturner(databaseInstanceRequest)
+      makeErrorResponseReturner(databaseInstanceRequest),
     );
 }
 

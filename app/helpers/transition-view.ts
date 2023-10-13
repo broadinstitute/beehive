@@ -6,7 +6,6 @@ export async function transitionView(updateDOM: () => void) {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
     !window.matchMedia("(min-width: 1250px)").matches ||
     !document ||
-    // @ts-expect-error
     !document.startViewTransition
   ) {
     updateDOM();
@@ -15,7 +14,6 @@ export async function transitionView(updateDOM: () => void) {
     // it definitely does sometimes.
     // https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API#browser_compatibility
     // If it exists, we run the updatey function inside it.
-    // @ts-expect-error
     document.startViewTransition(() => {
       // For this magic to work, though, we need React to actually do the updatey function
       // quickly so the browser can see the before and after. So we use the terrifying

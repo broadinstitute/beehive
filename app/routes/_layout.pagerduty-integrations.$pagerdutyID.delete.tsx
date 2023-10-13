@@ -1,4 +1,4 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
@@ -8,8 +8,8 @@ import { ActionBox } from "~/components/panel-structures/action-box";
 import { PagerdutyIntegrationDeleteDescription } from "~/features/sherlock/pagerduty-integrations/delete/pagerduty-integration-delete-description";
 import { PagerdutyIntegrationColors } from "~/features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
@@ -25,21 +25,21 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   { title: "Details - PagerDuty Integration - Delete" },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
     .apiV2PagerdutyIntegrationsSelectorDelete(
       { selector: `pd-id/${params.pagerdutyID}` },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       () => redirect("/pagerduty-integrations"),
-      makeErrorResponseReturner()
+      makeErrorResponseReturner(),
     );
 }
 

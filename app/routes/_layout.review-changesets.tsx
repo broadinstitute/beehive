@@ -1,4 +1,8 @@
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { defer, redirect } from "@remix-run/node";
 import {
   Await,
@@ -47,13 +51,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Review Version Changes",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const changesetIDs = url.searchParams.getAll("changeset");
   const changesetsApi = new ChangesetsApi(SherlockConfiguration);
@@ -141,7 +145,7 @@ export async function loader({ request }: LoaderArgs) {
   });
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();

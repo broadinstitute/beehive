@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { ChartsApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
@@ -7,7 +7,7 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartsApi(SherlockConfiguration)
     .apiChartsV3SelectorGet({ selector: params["*"] || "" }, handleIAP(request))
     .then(

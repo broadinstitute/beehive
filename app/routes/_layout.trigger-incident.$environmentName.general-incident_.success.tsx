@@ -1,4 +1,4 @@
-import { V2_MetaFunction } from "@remix-run/node";
+import { MetaFunction } from "@remix-run/node";
 import { NavLink, Params } from "@remix-run/react";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { IncidentTriggerSuccessPanel } from "../features/sherlock/pagerduty-integrations/trigger-incident/incident-trigger-success-panel";
@@ -13,7 +13,7 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName} - Incident Triggered`,
   },

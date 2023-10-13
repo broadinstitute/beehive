@@ -1,8 +1,8 @@
 import {
   defer,
-  type LoaderArgs,
+  type LoaderFunctionArgs,
+  type MetaFunction,
   type SerializeFrom,
-  type V2_MetaFunction,
 } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import {
@@ -32,11 +32,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.clusterName} - Cluster` },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return defer({
     ciRuns: new CiIdentifiersApi(SherlockConfiguration)
       .apiCiIdentifiersV3SelectorGet(
@@ -47,7 +47,7 @@ export async function loader({ request, params }: LoaderArgs) {
       )
       .then(
         (ciIdentifier) => ciIdentifier.ciRuns,
-        () => [],
+        () => undefined,
       ),
     cluster: await new ClustersApi(SherlockConfiguration)
       .apiClustersV3SelectorGet(

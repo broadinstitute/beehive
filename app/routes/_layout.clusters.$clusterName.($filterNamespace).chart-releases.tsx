@@ -1,4 +1,4 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -37,7 +37,7 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${
       params.filterNamespace
@@ -47,14 +47,14 @@ export const meta: V2_MetaFunction = ({ params }) => [
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
     .apiV2ChartReleasesGet(
       {
         cluster: params.clusterName || "",
         namespace: params.filterNamespace || undefined,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       // Sherlock's API doesn't really have a great mechanism for
@@ -64,10 +64,10 @@ export async function loader({ request, params }: LoaderArgs) {
         chartReleases
           .filter(
             (chartRelease) =>
-              chartRelease.environmentInfo?.lifecycle !== "template"
+              chartRelease.environmentInfo?.lifecycle !== "template",
           )
           .sort(chartReleaseSorter),
-      errorResponseThrower
+      errorResponseThrower,
     );
 }
 

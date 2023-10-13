@@ -1,9 +1,9 @@
 import {
-  ActionArgs,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   json,
-  LoaderArgs,
   redirect,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   NavLink,
@@ -26,8 +26,8 @@ import {
 import { ChangeChartReleaseVersionsPanel } from "~/features/sherlock/chart-releases/change-versions/change-chart-release-versions-panel";
 import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/chart-release-sorter";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -43,13 +43,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.chartReleaseName} - Chart Instance - Change Versions`,
   },
 ];
 
-export function loader({ request, params }: LoaderArgs) {
+export function loader({ request, params }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const preconfiguredAppVersionExact = url.searchParams.get("app");
   const preconfiguredChartVersionExact = url.searchParams.get("chart");
@@ -85,7 +85,7 @@ export function loader({ request, params }: LoaderArgs) {
   ]);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();

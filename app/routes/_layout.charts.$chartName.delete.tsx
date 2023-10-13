@@ -1,4 +1,4 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { ChartsApi } from "@sherlock-js-client/sherlock";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
@@ -11,8 +11,8 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { ChartDeleteDescription } from "~/features/sherlock/charts/delete/chart-delete-description";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useChartContext } from "~/routes/_layout.charts.$chartName";
@@ -23,11 +23,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.chartName} - Chart - Delete` },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   return new ChartsApi(SherlockConfiguration)

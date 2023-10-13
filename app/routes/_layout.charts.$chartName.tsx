@@ -1,7 +1,7 @@
 import {
-  LoaderArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   SerializeFrom,
-  V2_MetaFunction,
   defer,
 } from "@remix-run/node";
 import {
@@ -29,11 +29,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.chartName} - Chart` },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return defer({
     ciRuns: new CiIdentifiersApi(SherlockConfiguration)
       .apiCiIdentifiersV3SelectorGet(
@@ -44,7 +44,7 @@ export async function loader({ request, params }: LoaderArgs) {
       )
       .then(
         (ciIdentifier) => ciIdentifier.ciRuns,
-        () => [],
+        () => undefined,
       ),
     chart: await new ChartsApi(SherlockConfiguration)
       .apiChartsV3SelectorGet(

@@ -1,4 +1,9 @@
-import { ActionArgs, json, LoaderArgs, redirect } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  json,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -13,7 +18,7 @@ import {
   V2controllersChangesetPlanRequestChartReleaseEntry,
 } from "@sherlock-js-client/sherlock";
 import { AlertTriangle, Rocket } from "lucide-react";
-import { promiseHash } from "remix-utils";
+import { promiseHash } from "remix-utils/promise";
 import { ActionButton } from "~/components/interactivity/action-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { CsrfTokenInput } from "~/components/logic/csrf-token";
@@ -32,8 +37,7 @@ import {
   SherlockConfiguration,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
-
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const forwardedIAP = handleIAP(request);
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
   return promiseHash({
@@ -73,7 +77,7 @@ export async function loader({ request, params }: LoaderArgs) {
   );
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();

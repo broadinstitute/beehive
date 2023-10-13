@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ClientOnly } from "remix-utils";
+import { ClientOnly } from "remix-utils/client-only";
 import { localZonedISOString } from "~/helpers/date";
 import { LoadingField } from "./loading-field";
 
@@ -33,7 +33,7 @@ const InternalTimeField: React.FunctionComponent<
       ? new Date(existingTime)
       : initialInputTime
       ? inputTimeToDate(initialInputTime)
-      : null
+      : null,
   );
   return (
     <>
@@ -72,7 +72,7 @@ function inputTimeToDate(inputTime: string): Date {
   const parsed = inputTime.match(inputTimeRegex);
   if (!parsed || parsed.length < 3) {
     throw new Error(
-      `inputTime ${inputTime} didn't seem to successfully match against ${inputTimeRegex}, is something wrong with your browser's <input type="time" />?`
+      `inputTime ${inputTime} didn't seem to successfully match against ${inputTimeRegex}, is something wrong with your browser's <input type="time" />?`,
     );
   }
   const date = new Date();

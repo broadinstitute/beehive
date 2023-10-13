@@ -1,5 +1,5 @@
-import type { LoaderArgs } from "@remix-run/node";
-import type { Params, V2_MetaFunction } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { MetaFunction, Params } from "@remix-run/react";
 import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import { DeployHooksApi } from "@sherlock-js-client/sherlock";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -18,11 +18,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.environmentName} - Environment - Deploy Hooks` },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const deployHooksApi = new DeployHooksApi(SherlockConfiguration);
   return Promise.all([
     deployHooksApi.apiDeployHooksGithubActionsV3Get(

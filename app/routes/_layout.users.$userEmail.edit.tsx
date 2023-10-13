@@ -1,4 +1,4 @@
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import { NavLink, useActionData } from "@remix-run/react";
@@ -25,11 +25,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.userEmail} - User - Edit` },
 ];
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();

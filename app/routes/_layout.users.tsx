@@ -1,7 +1,7 @@
 import type {
-  LoaderArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   SerializeFrom,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   NavLink,
@@ -33,13 +33,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/users">Users</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Users",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const search = url.searchParams.get("search");
   const api = new UsersApi(SherlockConfiguration);
