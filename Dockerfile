@@ -1,44 +1,47 @@
 ARG NODE_VERSION='18'
 ARG DISTRO='alpine'
 
-# Get all dependencies
-FROM node:${NODE_VERSION}-${DISTRO} as deps
+# base node image
+FROM us.gcr.io/broad-dsp-gcr-public/base/nodejs:${NODE_VERSION}-${DISTRO} as base
+
+# set for base and all layer that inherit from it
+ENV NODE_ENV production
+
+RUN apk --no-cache -U upgrade
+
+# Install all node_modules, including dev dependencies
+FROM base as deps
+
 WORKDIR /app
 
-ADD package.json package-lock.json .npmrc ./
-RUN npm clean-install
+ADD package.json .npmrc ./
+RUN npm install --include=dev
 
-# Pare down dependencies for production
-FROM node:${NODE_VERSION}-${DISTRO} as production-deps
+# Setup production node_modules
+FROM base as production-deps
+
 WORKDIR /app
 
 COPY --from=deps /app/node_modules /app/node_modules
-
-ADD package.json package-lock.json .npmrc ./
+ADD package.json .npmrc ./
 RUN npm prune --omit=dev
 
-# Build with all dependencies
-FROM node:${NODE_VERSION}-${DISTRO} as build
-WORKDIR /app
+# Build the app
+FROM base as build
 
-ENV NODE_ENV=production
+WORKDIR /app
 
 COPY --from=deps /app/node_modules /app/node_modules
 
 ADD . .
 RUN npm run build
 
-# Run with production dependencies
-#   - Remix's built-in server is specifically production-ready
-#     https://remix.run/docs/en/v1/other-api/serve#remix-app-server
-#   - Use blessed image from DSP AppSec
-#     https://github.com/broadinstitute/dsp-appsec-blessed-images
-FROM us.gcr.io/broad-dsp-gcr-public/base/nodejs:${NODE_VERSION}-${DISTRO} as runtime
-WORKDIR /app
+# Finally, build the production image with minimal footprint
+FROM base
 
 ARG BUILD_VERSION
 
-RUN apk --no-cache -U upgrade
+WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=80

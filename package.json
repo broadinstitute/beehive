@@ -6,7 +6,7 @@
     "build:remix": "remix build --sourcemap",
     "dev": "run-p \"dev:*\"",
     "dev:remix": "remix dev",
-    "start": "remix-serve build",
+    "start": "remix-serve ./build/index.js",
     "typecheck": "npx tsc -b",
     "prepare": "husky install"
   },
