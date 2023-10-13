@@ -1,4 +1,4 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -32,13 +32,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.chartName} - App Versions`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new AppVersionsApi(SherlockConfiguration)
     .apiV2AppVersionsGet({ chart: params.chartName || "" }, handleIAP(request))
     .catch(errorResponseThrower);

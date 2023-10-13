@@ -1,4 +1,4 @@
-import { LoaderArgs, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { verifySessionPagerdutyToken } from "~/components/logic/pagerduty-token";
 import {
@@ -8,7 +8,7 @@ import {
 import { getSession } from "~/session.server";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   verifySessionPagerdutyToken(request, session);
 
@@ -48,10 +48,10 @@ export async function loader({ request }: LoaderArgs) {
               type: k.type,
             },
           },
-          handleIAP(request)
+          handleIAP(request),
         )
-        .catch(errorResponseThrower)
-    )
+        .catch(errorResponseThrower),
+    ),
   ).catch(errorResponseThrower);
 
   const idToUse =

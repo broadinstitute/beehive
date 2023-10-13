@@ -18,12 +18,12 @@ export const ClusterCreatableFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <label>
-        <h2 className="font-light text-2xl">Name</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Name</h2>
         <p>The name of this Kubernetes Cluster.</p>
         <TextField name="name" placeholder="(required)" required />
       </label>
       <div>
-        <h2 className="font-light text-2xl">Provider</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Provider</h2>
         <p>The cloud provider hosting this cluster.</p>
         <EnumInputSelect
           name="provider"
@@ -38,7 +38,9 @@ export const ClusterCreatableFields: React.FunctionComponent<
         />
       </div>
       <label>
-        <h2 className="font-light text-2xl">Google Project</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Google Project
+        </h2>
         <p>When applicable, the Google Project related to this cluster.</p>
         <TextField
           name="googleProject"
@@ -50,7 +52,9 @@ export const ClusterCreatableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Azure Subscription</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Azure Subscription
+        </h2>
         <p>When applicable, the Azure Subscription related to this cluster.</p>
         <TextField
           name="azureSubscription"

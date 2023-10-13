@@ -1,8 +1,8 @@
 import {
-  json,
-  LoaderArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   SerializeFrom,
-  V2_MetaFunction,
+  json,
 } from "@remix-run/node";
 import {
   Link,
@@ -17,7 +17,7 @@ import {
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { ArrowDown, Clock2 } from "lucide-react";
 import { useState } from "react";
-import { promiseHash } from "remix-utils";
+import { promiseHash } from "remix-utils/promise";
 import { InlinePopover } from "~/components/interactivity/inline-popover";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -27,26 +27,25 @@ import { SonarCloudLinkChip } from "~/features/sherlock/charts/chart-link-chip";
 import { AppPopoverContents } from "~/features/sherlock/charts/view/app-popover-contents";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { transitionView } from "~/helpers/transition-view";
 import { loader as parentLoader } from "~/routes/_layout.apps";
 import { AppInstanceEntry } from "../features/sherlock/chart-releases/view/app-instance-entry";
 import { AppInstanceEntryInfo } from "../features/sherlock/chart-releases/view/app-instance-entry-info";
-
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink to={`/apps/${params.chartName}`}>{params.chartName}</NavLink>
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.chartName} - App` },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const forwardedIAP = handleIAP(request);
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
   return json(

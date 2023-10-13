@@ -16,7 +16,9 @@ export const AppVersionEditableFields: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <label>
-        <h2 className="font-light text-2xl">Description</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Description
+        </h2>
         <p className="mb-2">
           This is the description of this version. It should be something short,
           like a Git commit message.

@@ -1,9 +1,9 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { ChartsApi, EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
-import { promiseHash } from "remix-utils";
+import { promiseHash } from "remix-utils/promise";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -19,18 +19,17 @@ import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
-
 export const handle = {
   breadcrumb: () => <NavLink to="/apps">Apps</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Apps",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const forwardedIAP = handleIAP(request);
   return json(
     await promiseHash({

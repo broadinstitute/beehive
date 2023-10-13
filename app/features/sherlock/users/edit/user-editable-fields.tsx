@@ -12,7 +12,7 @@ export const UserEditableFields: React.FunctionComponent<{
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <h2 className="font-light text-2xl">
+        <h2 className="font-light text-2xl text-color-header-text">
           How Should We Determine Your Name?
         </h2>
         <p>
@@ -73,7 +73,7 @@ export const UserEditableFields: React.FunctionComponent<{
         )}
         {nameFrom === "sherlock" && (
           <label>
-            <h2 className="font-light text-2xl">Name</h2>
+            <h2 className="font-light text-2xl text-color-header-text">Name</h2>
             <TextField name="name" defaultValue={user?.name} />
           </label>
         )}
@@ -85,7 +85,9 @@ export const UserEditableFields: React.FunctionComponent<{
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="font-light text-2xl">Changing Other Information</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Changing Other Information
+        </h2>
         <p>
           If you'd like to change your GitHub or Slack username, you can do that
           through those services. Once that's done, you can click save here and

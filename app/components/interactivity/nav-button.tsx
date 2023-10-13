@@ -62,7 +62,7 @@ export const NavButton: React.FunctionComponent<
       >
         {icon}
         <div
-          className={`grow text-xl font-medium text-color-body-text ${textAlignment}`}
+          className={`grow text-xl font-medium text-color-header-text ${textAlignment}`}
         >
           {children}
         </div>

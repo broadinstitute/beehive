@@ -58,7 +58,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
         <div className="shrink-0 flex flex-row gap-2 justify-between items-center h-full w-full px-[1rem] py-2">
           {icon}
           <div
-            className={`grow text-xl font-medium text-color-body-text ${textAlignment}`}
+            className={`grow text-xl font-medium text-color-header-text ${textAlignment}`}
           >
             {children}
           </div>

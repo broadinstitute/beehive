@@ -18,7 +18,7 @@ export const SherlockConfiguration = new Configuration({
   ],
   fetchApi: (
     input: RequestInfo | URL,
-    init?: RequestInit | undefined
+    init?: RequestInit | undefined,
   ): Promise<Response> => {
     return fetch(input, {
       ...init,
@@ -33,13 +33,12 @@ export const SherlockConfiguration = new Configuration({
       // difficult to manage).
       // TL;DR: We don't do TLS hostname validation when the hostname is in the
       // same cluster.
-      // @ts-expect-error
       agent:
         process.env.SHERLOCK_BASE_URL?.startsWith("https://") &&
         process.env.SHERLOCK_BASE_URL?.endsWith(".local")
           ? new https.Agent({ rejectUnauthorized: false })
           : undefined,
-    });
+    } as RequestInit);
   },
 });
 

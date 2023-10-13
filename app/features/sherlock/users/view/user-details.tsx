@@ -32,7 +32,7 @@ export const UserDetails: React.FunctionComponent<{
         </ExternalNavButton>
       )}
       <div className="flex flex-col gap-2">
-        <h2 className="font-light text-2xl">Security</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Security</h2>
         <div className="flex flex-row gap-2">
           {user.suitable ? (
             <>
@@ -74,7 +74,9 @@ export const UserDetails: React.FunctionComponent<{
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="font-light text-2xl">Google Identity</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Google Identity
+        </h2>
         <h1 className="font-light text-4xl">{user.email}</h1>
         <p>
           This information is sourced from Google-generated ID tokens from
@@ -98,7 +100,9 @@ export const UserDetails: React.FunctionComponent<{
       <div className="flex flex-col gap-2">
         {user.githubUsername ? (
           <>
-            <h2 className="font-light text-2xl">GitHub Identity</h2>
+            <h2 className="font-light text-2xl text-color-header-text">
+              GitHub Identity
+            </h2>
             <h1 className="font-light text-4xl">{user.githubUsername}</h1>
             <p>
               This information is sourced from the GitHub access the user grants
@@ -117,7 +121,9 @@ export const UserDetails: React.FunctionComponent<{
           </>
         ) : (
           <>
-            <h2 className="font-light text-2xl">No Linked GitHub Identity</h2>
+            <h2 className="font-light text-2xl text-color-header-text">
+              No Linked GitHub Identity
+            </h2>
             {isServiceAccount ? (
               <p>
                 Service accounts won't generally have a linked GitHub account.
@@ -135,7 +141,9 @@ export const UserDetails: React.FunctionComponent<{
       <div className="flex flex-col gap-2">
         {user.slackUsername ? (
           <>
-            <h2 className="font-light text-2xl">Slack Identity</h2>
+            <h2 className="font-light text-2xl text-color-header-text">
+              Slack Identity
+            </h2>
             <h1 className="font-light text-4xl">{user.slackUsername}</h1>
             <p>
               This information is sourced directly by Sherlock via its Slack
@@ -154,7 +162,9 @@ export const UserDetails: React.FunctionComponent<{
           </>
         ) : (
           <>
-            <h2 className="font-light text-2xl">No Linked Slack Identity</h2>
+            <h2 className="font-light text-2xl text-color-header-text">
+              No Linked Slack Identity
+            </h2>
             {isServiceAccount ? (
               <p>
                 Service accounts won't generally have a linked Slack identity.
@@ -170,7 +180,7 @@ export const UserDetails: React.FunctionComponent<{
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="font-light text-2xl">Metadata</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Metadata</h2>
         <p>
           This information is derived from Beehive and Sherlock. It isn't used
           for security or permissions.

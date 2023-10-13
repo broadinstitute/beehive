@@ -1,4 +1,4 @@
-import { V2_MetaFunction } from "@remix-run/node";
+import { MetaFunction } from "@remix-run/node";
 import { NavLink, Params } from "@remix-run/react";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -14,7 +14,7 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName}/${params.chartName} - Incident Triggered`,
   },

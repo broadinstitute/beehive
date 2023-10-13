@@ -17,7 +17,7 @@ export const LinkPagerdutyFields: React.FunctionComponent<
       It won't configure any automatic alerts or monitoring, it just allows
       people to manually trigger events through Beehive.
     </p>
-    <p className="font-light text-2xl">
+    <p className="font-light text-2xl text-color-header-text">
       Selected:{" "}
       <b className="font-medium">{currentIntegrationName || "None"}</b>
     </p>

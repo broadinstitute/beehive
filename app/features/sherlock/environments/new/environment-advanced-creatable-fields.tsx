@@ -14,7 +14,7 @@ export const EnvironmentAdvancedCreatableFields: React.FunctionComponent<{
   const [autoPopulateChartReleases, setAutoPopulateChartReleases] = useState(
     environment?.autoPopulateChartReleases != null
       ? environment.autoPopulateChartReleases.toString()
-      : "true"
+      : "true",
   );
   return (
     <>
@@ -22,7 +22,7 @@ export const EnvironmentAdvancedCreatableFields: React.FunctionComponent<{
         <div className="mb-4">
           {lifecycle === "dynamic" && (
             <>
-              <h2 className="font-light text-2xl">
+              <h2 className="font-light text-2xl text-color-header-text">
                 Copy Charts From Template?
               </h2>
               <p>
@@ -34,7 +34,7 @@ export const EnvironmentAdvancedCreatableFields: React.FunctionComponent<{
           )}
           {lifecycle === "template" && (
             <>
-              <h2 className="font-light text-2xl">
+              <h2 className="font-light text-2xl text-color-header-text">
                 Start With Default Charts?
               </h2>
               <p>
@@ -59,7 +59,9 @@ export const EnvironmentAdvancedCreatableFields: React.FunctionComponent<{
       )}
       {lifecycle !== "dynamic" && (
         <label>
-          <h2 className="font-light text-2xl">Values Base</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Values Base
+          </h2>
           <p className="mb-2">
             An environment's configuration is based on two things: the values
             base (this field) and the values name (the name of the environment).

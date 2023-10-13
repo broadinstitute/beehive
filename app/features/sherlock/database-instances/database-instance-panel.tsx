@@ -76,7 +76,9 @@ export const DatabaseInstancePanel: React.FunctionComponent<{
               value={chartRelease.name}
             />
             <div className="flex flex-col gap-2">
-              <h2 className="font-light text-2xl">Platform</h2>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Platform
+              </h2>
               <p>The cloud platform providing the database instance.</p>
               <p>
                 Our static environments like dev and prod usually have database
@@ -109,7 +111,9 @@ export const DatabaseInstancePanel: React.FunctionComponent<{
                   platform === "google" ? "flex" : "hidden"
                 } flex-col gap-2`}
               >
-                <h2 className="font-light text-2xl">Google Project</h2>
+                <h2 className="font-light text-2xl text-color-header-text">
+                  Google Project
+                </h2>
                 <p>This is the Google project where the database is located.</p>
                 <p>
                   We'll pull in the Kubernetes cluster's Google project as the
@@ -133,7 +137,9 @@ export const DatabaseInstancePanel: React.FunctionComponent<{
                     : "hidden"
                 } flex-col gap-2`}
               >
-                <h2 className="font-light text-2xl">Instance Name</h2>
+                <h2 className="font-light text-2xl text-color-header-text">
+                  Instance Name
+                </h2>
                 <p>
                   This is the exact name of the database instance to connect to.
                 </p>
@@ -155,7 +161,9 @@ export const DatabaseInstancePanel: React.FunctionComponent<{
               </label>
             </div>
             <label className="flex flex-col gap-2">
-              <h2 className="font-light text-2xl">Default Database</h2>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Default Database
+              </h2>
               <p>
                 The default database inside the overall database instance to
                 connect to.

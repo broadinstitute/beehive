@@ -1,7 +1,7 @@
 import type {
   LinksFunction,
-  LoaderArgs,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
@@ -32,7 +32,7 @@ import { commitSession, getSession, sessionFields } from "./session.server";
 import beehiveLoadingStyles from "./styles/beehive-loading.css";
 import tailwindStyles from "./styles/tailwind.css";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Beehive",
   },
@@ -44,7 +44,7 @@ export const links: LinksFunction = () => [
   { rel: "icon", href: favicon, type: "image/svg+xml" },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   let requestUrl = new URL(request.url);
 

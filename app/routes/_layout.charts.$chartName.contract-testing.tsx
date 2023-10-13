@@ -1,4 +1,4 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { ChartsApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
@@ -10,8 +10,8 @@ import { FormErrorDisplay } from "~/errors/components/form-error-display";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useChartContext } from "~/routes/_layout.charts.$chartName";
@@ -25,11 +25,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.chartName} - Chart - Contract Testing` },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();

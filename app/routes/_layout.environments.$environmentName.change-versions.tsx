@@ -1,4 +1,8 @@
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
@@ -44,11 +48,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.environmentName} - Environment - Change Versions` },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const preconfiguredOtherEnvironment = url.searchParams.get("from");
   return Promise.all([
@@ -71,7 +75,7 @@ export async function loader({ request, params }: LoaderArgs) {
   ]);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
@@ -175,7 +179,7 @@ export default function Route() {
           {...EnvironmentColors}
         >
           <label>
-            <h2 className="font-light text-2xl">
+            <h2 className="font-light text-2xl text-color-header-text">
               Use Versions From Another Environment
             </h2>
             <p className="mb-2">
@@ -223,7 +227,9 @@ export default function Route() {
           {otherEnvironment && (
             <>
               <div>
-                <h2 className="font-light text-2xl">Choose Behavior</h2>
+                <h2 className="font-light text-2xl text-color-header-text">
+                  Choose Behavior
+                </h2>
                 <p>
                   Beehive will grab versions from {otherEnvironment}. Here you
                   can choose how those versions should be applied.

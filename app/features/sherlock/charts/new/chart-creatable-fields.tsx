@@ -11,7 +11,7 @@ export const ChartCreatableFields: React.FunctionComponent<
 > = ({ chart }) => (
   <div>
     <label>
-      <h3 className="font-light text-2xl">Chart Name</h3>
+      <h3 className="font-light text-2xl text-color-header-text">Chart Name</h3>
       <p>
         This is the name of the Helm Chart. Chart names should be short and
         lowercase—digits and hyphens are also allowed.

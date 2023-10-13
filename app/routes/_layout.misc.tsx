@@ -1,5 +1,5 @@
 import { Octokit } from "@octokit/rest";
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { defer } from "@remix-run/node";
 import { Await, Link, NavLink, useLoaderData } from "@remix-run/react";
 import { MiscApi, UsersApi } from "@sherlock-js-client/sherlock";
@@ -19,13 +19,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/misc">Misc</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Misc",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const sherlock = new MiscApi(SherlockConfiguration);
   const sherlockUsers = new UsersApi(SherlockConfiguration);

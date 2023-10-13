@@ -1,4 +1,4 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -6,8 +6,8 @@ import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handl
 import { runGha } from "~/features/github/run-gha";
 import { ChartReleaseDeletePanel } from "~/features/sherlock/chart-releases/delete/chart-release-delete-panel";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useClusterChartReleaseContext } from "~/routes/_layout.clusters.$clusterName.($filterNamespace).chart-releases.$namespace.$chartName";
@@ -23,13 +23,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.clusterName}/${params.namespace}/${params.chartName} - Chart Instance - Delete`,
   },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   return new ChartReleasesApi(SherlockConfiguration)
@@ -37,7 +37,7 @@ export async function action({ request, params }: ActionArgs) {
       {
         selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async (chartRelease) => {
       if (chartRelease.environmentInfo?.lifecycle === "dynamic") {
@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionArgs) {
               "bee-name": chartRelease.environmentInfo?.name || "",
             },
           },
-          "sync your BEE"
+          "sync your BEE",
         );
       }
       return redirect(`/clusters/${params.clusterName}/chart-releases`, {

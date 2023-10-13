@@ -1,4 +1,4 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, Params, useActionData } from "@remix-run/react";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
@@ -9,8 +9,8 @@ import { runGha } from "~/features/github/run-gha";
 import { EnvironmentDeleteDescription } from "~/features/sherlock/environments/delete/environment-delete-description";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { commitSession } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -27,11 +27,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.environmentName} - Environment - Delete` },
 ];
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const environmentsApi = new EnvironmentsApi(SherlockConfiguration);
@@ -39,7 +39,7 @@ export async function action({ request, params }: ActionArgs) {
   return environmentsApi
     .apiV2EnvironmentsSelectorGet(
       { selector: params.environmentName || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async (environment) => {
       if (environment.lifecycle === "dynamic") {
@@ -51,7 +51,7 @@ export async function action({ request, params }: ActionArgs) {
               "bee-name": environment.name || "",
             },
           },
-          "delete your BEE"
+          "delete your BEE",
         );
         return redirect("/environments", {
           headers: { "Set-Cookie": await commitSession(session) },
@@ -60,7 +60,7 @@ export async function action({ request, params }: ActionArgs) {
         return await environmentsApi
           .apiV2EnvironmentsSelectorDelete(
             { selector: params.environmentName || "" },
-            handleIAP(request)
+            handleIAP(request),
           )
           .then(() => redirect("/environments"), makeErrorResponseReturner());
       }

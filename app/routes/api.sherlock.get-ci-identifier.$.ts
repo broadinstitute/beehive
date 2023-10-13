@@ -1,4 +1,4 @@
-import type { LoaderArgs, SerializeFrom } from "@remix-run/node";
+import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import type { SherlockCiIdentifierV3 } from "@sherlock-js-client/sherlock";
 import { CiIdentifiersApi } from "@sherlock-js-client/sherlock";
 import {
@@ -10,7 +10,7 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const limitCiRuns = url.searchParams.get("limitCiRuns");
   const offsetCiRuns = url.searchParams.get("offsetCiRuns");

@@ -109,7 +109,7 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
                 <>
                   <div className="flex flex-row items-center gap-4 py-4">
                     <div className="grow border-b-2 border-color-divider-line"></div>
-                    <div className="shrink-0 grow-0 font-medium text-xl">
+                    <div className="shrink-0 grow-0 font-medium text-xl text-color-header-text">
                       Or
                     </div>
                     <div className="grow border-b-2 border-color-divider-line"></div>

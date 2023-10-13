@@ -180,7 +180,9 @@ export const GithubActionsDeployHookEditableFields: React.FunctionComponent<
   return (
     <>
       <label>
-        <h2 className="font-light text-2xl">GitHub Organization</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          GitHub Organization
+        </h2>
         <p>
           The owner of the repository where the workflow you want to trigger is
           located.
@@ -199,7 +201,9 @@ export const GithubActionsDeployHookEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">GitHub Repository</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          GitHub Repository
+        </h2>
         <p>The repository where the workflow you want to trigger is located.</p>
         <TextField
           name="githubActionsRepo"
@@ -215,7 +219,7 @@ export const GithubActionsDeployHookEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">Workflow</h2>
+        <h2 className="font-light text-2xl text-color-header-text">Workflow</h2>
         <p>The file path within the repository to the workflow to run.</p>
         <TextField
           name="githubActionsWorkflowPath"
@@ -232,7 +236,7 @@ export const GithubActionsDeployHookEditableFields: React.FunctionComponent<
         />
       </label>
       <label>
-        <h2 className="font-light text-2xl">
+        <h2 className="font-light text-2xl text-color-header-text">
           {showRefBehaviorField ? "Default " : ""}Git Ref
         </h2>
         <p className="mb-2">
@@ -264,7 +268,9 @@ export const GithubActionsDeployHookEditableFields: React.FunctionComponent<
       </label>
       {showRefBehaviorField && <RefBehaviorField existing={existing} />}
       <label>
-        <h2 className="font-light text-2xl mb-1">Inputs</h2>
+        <h2 className="font-light text-2xl text-color-header-text mb-1">
+          Inputs
+        </h2>
         <details>
           <summary className="font-semibold mb-2 cursor-pointer">
             Show Configuration (Advanced)
@@ -333,7 +339,9 @@ const RefBehaviorField: React.FunctionComponent<{
   return (
     <>
       <div>
-        <h2 className="font-light text-2xl">Git Ref Behavior</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Git Ref Behavior
+        </h2>
         <EnumInputSelect<
           | "always-use-default-ref"
           | "use-app-version-as-ref"

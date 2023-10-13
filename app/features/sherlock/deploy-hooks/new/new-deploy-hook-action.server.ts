@@ -1,4 +1,4 @@
-import type { ActionArgs, TypedResponse } from "@remix-run/node";
+import type { ActionFunctionArgs, TypedResponse } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type {
   SherlockGithubActionsDeployHookV3Create,
@@ -12,7 +12,7 @@ import { getValidSession } from "~/helpers/get-valid-session.server";
 import { SherlockConfiguration, handleIAP } from "../../sherlock.server";
 
 export async function newDeployHookAction(
-  request: ActionArgs["request"],
+  request: ActionFunctionArgs["request"],
   currentPagePath: string,
   partialTriggerConfig:
     | {

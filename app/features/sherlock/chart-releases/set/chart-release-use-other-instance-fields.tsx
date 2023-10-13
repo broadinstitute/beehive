@@ -24,7 +24,7 @@ export const ChartReleaseUseOtherInstanceFields: React.FunctionComponent<
   setUseExactVersionsFromOtherChartRelease,
 }) => (
   <label>
-    <h2 className="font-light text-2xl">
+    <h2 className="font-light text-2xl text-color-header-text">
       Use Exact Versions From Another Instance of This Chart
     </h2>
     <p>

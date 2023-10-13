@@ -1,4 +1,4 @@
-import { json, LoaderArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import https from "https";
 import { handleIAP } from "~/features/sherlock/sherlock.server";
 
@@ -10,7 +10,7 @@ import { handleIAP } from "~/features/sherlock/sherlock.server";
 // from Beehive's backend.
 // Similar for pass-through to Sherlock, it's important that ARGOCD_BASE_URL be
 // set to enable in-cluster communication.
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   if (process.env.NODE_ENV === "development") {
     throw json("unsupported", 400);
   }
@@ -29,6 +29,6 @@ export async function loader({ request }: LoaderArgs) {
         process.env.ARGOCD_BASE_URL?.endsWith(".local")
           ? new https.Agent({ rejectUnauthorized: false })
           : undefined,
-    }
+    },
   );
 }

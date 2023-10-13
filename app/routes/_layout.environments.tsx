@@ -1,4 +1,8 @@
-import { LoaderArgs, SerializeFrom, V2_MetaFunction } from "@remix-run/node";
+import {
+  LoaderFunctionArgs,
+  MetaFunction,
+  SerializeFrom,
+} from "@remix-run/node";
 import {
   NavLink,
   Outlet,
@@ -28,18 +32,18 @@ export const handle = {
   breadcrumb: () => <NavLink to="/environments">Environments</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Environments",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return new EnvironmentsApi(SherlockConfiguration)
     .apiV2EnvironmentsGet({}, handleIAP(request))
     .then(
       (environments) => environments.sort(environmentSorter),
-      errorResponseThrower
+      errorResponseThrower,
     );
 }
 

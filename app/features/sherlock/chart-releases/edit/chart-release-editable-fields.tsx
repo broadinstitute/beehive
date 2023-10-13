@@ -37,7 +37,9 @@ export const ChartReleaseEditableFields: React.FunctionComponent<
           find the app online.
         </p>
         <label>
-          <h2 className="font-light text-2xl">Subdomain</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Subdomain
+          </h2>
           <TextField
             name="subdomain"
             value={subdomain}
@@ -46,7 +48,9 @@ export const ChartReleaseEditableFields: React.FunctionComponent<
           />
         </label>
         <label>
-          <h2 className="font-light text-2xl">Protocol</h2>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Protocol
+          </h2>
           <TextField
             name="protocol"
             value={protocol}
@@ -55,7 +59,7 @@ export const ChartReleaseEditableFields: React.FunctionComponent<
           />
         </label>
         <label>
-          <h2 className="font-light text-2xl">Port</h2>
+          <h2 className="font-light text-2xl text-color-header-text">Port</h2>
           <TextField
             name="port"
             value={port}

@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
   AppVersionsApi,
@@ -16,7 +16,7 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const forwardedIAP = handleIAP(request);
 
   return new ChartsApi(SherlockConfiguration)

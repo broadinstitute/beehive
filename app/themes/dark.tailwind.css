@@ -10,8 +10,8 @@
     --color-near-bg: 30 30 33; /* zinc-850ish */
     --color-nearest-bg: 39 39 42; /* zinc-800 */
 
-    --color-header-text: 255 255 255; /* white */
-    --color-body-text: 244 244 245; /* zinc-100 */
+    --color-header-text: 244 244 245; /* zinc-100 */
+    --color-body-text: 228 228 231; /* zinc-200 */
     --color-placeholder-text: 161 161 170; /* zinc-400 */
     --color-link-underline: 59 130 246; /* blue-500 */
 

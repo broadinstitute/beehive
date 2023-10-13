@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { SherlockGithubActionsDeployHookV3Edit } from "@sherlock-js-client/sherlock";
 import { DeployHooksApi } from "@sherlock-js-client/sherlock";
@@ -8,7 +8,7 @@ import { getValidSession } from "~/helpers/get-valid-session.server";
 import { SherlockConfiguration, handleIAP } from "../../sherlock.server";
 
 export async function editGithubActionsDeployHookAction(
-  request: ActionArgs["request"],
+  request: ActionFunctionArgs["request"],
   currentPagePath: string,
   id: string,
 ) {

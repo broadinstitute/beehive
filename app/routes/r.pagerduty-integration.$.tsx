@@ -1,4 +1,4 @@
-import { LoaderArgs, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
@@ -6,15 +6,15 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
     .apiV2PagerdutyIntegrationsSelectorGet(
       { selector: params["*"] || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (pagerdutyIntegration) =>
         redirect(`/pagerduty-integrations/${pagerdutyIntegration.pagerdutyID}`),
-      makeErrorResponseReturner()
+      makeErrorResponseReturner(),
     );
 }

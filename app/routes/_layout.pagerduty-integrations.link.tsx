@@ -1,10 +1,10 @@
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, useLoaderData } from "@remix-run/react";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import {
-  getPdAppIdFromEnv,
   PagerdutyInstallLink,
+  getPdAppIdFromEnv,
 } from "~/components/logic/pagerduty-token";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PagerdutyIntegrationGeneralLinkDescription } from "~/features/sherlock/pagerduty-integrations/link-pagerduty/pagerduty-integration-general-link-description";
@@ -15,13 +15,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/pagerduty-integrations/link">Link</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "Link - PagerDuty Integrations",
   },
 ];
 
-export async function loader(_: LoaderArgs) {
+export async function loader(_: LoaderFunctionArgs) {
   return getPdAppIdFromEnv();
 }
 

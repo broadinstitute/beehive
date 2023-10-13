@@ -45,7 +45,7 @@ export const ChangsetRecreateButton: React.FunctionComponent<{
         method="post"
         action="/api/sherlock/recreate-changeset"
       >
-        <h2 className="font-light text-2xl">
+        <h2 className="font-light text-2xl text-color-header-text">
           Set {changeset.chartRelease} to app{" "}
           {changeset.toAppVersionExact ?? "(none)"} and chart{" "}
           {changeset.toChartVersionExact ?? "(none)"}?

@@ -1,4 +1,4 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
 import { ClustersApi, SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -12,8 +12,8 @@ import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { ClusterEditableFields } from "~/features/sherlock/clusters/edit/cluster-editable-fields";
 import { ClusterCreatableFields } from "~/features/sherlock/clusters/new/cluster-creatable-fields";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -22,13 +22,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/clusters/new">New</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "New Cluster",
   },
 ];
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();

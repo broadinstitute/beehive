@@ -68,7 +68,9 @@ export const AppVersionPicker: React.FunctionComponent<
   return (
     <div className="flex flex-col space-y-4">
       <div>
-        <h2 className="font-light text-2xl">Specify App Version</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Specify App Version
+        </h2>
         <p>
           Choose one option below, our systems will handle the others when you
           save. You can change versions later.
@@ -138,7 +140,9 @@ export const AppVersionPicker: React.FunctionComponent<
         <div className="pl-6 border-l-2 border-color-divider-line mt-4 flex flex-col space-y-4">
           {appVersionResolver === "exact" && (
             <label>
-              <h2 className="font-light text-2xl">Set Exact Version</h2>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Set Exact Version
+              </h2>
               <p>
                 An exact value will always persist until explicitly changed. It
                 won't be affected by refreshes.
@@ -171,7 +175,9 @@ export const AppVersionPicker: React.FunctionComponent<
           )}
           {appVersionResolver === "follow" && (
             <label>
-              <h2 className="font-light text-2xl">Select Other Instance</h2>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Select Other Instance
+              </h2>
               <p>
                 Another instance of this chart to get the app version from. As
                 long as this is set, future refreshes will grab whatever version
@@ -207,7 +213,9 @@ export const AppVersionPicker: React.FunctionComponent<
           )}
           {appVersionResolver === "commit" && (
             <label>
-              <h2 className="font-light text-2xl">Set Git Commit</h2>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Set Git Commit
+              </h2>
               <p className="mb-2">
                 Enter a commit hash from the app's repo and our systems will try
                 to match the most recent build from that commit.
@@ -235,7 +243,9 @@ export const AppVersionPicker: React.FunctionComponent<
           )}
           {appVersionResolver === "branch" && (
             <label>
-              <h2 className="font-light text-2xl">Set Git Branch</h2>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Set Git Branch
+              </h2>
               <p className="mb-2">
                 Set a branch name from the app's repo and our systems will try
                 to match the most recent build from it. Refreshing the versions
@@ -279,7 +289,9 @@ export const AppVersionPicker: React.FunctionComponent<
           )}
           {showFirecloudDevelopRef && (
             <label>
-              <h2 className="font-light text-2xl">Firecloud Develop Ref</h2>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Firecloud Develop Ref
+              </h2>
               <p>
                 This is the Git reference in{" "}
                 <a

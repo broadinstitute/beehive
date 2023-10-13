@@ -1,8 +1,8 @@
 import {
-  ActionArgs,
-  LoaderArgs,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   redirect,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   NavLink,
@@ -13,8 +13,8 @@ import {
 import {
   AppVersionsApi,
   ChartReleasesApi,
-  ChartsApi,
   ChartVersionsApi,
+  ChartsApi,
   V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -34,8 +34,8 @@ import { ChartReleaseEditableFields } from "~/features/sherlock/chart-releases/e
 import { chartReleaseSorter } from "~/features/sherlock/chart-releases/list/chart-release-sorter";
 import { ChartVersionPicker } from "~/features/sherlock/chart-versions/set/chart-version-picker";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -53,13 +53,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.clusterName} - Cluster - Add Chart - ${params.chartName}`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return Promise.all([
     new ChartsApi(SherlockConfiguration)
       .apiChartsV3SelectorGet(
@@ -95,7 +95,7 @@ export async function loader({ request, params }: LoaderArgs) {
   ]);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();

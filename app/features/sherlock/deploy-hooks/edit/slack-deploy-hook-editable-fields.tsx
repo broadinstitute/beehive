@@ -7,7 +7,9 @@ export const SlackDeployHookEditableFields: React.FunctionComponent<{
 }> = ({ existing }) => {
   return (
     <label>
-      <h2 className="font-light text-2xl">Slack Channel</h2>
+      <h2 className="font-light text-2xl text-color-header-text">
+        Slack Channel
+      </h2>
       <p className="mb-2">
         You can paste a normal channel name here. The channel needs to be in the
         Broad Institute's Slack workspace.

@@ -1,5 +1,8 @@
-import { type ActionArgs, type LoaderArgs } from "@remix-run/node";
-import type { Params, V2_MetaFunction } from "@remix-run/react";
+import {
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
+import type { MetaFunction, Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
@@ -26,13 +29,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName} - Environment - Deploy Hooks - Slack Hook`,
   },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new DeployHooksApi(SherlockConfiguration)
     .apiDeployHooksSlackV3SelectorGet(
       {
@@ -43,7 +46,7 @@ export async function loader({ request, params }: LoaderArgs) {
     .catch(errorResponseThrower);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   return editSlackDeployHookAction(
     request,
     `/environments/${params.environmentName}/deploy-hooks`,

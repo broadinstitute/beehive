@@ -20,22 +20,24 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
     useState(
       initialOfflineScheduleBeginEnabled != null
         ? initialOfflineScheduleBeginEnabled.toString()
-        : "true"
+        : "true",
     );
   const [offlineScheduleEndEnabled, setOfflineScheduleEndEnabled] = useState(
     initialOfflineScheduleEndEnabled != null
       ? initialOfflineScheduleEndEnabled.toString()
-      : "true"
+      : "true",
   );
   const [offlineScheduleEndWeekends, setOfflineScheduleEndWeekends] = useState(
     initialOfflineScheduleEndWeekends != null
       ? initialOfflineScheduleEndWeekends.toString()
-      : "false"
+      : "false",
   );
   return (
     <>
       <div>
-        <h2 className="font-light text-2xl">Stop Schedule</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Stop Schedule
+        </h2>
         <EnumInputSelect
           name="offlineScheduleBeginEnabled"
           className="grid grid-cols-2 mt-2"
@@ -51,7 +53,7 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
       {offlineScheduleBeginEnabled === "true" && (
         <div className="pl-6 border-l-2 border-color-divider-line flex flex-col gap-4">
           <div>
-            <h2 className="font-light text-2xl">
+            <h2 className="font-light text-2xl text-color-header-text">
               When Should the BEE Stop Each Day?
             </h2>
             <p className="mt-1">
@@ -67,7 +69,9 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
         </div>
       )}
       <div>
-        <h2 className="font-light text-2xl">Start Schedule</h2>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Start Schedule
+        </h2>
         <EnumInputSelect
           name="offlineScheduleEndEnabled"
           className="grid grid-cols-2 mt-2"
@@ -83,7 +87,7 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
       {offlineScheduleEndEnabled === "true" && (
         <div className="pl-6 border-l-2 border-color-divider-line flex flex-col gap-4">
           <div>
-            <h2 className="font-light text-2xl">
+            <h2 className="font-light text-2xl text-color-header-text">
               When Should the BEE Start Each Day?
             </h2>
             <p className="mt-1">
@@ -100,7 +104,7 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
             />
           </div>
           <div>
-            <h2 className="font-light text-2xl">
+            <h2 className="font-light text-2xl text-color-header-text">
               Should the BEE Start on Weekends?
             </h2>
             <p className="mt-1">

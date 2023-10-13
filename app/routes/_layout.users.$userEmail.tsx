@@ -1,8 +1,8 @@
 import {
   json,
-  type LoaderArgs,
+  type LoaderFunctionArgs,
+  type MetaFunction,
   type SerializeFrom,
-  type V2_MetaFunction,
 } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import {
@@ -17,8 +17,8 @@ import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { UserColors } from "~/features/sherlock/users/user-colors";
 import { UserDetails } from "~/features/sherlock/users/view/user-details";
@@ -30,11 +30,11 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   { title: `${params.userEmail} - User` },
 ];
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({
     slackWorkspaceID: process.env.SLACK_WORKSPACE_ID,
     user: await new UsersApi(SherlockConfiguration)

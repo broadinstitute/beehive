@@ -1,0 +1,104 @@
+@layer base {
+  /*
+  colors from Ethan Schoonover's Solarized theme
+  https://ethanschoonover.com/solarized
+  */
+  [data-theme="solarized-dark"] [data-theme-prod="false"] {
+    color-scheme: dark; /* make browser elements dark mode */
+
+    --color-far-bg: 0 43 54; /* base 03 - background */
+    --color-near-bg: 0 43 54; /* base 03 - background */
+    --color-nearest-bg: 0 43 54; /* base 03 - background */
+
+    --color-header-text: 147 161 161; /* base 1 - optional emphasized content */
+    --color-body-text: 131 148 150; /* base 0 - body text */
+    --color-placeholder-text: 88 110 117; /* base 01 - secondary content */
+    --color-link-underline: 88 110 117; /* base 01 - secondary content */
+
+    --color-focused-element: 88 110 117; /* base 01 - secondary content */
+    --color-divider-line: 88 110 117; /* base 01 - secondary content */
+    --color-neutral-soft-border: 88 110 117; /* base 01 - secondary content */
+    --color-neutral-hard-border: 147 161 161; /* base 1 - optional emphasized content */
+    --color-text-box-border: 88 110 117; /* base 01 - secondary content */
+
+    --color-button-down: 7 54 66; /* base 02 - background highlights */
+    --color-icon-button-down: 7 54 66; /* base 02 - background highlights */
+    --color-icon-button-hover: 7 54 66; /* base 02 - background highlights */
+
+    --color-cluster-bg: 7 54 66; /* base 02 - background highlights */
+    --color-cluster-border: 133 153 0; /* green */
+    --color-environment-bg: 7 54 66; /* base 02 - background highlights */
+    --color-environment-border: 181 137 0; /* yellow */
+    --color-chart-bg: 7 54 66; /* base 02 - background highlights */
+    --color-chart-border: 38 139 210; /* blue */
+    --color-app-version-bg: 7 54 66; /* base 02 - background highlights */
+    --color-app-version-border: 220 50 47; /* red */
+    --color-chart-version-bg: 7 54 66; /* base 02 - background highlights */
+    --color-chart-version-border: 108 113 196; /* violet */
+    --color-ci-bg: 7 54 66; /* base 02 - background highlights */
+    --color-ci-border: 147 161 161; /* base 1 - optional emphasized content */
+    --color-misc-type-bg: 7 54 66; /* base 02 - background highlights */
+    --color-misc-type-border: 88 110 117; /* base 01 - secondary content */
+
+    --color-error-bg: 7 54 66; /* base 02 - background highlights */
+    --color-error-border: 220 50 47; /* red */
+    --color-error-button: 7 54 66; /* base 02 - background highlights */
+
+    --color-beehive-logo: 234 179 8; /* tailwind's yellow-500 */
+
+    --color-status-red: 220 50 47; /* red */
+    --color-status-green: 133 153 0; /* green */
+    --color-status-yellow: 181 137 0; /* yellow */
+    --color-status-gray: 88 110 117; /* base 01 - secondary content */
+  }
+
+  /* light theme for prod */
+  [data-theme="solarized-dark"] [data-theme-prod="true"] {
+    color-scheme: light; /* make browser elements light mode */
+
+    --color-far-bg: 253 246 227; /* base 3 - background */
+    --color-near-bg: 253 246 227; /* base 3 - background */
+    --color-nearest-bg: 253 246 227; /* base 3 - background */
+
+    --color-header-text: 88 110 117; /* base 01 - optional emphasized content */
+    --color-body-text: 101 123 131; /* base 00 - body text */
+    --color-placeholder-text: 147 161 161; /* base 1 - secondary content */
+    --color-link-underline: 147 161 161; /* base 1 - secondary content */
+
+    --color-focused-element: 147 161 161; /* base 1 - secondary content */
+    --color-divider-line: 147 161 161; /* base 1 - secondary content */
+    --color-neutral-soft-border: 147 161 161; /* base 1 - secondary content */
+    --color-neutral-hard-border: 88 110 117; /* base 01 - optional emphasized content */
+    --color-text-box-border: 147 161 161; /* base 1 - secondary content */
+
+    --color-button-down: 238 232 213; /* base 2 - background highlights */
+    --color-icon-button-down: 238 232 213; /* base 2 - background highlights */
+    --color-icon-button-hover: 238 232 213; /* base 2 - background highlights */
+
+    --color-cluster-bg: 238 232 213; /* base 2 - background highlights */
+    --color-cluster-border: 133 153 0; /* green */
+    --color-environment-bg: 238 232 213; /* base 2 - background highlights */
+    --color-environment-border: 181 137 0; /* yellow */
+    --color-chart-bg: 238 232 213; /* base 2 - background highlights */
+    --color-chart-border: 38 139 210; /* blue */
+    --color-app-version-bg: 238 232 213; /* base 2 - background highlights */
+    --color-app-version-border: 220 50 47; /* red */
+    --color-chart-version-bg: 238 232 213; /* base 2 - background highlights */
+    --color-chart-version-border: 108 113 196; /* violet */
+    --color-ci-bg: 238 232 213; /* base 2 - background highlights */
+    --color-ci-border: 88 110 117; /* base 01 - optional emphasized content */
+    --color-misc-type-bg: 238 232 213; /* base 2 - background highlights */
+    --color-misc-type-border: 147 161 161; /* base 1 - secondary content */
+
+    --color-error-bg: 238 232 213; /* base 2 - background highlights */
+    --color-error-border: 220 50 47; /* red */
+    --color-error-button: 238 232 213; /* base 2 - background highlights */
+
+    --color-beehive-logo: 252 211 77; /* tailwind's amber-300 */
+
+    --color-status-red: 220 50 47; /* red */
+    --color-status-green: 133 153 0; /* green */
+    --color-status-yellow: 181 137 0; /* yellow */
+    --color-status-gray: 147 161 161; /* base 1 - secondary content */
+  }
+}

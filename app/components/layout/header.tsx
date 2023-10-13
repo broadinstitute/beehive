@@ -3,6 +3,7 @@ import { FunctionComponent } from "react";
 import { BeehiveIcon } from "../assets/beehive-icon";
 
 export const Header: FunctionComponent = () => {
+  // @ts-expect-error
   const breadcrumbs = useMatches().filter((match) => match.handle?.breadcrumb);
   const params = useParams();
   return (
@@ -24,7 +25,8 @@ export const Header: FunctionComponent = () => {
             className="shrink-0 items-center gap-2 font-light text-xl laptop:flex last:flex hidden"
           >
             <span>❯</span>
-            {match.handle?.breadcrumb(params)}
+            {// @ts-expect-error
+            match.handle?.breadcrumb(params)}
           </div>
         ))}
       </div>

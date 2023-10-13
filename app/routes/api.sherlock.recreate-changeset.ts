@@ -1,4 +1,4 @@
-import { redirect, type ActionArgs } from "@remix-run/node";
+import { redirect, type ActionFunctionArgs } from "@remix-run/node";
 import type { V2controllersChangesetPlanRequest } from "@sherlock-js-client/sherlock";
 import { ChangesetsApi } from "@sherlock-js-client/sherlock";
 import { json } from "react-router";
@@ -11,7 +11,7 @@ import {
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { commitSession, sessionFields } from "~/session.server";
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const session = await getValidSession(request);
   const formData = await request.formData();
 
@@ -27,7 +27,7 @@ export async function action({ request }: ActionArgs) {
       {
         changesetPlanRequest: changesetRequest,
       },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(async (changesets) => {
       if (changesets.length > 0) {
@@ -35,9 +35,9 @@ export async function action({ request }: ActionArgs) {
           `/review-changesets?${[
             ...changesets.map((c) => `changeset=${c.id}`),
             `return=${encodeURIComponent(
-              `/r/chart-release/${changesets[0].chartRelease}`
+              `/r/chart-release/${changesets[0].chartRelease}`,
             )}`,
-          ].join("&")}`
+          ].join("&")}`,
         );
       } else {
         session.flash(
@@ -46,7 +46,7 @@ export async function action({ request }: ActionArgs) {
             type: "error",
             text: "Sherlock identified that there were no meaningful changes to deploy. (Perhaps those versions are already presently deployed?)",
             error: true,
-          })
+          }),
         );
         return json(
           { formState: changesetRequest },
@@ -54,7 +54,7 @@ export async function action({ request }: ActionArgs) {
             headers: {
               "Set-Cookie": await commitSession(session),
             },
-          }
+          },
         );
       }
     }, makeErrorResponseReturner(changesetRequest));

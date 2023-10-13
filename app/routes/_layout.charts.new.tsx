@@ -1,4 +1,4 @@
-import { ActionArgs, redirect, V2_MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
 import { ChartsApi, SherlockChartV3 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -12,8 +12,8 @@ import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { ChartEditableFields } from "~/features/sherlock/charts/edit/chart-editable-fields";
 import { ChartCreatableFields } from "~/features/sherlock/charts/new/chart-creatable-fields";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
@@ -22,13 +22,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/charts/new">New</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "New Chart",
   },
 ];
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();

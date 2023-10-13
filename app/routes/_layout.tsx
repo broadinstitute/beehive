@@ -1,5 +1,5 @@
 import useResizeObserver from "@react-hook/resize-observer";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { UsersApi } from "@sherlock-js-client/sherlock";
@@ -16,7 +16,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { commitSession, getSession, sessionFields } from "~/session.server";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   // We can't use getValidSession here because this is a loader -- no form was
   // submitted, there's nothing to validate.
   const session = await getSession(request.headers.get("Cookie"));

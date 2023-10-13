@@ -1,4 +1,8 @@
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
 import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
@@ -46,13 +50,13 @@ export const handle = {
   breadcrumb: () => <NavLink to="/environments/new">New</NavLink>,
 };
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: "New Environment",
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const preconfiguredLifecycle = url.searchParams.get("lifecycle");
   const selfUserEmail = getUserEmail(request);
@@ -71,7 +75,7 @@ export async function loader({ request }: LoaderArgs) {
   ]);
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();
@@ -247,7 +251,9 @@ export default function Route() {
               {lifecycle === "dynamic" && (
                 <>
                   <div>
-                    <h2 className="font-light text-2xl">Action to Run</h2>
+                    <h2 className="font-light text-2xl text-color-header-text">
+                      Action to Run
+                    </h2>
                     <EnumInputSelect
                       name="action"
                       className="grid grid-cols-3 mt-2"

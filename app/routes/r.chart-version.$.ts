@@ -1,4 +1,4 @@
-import { LoaderArgs, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { ChartVersionsApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
@@ -6,17 +6,17 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartVersionsApi(SherlockConfiguration)
     .apiV2ChartVersionsSelectorGet(
       { selector: params["*"] || "" },
-      handleIAP(request)
+      handleIAP(request),
     )
     .then(
       (chartVersion) =>
         redirect(
-          `/charts/${chartVersion.chart}/chart-versions/${chartVersion.chartVersion}`
+          `/charts/${chartVersion.chart}/chart-versions/${chartVersion.chartVersion}`,
         ),
-      makeErrorResponseReturner()
+      makeErrorResponseReturner(),
     );
 }

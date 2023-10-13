@@ -1,8 +1,8 @@
 import {
-  ActionArgs,
-  LoaderArgs,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
   redirect,
-  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   NavLink,
@@ -18,8 +18,8 @@ import {
 import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
@@ -41,13 +41,13 @@ export const handle = {
   ),
 };
 
-export const meta: V2_MetaFunction = ({ params }) => [
+export const meta: MetaFunction = ({ params }) => [
   {
     title: `${params.environmentName}/${params.chartName} - Chart Instance - Link PagerDuty`,
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return Promise.all([
     new PagerdutyIntegrationsApi(SherlockConfiguration)
       .apiV2PagerdutyIntegrationsGet({}, handleIAP(request))
@@ -56,7 +56,7 @@ export async function loader({ request }: LoaderArgs) {
   ]);
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();

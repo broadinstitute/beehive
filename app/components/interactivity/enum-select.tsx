@@ -47,7 +47,7 @@ export const EnumSelect = <T,>({
       valueToSet === fieldValue
         ? "bg-color-nearest-bg before:border-4 font-medium"
         : "bg-color-nearest-bg/50 before:border-2 before:hover:border-4"
-    } motion-safe:transition-all before:motion-safe:transition-all`}
+    } motion-safe:transition-all before:motion-safe:transition-all text-color-header-text`}
           onClickCapture={(e) => {
             setFieldValue(valueToSet);
             e.preventDefault();
