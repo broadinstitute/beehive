@@ -9,6 +9,8 @@ enum Theme {
   SOLARIZED_DARK = "solarized-dark",
   FLEXIGO_LIGHT = "flexigo-light",
   FLEXIGO_DARK = "flexigo-dark",
+  HALLOWEEN_LIGHT = "halloween-light",
+  HALLOWEEN_DARK = "halloween-dark",
 }
 
 const defaultTheme: Theme = Theme.LIGHT;
