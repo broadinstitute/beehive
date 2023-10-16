@@ -38,8 +38,7 @@ export default function Route() {
           Welcome to Beehive
         </h1>
         <span className="text-lg text-center">
-          <b className="font-semibold">New!</b> Run GitHub Actions and send
-          Slack notifications upon deployments with Deploy Hooks!
+          Halloween themes now available! 🎃
         </span>
       </div>
       <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">
