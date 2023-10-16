@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
+import type { SherlockChartVersionV3 } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
@@ -9,9 +9,7 @@ import { MutateControls } from "../../mutate-controls";
 import { ChartVersionColors } from "../chart-version-colors";
 
 export interface ChartVersionDetailsProps {
-  chartVersion:
-    | V2controllersChartVersion
-    | SerializeFrom<V2controllersChartVersion>;
+  chartVersion: SherlockChartVersionV3 | SerializeFrom<SherlockChartVersionV3>;
   initialCiRuns?: React.ComponentProps<
     typeof CiRunResourceStatusWidget
   >["initialCiRuns"];
@@ -67,16 +65,15 @@ export const ChartVersionDetails: React.FunctionComponent<
             coming after{" "}
             <span className="font-mono">
               {
-                (
-                  chartVersion.parentChartVersionInfo as V2controllersChartVersion
-                ).chartVersion
+                (chartVersion.parentChartVersionInfo as SherlockChartVersionV3)
+                  .chartVersion
               }
             </span>{" "}
             wherever applicable, like for calculcating version diffs.
           </p>
           <NavButton
             to={`../${
-              (chartVersion.parentChartVersionInfo as V2controllersChartVersion)
+              (chartVersion.parentChartVersionInfo as SherlockChartVersionV3)
                 .chartVersion
             }`}
             {...ChartVersionColors}

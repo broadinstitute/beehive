@@ -1,11 +1,11 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersAppVersion } from "@sherlock-js-client/sherlock";
+import { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 
 export interface AppVersionEditableFieldsProps {
-  appVersion?: V2controllersAppVersion | SerializeFrom<V2controllersAppVersion>;
+  appVersion?: SherlockAppVersionV3 | SerializeFrom<SherlockAppVersionV3>;
   repo?: string;
 }
 

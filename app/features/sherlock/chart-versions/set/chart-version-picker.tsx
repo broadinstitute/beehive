@@ -1,7 +1,7 @@
 import { SerializeFrom } from "@remix-run/node";
 import {
+  SherlockChartVersionV3,
   V2controllersChartRelease,
-  V2controllersChartVersion,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -13,7 +13,7 @@ import { SidebarSelectChartVersion } from "./sidebar-select-chart-version";
 
 export const ChartVersionPicker: React.FunctionComponent<
   {
-    chartVersions: SerializeFrom<V2controllersChartVersion[]>;
+    chartVersions: SerializeFrom<SherlockChartVersionV3[]>;
     chartReleases: SerializeFrom<V2controllersChartRelease[]>;
     isTargetingChangeset: boolean;
 

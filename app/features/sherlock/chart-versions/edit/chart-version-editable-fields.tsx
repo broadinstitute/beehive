@@ -1,13 +1,11 @@
 import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
+import { SherlockChartVersionV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 
 export interface ChartVersionEditableFieldsProps {
-  chartVersion?:
-    | V2controllersChartVersion
-    | SerializeFrom<V2controllersChartVersion>;
+  chartVersion?: SherlockChartVersionV3 | SerializeFrom<SherlockChartVersionV3>;
   repo?: string;
 }
 

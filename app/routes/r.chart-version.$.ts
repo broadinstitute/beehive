@@ -8,7 +8,7 @@ import {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartVersionsApi(SherlockConfiguration)
-    .apiV2ChartVersionsSelectorGet(
+    .apiChartVersionsV3SelectorGet(
       { selector: params["*"] || "" },
       handleIAP(request),
     )

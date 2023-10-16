@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import { NavLink, useActionData } from "@remix-run/react";
-import type { V2controllersChartVersion } from "@sherlock-js-client/sherlock";
+import type { SherlockChartVersionV3 } from "@sherlock-js-client/sherlock";
 import { ChartVersionsApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -42,12 +42,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const chartVersionRequest: V2controllersChartVersion = {
+  const chartVersionRequest: SherlockChartVersionV3 = {
     ...formDataToObject(formData, false),
   };
 
   return new ChartVersionsApi(SherlockConfiguration)
-    .apiV2ChartVersionsSelectorPatch(
+    .apiChartVersionsV3SelectorPatch(
       {
         selector: `${params.chartName}/${params.chartVersion}`,
         chartVersion: chartVersionRequest,
