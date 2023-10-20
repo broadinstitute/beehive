@@ -9,8 +9,8 @@ import { AppInstancePopoverContents } from "./app-instance-popover-contents";
 export const AppInstanceEntryInfo: React.FunctionComponent<{
   chartRelease: SerializeFrom<V2controllersChartRelease>;
 }> = ({ chartRelease }) => (
-  <div className="flex flex-row gap-4">
-    <div className="flex flex-col gap-2 items-start">
+  <div className="flex flex-col tablet:flex-row gap-4">
+    <div className="flex tablet:w-80 shrink-0 flex-col gap-2 items-start">
       {chartRelease.environment && (
         <InlinePopover
           inlineText={chartRelease.environment}
