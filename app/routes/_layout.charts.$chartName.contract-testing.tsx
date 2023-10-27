@@ -66,10 +66,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }),
   };
   return fetch(process.env.PACT_BASE_URL + "/pacticipants", requestOptions)
-    .then((response) => {
+    .then(async (response) => {
       if (response.status != 201) {
         throw new Error(
-          `Could not successfully register ${params.chartName} to pact`,
+          `Could not successfully register ${params.chartName}: ${
+            response.status
+          }, ${await response.text()}`,
         );
       }
     })
