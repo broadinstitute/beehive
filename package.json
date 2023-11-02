@@ -22,7 +22,7 @@
     "@remix-run/react": "^v2.1.0",
     "@remix-run/serve": "^v2.1.0",
     "@sherlock-js-client/sherlock": "^0.2.19",
-    "lucide-react": "^0.287.0",
+    "lucide-react": "^0.290.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
