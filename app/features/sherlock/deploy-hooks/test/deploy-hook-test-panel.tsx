@@ -35,7 +35,7 @@ export const DeployHookTestPanel: React.FunctionComponent<{
         </h2>
         <p>
           Choose whether the hook should be fully executed or whether Beehive
-          should stop just sort of calling {type}.
+          should stop just short of calling {type}.
         </p>
         <EnumInputSelect<"true" | "false">
           name="execute"
