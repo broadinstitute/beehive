@@ -65,7 +65,9 @@ export const ActionBox: React.FunctionComponent<ActionBoxProps> = ({
           <p className="font-semibold">Saved!</p>
         )}
       </Form>
-      <div className={panelSizeToInnerClassName(size)}>{belowComponent}</div>
+      <div className={`${panelSizeToInnerClassName(size)} flex flex-col gap-4`}>
+        {belowComponent}
+      </div>
     </div>
   );
 };

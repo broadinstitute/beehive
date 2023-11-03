@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Github,
+  Info,
   Megaphone,
   Wand,
   X,
@@ -15,7 +16,8 @@ export type Notification =
   | GitHubActionsNotification
   | DevOpsAnnouncementNotification
   | ErrorNotification
-  | NextStepsNotification;
+  | NextStepsNotification
+  | InfoNotification;
 
 interface AbstractNotification {
   type: string;
@@ -49,6 +51,10 @@ export interface NextStepsNotification extends AbstractNotification {
   error?: false;
 }
 
+export interface InfoNotification extends AbstractNotification {
+  type: "info";
+}
+
 export const NotificationComponent: React.FunctionComponent<{
   notification: Notification;
   close: () => void;
@@ -75,6 +81,9 @@ export const NotificationComponent: React.FunctionComponent<{
     case "next-steps":
       Icon = Wand;
       title = "Next Steps";
+    case "info":
+      Icon = Info;
+      title = "Info";
   }
   const [visible, setVisible] = useState(false);
   useEffect(() => {
