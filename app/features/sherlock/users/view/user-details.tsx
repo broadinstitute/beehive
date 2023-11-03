@@ -147,7 +147,7 @@ export const UserDetails: React.FunctionComponent<{
             <h1 className="font-light text-4xl">{user.slackUsername}</h1>
             <p>
               This information is sourced directly by Sherlock via its Slack
-              authentication.
+              authorization.
             </p>
             <div className="grid grid-cols-2 gap-2">
               <div>Username</div>
