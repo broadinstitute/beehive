@@ -38,7 +38,7 @@ export default function Route() {
           Welcome to Beehive
         </h1>
         <span className="text-lg text-center">
-          Halloween themes now available! 🎃
+          You can now test and dry-run deploy hooks!
         </span>
       </div>
       <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">

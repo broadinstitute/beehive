@@ -47,13 +47,22 @@ export const GithubActionsDeployHookEditPanel: React.FunctionComponent<{
           submitText="Save"
           saved={searchParams.get("saved") === "true"}
           belowComponent={
-            <NavButton
-              to="./delete"
-              onClick={() => setSidebar()}
-              {...DeployHookColors}
-            >
-              Delete
-            </NavButton>
+            <>
+              <NavButton
+                to="./test"
+                onClick={() => setSidebar()}
+                {...DeployHookColors}
+              >
+                Test
+              </NavButton>
+              <NavButton
+                to="./delete"
+                onClick={() => setSidebar()}
+                {...DeployHookColors}
+              >
+                Delete
+              </NavButton>
+            </>
           }
           {...DeployHookColors}
         >

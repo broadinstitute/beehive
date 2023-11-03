@@ -22,9 +22,14 @@ export const SlackDeployHookEditPanel: React.FunctionComponent<{
         submitText="Save"
         saved={searchParams.get("saved") === "true"}
         belowComponent={
-          <NavButton to="./delete" {...DeployHookColors}>
-            Delete
-          </NavButton>
+          <>
+            <NavButton to="./test" {...DeployHookColors}>
+              Test
+            </NavButton>
+            <NavButton to="./delete" {...DeployHookColors}>
+              Delete
+            </NavButton>
+          </>
         }
         {...DeployHookColors}
       >
