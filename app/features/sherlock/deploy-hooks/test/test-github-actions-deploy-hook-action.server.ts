@@ -30,8 +30,11 @@ export async function testGithubActionsDeployHookAction(
       session.flash(
         sessionFields.flashNotifications,
         buildNotifications({
-          type: "gha",
-          text: "Your GitHub Action has been stared",
+          type: formData.get("execute") === "true" ? "gha" : "info",
+          text:
+            formData.get("execute") === "true"
+              ? "Your GitHub Action has been started"
+              : "The dry-run completed successfully",
           url: response.url ?? "",
         }),
       );

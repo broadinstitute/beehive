@@ -31,7 +31,10 @@ export async function testSlackDeployHookAction(
         sessionFields.flashNotifications,
         buildNotifications({
           type: "info",
-          text: "A Slack message has been sent",
+          text:
+            formData.get("execute") === "true"
+              ? "A Slack message has been sent"
+              : "The dry-run completed successfully",
         }),
       );
       return redirect(currentPagePath, {
