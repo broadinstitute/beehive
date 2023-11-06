@@ -29,7 +29,7 @@
     "remix-utils": "^7.1.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^v2.1.0",
+    "@remix-run/dev": "^v2.2.0",
     "@remix-run/eslint-config": "^v2.1.0",
     "@types/node": "^20.8.9",
     "@types/react": "^18.2.35",
