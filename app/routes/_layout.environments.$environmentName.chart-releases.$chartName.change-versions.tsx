@@ -94,7 +94,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const changesetRequest: V2controllersChangesetPlanRequestChartReleaseEntry = {
     ...formDataToObject(formData, true),
     chartRelease: `${params.environmentName}/${params.chartName}`,
-    toHelmfileRefEnabled: formData.get("toHelmfileRefEnabled") === "true",
+    toHelmfileRefEnabled:
+      // "true" -> true, "false" -> false, empty or anything else -> act as if it wasn't set
+      formData.get("toHelmfileRefEnabled") === "true"
+        ? true
+        : formData.get("toHelmfileRefEnabled") === "false"
+        ? false
+        : undefined,
   };
 
   return new ChangesetsApi(SherlockConfiguration)
