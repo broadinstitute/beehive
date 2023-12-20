@@ -133,6 +133,10 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
               ? "A unique name will be generated if you leave this blank."
               : ""
           }`}</p>
+          <b>
+            The name should be all lowercase with hyphen separators ie:
+            my-new-environment
+          </b>
           <TextField
             name="name"
             placeholder={
@@ -140,6 +144,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             }
             required={lifecycle !== "dynamic"}
             value={name}
+            title="Name should be lowercase and alphanumeric with hyphen separators"
             pattern="[a-z0-9]([\-a-z0-9]*[a-z0-9])?"
             onChange={(e) => setName(e.currentTarget.value)}
           />
