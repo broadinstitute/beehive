@@ -32,7 +32,7 @@
     "@remix-run/dev": "^v2.1.0",
     "@remix-run/eslint-config": "^v2.1.0",
     "@types/node": "^20.8.9",
-    "@types/react": "^18.2.35",
+    "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.14",
     "autoprefixer": "^10.4.16",
     "cssnano": "^6.0.1",
