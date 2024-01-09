@@ -16,6 +16,7 @@ export async function editSlackDeployHookAction(
   const formData = await request.formData();
   const slackDeployHookRequest: SherlockSlackDeployHookV3Edit = {
     ...formDataToObject(formData, true),
+    mentionPeople: formData.get("mentionPeople") === "true",
     onSuccess: formData.get("onSuccess") === "true",
     onFailure: formData.get("onFailure") === "true",
   };
