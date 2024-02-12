@@ -1,15 +1,11 @@
-import {
+import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
-  redirect,
 } from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -49,7 +45,7 @@ export const meta: MetaFunction = ({ params }) => [
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesGet(
+    .apiChartReleasesV3Get(
       { environment: params.environmentName },
       handleIAP(request),
     )
@@ -77,7 +73,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const api = new ChartReleasesApi(SherlockConfiguration);
   return Promise.all(
     Array.from(chartReleaseSettings).map(([chartName, included]) =>
-      api.apiV2ChartReleasesSelectorPatch(
+      api.apiChartReleasesV3SelectorPatch(
         {
           selector: `${params.environmentName}/${chartName}`,
           chartRelease: {

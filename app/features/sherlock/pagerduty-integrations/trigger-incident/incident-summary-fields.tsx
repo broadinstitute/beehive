@@ -2,7 +2,8 @@ import { TextAreaField } from "~/components/interactivity/text-area-field";
 
 export const IncidentSummaryFields: React.FunctionComponent<{
   initialSummary?: string;
-}> = ({ initialSummary }) => (
+  link?: string;
+}> = ({ initialSummary, link = "https://broad.io/beehive" }) => (
   <div className="flex flex-col space-y-4">
     <label>
       <h2 className="font-light text-2xl text-color-header-text">Summary</h2>
@@ -17,5 +18,6 @@ export const IncidentSummaryFields: React.FunctionComponent<{
         required
       />
     </label>
+    <input type="hidden" name="sourceLink" value={link} />
   </div>
 );

@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockChartV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartV3 } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { GithubLinkChip } from "~/features/github/github-link-chip";
@@ -96,19 +96,6 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
       </div>
     )}
 
-    {chart.legacyConfigsEnabled && (
-      <p>
-        This application is flagged as receiving legacy configuration from{" "}
-        <a
-          href="https://github.com/broadinstitute/firecloud-develop"
-          className="decoration-color-link-underline underline"
-        >
-          firecloud-develop
-        </a>
-        .
-      </p>
-    )}
-
     <div className="flex flex-col space-y-2">
       {(chart.chartRepo == "terra-helm" && (
         <div className="flex flex-col space-y-2">
@@ -159,6 +146,7 @@ export const ChartDetails: React.FunctionComponent<ChartDetailsProps> = ({
         href={`https://grafana.dsp-devops.broadinstitute.org/d/oyhJF6t4k/v2-accelerate-metrics-per-app?&var-chart=${chart.name}`}
         target="_blank"
         className="underline decoration-color-link-underline w-fit"
+        rel="noreferrer"
       >
         View Accelerate Metrics in Grafana ↗
       </a>

@@ -1,12 +1,12 @@
-import {
+import type {
   LoaderFunctionArgs,
   MetaFunction,
   SerializeFrom,
 } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
   useParams,
@@ -46,7 +46,7 @@ export const meta: MetaFunction = ({ params }) => [
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesGet(
+    .apiChartReleasesV3Get(
       { environment: params.environmentName || "" },
       handleIAP(request),
     )

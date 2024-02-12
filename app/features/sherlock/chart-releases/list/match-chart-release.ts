@@ -1,8 +1,8 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 
 export function matchChartRelease(
-  chartRelease: SerializeFrom<V2controllersChartRelease>,
+  chartRelease: SerializeFrom<SherlockChartReleaseV3>,
   matchText: string,
 ): boolean {
   return (

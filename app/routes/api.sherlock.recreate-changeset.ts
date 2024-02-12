@@ -1,5 +1,5 @@
 import { redirect, type ActionFunctionArgs } from "@remix-run/node";
-import type { V2controllersChangesetPlanRequest } from "@sherlock-js-client/sherlock";
+import type { SherlockChangesetV3PlanRequest } from "@sherlock-js-client/sherlock";
 import { ChangesetsApi } from "@sherlock-js-client/sherlock";
 import { json } from "react-router";
 import { buildNotifications } from "~/components/logic/notification";
@@ -15,7 +15,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await getValidSession(request);
   const formData = await request.formData();
 
-  const changesetRequest: V2controllersChangesetPlanRequest = {
+  const changesetRequest: SherlockChangesetV3PlanRequest = {
     recreateChangesets: formData
       .getAll("changeset")
       .filter((value): value is string => typeof value === "string")
@@ -23,9 +23,10 @@ export async function action({ request }: ActionFunctionArgs) {
   };
 
   return new ChangesetsApi(SherlockConfiguration)
-    .apiV2ProceduresChangesetsPlanPost(
+    .apiChangesetsProceduresV3PlanPost(
       {
         changesetPlanRequest: changesetRequest,
+        verboseOutput: false,
       },
       handleIAP(request),
     )

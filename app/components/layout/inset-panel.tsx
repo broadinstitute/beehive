@@ -1,4 +1,5 @@
-import { PanelSize, panelSizeToOuterClassName } from "~/helpers/panel-size";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToOuterClassName } from "~/helpers/panel-size";
 
 export type InsetPanelProps = {
   children: React.ReactNode;

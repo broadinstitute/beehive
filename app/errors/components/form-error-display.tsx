@@ -1,4 +1,4 @@
-import { SummarizedErrorInfo } from "../helpers/summarize-response-error";
+import type { SummarizedErrorInfo } from "../helpers/summarize-response-error";
 import { ReloadButton } from "./error-buttons";
 
 export const FormErrorDisplay: React.FunctionComponent<SummarizedErrorInfo> = ({

@@ -1,11 +1,6 @@
-import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import {
-  NavLink,
-  Outlet,
-  Params,
-  useLoaderData,
-  useParams,
-} from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import { ChartVersionsApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ListControls } from "~/components/interactivity/list-controls";

@@ -1,22 +1,17 @@
-import {
+import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
-  json,
-  redirect,
 } from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import { json, redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { SherlockChangesetV3PlanRequestChartReleaseEntry } from "@sherlock-js-client/sherlock";
 import {
   AppVersionsApi,
   ChangesetsApi,
   ChartReleasesApi,
   ChartVersionsApi,
-  V2controllersChangesetPlanRequestChartReleaseEntry,
 } from "@sherlock-js-client/sherlock";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import {
@@ -55,7 +50,7 @@ export function loader({ request, params }: LoaderFunctionArgs) {
   const preconfiguredChartVersionExact = url.searchParams.get("chart");
   return Promise.all([
     new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesGet({ chart: params.chartName }, handleIAP(request))
+      .apiChartReleasesV3Get({ chart: params.chartName }, handleIAP(request))
       .then(
         (chartReleases) =>
           Array.from(
@@ -89,7 +84,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const changesetRequest: V2controllersChangesetPlanRequestChartReleaseEntry = {
+  const changesetRequest: SherlockChangesetV3PlanRequestChartReleaseEntry = {
     ...formDataToObject(formData, true),
     chartRelease: params.chartReleaseName || "",
     toHelmfileRefEnabled:
@@ -97,16 +92,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
       formData.get("toHelmfileRefEnabled") === "true"
         ? true
         : formData.get("toHelmfileRefEnabled") === "false"
-        ? false
-        : undefined,
+          ? false
+          : undefined,
   };
 
   return new ChangesetsApi(SherlockConfiguration)
-    .apiV2ProceduresChangesetsPlanPost(
+    .apiChangesetsProceduresV3PlanPost(
       {
         changesetPlanRequest: {
           chartReleases: [changesetRequest],
         },
+        verboseOutput: false,
       },
       handleIAP(request),
     )

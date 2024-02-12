@@ -1,6 +1,6 @@
-import { SerializeFrom } from "@remix-run/node";
+import type { SerializeFrom } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
-import { V2controllersChangeset } from "@sherlock-js-client/sherlock";
+import type { SherlockChangesetV3 } from "@sherlock-js-client/sherlock";
 import { Undo2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ActionButton } from "~/components/interactivity/action-button";
@@ -9,7 +9,7 @@ import { CsrfTokenInput } from "~/components/logic/csrf-token";
 import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 
 export const ChangsetRecreateButton: React.FunctionComponent<{
-  changeset: V2controllersChangeset | SerializeFrom<V2controllersChangeset>;
+  changeset: SherlockChangesetV3 | SerializeFrom<SherlockChangesetV3>;
 }> = ({ changeset }) => {
   const [open, onOpenChange] = useState(false);
 

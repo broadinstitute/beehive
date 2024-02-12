@@ -1,20 +1,20 @@
-import { SerializeFrom } from "@remix-run/node";
-import {
+import type { SerializeFrom } from "@remix-run/node";
+import type {
+  SherlockChartReleaseV3,
   SherlockChartVersionV3,
-  V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { ChartVersionColors } from "~/features/sherlock/chart-versions/chart-version-colors";
-import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectOtherChartRelease } from "../../chart-releases/set/sidebar-select-other-chart-release";
 import { SidebarSelectChartVersion } from "./sidebar-select-chart-version";
 
 export const ChartVersionPicker: React.FunctionComponent<
   {
     chartVersions: SerializeFrom<SherlockChartVersionV3[]>;
-    chartReleases: SerializeFrom<V2controllersChartRelease[]>;
+    chartReleases: SerializeFrom<SherlockChartReleaseV3[]>;
     isTargetingChangeset: boolean;
 
     initialChartVersionResolver: string;
@@ -213,6 +213,7 @@ export const ChartVersionPicker: React.FunctionComponent<
                 href="https://github.com/broadinstitute/terra-helmfile"
                 target="_blank"
                 className="underline decoration-color-link-underline"
+                rel="noreferrer"
               >
                 terra-helmfile
               </a>{" "}

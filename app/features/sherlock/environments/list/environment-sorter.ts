@@ -1,4 +1,4 @@
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 
 export const liveEnvironmentValuesNameOrder = [
   "dev",
@@ -10,8 +10,8 @@ export const liveEnvironmentValuesNameOrder = [
 ];
 
 export function environmentSorter(
-  a: V2controllersEnvironment,
-  b: V2controllersEnvironment
+  a: SherlockEnvironmentV3,
+  b: SherlockEnvironmentV3,
 ): number {
   if (a.base === "live" && b.base === "live") {
     return (

@@ -1,6 +1,9 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
-import { ChartsApi, SherlockChartV3 } from "@sherlock-js-client/sherlock";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
+import type { SherlockChartV3 } from "@sherlock-js-client/sherlock";
+import { ChartsApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -34,7 +37,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const chartRequest: SherlockChartV3 = {
     ...formDataToObject(formData, false),
     chartExposesEndpoint: formData.get("chartExposesEndpoint") === "true",
-    legacyConfigsEnabled: formData.get("legacyConfigsEnabled") === "true",
     defaultPort: ((defaultPort) =>
       typeof defaultPort === "string" && defaultPort !== ""
         ? parseInt(defaultPort)

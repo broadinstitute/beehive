@@ -1,8 +1,8 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 
 export const ListEnvironmentButtonText: React.FunctionComponent<{
-  environment: SerializeFrom<V2controllersEnvironment>;
+  environment: SerializeFrom<SherlockEnvironmentV3>;
   extraText?: string;
 }> = ({ environment, extraText }) => (
   <h2 className="font-light">

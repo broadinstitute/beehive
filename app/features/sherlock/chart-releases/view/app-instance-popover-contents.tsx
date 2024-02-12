@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import { ClusterLinkChip } from "../../clusters/cluster-link-chip";
 import { EnvironmentLinkChip } from "../../environments/environment-link-chip";
 import { PagerdutyIntegrationLinkChip } from "../../pagerduty-integrations/pagerduty-integration-link-chip";
@@ -7,7 +7,7 @@ import { ArgoLinkChip, ChartReleaseLinkChip } from "../chart-release-link-chip";
 import { ChartReleaseDetails } from "./chart-release-details";
 
 export const AppInstancePopoverContents: React.FunctionComponent<{
-  chartRelease: SerializeFrom<V2controllersChartRelease>;
+  chartRelease: SerializeFrom<SherlockChartReleaseV3>;
 }> = ({ chartRelease }) => (
   <>
     <h2 className="font-light text-4xl text-color-header-text">

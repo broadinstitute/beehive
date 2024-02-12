@@ -1,5 +1,5 @@
 import { NavLink, useMatches, useParams } from "@remix-run/react";
-import { FunctionComponent } from "react";
+import type { FunctionComponent } from "react";
 import { BeehiveIcon } from "../assets/beehive-icon";
 
 export const Header: FunctionComponent = () => {

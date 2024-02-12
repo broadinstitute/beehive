@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import { TerraIcon } from "~/components/assets/terra-icon";
 import { ExternalNavButton } from "~/components/interactivity/external-nav-button";
 import { NavButton } from "~/components/interactivity/nav-button";
@@ -17,9 +17,7 @@ import { EnvironmentColors } from "../environment-colors";
 import { EnvironmentLinkChip } from "../environment-link-chip";
 
 export interface EnvironmentDetailsProps {
-  environment:
-    | V2controllersEnvironment
-    | SerializeFrom<V2controllersEnvironment>;
+  environment: SherlockEnvironmentV3 | SerializeFrom<SherlockEnvironmentV3>;
   initialCiRuns?: React.ComponentProps<
     typeof CiRunResourceStatusWidget
   >["initialCiRuns"];

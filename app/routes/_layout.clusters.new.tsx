@@ -1,6 +1,8 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
-import { ClustersApi, SherlockClusterV3 } from "@sherlock-js-client/sherlock";
+import type { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
+import { ClustersApi } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";

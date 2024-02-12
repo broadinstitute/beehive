@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersPagerdutyIntegration } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockPagerdutyIntegrationV3 } from "@sherlock-js-client/sherlock";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { MutateControls } from "../../mutate-controls";
 import { ProdWarning } from "../../prod-warning";
@@ -7,8 +7,8 @@ import { PagerdutyIntegrationColors } from "../pagerduty-integration-colors";
 
 export interface PagerdutyIntegrationDetailsProps {
   pagerdutyIntegration:
-    | V2controllersPagerdutyIntegration
-    | SerializeFrom<V2controllersPagerdutyIntegration>;
+    | SherlockPagerdutyIntegrationV3
+    | SerializeFrom<SherlockPagerdutyIntegrationV3>;
   toDelete?: string;
 }
 

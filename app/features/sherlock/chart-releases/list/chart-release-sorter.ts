@@ -1,9 +1,9 @@
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import { liveEnvironmentValuesNameOrder } from "../../environments/list/environment-sorter";
 
 export function chartReleaseSorter(
-  a: V2controllersChartRelease,
-  b: V2controllersChartRelease,
+  a: SherlockChartReleaseV3,
+  b: SherlockChartReleaseV3,
 ): number {
   const aLiveEnvironmentValuesNameOrder =
     liveEnvironmentValuesNameOrder.indexOf(a.environmentInfo?.valuesName || "");

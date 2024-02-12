@@ -1,4 +1,5 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { destroySession } from "~/session.server";
 import { getValidSession } from "../helpers/get-valid-session.server";
 

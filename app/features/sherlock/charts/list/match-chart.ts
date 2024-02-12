@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockChartV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartV3 } from "@sherlock-js-client/sherlock";
 
 export function matchChart(
   chart: SerializeFrom<SherlockChartV3>,

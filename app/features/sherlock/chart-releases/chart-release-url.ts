@@ -1,10 +1,10 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 
 export function chartReleaseUrl(
   chartRelease:
-    | V2controllersChartRelease
-    | SerializeFrom<V2controllersChartRelease>
+    | SherlockChartReleaseV3
+    | SerializeFrom<SherlockChartReleaseV3>
     | null,
 ): string | null {
   if (

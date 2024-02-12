@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { InterleavedVersion } from "./interleave-version-promises";
+import type { SerializeFrom } from "@remix-run/node";
+import type { InterleavedVersion } from "./interleave-version-promises";
 
 export const InterleavedVersionList: React.FunctionComponent<{
   versions: SerializeFrom<InterleavedVersion[]>;
@@ -10,7 +10,7 @@ export const InterleavedVersionList: React.FunctionComponent<{
         <div key={index}>app {v.version.appVersion}</div>
       ) : (
         <div key={index}>chart {v.version.chartVersion}</div>
-      )
+      ),
     )}
   </>
 );

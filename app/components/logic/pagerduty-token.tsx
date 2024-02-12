@@ -1,4 +1,4 @@
-import { Session } from "@remix-run/node";
+import type { Session } from "@remix-run/node";
 import { createContext, useEffect, useState } from "react";
 import { sessionFields } from "~/session.server";
 import { PagerdutyIntegrationColors } from "../../features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
@@ -45,7 +45,7 @@ const PagerdutyInstallLinkWithToken: React.FunctionComponent<
       window.location.protocol +
         "//" +
         window.location.host +
-        "/api/pagerduty/receive-install"
+        "/api/pagerduty/receive-install",
     );
     redirectUrl.searchParams.set(redirectUrlTokenParameter, token);
     if (dest) {
@@ -53,7 +53,7 @@ const PagerdutyInstallLinkWithToken: React.FunctionComponent<
     }
 
     const setupUrl = new URL(
-      "https://broadinstitute.pagerduty.com/install/integration"
+      "https://broadinstitute.pagerduty.com/install/integration",
     );
     setupUrl.searchParams.set("app_id", pdAppID);
     setupUrl.searchParams.set("redirect_url", redirectUrl.href);
@@ -71,14 +71,14 @@ const PagerdutyInstallLinkWithToken: React.FunctionComponent<
 
 export const verifySessionPagerdutyToken = (
   request: Request,
-  session: Session
+  session: Session,
 ) => {
   if (
     !session.has(sessionFields.pdToken) ||
     !session.get(sessionFields.pdToken)
   ) {
     throw new Error(
-      "Session did not contain a PD token - this indicates an issue on Beehive's end setting the cookie"
+      "Session did not contain a PD token - this indicates an issue on Beehive's end setting the cookie",
     );
   }
 
@@ -88,7 +88,7 @@ export const verifySessionPagerdutyToken = (
     !requestUrl.searchParams.get(redirectUrlTokenParameter)
   ) {
     throw new Error(
-      "Request URL did not contain the PD token - this indicates an issue on Beehive's end constructing the URL or on PagerDuty's with redirecting to it"
+      "Request URL did not contain the PD token - this indicates an issue on Beehive's end constructing the URL or on PagerDuty's with redirecting to it",
     );
   }
 
@@ -98,7 +98,7 @@ export const verifySessionPagerdutyToken = (
   ) {
     throw new Response(
       "CSRF protection tripped; token in cookie was inconsistent with the token in the redirect URL",
-      { status: 422 }
+      { status: 422 },
     );
   }
 };

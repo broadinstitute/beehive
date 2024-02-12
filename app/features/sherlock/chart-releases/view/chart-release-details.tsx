@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import { AppVersionSummary } from "../../app-versions/view/app-version-summary";
 import { ChartVersionSummary } from "../../chart-versions/view/chart-version-summary";
 import { ChartLinkChip } from "../../charts/chart-link-chip";
@@ -15,9 +15,7 @@ import { ChartReleaseColors } from "../chart-release-colors";
 import { ArgoLinkChip } from "../chart-release-link-chip";
 
 export interface ChartReleaseDetailsProps {
-  chartRelease:
-    | V2controllersChartRelease
-    | SerializeFrom<V2controllersChartRelease>;
+  chartRelease: SherlockChartReleaseV3 | SerializeFrom<SherlockChartReleaseV3>;
   initialCiRuns?: React.ComponentProps<
     typeof CiRunResourceStatusWidget
   >["initialCiRuns"];
@@ -98,11 +96,6 @@ export const ChartReleaseDetails: React.FunctionComponent<
           }
           appVersionCommit={chartRelease.appVersionCommit}
           appVersionBranch={chartRelease.appVersionBranch}
-          firecloudDevelopRef={
-            chartRelease.chartInfo?.legacyConfigsEnabled
-              ? chartRelease.firecloudDevelopRef
-              : undefined
-          }
           renderAppVersionLink={chartRelease.appVersionReference != null}
         />
       )}

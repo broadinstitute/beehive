@@ -1,5 +1,5 @@
 import { NavLink } from "@remix-run/react";
-import { RemixNavLinkProps } from "@remix-run/react/dist/components";
+import type { RemixNavLinkProps } from "@remix-run/react/dist/components";
 
 export interface NavButtonProps {
   to: string;

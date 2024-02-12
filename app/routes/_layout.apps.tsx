@@ -42,7 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         ),
       environments: new EnvironmentsApi(
         SherlockConfiguration,
-      ).apiV2EnvironmentsGet(
+      ).apiEnvironmentsV3Get(
         {
           base: "live",
         },

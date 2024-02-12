@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -29,7 +29,7 @@ export const meta: MetaFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
-    .apiV2PagerdutyIntegrationsGet({}, handleIAP(request))
+    .apiPagerdutyIntegrationsV3Get({}, handleIAP(request))
     .catch(errorResponseThrower);
 }
 

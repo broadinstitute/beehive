@@ -1,4 +1,5 @@
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 
 export interface ListFilterInfoProps {
   size?: PanelSize;
@@ -11,7 +12,7 @@ export const ListFilterInfo: React.FunctionComponent<ListFilterInfoProps> = ({
 }) => (
   <div
     className={`${panelSizeToInnerClassName(
-      size
+      size,
     )} min-h-[3rem] text-color-placeholder-text flex flex-col items-center justify-center`}
   >
     <p className="text-center">

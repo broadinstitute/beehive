@@ -49,13 +49,14 @@ export const ArgoLinkChip: React.FunctionComponent<{
             { signal: controller?.signal },
           );
         }}
+        rel="noreferrer"
       >
         <h2 className="text-xl font-light">ArgoCD - View</h2>
       </a>
     );
   }
   return (
-    <a href={href} target="_blank">
+    <a href={href} target="_blank" rel="noreferrer">
       <img
         src={`/api/argocd/badge?name=${chartRelease}`}
         className="h-8 w-full rounded-xl hover:shadow-md motion-safe:transition-all"

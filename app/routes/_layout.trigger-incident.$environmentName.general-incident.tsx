@@ -1,9 +1,9 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
-import {
-  EnvironmentsApi,
-  PagerdutyAlertSummary,
-} from "@sherlock-js-client/sherlock";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
+import type { PagerdutyAlertSummary } from "@sherlock-js-client/sherlock";
+import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
@@ -44,10 +44,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
     ...formDataToObject(formData, true),
   };
 
-  return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2ProceduresEnvironmentsTriggerIncidentSelectorPost(
+  const selector = formData.get("selector");
+  return new PagerdutyIntegrationsApi(SherlockConfiguration)
+    .apiPagerdutyIntegrationsProceduresV3TriggerIncidentSelectorPost(
       {
-        selector: params.environmentName || "",
+        selector: typeof selector === "string" ? selector : "",
         summary: summaryRequest,
       },
       handleIAP(request),
@@ -68,15 +69,20 @@ export default function Route() {
 
   return (
     <>
-      {" "}
       <OutsetPanel>
         <ActionBox
           title={`Preparing to Trigger General Incident for ${environment.name}`}
           submitText="Click to Trigger General Incident"
           {...EnvironmentColors}
         >
+          <input
+            type="hidden"
+            name="selector"
+            value={environment.pagerdutyIntegration}
+          />
           <IncidentSummaryFields
             initialSummary={errorInfo?.formState?.summary}
+            link={`https://broad.io/beehive/r/environment/${environment.name}`}
           />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>

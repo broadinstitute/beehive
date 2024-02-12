@@ -1,4 +1,4 @@
-import { ColorProps } from "../../color-class-names";
+import type { ColorProps } from "../../color-class-names";
 
 export const ChartColors: ColorProps = {
   borderClassName: "border-color-chart-border",

@@ -1,21 +1,17 @@
-import {
+import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
-  redirect,
 } from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import {
   AppVersionsApi,
   ChartReleasesApi,
   ChartVersionsApi,
   ChartsApi,
-  V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -68,7 +64,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       )
       .catch(errorResponseThrower),
     new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesGet({ chart: params.chartName }, handleIAP(request))
+      .apiChartReleasesV3Get({ chart: params.chartName }, handleIAP(request))
       .then(
         (chartReleases) =>
           chartReleases
@@ -99,7 +95,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   const formData = await request.formData();
-  const chartReleaseRequest: V2controllersChartRelease = {
+  const chartReleaseRequest: SherlockChartReleaseV3 = {
     ...formDataToObject(formData, true),
     chart: params.chartName,
     cluster: params.clusterName,
@@ -111,7 +107,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   };
 
   return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesPost(
+    .apiChartReleasesV3Post(
       { chartRelease: chartReleaseRequest },
       handleIAP(request),
     )
@@ -179,7 +175,6 @@ export default function Route() {
             appVersions={appVersions}
             chartReleases={otherChartReleases}
             isTargetingChangeset={false}
-            showFirecloudDevelopRef={chart.legacyConfigsEnabled}
             initialAppVersionResolver={
               errorInfo?.formState?.appVersionResolver ||
               (chart.appImageGitRepo ? "branch" : "none")
@@ -195,9 +190,6 @@ export default function Route() {
               errorInfo?.formState?.appVersionBranch ||
               chart.appImageGitMainBranch ||
               ""
-            }
-            initialFirecloudDevelopRef={
-              errorInfo?.formState?.firecloudDevelopRef || "dev"
             }
           />
           <br />

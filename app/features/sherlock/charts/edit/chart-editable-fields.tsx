@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockChartV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
@@ -19,9 +19,6 @@ export const ChartEditableFields: React.FunctionComponent<
   );
   const [chartExposesEndpoint, setChartExposesEndpoint] = useState(
     chart?.chartExposesEndpoint === true ? "true" : "false",
-  );
-  const [legacyConfigsEnabled, setLegacyConfigsEnabled] = useState(
-    chart?.legacyConfigsEnabled === true ? "true" : "false",
   );
   const [description, setDescription] = useState(chart?.description || "");
   return (
@@ -183,26 +180,6 @@ export const ChartEditableFields: React.FunctionComponent<
             defaultValue={chart?.defaultPort || "443"}
           />
         </label>
-      </div>
-      <div>
-        <h2 className="font-light text-2xl text-color-header-text">
-          Legacy Configs?
-        </h2>
-        <p>
-          This flag controls whether or not instances of this chart will have
-          configuration from firecloud-develop.
-        </p>
-        <EnumInputSelect
-          name="legacyConfigsEnabled"
-          className="grid grid-cols-2 mt-2"
-          fieldValue={legacyConfigsEnabled}
-          setFieldValue={setLegacyConfigsEnabled}
-          enums={[
-            ["Yes", "true"],
-            ["No", "false"],
-          ]}
-          {...ChartColors}
-        />
       </div>
     </div>
   );

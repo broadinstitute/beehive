@@ -1,5 +1,5 @@
-import { ActionButtonProps } from "../interactivity/action-button";
-import { NavButtonProps } from "../interactivity/nav-button";
+import type { ActionButtonProps } from "../interactivity/action-button";
+import type { NavButtonProps } from "../interactivity/nav-button";
 
 export interface MemoryFilteredListProps<T> {
   entries: Array<T>;

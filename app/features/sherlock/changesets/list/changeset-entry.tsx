@@ -1,6 +1,6 @@
 import type { SerializeFrom } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import type { V2controllersChangeset } from "@sherlock-js-client/sherlock";
+import type { SherlockChangesetV3 } from "@sherlock-js-client/sherlock";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
@@ -22,7 +22,7 @@ import { ChangsetRecreateButton } from "../recreate/changeset-recreate-button";
 
 export const ChangesetEntry: React.FunctionComponent<{
   size?: PanelSize;
-  changeset: V2controllersChangeset | SerializeFrom<V2controllersChangeset>;
+  changeset: SherlockChangesetV3 | SerializeFrom<SherlockChangesetV3>;
   disableTitle?: boolean;
   includedCheckboxValue?: boolean;
   setIncludedCheckboxValue?: (value: boolean) => void;
@@ -49,8 +49,6 @@ export const ChangesetEntry: React.FunctionComponent<{
   const appVersionInSherlockChanged =
     (changeset.fromAppVersionReference === undefined) !==
     (changeset.toAppVersionReference === undefined);
-  const firecloudDevelopRefChanged =
-    changeset.fromFirecloudDevelopRef !== changeset.toFirecloudDevelopRef;
   const chartVersionChanged =
     changeset.fromChartVersionExact !== changeset.toChartVersionExact;
   const chartVersionResolverChanged =
@@ -74,7 +72,6 @@ export const ChangesetEntry: React.FunctionComponent<{
         ]
       : []),
     ...(appVersionResolverChanged ||
-    firecloudDevelopRefChanged ||
     chartVersionResolverChanged ||
     helmfileRefChanged
       ? ["configuration change"]
@@ -288,7 +285,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                 {changeset.fromAppVersionResolver === "exact" &&
                   `exact app version`}
                 {changeset.fromAppVersionResolver === "follow" &&
-                  `another instance - ${changeset.fromAppVersionFollowChartRelease}`}
+                  `another instance for app version - ${changeset.fromAppVersionFollowChartRelease}`}
                 {changeset.fromAppVersionResolver === "commit" &&
                   `app commit — ${changeset.fromAppVersionCommit}`}
                 {changeset.fromAppVersionResolver === "branch" &&
@@ -356,40 +353,6 @@ export const ChangesetEntry: React.FunctionComponent<{
                   </p>
                 </>
               )}
-            </>
-          )}
-          {changeset.chartReleaseInfo?.chartInfo?.legacyConfigsEnabled && (
-            <>
-              <p
-                className={`${
-                  firecloudDevelopRefChanged
-                    ? "text-color-body-text"
-                    : "text-color-body-text/40"
-                } border-b border-color-divider-line pb-2`}
-              >{`Legacy configuration from firecloud-develop's ${changeset.fromFirecloudDevelopRef}`}</p>
-              <p
-                className={`${
-                  firecloudDevelopRefChanged
-                    ? "text-color-body-text"
-                    : "text-color-body-text/40"
-                } border-b border-color-divider-line pb-2`}
-              >
-                {`Legacy configuration from firecloud-develop's ${changeset.toFirecloudDevelopRef}`}
-                {firecloudDevelopRefChanged && (
-                  <>
-                    {" ("}
-                    <a
-                      href={`https://github.com/broadinstitute/firecloud-develop/compare/${changeset.fromFirecloudDevelopRef}...${changeset.toFirecloudDevelopRef}`}
-                      target="_blank"
-                      className="underline decoration-color-link-underline"
-                      rel="noreferrer"
-                    >
-                      git diff ↗
-                    </a>
-                    {")"}
-                  </>
-                )}
-              </p>
             </>
           )}
           <h2
@@ -579,9 +542,7 @@ export const ChangesetEntry: React.FunctionComponent<{
                 changeset.chartReleaseInfo?.chartVersionExact !=
                   changeset.toChartVersionExact ||
                 changeset.chartReleaseInfo?.helmfileRef !=
-                  changeset.toHelmfileRef ||
-                changeset.chartReleaseInfo?.firecloudDevelopRef !=
-                  changeset.toFirecloudDevelopRef) && (
+                  changeset.toHelmfileRef) && (
                 <ChangsetRecreateButton changeset={changeset} />
               )}
             </>

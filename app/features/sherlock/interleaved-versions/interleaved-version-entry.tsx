@@ -1,14 +1,15 @@
-import { SerializeFrom } from "@remix-run/node";
+import type { SerializeFrom } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { transitionView } from "~/helpers/transition-view";
 import { AppVersionColors } from "../app-versions/app-version-colors";
 import { ChartVersionColors } from "../chart-versions/chart-version-colors";
-import { InterleavedVersion } from "./interleave-version-promises";
+import type { InterleavedVersion } from "./interleave-version-promises";
 
 export const InterleavedVersionEntry: React.FunctionComponent<{
   entry: SerializeFrom<InterleavedVersion>;
@@ -18,7 +19,7 @@ export const InterleavedVersionEntry: React.FunctionComponent<{
   return (
     <div
       className={`h-fit ${panelSizeToInnerClassName(
-        size
+        size,
       )} bg-color-near-bg rounded-2xl shadow-md border-2 ${
         entry.type === "app"
           ? AppVersionColors.borderClassName
@@ -61,8 +62,8 @@ export const InterleavedVersionEntry: React.FunctionComponent<{
             entry.type === "app"
               ? entry.version.chartInfo?.appImageGitRepo
               : entry.version.chartInfo?.chartRepo === "terra-helm"
-              ? "broadinstitute/terra-helmfile"
-              : undefined
+                ? "broadinstitute/terra-helmfile"
+                : undefined
           }
           className={`break-words font-light text-xl ${
             minimized ? "line-clamp-3" : "line-clamp-none"
@@ -90,6 +91,7 @@ export const InterleavedVersionEntry: React.FunctionComponent<{
             href={`https://github.com/${entry.version.chartInfo?.appImageGitRepo}/commit/${entry.version.gitCommit}`}
             target="_blank"
             className="font-light text-sm underline decoration-color-link-underline"
+            rel="noreferrer"
           >
             {`Commit ${entry.version.gitCommit?.substring(0, 7)} ↗`}
           </a>

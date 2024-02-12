@@ -1,8 +1,8 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 
 export const ListChartReleaseButtonText: React.FunctionComponent<{
-  chartRelease: SerializeFrom<V2controllersChartRelease>;
+  chartRelease: SerializeFrom<SherlockChartReleaseV3>;
   showDestination?: "auto" | "cluster" | "none";
   showVersion?: "app" | "chart" | "none";
 }> = ({ chartRelease, showVersion = "app", showDestination }) => {

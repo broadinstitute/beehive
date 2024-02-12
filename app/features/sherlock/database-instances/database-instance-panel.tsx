@@ -1,7 +1,7 @@
-import { SerializeFrom } from "@remix-run/node";
-import {
-  V2controllersChartRelease,
-  V2controllersDatabaseInstance,
+import type { SerializeFrom } from "@remix-run/node";
+import type {
+  SherlockChartReleaseV3,
+  SherlockDatabaseInstanceV3,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ActionButton } from "~/components/interactivity/action-button";
@@ -10,13 +10,13 @@ import { TextField } from "~/components/interactivity/text-field";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
-import { ReturnedErrorInfo } from "~/errors/helpers/error-response-handlers";
+import type { ReturnedErrorInfo } from "~/errors/helpers/error-response-handlers";
 import { DatabaseInstanceColors } from "./database-instance-colors";
 
 export const DatabaseInstancePanel: React.FunctionComponent<{
-  chartRelease: SerializeFrom<V2controllersChartRelease>;
-  databaseInstance: SerializeFrom<V2controllersDatabaseInstance> | null;
-  errorInfo?: SerializeFrom<ReturnedErrorInfo<V2controllersDatabaseInstance>>;
+  chartRelease: SerializeFrom<SherlockChartReleaseV3>;
+  databaseInstance: SerializeFrom<SherlockDatabaseInstanceV3> | null;
+  errorInfo?: SerializeFrom<ReturnedErrorInfo<SherlockDatabaseInstanceV3>>;
 }> = ({ chartRelease, databaseInstance, errorInfo }) => {
   const [noDatabaseInstance, setNoDatabaseInstance] = useState(
     !databaseInstance && !errorInfo,

@@ -1,13 +1,13 @@
-import {
+import type {
   LoaderFunctionArgs,
   MetaFunction,
   SerializeFrom,
-  defer,
 } from "@remix-run/node";
+import { defer } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";

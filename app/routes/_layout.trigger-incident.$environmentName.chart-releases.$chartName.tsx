@@ -1,18 +1,15 @@
-import {
+import type {
   ActionFunctionArgs,
-  LoaderFunction,
+  LoaderFunctionArgs,
   MetaFunction,
-  redirect,
 } from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { PagerdutyAlertSummary } from "@sherlock-js-client/sherlock";
 import {
   ChartReleasesApi,
-  PagerdutyAlertSummary,
+  PagerdutyIntegrationsApi,
 } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -48,14 +45,14 @@ export const meta: MetaFunction = ({ params }) => [
   },
 ];
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesSelectorGet(
+    .apiChartReleasesV3SelectorGet(
       { selector: `${params.environmentName}/${params.chartName}` },
       handleIAP(request),
     )
     .catch(errorResponseThrower);
-};
+}
 
 export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
@@ -65,10 +62,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
     ...formDataToObject(formData, true),
   };
 
-  return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ProceduresChartReleasesTriggerIncidentSelectorPost(
+  const selector = formData.get("selector");
+  return new PagerdutyIntegrationsApi(SherlockConfiguration)
+    .apiPagerdutyIntegrationsProceduresV3TriggerIncidentSelectorPost(
       {
-        selector: `${params.environmentName}/${params.chartName}`,
+        selector: typeof selector === "string" ? selector : "",
         summary: summaryRequest,
       },
       handleIAP(request),
@@ -94,8 +92,14 @@ export default function Route() {
           submitText="Click to Trigger Incident"
           {...ChartReleaseColors}
         >
+          <input
+            type="hidden"
+            name="selector"
+            value={chartRelease.pagerdutyIntegration}
+          />
           <IncidentSummaryFields
             initialSummary={errorInfo?.formState?.summary}
+            link={`https://broad.io/beehive/r/chart-release/${chartRelease.name}`}
           />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>

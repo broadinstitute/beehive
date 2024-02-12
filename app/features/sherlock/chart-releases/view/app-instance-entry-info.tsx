@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import { InlinePopover } from "~/components/interactivity/inline-popover";
 import { ArgoLinkChip } from "~/features/sherlock/chart-releases/chart-release-link-chip";
 import { CiRunResourceStatusWidget } from "../../ci/view/ci-run-resource-status-button";
@@ -7,7 +7,7 @@ import { EnvironmentColors } from "../../environments/environment-colors";
 import { AppInstancePopoverContents } from "./app-instance-popover-contents";
 
 export const AppInstanceEntryInfo: React.FunctionComponent<{
-  chartRelease: SerializeFrom<V2controllersChartRelease>;
+  chartRelease: SerializeFrom<SherlockChartReleaseV3>;
 }> = ({ chartRelease }) => (
   <div className="flex flex-col tablet:flex-row gap-4">
     <div className="flex tablet:w-80 shrink-0 flex-col gap-2 items-start">

@@ -1,9 +1,9 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 
 export function matchEnvironment(
-  environment: SerializeFrom<V2controllersEnvironment>,
-  matchText: string
+  environment: SerializeFrom<SherlockEnvironmentV3>,
+  matchText: string,
 ): boolean {
   return (
     environment.lifecycle?.includes(matchText) ||

@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { TextAreaField } from "~/components/interactivity/text-area-field";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";

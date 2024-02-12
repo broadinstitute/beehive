@@ -1,14 +1,12 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { EnvironmentColors } from "../environment-colors";
 
 export const EnvironmentAdvancedCreatableFields: React.FunctionComponent<{
-  environment?:
-    | V2controllersEnvironment
-    | SerializeFrom<V2controllersEnvironment>;
+  environment?: SherlockEnvironmentV3 | SerializeFrom<SherlockEnvironmentV3>;
   lifecycle: string;
 }> = ({ environment, lifecycle }) => {
   const [autoPopulateChartReleases, setAutoPopulateChartReleases] = useState(

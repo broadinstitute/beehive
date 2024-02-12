@@ -1,14 +1,14 @@
-import {
+import type {
   LoaderFunctionArgs,
   MetaFunction,
   SerializeFrom,
-  json,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   Link,
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useNavigate,
   useOutletContext,
@@ -32,7 +32,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { transitionView } from "~/helpers/transition-view";
-import { loader as parentLoader } from "~/routes/_layout.apps";
+import type { loader as parentLoader } from "~/routes/_layout.apps";
 import { AppInstanceEntry } from "../features/sherlock/chart-releases/view/app-instance-entry";
 import { AppInstanceEntryInfo } from "../features/sherlock/chart-releases/view/app-instance-entry-info";
 export const handle = {
@@ -51,25 +51,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json(
     await promiseHash({
       inDev: chartReleasesApi
-        .apiV2ChartReleasesSelectorGet(
+        .apiChartReleasesV3SelectorGet(
           { selector: `dev/${params.chartName}` },
           forwardedIAP,
         )
         .catch(() => null),
-      inAlpha: chartReleasesApi
-        .apiV2ChartReleasesSelectorGet(
-          { selector: `alpha/${params.chartName}` },
-          forwardedIAP,
-        )
-        .catch(() => null),
       inStaging: chartReleasesApi
-        .apiV2ChartReleasesSelectorGet(
+        .apiChartReleasesV3SelectorGet(
           { selector: `staging/${params.chartName}` },
           forwardedIAP,
         )
         .catch(() => null),
       inProd: chartReleasesApi
-        .apiV2ChartReleasesSelectorGet(
+        .apiChartReleasesV3SelectorGet(
           { selector: `prod/${params.chartName}` },
           forwardedIAP,
         )
@@ -81,7 +75,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const { inDev, inAlpha, inStaging, inProd } = useLoaderData<typeof loader>();
+  const { inDev, inStaging, inProd } = useLoaderData<typeof loader>();
 
   const { environments } =
     useOutletContext<SerializeFrom<typeof parentLoader>>();
@@ -93,8 +87,6 @@ export default function Route() {
   environments.forEach((environment) => {
     if (inDev && environment.name === "dev")
       inDev.environmentInfo = environment;
-    if (inAlpha && environment.name === "alpha")
-      inAlpha.environmentInfo = environment;
     if (inStaging && environment.name === "staging")
       inStaging.environmentInfo = environment;
     if (inProd && environment.name === "prod")
@@ -102,19 +94,13 @@ export default function Route() {
   });
 
   const chartInfo =
-    inDev?.chartInfo ||
-    inAlpha?.chartInfo ||
-    inStaging?.chartInfo ||
-    inProd?.chartInfo ||
-    null;
+    inDev?.chartInfo || inStaging?.chartInfo || inProd?.chartInfo || null;
 
   const promotionFromDevPossible =
     inDev &&
-    (inAlpha || inStaging) &&
-    (inDev.appVersionExact !== inAlpha?.appVersionExact ||
-      inDev.chartVersionExact !== inAlpha?.chartVersionExact ||
-      inDev.appVersionExact !== inStaging?.appVersionExact ||
-      inDev.chartVersionExact !== inAlpha?.chartVersionExact);
+    inStaging &&
+    (inDev.appVersionExact !== inStaging?.appVersionExact ||
+      inDev.chartVersionExact !== inStaging?.chartVersionExact);
   const promotionFromStagingPossible =
     inStaging &&
     inProd &&
@@ -195,7 +181,7 @@ export default function Route() {
                 <AppInstanceEntryInfo chartRelease={inDev} />
               </AppInstanceEntry>
             )}
-            {(inAlpha || inStaging) && (
+            {inStaging && (
               <AppInstanceEntry
                 promoteButton={
                   promotionFromStagingPossible && (
@@ -214,10 +200,6 @@ export default function Route() {
                   )
                 }
               >
-                {inAlpha && <AppInstanceEntryInfo chartRelease={inAlpha} />}
-                {inAlpha && inStaging && (
-                  <div className="grow pt-2 mb-2 mx-1 border-b border-color-divider-line" />
-                )}
                 {inStaging && <AppInstanceEntryInfo chartRelease={inStaging} />}
               </AppInstanceEntry>
             )}
@@ -228,7 +210,7 @@ export default function Route() {
               </AppInstanceEntry>
             )}
 
-            {!inDev && !(inAlpha || inStaging) && !inProd && (
+            {!inDev && !inStaging && !inProd && (
               <div className="w-full text-center">
                 This service isn't in any environments this abbreviated
                 deployment view is configured for. View instances of it{" "}
@@ -246,9 +228,7 @@ export default function Route() {
           </div>
         </div>
       </InsetPanel>
-      <Outlet
-        context={{ inDev, inAlpha, inStaging, inProd, forceShowRecentVersions }}
-      />
+      <Outlet context={{ forceShowRecentVersions }} />
     </>
   );
 }

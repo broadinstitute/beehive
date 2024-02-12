@@ -1,9 +1,9 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
-import {
-  ChartReleasesApi,
-  V2controllersChartRelease,
-} from "@sherlock-js-client/sherlock";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
+import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import { ChartReleaseEditPanel } from "~/features/sherlock/chart-releases/edit/chart-release-edit-panel";
@@ -35,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const chartReleaseRequest: V2controllersChartRelease = {
+  const chartReleaseRequest: SherlockChartReleaseV3 = {
     ...formDataToObject(formData, false),
     port: ((port) =>
       typeof port === "string" && port !== "" ? parseInt(port) : undefined)(
@@ -44,7 +44,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   };
 
   return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesSelectorPatch(
+    .apiChartReleasesV3SelectorPatch(
       {
         selector: params.chartReleaseName || "",
         chartRelease: chartReleaseRequest,
