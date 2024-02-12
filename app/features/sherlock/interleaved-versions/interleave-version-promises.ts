@@ -82,33 +82,29 @@ export async function interleaveChangelogPromises(
     appVersionsPromise.catch(() => null),
     chartVersionsPromise.catch(() => null),
   ]);
+  const appVersionResponse = await appVersionsResponse
+    ?.value()
+    .catch(() => ({ changelog: [], complete: false }));
+  const chartVersionResponse = await chartVersionsResponse
+    ?.value()
+    .catch(() => ({ changelog: [], complete: false }));
 
   const complete =
     (appVersionsResponse?.raw.status == 200 &&
       chartVersionsResponse?.raw.status == 200 &&
-      (await appVersionsResponse?.value())?.complete &&
-      (await chartVersionsResponse?.value())?.complete) ||
+      appVersionResponse?.complete &&
+      chartVersionResponse?.complete) ||
     false;
 
   let versions = [
-    ...((await appVersionsResponse
-      ?.value()
-      .catch(() => ({ changelog: [], complete: false }))
-      .then((response) =>
-        response.changelog?.map((appVersion) => ({
-          type: "app" as const,
-          version: appVersion,
-        })),
-      )) ?? []),
-    ...((await chartVersionsResponse
-      ?.value()
-      .catch(() => ({ changelog: [], complete: false }))
-      .then((response) =>
-        response.changelog?.map((chartVersion) => ({
-          type: "chart" as const,
-          version: chartVersion,
-        })),
-      )) ?? []),
+    ...(appVersionResponse?.changelog?.map((appVersion) => ({
+      type: "app" as const,
+      version: appVersion,
+    })) ?? []),
+    ...(chartVersionResponse?.changelog?.map((chartVersion) => ({
+      type: "chart" as const,
+      version: chartVersion,
+    })) ?? []),
   ].sort((a, b) => +(b.version.updatedAt ?? 0) - +(a.version.updatedAt ?? 0));
 
   for (const extraProcess of extraProcesses) {

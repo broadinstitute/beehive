@@ -23,7 +23,7 @@ export async function runGha(
   if (!realPayload.workflow_id) {
     throw new Error("no workfload ID provided");
   }
-  console.log(`workflow dispath: ${JSON.stringify(payload)}`);
+  console.log(`workflow dispatch: ${JSON.stringify(payload)}`);
   const notification = await new Octokit({
     auth: session.get(sessionFields.githubAccessToken),
   }).actions
