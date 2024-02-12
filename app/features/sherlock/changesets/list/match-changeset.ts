@@ -1,9 +1,9 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChangeset } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChangesetV3 } from "@sherlock-js-client/sherlock";
 
 export function matchChangeset(
-  changeset: SerializeFrom<V2controllersChangeset>,
-  matchText: string
+  changeset: SerializeFrom<SherlockChangesetV3>,
+  matchText: string,
 ): boolean {
   return (
     changeset.chartReleaseInfo?.appVersionExact?.includes(matchText) ||

@@ -1,5 +1,7 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
 import { ChartReleasesApi } from "@sherlock-js-client/sherlock";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
@@ -33,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
   return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesSelectorDelete(
+    .apiChartReleasesV3SelectorDelete(
       {
         selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
       },

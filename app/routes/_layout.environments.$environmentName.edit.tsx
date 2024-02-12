@@ -6,7 +6,7 @@ import type {
 import { redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
-import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import {
   ClustersApi,
   EnvironmentsApi,
@@ -66,7 +66,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const environmentRequest: V2controllersEnvironment = {
+  const environmentRequest: SherlockEnvironmentV3 = {
     ...formDataToObject(formData, false),
     requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
@@ -74,7 +74,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   };
 
   return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsSelectorPatch(
+    .apiEnvironmentsV3SelectorPatch(
       {
         selector: params.environmentName || "",
         environment: environmentRequest,

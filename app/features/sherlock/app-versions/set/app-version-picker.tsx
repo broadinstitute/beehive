@@ -1,13 +1,13 @@
-import { SerializeFrom } from "@remix-run/node";
-import {
+import type { SerializeFrom } from "@remix-run/node";
+import type {
   SherlockAppVersionV3,
-  V2controllersChartRelease,
+  SherlockChartReleaseV3,
 } from "@sherlock-js-client/sherlock";
 import React, { useMemo, useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
-import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectOtherChartRelease } from "../../chart-releases/set/sidebar-select-other-chart-release";
 import { SidebarSelectAppVersion } from "./sidebar-select-app-version";
 import { SidebarSelectAppVersionBranch } from "./sidebar-select-app-version-branch";
@@ -15,16 +15,14 @@ import { SidebarSelectAppVersionBranch } from "./sidebar-select-app-version-bran
 export const AppVersionPicker: React.FunctionComponent<
   {
     appVersions: SerializeFrom<SherlockAppVersionV3[]>;
-    chartReleases: SerializeFrom<V2controllersChartRelease[]>;
+    chartReleases: SerializeFrom<SherlockChartReleaseV3[]>;
     isTargetingChangeset: boolean;
-    showFirecloudDevelopRef?: boolean;
 
     initialAppVersionResolver: string;
     initialAppVersionExact: string;
     initialAppVersionCommit: string;
     initialAppVersionBranch: string;
     initialAppVersionFollowChartRelease: string;
-    initialFirecloudDevelopRef: string;
   } & SetsSidebarProps
 > = ({
   setSidebarFilterText,
@@ -32,13 +30,11 @@ export const AppVersionPicker: React.FunctionComponent<
   appVersions,
   chartReleases,
   isTargetingChangeset,
-  showFirecloudDevelopRef,
   initialAppVersionResolver,
   initialAppVersionExact,
   initialAppVersionFollowChartRelease,
   initialAppVersionCommit,
   initialAppVersionBranch,
-  initialFirecloudDevelopRef,
 }) => {
   const [appVersionResolver, setAppVersionResolver] = useState(
     initialAppVersionResolver,
@@ -286,35 +282,6 @@ export const AppVersionPicker: React.FunctionComponent<
               this chart instance. This option is most common for third party
               charts or charts we have that don't deploy an app.
             </p>
-          )}
-          {showFirecloudDevelopRef && (
-            <label>
-              <h2 className="font-light text-2xl text-color-header-text">
-                Firecloud Develop Ref
-              </h2>
-              <p>
-                This is the Git reference in{" "}
-                <a
-                  href="https://github.com/broadinstitute/firecloud-develop"
-                  target="_blank"
-                  className="underline decoration-color-link-underline"
-                >
-                  firecloud-develop
-                </a>{" "}
-                to use for configuration values. This chart is marked as using
-                legacy configuration, so this field is available and required.
-              </p>
-              <TextField
-                name={
-                  isTargetingChangeset
-                    ? "toFirecloudDevelopRef"
-                    : "firecloudDevelopRef"
-                }
-                defaultValue={initialFirecloudDevelopRef}
-                required
-                placeholder="(required)"
-              />
-            </label>
           )}
         </div>
       </div>

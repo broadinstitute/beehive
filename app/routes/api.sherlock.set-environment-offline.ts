@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { json } from "react-router";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
@@ -14,13 +14,13 @@ import { commitSession } from "~/session.server";
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getValidSession(request);
   const formData = await request.formData();
-  const environmentRequest: V2controllersEnvironment = {
+  const environmentRequest: SherlockEnvironmentV3 = {
     offline: formData.get("offline") === "true",
   };
 
   const environmentName = formData.get("environment");
   return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsSelectorPatch(
+    .apiEnvironmentsV3SelectorPatch(
       {
         selector: typeof environmentName === "string" ? environmentName : "",
         environment: environmentRequest,

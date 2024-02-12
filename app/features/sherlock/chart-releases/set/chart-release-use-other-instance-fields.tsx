@@ -1,13 +1,13 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import React from "react";
 import { TextField } from "~/components/interactivity/text-field";
-import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectOtherChartRelease } from "./sidebar-select-other-chart-release";
 
 export const ChartReleaseUseOtherInstanceFields: React.FunctionComponent<
   {
-    chartReleases: SerializeFrom<V2controllersChartRelease[]>;
+    chartReleases: SerializeFrom<SherlockChartReleaseV3[]>;
     chartName: string;
     preconfigured?: boolean;
     useExactVersionsFromOtherChartRelease: string;

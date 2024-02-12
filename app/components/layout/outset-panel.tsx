@@ -1,5 +1,5 @@
 import { panelSizeToOuterClassName } from "~/helpers/panel-size";
-import { InsetPanelProps } from "./inset-panel";
+import type { InsetPanelProps } from "./inset-panel";
 
 export interface OutsetPanelProps extends InsetPanelProps {
   borderClassName?: string;

@@ -6,7 +6,7 @@ import type {
 import { json, redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
-import type { V2controllersChangesetPlanRequestEnvironmentEntry } from "@sherlock-js-client/sherlock";
+import type { SherlockChangesetV3PlanRequestEnvironmentEntry } from "@sherlock-js-client/sherlock";
 import {
   ChangesetsApi,
   ChartReleasesApi,
@@ -57,13 +57,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const preconfiguredOtherEnvironment = url.searchParams.get("from");
   return Promise.all([
     new EnvironmentsApi(SherlockConfiguration)
-      .apiV2EnvironmentsGet({}, handleIAP(request))
+      .apiEnvironmentsV3Get({}, handleIAP(request))
       .then(
         (environments) => environments.sort(environmentSorter),
         errorResponseThrower,
       ),
     new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesGet(
+      .apiChartReleasesV3Get(
         { environment: params.environmentName },
         handleIAP(request),
       )
@@ -85,7 +85,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const followVersionsFromOtherEnvironment = formData.get(
     "followVersionsFromOtherEnvironment",
   );
-  const changesetRequest: V2controllersChangesetPlanRequestEnvironmentEntry = {
+  const changesetRequest: SherlockChangesetV3PlanRequestEnvironmentEntry = {
     environment: params.environmentName,
     includeCharts: formData
       .getAll("includeChart")
@@ -106,11 +106,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   };
 
   return new ChangesetsApi(SherlockConfiguration)
-    .apiV2ProceduresChangesetsPlanPost(
+    .apiChangesetsProceduresV3PlanPost(
       {
         changesetPlanRequest: {
           environments: [changesetRequest],
         },
+        verboseOutput: false,
       },
       handleIAP(request),
     )

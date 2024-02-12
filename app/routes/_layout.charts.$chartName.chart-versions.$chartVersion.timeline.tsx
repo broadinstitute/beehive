@@ -31,7 +31,7 @@ export const meta: MetaFunction = ({ params }) => [
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const changesets = await new ChangesetsApi(SherlockConfiguration)
-    .apiV2ProceduresChangesetsQueryAppliedForVersionVersionTypeChartVersionGet(
+    .apiChangesetsProceduresV3VersionHistoryVersionTypeChartVersionGet(
       {
         chart: params.chartName ?? "",
         version: params.chartVersion ?? "",
@@ -46,7 +46,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       // We need two levels deep, not one like Sherlock gives us by default,
       // so we fill the chartReleaseInfo ourselves with a followup request.
       changeset.chartReleaseInfo = await chartReleasesApi
-        .apiV2ChartReleasesSelectorGet(
+        .apiChartReleasesV3SelectorGet(
           {
             selector: changeset.chartRelease || "",
           },

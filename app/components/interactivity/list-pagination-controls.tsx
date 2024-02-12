@@ -1,4 +1,5 @@
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { InactiveNavButton } from "./inactive-nav-button";
 
 export const ListPaginationControls: React.FunctionComponent<{
@@ -20,7 +21,7 @@ export const ListPaginationControls: React.FunctionComponent<{
 }) => (
   <div
     className={`${panelSizeToInnerClassName(
-      size
+      size,
     )} flex flex-row gap-4 flex-wrap laptop:flex-nowrap`}
   >
     {offset > 0 && (

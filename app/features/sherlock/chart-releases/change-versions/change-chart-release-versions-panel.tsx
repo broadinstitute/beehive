@@ -1,9 +1,9 @@
-import { SerializeFrom } from "@remix-run/node";
-import {
+import type { SerializeFrom } from "@remix-run/node";
+import type {
   SherlockAppVersionV3,
+  SherlockChangesetV3PlanRequestChartReleaseEntry,
+  SherlockChartReleaseV3,
   SherlockChartVersionV3,
-  V2controllersChangesetPlanRequestChartReleaseEntry,
-  V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
@@ -11,10 +11,8 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
-import {
-  ReturnedErrorInfo,
-  isReturnedFormErrorInfo,
-} from "~/errors/helpers/error-response-handlers";
+import type { ReturnedErrorInfo } from "~/errors/helpers/error-response-handlers";
+import { isReturnedFormErrorInfo } from "~/errors/helpers/error-response-handlers";
 import { ChartReleaseChangeVersionHelpCopy } from "~/features/sherlock/chart-releases/change-versions/chart-release-change-version-help-copy";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { useSidebar } from "~/hooks/use-sidebar";
@@ -23,9 +21,9 @@ import { ChartVersionPicker } from "../../chart-versions/set/chart-version-picke
 import { ChartReleaseUseOtherInstanceFields } from "../set/chart-release-use-other-instance-fields";
 
 export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
-  chartRelease: SerializeFrom<V2controllersChartRelease>;
+  chartRelease: SerializeFrom<SherlockChartReleaseV3>;
 
-  otherChartReleases: SerializeFrom<V2controllersChartRelease[]>;
+  otherChartReleases: SerializeFrom<SherlockChartReleaseV3[]>;
   appVersions: SerializeFrom<SherlockAppVersionV3[]>;
   chartVersions: SerializeFrom<SherlockChartVersionV3[]>;
   preconfiguredAppVersionExact?: string | null;
@@ -34,10 +32,10 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
 
   actionData?:
     | SerializeFrom<{
-        formState: V2controllersChangesetPlanRequestChartReleaseEntry;
+        formState: SherlockChangesetV3PlanRequestChartReleaseEntry;
       }>
     | SerializeFrom<
-        ReturnedErrorInfo<V2controllersChangesetPlanRequestChartReleaseEntry>
+        ReturnedErrorInfo<SherlockChangesetV3PlanRequestChartReleaseEntry>
       >;
 }> = ({
   chartRelease,
@@ -127,9 +125,6 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
                 appVersions={appVersions}
                 chartReleases={otherChartReleases}
                 isTargetingChangeset={true}
-                showFirecloudDevelopRef={
-                  chartRelease.chartInfo?.legacyConfigsEnabled
-                }
                 initialAppVersionResolver={
                   formState?.toAppVersionResolver ||
                   (preconfiguredAppVersionExact && "exact") ||
@@ -156,12 +151,6 @@ export const ChangeChartReleaseVersionsPanel: React.FunctionComponent<{
                   formState?.toAppVersionBranch ||
                   chartRelease.appVersionBranch ||
                   ""
-                }
-                initialFirecloudDevelopRef={
-                  formState?.toFirecloudDevelopRef ||
-                  chartRelease.firecloudDevelopRef ||
-                  chartRelease.environmentInfo?.defaultFirecloudDevelopRef ||
-                  "dev"
                 }
               />
               <ChartVersionPicker

@@ -58,13 +58,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       ),
     ...(await promiseHash({
       environment: new EnvironmentsApi(SherlockConfiguration)
-        .apiV2EnvironmentsSelectorGet(
+        .apiEnvironmentsV3SelectorGet(
           { selector: params.environmentName || "" },
           handleIAP(request),
         )
         .catch(errorResponseThrower),
       terrauiInstance: new ChartReleasesApi(SherlockConfiguration)
-        .apiV2ChartReleasesSelectorGet(
+        .apiChartReleasesV3SelectorGet(
           { selector: `${params.environmentName}/terraui` },
           handleIAP(request),
         )

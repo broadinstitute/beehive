@@ -1,12 +1,12 @@
-import {
+import type {
   LoaderFunctionArgs,
   MetaFunction,
   SerializeFrom,
 } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  Params,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
@@ -51,7 +51,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // them down through via context means we won't be loading them repeatedly on
     // the next page if the user is browsing charts to deploy by clicking on them.
     new EnvironmentsApi(SherlockConfiguration)
-      .apiV2EnvironmentsGet({}, handleIAP(request))
+      .apiEnvironmentsV3Get({}, handleIAP(request))
       .then(
         (environments) => environments.sort(environmentSorter),
         errorResponseThrower,

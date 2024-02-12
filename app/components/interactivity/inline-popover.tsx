@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Popover, PopoverProps } from "./popover";
+import type { PopoverProps } from "./popover";
+import { Popover } from "./popover";
 
 export const InlinePopover: React.FunctionComponent<
   {

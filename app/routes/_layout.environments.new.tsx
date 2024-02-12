@@ -5,7 +5,7 @@ import type {
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
-import type { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import {
   ClustersApi,
   EnvironmentsApi,
@@ -82,7 +82,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const offlineScheduleBeginTime = formData.get("offlineScheduleBeginTime");
   const offlineScheduleEndTime = formData.get("offlineScheduleEndTime");
   const offlineScheduleEndWeekends = formData.get("offlineScheduleEndWeekends");
-  const environmentRequest: V2controllersEnvironment = {
+  const environmentRequest: SherlockEnvironmentV3 = {
     ...formDataToObject(formData, true),
     autoPopulateChartReleases:
       formData.get("autoPopulateChartReleases") === "true",
@@ -109,7 +109,7 @@ export async function action({ request }: ActionFunctionArgs) {
   };
 
   return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsPost(
+    .apiEnvironmentsV3Post(
       { environment: environmentRequest },
       handleIAP(request),
     )
@@ -237,8 +237,8 @@ export default function Route() {
             {lifecycle === "dynamic"
               ? "BEE is deployed"
               : lifecycle === "template"
-              ? "template works"
-              : "environment behaves"}
+                ? "template works"
+                : "environment behaves"}
             .{" "}
             {lifecycle !== "static" &&
               "These can usually be left alone unless you know the default behavior won't work for you."}

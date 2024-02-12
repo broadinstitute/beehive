@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { verifySessionPagerdutyToken } from "~/components/logic/pagerduty-token";
 import {
@@ -38,9 +39,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   await Promise.all(
     config.integration_keys.map((k) =>
       sherlock
-        .apiV2PagerdutyIntegrationsSelectorPut(
+        .apiPagerdutyIntegrationsV3Post(
           {
-            selector: `pd-id/${k.id}`,
             pagerdutyIntegration: {
               pagerdutyID: k.id,
               name: k.name,

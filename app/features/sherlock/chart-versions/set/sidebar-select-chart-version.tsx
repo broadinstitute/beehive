@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockChartVersionV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockChartVersionV3 } from "@sherlock-js-client/sherlock";
 import { SidebarFilterControlledList } from "~/components/panel-structures/sidebar-filter-controlled-list";
 import { ChartVersionColors } from "~/features/sherlock/chart-versions/chart-version-colors";
 import { ListChartVersionButtonText } from "../list/list-chart-version-button-text";

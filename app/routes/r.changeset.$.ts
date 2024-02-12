@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { ChangesetsApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
@@ -8,8 +9,8 @@ import {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return new ChangesetsApi(SherlockConfiguration)
-    .apiV2ChangesetsSelectorGet(
-      { selector: params["*"] || "" },
+    .apiChangesetsV3IdGet(
+      { id: parseInt(params["*"] || "0") },
       handleIAP(request),
     )
     .then(

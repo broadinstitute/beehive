@@ -1,5 +1,5 @@
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { panelSizeToOuterClassName } from "~/helpers/panel-size";
 import { isErrorResponseFromSherlock } from "../helpers/is-error-response-from-sherlock";
 import { BackButton, ReloadButton } from "./error-buttons";

@@ -1,5 +1,7 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetFiller } from "~/components/layout/outset-filler";
@@ -33,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
-    .apiV2PagerdutyIntegrationsSelectorDelete(
+    .apiPagerdutyIntegrationsV3SelectorDelete(
       { selector: `pd-id/${params.pagerdutyID}` },
       handleIAP(request),
     )

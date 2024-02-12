@@ -3,7 +3,7 @@ import { safeRedirectPath } from "~/helpers/validate";
 import { ActionButton } from "../interactivity/action-button";
 import { NavButton } from "../interactivity/nav-button";
 import { CsrfTokenInput } from "../logic/csrf-token";
-import { ActionBoxProps } from "./action-box";
+import type { ActionBoxProps } from "./action-box";
 
 export interface BigActionBoxProps extends ActionBoxProps {
   leadingContent?: React.ReactNode;

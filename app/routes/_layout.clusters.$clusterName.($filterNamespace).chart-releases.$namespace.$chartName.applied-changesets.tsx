@@ -1,5 +1,6 @@
-import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { NavLink, Params, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useLoaderData } from "@remix-run/react";
 import { ChangesetsApi } from "@sherlock-js-client/sherlock";
 import { useMemo } from "react";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -36,9 +37,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const limit = limitString ? parseInt(limitString) : 25;
   return Promise.all([
     new ChangesetsApi(SherlockConfiguration)
-      .apiV2ProceduresChangesetsQueryAppliedForChartReleaseSelectorGet(
+      .apiChangesetsProceduresV3ChartReleaseHistoryChartReleaseGet(
         {
-          selector: `${params.clusterName}/${params.namespace}/${params.chartName}`,
+          chartRelease: `${params.clusterName}/${params.namespace}/${params.chartName}`,
           offset: offset,
           limit: limit,
         },

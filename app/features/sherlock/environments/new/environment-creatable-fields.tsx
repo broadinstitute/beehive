@@ -1,14 +1,14 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
-import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { EnvironmentColors } from "../environment-colors";
 import { SidebarSelectEnvironment } from "../set/sidebar-select-environment";
 
 function templateEnvironmentListDecorator(
-  entry: SerializeFrom<V2controllersEnvironment>,
+  entry: SerializeFrom<SherlockEnvironmentV3>,
 ): string | undefined {
   if (entry.name === "swatomation") {
     return "Good Default!";
@@ -16,10 +16,8 @@ function templateEnvironmentListDecorator(
 }
 
 export interface EnvironmentCreatableFieldsProps {
-  environment?:
-    | V2controllersEnvironment
-    | SerializeFrom<V2controllersEnvironment>;
-  templateEnvironments: SerializeFrom<V2controllersEnvironment[]>;
+  environment?: SherlockEnvironmentV3 | SerializeFrom<SherlockEnvironmentV3>;
+  templateEnvironments: SerializeFrom<SherlockEnvironmentV3[]>;
   lifecycle: string;
   setLifecycle: (value: string) => void;
   templateEnvironment: string;

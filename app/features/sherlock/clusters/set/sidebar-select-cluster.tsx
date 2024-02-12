@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 import { SidebarFilterControlledList } from "~/components/panel-structures/sidebar-filter-controlled-list";
 import { ClusterColors } from "~/features/sherlock/clusters/cluster-colors";
 import { ListClusterButtonText } from "../list/list-cluster-button-text";

@@ -1,7 +1,5 @@
-import {
-  PagerdutyInstallLink,
-  PagerdutyInstallLinkProps,
-} from "~/components/logic/pagerduty-token";
+import type { PagerdutyInstallLinkProps } from "~/components/logic/pagerduty-token";
+import { PagerdutyInstallLink } from "~/components/logic/pagerduty-token";
 
 export interface LinkPagerdutyFieldsProps extends PagerdutyInstallLinkProps {
   currentIntegrationName?: string;

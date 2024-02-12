@@ -1,4 +1,4 @@
-import {
+import type {
   LoaderFunctionArgs,
   MetaFunction,
   SerializeFrom,
@@ -40,7 +40,7 @@ export const meta: MetaFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsGet({}, handleIAP(request))
+    .apiEnvironmentsV3Get({}, handleIAP(request))
     .then(
       (environments) => environments.sort(environmentSorter),
       errorResponseThrower,

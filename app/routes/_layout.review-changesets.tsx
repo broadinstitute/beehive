@@ -10,7 +10,7 @@ import {
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react";
-import { ChangesetsApi, ChartReleasesApi } from "@sherlock-js-client/sherlock";
+import { ChangesetsApi } from "@sherlock-js-client/sherlock";
 import { AlertCircle, CheckCircle } from "lucide-react";
 import { Suspense, useMemo, useState } from "react";
 import { BeehiveIcon } from "~/components/assets/beehive-icon";
@@ -61,31 +61,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const changesetIDs = url.searchParams.getAll("changeset");
   const changesetsApi = new ChangesetsApi(SherlockConfiguration);
-  const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
-  const changesets = (
-    await Promise.all(
-      changesetIDs.map(async (id) => {
-        const changeset = await changesetsApi
-          .apiV2ChangesetsSelectorGet({ selector: id }, handleIAP(request))
-          .catch(errorResponseThrower);
-        // We need two levels deep, not one like Sherlock gives us by default,
-        // so we fill the chartReleaseInfo ourselves with a followup request.
-        changeset.chartReleaseInfo = await chartReleasesApi
-          .apiV2ChartReleasesSelectorGet(
-            {
-              selector: changeset.chartRelease || "",
-            },
-            handleIAP(request),
-          )
-          .catch(errorResponseThrower);
-        return changeset;
-      }),
+  const changesets = await changesetsApi
+    .apiChangesetsV3Get(
+      {
+        id: changesetIDs.map((s) => parseInt(s, 10)),
+      },
+      handleIAP(request),
     )
-  ).sort((a, b) =>
-    a.chartReleaseInfo?.name && b.chartReleaseInfo?.name
-      ? a.chartReleaseInfo.name.localeCompare(b.chartReleaseInfo.name)
-      : 0,
-  );
+    .catch(errorResponseThrower);
 
   // If any of these changes affect prod and haven't been applied, check the release protection calendar
   let protectionEventsPromise: Promise<google.calendar_v3.Schema$Event[]> =
@@ -150,11 +133,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const formData = await request.formData();
   return new ChangesetsApi(SherlockConfiguration)
-    .apiV2ProceduresChangesetsApplyPost(
+    .apiChangesetsProceduresV3ApplyPost(
       {
         applyRequest: formData
           .getAll("changeset")
           .filter((value): value is string => typeof value === "string"),
+        verboseOutput: false,
       },
       handleIAP(request),
     )
@@ -215,10 +199,10 @@ export default function Route() {
   const returnColors = returnURL.includes("chart-releases/")
     ? ChartReleaseColors
     : returnURL.includes("clusters")
-    ? ClusterColors
-    : returnURL.includes("environments")
-    ? EnvironmentColors
-    : ChartReleaseColors;
+      ? ClusterColors
+      : returnURL.includes("environments")
+        ? EnvironmentColors
+        : ChartReleaseColors;
 
   const [filterText, setFilterText] = useState("");
   const [actionToRun, setActionToRun] = useState("sync");

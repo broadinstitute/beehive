@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
 
 export function matchAppVersion(
   appVersion: SerializeFrom<SherlockAppVersionV3>,

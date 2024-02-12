@@ -1,24 +1,22 @@
-import { SerializeFrom } from "@remix-run/node";
+import type { SerializeFrom } from "@remix-run/node";
 import { useSearchParams } from "@remix-run/react";
-import { V2controllersPagerdutyIntegration } from "@sherlock-js-client/sherlock";
+import type { SherlockPagerdutyIntegrationV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { SidebarFilterList } from "~/components/panel-structures/sidebar-filter-list";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
-import { SummarizedErrorInfo } from "~/errors/helpers/summarize-response-error";
-import { ColorProps } from "~/features/color-class-names";
+import type { SummarizedErrorInfo } from "~/errors/helpers/summarize-response-error";
+import type { ColorProps } from "~/features/color-class-names";
 import { PagerdutyIntegrationColors } from "~/features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
 import { matchPagerdutyIntegration } from "../list/match-pagerduty-integration";
-import {
-  LinkPagerdutyFields,
-  LinkPagerdutyFieldsProps,
-} from "./link-pagerduty-fields";
+import type { LinkPagerdutyFieldsProps } from "./link-pagerduty-fields";
+import { LinkPagerdutyFields } from "./link-pagerduty-fields";
 
 export const LinkPagerdutyPanel: React.FunctionComponent<
   {
-    pagerdutyIntegrations: SerializeFrom<V2controllersPagerdutyIntegration[]>;
+    pagerdutyIntegrations: SerializeFrom<SherlockPagerdutyIntegrationV3[]>;
     existingPagerdutyId?: string;
     errorInfo?: SerializeFrom<{ errorSummary: SummarizedErrorInfo }>;
   } & Pick<LinkPagerdutyFieldsProps, "pdAppID" | "dest"> &
@@ -39,12 +37,12 @@ export const LinkPagerdutyPanel: React.FunctionComponent<
     pagerdutyIntegrations.map((pagerdutyIntegration) => [
       pagerdutyIntegration.pagerdutyID,
       pagerdutyIntegration,
-    ])
+    ]),
   );
 
   const [filterText, setFilterText] = useState("");
   const [selectedPagerdutyID, setSelectedPagerdutyID] = useState(
-    searchParams.get("pd-id") || existingPagerdutyId || ""
+    searchParams.get("pd-id") || existingPagerdutyId || "",
   );
 
   return (

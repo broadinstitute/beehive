@@ -59,7 +59,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         () => undefined,
       ),
     chartRelease: await new ChartReleasesApi(SherlockConfiguration)
-      .apiV2ChartReleasesSelectorGet(
+      .apiChartReleasesV3SelectorGet(
         {
           selector: params.chartReleaseName || "",
         },

@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { V2controllersChartRelease } from "@sherlock-js-client/sherlock";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ActionButton } from "~/components/interactivity/action-button";
 import { SidebarFilterList } from "~/components/panel-structures/sidebar-filter-list";
@@ -9,7 +9,7 @@ import { matchChartRelease } from "../list/match-chart-release";
 
 export const SidebarSelectMultipleChartReleases: React.FunctionComponent<{
   title?: string;
-  chartReleases: SerializeFrom<V2controllersChartRelease[]>;
+  chartReleases: SerializeFrom<SherlockChartReleaseV3[]>;
   chartMap: Map<string, boolean>;
   setChartMap: (value: React.SetStateAction<Map<string, boolean>>) => void;
   includeAppVersions?: boolean;

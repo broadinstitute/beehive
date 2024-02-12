@@ -1,10 +1,8 @@
-import { TypedResponse } from "@remix-run/node";
+import type { TypedResponse } from "@remix-run/node";
 import { ResponseError } from "@sherlock-js-client/sherlock";
 import { json } from "react-router";
-import {
-  SummarizedErrorInfo,
-  summarizeResponseError,
-} from "./summarize-response-error";
+import type { SummarizedErrorInfo } from "./summarize-response-error";
+import { summarizeResponseError } from "./summarize-response-error";
 
 export function errorResponseThrower(reason: any): never {
   if (reason instanceof ResponseError) {

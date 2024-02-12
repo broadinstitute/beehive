@@ -1,19 +1,15 @@
-import {
+import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
-  redirect,
 } from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import {
   EnvironmentsApi,
   PagerdutyIntegrationsApi,
-  V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
@@ -46,7 +42,7 @@ export const meta: MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderFunctionArgs) {
   return Promise.all([
     new PagerdutyIntegrationsApi(SherlockConfiguration)
-      .apiV2PagerdutyIntegrationsGet({}, handleIAP(request))
+      .apiPagerdutyIntegrationsV3Get({}, handleIAP(request))
       .catch(errorResponseThrower),
     getPdAppIdFromEnv(),
   ]);
@@ -56,12 +52,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const environmentRequest: V2controllersEnvironment = {
+  const environmentRequest: SherlockEnvironmentV3 = {
     ...formDataToObject(formData, false),
   };
 
   return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsSelectorPatch(
+    .apiEnvironmentsV3SelectorPatch(
       {
         selector: params.environmentName || "",
         environment: environmentRequest,

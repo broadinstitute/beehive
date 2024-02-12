@@ -1,8 +1,8 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type {
   SherlockClusterV3,
+  SherlockEnvironmentV3,
   SherlockUserV3,
-  V2controllersEnvironment,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -15,9 +15,7 @@ import { SidebarSelectUser } from "../../users/set/sidebar-select-user";
 import { EnvironmentColors } from "../environment-colors";
 
 export interface EnvironmentEditableFieldsProps {
-  environment?:
-    | V2controllersEnvironment
-    | SerializeFrom<V2controllersEnvironment>;
+  environment?: SherlockEnvironmentV3 | SerializeFrom<SherlockEnvironmentV3>;
   clusters: SerializeFrom<SherlockClusterV3[]>;
   users: SerializeFrom<SherlockUserV3[]>;
   // When we're creating an environment, we don't want to try to replicate Sherlock's
@@ -206,33 +204,6 @@ export const EnvironmentEditableFields: React.FunctionComponent<
               />
             ));
           }}
-        />
-      </label>
-      <label>
-        <h2 className="font-light text-2xl text-color-header-text">
-          Default Firecloud Develop Ref
-        </h2>
-        <p className="mb-2">
-          Legacy configuration from firecloud-develop doesn't work quite like
-          our newer systems. All the legacy configuration in an environment
-          points at the same git ref of firecloud-develop, and during monolith
-          release the contents of those refs change to update the configuration.
-        </p>
-        <p className="mb-2">
-          To make this work in Beehive, when you copy versions from one chart
-          instance or environment to another, the firecloud-develop ref won't
-          actually change. It'll only change if you change it explicitly.
-        </p>
-        <p>
-          This field will set the initial default value for chart instances as
-          they get created. This means that a "prod-like BEE" could specify{" "}
-          <span className="font-mono">prod</span> here, and any legacy
-          configuration inside it would follow that branch by default.
-        </p>
-        <TextField
-          name="defaultFirecloudDevelopRef"
-          placeholder={templateInUse ? "(defaults to template's value)" : "dev"}
-          defaultValue={environment?.defaultFirecloudDevelopRef}
         />
       </label>
       <label>

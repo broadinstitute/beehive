@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import {
@@ -8,7 +9,7 @@ import {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return new PagerdutyIntegrationsApi(SherlockConfiguration)
-    .apiV2PagerdutyIntegrationsSelectorGet(
+    .apiPagerdutyIntegrationsV3SelectorGet(
       { selector: params["*"] || "" },
       handleIAP(request),
     )

@@ -1,4 +1,4 @@
-import { ColorProps } from "../../color-class-names";
+import type { ColorProps } from "../../color-class-names";
 
 export const ClusterColors: ColorProps = {
   borderClassName: "border-color-cluster-border",

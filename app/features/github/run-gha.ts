@@ -1,9 +1,8 @@
-import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
-import {
-  buildNotifications,
-  Notification,
-} from "~/components/logic/notification";
-import { getValidSession } from "~/helpers/get-valid-session.server";
+import type { RestEndpointMethodTypes } from "@octokit/rest";
+import { Octokit } from "@octokit/rest";
+import type { Notification } from "~/components/logic/notification";
+import { buildNotifications } from "~/components/logic/notification";
+import type { getValidSession } from "~/helpers/get-valid-session.server";
 import { sessionFields } from "~/session.server";
 
 export type GhaPayload =
@@ -12,7 +11,7 @@ export type GhaPayload =
 export async function runGha(
   session: Awaited<ReturnType<typeof getValidSession>>,
   payload: Partial<GhaPayload>,
-  actionDescription: string
+  actionDescription: string,
 ) {
   const realPayload: GhaPayload = {
     ...payload,
@@ -24,7 +23,7 @@ export async function runGha(
   if (!realPayload.workflow_id) {
     throw new Error("no workfload ID provided");
   }
-  console.log(`workflow dispath: ${JSON.stringify(payload)}`);
+  console.log(`workflow dispatch: ${JSON.stringify(payload)}`);
   const notification = await new Octokit({
     auth: session.get(sessionFields.githubAccessToken),
   }).actions
@@ -43,13 +42,13 @@ export async function runGha(
       (rejected): Notification => ({
         type: "error",
         text: `There was a problem calling the GitHub Action to ${actionDescription}: ${JSON.stringify(
-          rejected
+          rejected,
         )}`,
         error: true,
-      })
+      }),
     );
   session.flash(
     sessionFields.flashNotifications,
-    buildNotifications(notification)
+    buildNotifications(notification),
   );
 }

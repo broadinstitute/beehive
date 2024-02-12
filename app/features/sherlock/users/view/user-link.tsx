@@ -1,15 +1,9 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type {
-  SherlockUserV3,
-  V2controllersUser,
-} from "@sherlock-js-client/sherlock";
+import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
 import { SelfUserContext } from "~/contexts";
 
 export const UserLink: React.FunctionComponent<{
-  user:
-    | SerializeFrom<SherlockUserV3 | V2controllersUser>
-    | SherlockUserV3
-    | V2controllersUser;
+  user: SerializeFrom<SherlockUserV3> | SherlockUserV3;
 }> = ({ user }) => (
   <SelfUserContext.Consumer>
     {(selfUser) => (

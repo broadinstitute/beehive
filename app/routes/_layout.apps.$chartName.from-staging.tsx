@@ -1,21 +1,17 @@
-import {
-  ActionFunctionArgs,
-  json,
-  LoaderFunctionArgs,
-  redirect,
-} from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
+import type { SherlockChangesetV3PlanRequestChartReleaseEntry } from "@sherlock-js-client/sherlock";
 import {
   AppVersionsApi,
   ChangesetsApi,
   ChartReleasesApi,
   ChartVersionsApi,
-  V2controllersChangesetPlanRequestChartReleaseEntry,
 } from "@sherlock-js-client/sherlock";
 import { AlertTriangle, Rocket } from "lucide-react";
 import { promiseHash } from "remix-utils/promise";
@@ -30,11 +26,11 @@ import {
   makeErrorResponseReturner,
 } from "~/errors/helpers/error-response-handlers";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
-import { interleaveVersionPromises } from "~/features/sherlock/interleaved-versions/interleave-version-promises";
+import { interleaveChangelogPromises } from "~/features/sherlock/interleaved-versions/interleave-version-promises";
 import { InterleavedVersionEntry } from "~/features/sherlock/interleaved-versions/interleaved-version-entry";
 import {
-  handleIAP,
   SherlockConfiguration,
+  handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -42,22 +38,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
   return promiseHash({
     inStaging: chartReleasesApi
-      .apiV2ChartReleasesSelectorGet(
+      .apiChartReleasesV3SelectorGet(
         { selector: `staging/${params.chartName}` },
         forwardedIAP,
       )
       .catch(() => null),
     inProd: chartReleasesApi
-      .apiV2ChartReleasesSelectorGet(
+      .apiChartReleasesV3SelectorGet(
         { selector: `prod/${params.chartName}` },
         forwardedIAP,
       )
       .catch(() => null),
   }).then((chartReleases) =>
-    interleaveVersionPromises(
+    interleaveChangelogPromises(
       new AppVersionsApi(
         SherlockConfiguration,
-      ).apiV2ProceduresAppVersionsChildrenPathToParentGetRaw(
+      ).apiAppVersionsProceduresV3ChangelogGetRaw(
         {
           parent: chartReleases.inProd?.appVersionReference ?? "",
           child: chartReleases.inStaging?.appVersionReference ?? "",
@@ -66,7 +62,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       ),
       new ChartVersionsApi(
         SherlockConfiguration,
-      ).apiV2ProceduresChartVersionsChildrenPathToParentGetRaw(
+      ).apiChartVersionsProceduresV3ChangelogGetRaw(
         {
           parent: chartReleases.inProd?.chartVersionReference ?? "",
           child: chartReleases.inStaging?.chartVersionReference ?? "",
@@ -83,7 +79,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   return new ChangesetsApi(SherlockConfiguration)
-    .apiV2ProceduresChangesetsPlanPost(
+    .apiChangesetsProceduresV3PlanPost(
       {
         changesetPlanRequest: {
           chartReleases: formData
@@ -92,12 +88,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
             .map(
               (
                 environmentName,
-              ): V2controllersChangesetPlanRequestChartReleaseEntry => ({
+              ): SherlockChangesetV3PlanRequestChartReleaseEntry => ({
                 chartRelease: `${environmentName}/${params.chartName}`,
                 useExactVersionsFromOtherChartRelease: `staging/${params.chartName}`,
               }),
             ),
         },
+        verboseOutput: false,
       },
       handleIAP(request),
     )
@@ -150,6 +147,7 @@ export default function Route() {
                   className="underline decoration-color-link-underline"
                   href="https://docs.google.com/document/d/1lkUkN2KOpHKWufaqw_RIE7EN3vN4G2xMnYBU83gi8VA/edit#heading=h.5tlvfawo6e7u"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   report versions to DevOps
                 </a>

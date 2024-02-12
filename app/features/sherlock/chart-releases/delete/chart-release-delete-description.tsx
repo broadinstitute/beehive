@@ -1,10 +1,8 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 
 export interface ChartReleaseDeleteDescriptionProps {
-  environment?:
-    | V2controllersEnvironment
-    | SerializeFrom<V2controllersEnvironment>;
+  environment?: SherlockEnvironmentV3 | SerializeFrom<SherlockEnvironmentV3>;
 }
 
 export const ChartReleaseDeleteDescription: React.FunctionComponent<

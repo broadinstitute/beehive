@@ -1,7 +1,7 @@
-import { ErrorsErrorResponse } from "@sherlock-js-client/sherlock";
+import type { ErrorsErrorResponse } from "@sherlock-js-client/sherlock";
 
 export function isErrorResponseFromSherlock(
-  data: any
+  data: any,
 ): data is ErrorsErrorResponse {
   return (
     data.hasOwnProperty("message") &&

@@ -1,5 +1,7 @@
-import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { NavLink, Params, useActionData } from "@remix-run/react";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
 import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { DeletionGuard } from "~/components/interactivity/deletion-guard";
 import { OutsetFiller } from "~/components/layout/outset-filler";
@@ -37,7 +39,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const environmentsApi = new EnvironmentsApi(SherlockConfiguration);
 
   return environmentsApi
-    .apiV2EnvironmentsSelectorGet(
+    .apiEnvironmentsV3SelectorGet(
       { selector: params.environmentName || "" },
       handleIAP(request),
     )
@@ -58,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         });
       } else {
         return await environmentsApi
-          .apiV2EnvironmentsSelectorDelete(
+          .apiEnvironmentsV3SelectorDelete(
             { selector: params.environmentName || "" },
             handleIAP(request),
           )

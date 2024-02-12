@@ -1,19 +1,15 @@
-import {
+import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
-  redirect,
 } from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { SherlockChartReleaseV3 } from "@sherlock-js-client/sherlock";
 import {
   ChartReleasesApi,
   PagerdutyIntegrationsApi,
-  V2controllersChartRelease,
 } from "@sherlock-js-client/sherlock";
 import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
@@ -50,7 +46,7 @@ export const meta: MetaFunction = ({ params }) => [
 export async function loader({ request }: LoaderFunctionArgs) {
   return Promise.all([
     new PagerdutyIntegrationsApi(SherlockConfiguration)
-      .apiV2PagerdutyIntegrationsGet({}, handleIAP(request))
+      .apiPagerdutyIntegrationsV3Get({}, handleIAP(request))
       .catch(errorResponseThrower),
     getPdAppIdFromEnv(),
   ]);
@@ -60,12 +56,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const chartReleaseRequest: V2controllersChartRelease = {
+  const chartReleaseRequest: SherlockChartReleaseV3 = {
     ...formDataToObject(formData, false),
   };
 
   return new ChartReleasesApi(SherlockConfiguration)
-    .apiV2ChartReleasesSelectorPatch(
+    .apiChartReleasesV3SelectorPatch(
       {
         selector: `${params.environmentName}/${params.chartName}`,
         chartRelease: chartReleaseRequest,

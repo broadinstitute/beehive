@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { NavButtonProps } from "./nav-button";
+import type { NavButtonProps } from "./nav-button";
 
 // Like NavButton but never shows as active. Useful to navigate between URL parameters, since those aren't taken into account to
 // determine what is active or not by Remix or React Router.

@@ -1,4 +1,4 @@
-import { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
+import type { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
 
 const clusterBaseOrder = ["terra", "bee-cluster", "tools", "ddp", "datarepo"];
 

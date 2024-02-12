@@ -10,7 +10,6 @@ export interface AppVersionSummaryProps {
   appVersionFollowChartRelease?: string;
   appVersionCommit?: string;
   appVersionBranch?: string;
-  firecloudDevelopRef?: string;
   renderAppVersionLink: boolean;
 }
 
@@ -24,7 +23,6 @@ export const AppVersionSummary: React.FunctionComponent<
   appVersionFollowChartRelease,
   appVersionCommit,
   appVersionBranch,
-  firecloudDevelopRef,
   renderAppVersionLink,
 }) => {
   let extraGitInfo: JSX.Element | null = null;
@@ -160,18 +158,6 @@ export const AppVersionSummary: React.FunctionComponent<
         {`${chartName} app @ ${appVersionExact}`}
       </h2>
       {explanation}
-      {firecloudDevelopRef && (
-        <p>
-          Configuration uses values from firecloud-develop's{" "}
-          <a
-            href={`https://github.com/broadinstitute/firecloud-develop/tree/${firecloudDevelopRef}`}
-            className="font-mono underline decoration-color-link-underline"
-          >
-            {firecloudDevelopRef}
-          </a>
-          .
-        </p>
-      )}
       {renderAppVersionLink && (
         <NavButton
           to={`/charts/${chartName}/app-versions/${appVersionExact}`}

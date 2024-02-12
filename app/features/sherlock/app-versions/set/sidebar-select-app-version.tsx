@@ -1,5 +1,5 @@
-import { SerializeFrom } from "@remix-run/node";
-import { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockAppVersionV3 } from "@sherlock-js-client/sherlock";
 import { SidebarFilterControlledList } from "~/components/panel-structures/sidebar-filter-controlled-list";
 import { AppVersionColors } from "~/features/sherlock/app-versions/app-version-colors";
 import { ListAppVersionButtonText } from "../list/list-app-version-button-text";

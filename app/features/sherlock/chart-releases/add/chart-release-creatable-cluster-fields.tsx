@@ -1,13 +1,13 @@
-import { SerializeFrom } from "@remix-run/node";
-import { V2controllersEnvironment } from "@sherlock-js-client/sherlock";
+import type { SerializeFrom } from "@remix-run/node";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import React, { useState } from "react";
 import { TextField } from "~/components/interactivity/text-field";
 import { SidebarSelectEnvironment } from "~/features/sherlock/environments/set/sidebar-select-environment";
-import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 
 export const ChartReleaseCreatableClusterFields: React.FunctionComponent<
   {
-    environments: SerializeFrom<V2controllersEnvironment[]>;
+    environments: SerializeFrom<SherlockEnvironmentV3[]>;
 
     initialName: string;
     initialNamespace: string;

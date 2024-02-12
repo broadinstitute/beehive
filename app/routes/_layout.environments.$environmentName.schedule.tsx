@@ -1,9 +1,9 @@
-import { MetaFunction, NavLink, Params, useActionData } from "@remix-run/react";
-import { ActionFunctionArgs, redirect } from "@remix-run/server-runtime";
-import {
-  EnvironmentsApi,
-  V2controllersEnvironment,
-} from "@sherlock-js-client/sherlock";
+import type { MetaFunction, Params } from "@remix-run/react";
+import { NavLink, useActionData } from "@remix-run/react";
+import type { ActionFunctionArgs } from "@remix-run/server-runtime";
+import { redirect } from "@remix-run/server-runtime";
+import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
+import { EnvironmentsApi } from "@sherlock-js-client/sherlock";
 import { Power, PowerOff } from "lucide-react";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -41,7 +41,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const offlineScheduleEndTime = formData.get("offlineScheduleEndTime");
   const offlineScheduleEndWeekends = formData.get("offlineScheduleEndWeekends");
 
-  const environmentRequest: V2controllersEnvironment = {
+  const environmentRequest: SherlockEnvironmentV3 = {
     offlineScheduleBeginEnabled:
       formData.get("offlineScheduleBeginEnabled") === "true",
     offlineScheduleBeginTime:
@@ -61,7 +61,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         : undefined,
   };
   return new EnvironmentsApi(SherlockConfiguration)
-    .apiV2EnvironmentsSelectorPatch(
+    .apiEnvironmentsV3SelectorPatch(
       {
         selector: params.environmentName || "",
         environment: environmentRequest,

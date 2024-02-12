@@ -1,5 +1,6 @@
-import { MetaFunction } from "@remix-run/node";
-import { NavLink, Params } from "@remix-run/react";
+import type { MetaFunction } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink } from "@remix-run/react";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { IncidentTriggerSuccessPanel } from "../features/sherlock/pagerduty-integrations/trigger-incident/incident-trigger-success-panel";
 

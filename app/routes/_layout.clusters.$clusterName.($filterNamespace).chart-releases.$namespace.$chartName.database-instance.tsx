@@ -1,19 +1,13 @@
-import {
+import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
-  redirect,
 } from "@remix-run/node";
-import {
-  NavLink,
-  Params,
-  useActionData,
-  useLoaderData,
-} from "@remix-run/react";
-import {
-  DatabaseInstancesApi,
-  V2controllersDatabaseInstance,
-} from "@sherlock-js-client/sherlock";
+import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
+import type { SherlockDatabaseInstanceV3 } from "@sherlock-js-client/sherlock";
+import { DatabaseInstancesApi } from "@sherlock-js-client/sherlock";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import { DatabaseInstancePanel } from "~/features/sherlock/database-instances/database-instance-panel";
@@ -43,7 +37,7 @@ export const meta: MetaFunction = ({ params }) => [
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return new DatabaseInstancesApi(SherlockConfiguration)
-    .apiV2DatabaseInstancesSelectorGet(
+    .apiDatabaseInstancesV3SelectorGet(
       {
         selector: `chart-release/${params.clusterName}/${params.namespace}/${params.chartName}`,
       },
@@ -56,15 +50,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const databaseInstanceRequest: V2controllersDatabaseInstance = {
+  const databaseInstanceRequest: SherlockDatabaseInstanceV3 = {
     ...formDataToObject(formData, false),
   };
 
   return new DatabaseInstancesApi(SherlockConfiguration)
-    .apiV2DatabaseInstancesSelectorPut(
+    .apiDatabaseInstancesV3Put(
       {
         databaseInstance: databaseInstanceRequest,
-        selector: `chart-release/${params.clusterName}/${params.namespace}/${params.chartName}`,
       },
       handleIAP(request),
     )

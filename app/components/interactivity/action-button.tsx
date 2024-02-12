@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
-import { PanelSize, panelSizeToInnerClassName } from "~/helpers/panel-size";
+import type { PanelSize } from "~/helpers/panel-size";
+import { panelSizeToInnerClassName } from "~/helpers/panel-size";
 import { BeehiveIcon } from "../assets/beehive-icon";
 
 export interface ActionButtonProps {

@@ -1,4 +1,5 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import https from "https";
 import { handleIAP } from "~/features/sherlock/sherlock.server";
 

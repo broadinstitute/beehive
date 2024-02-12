@@ -1,16 +1,10 @@
 import { ActionButton } from "~/components/interactivity/action-button";
-import {
-  ListFilterInfo,
-  ListFilterInfoProps,
-} from "~/components/interactivity/list-filter-info";
-import {
-  MemoryFilteredList,
-  MemoryFilteredListProps,
-} from "~/components/logic/memory-filtered-list";
-import {
-  InteractiveList,
-  InteractiveListProps,
-} from "~/components/panel-structures/interactive-list";
+import type { ListFilterInfoProps } from "~/components/interactivity/list-filter-info";
+import { ListFilterInfo } from "~/components/interactivity/list-filter-info";
+import type { MemoryFilteredListProps } from "~/components/logic/memory-filtered-list";
+import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
+import type { InteractiveListProps } from "~/components/panel-structures/interactive-list";
+import { InteractiveList } from "~/components/panel-structures/interactive-list";
 
 type SidebarFilterControlledListProps<T> = {
   handleListButtonClick: (entry: T) => void;
@@ -21,7 +15,7 @@ type SidebarFilterControlledListProps<T> = {
   Omit<MemoryFilteredListProps<T>, "children">;
 
 export const SidebarFilterControlledList = <T extends unknown>(
-  props: SidebarFilterControlledListProps<T>
+  props: SidebarFilterControlledListProps<T>,
 ) => (
   <InteractiveList {...props}>
     <ListFilterInfo {...props} />
