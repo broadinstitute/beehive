@@ -266,8 +266,9 @@ export const ChangesetEntry: React.FunctionComponent<{
                   </ul>
                 )}
                 {appVersionChanged &&
-                  changeset.newAppVersions?.at(0)?.parentAppVersion !==
-                    changeset.fromAppVersionReference && (
+                  changeset.newAppVersions &&
+                  changeset.newAppVersions[changeset.newAppVersions.length - 1]
+                    ?.appVersion != changeset.toAppVersionExact && (
                     <p>
                       A full version tree wasn't built; this list of changes
                       might be incomplete.
@@ -425,8 +426,9 @@ export const ChangesetEntry: React.FunctionComponent<{
               </ul>
             )}
             {chartVersionChanged &&
-              changeset.newChartVersions?.at(0)?.parentChartVersion !==
-                changeset.fromChartVersionReference && (
+              changeset.newChartVersions &&
+              changeset.newChartVersions[changeset.newChartVersions.length - 1]
+                ?.chartVersion != changeset.toChartVersionExact && (
                 <p>
                   A full version tree wasn't built; this list of changes might
                   be incomplete.
