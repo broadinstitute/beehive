@@ -255,8 +255,8 @@ export const GithubActionsDeployHookEditableFields: React.FunctionComponent<
             defaultBranchFetcher.state !== "idle"
               ? "Loading..."
               : detectedDefaultRef
-              ? detectedDefaultRef
-              : "branch-name"
+                ? detectedDefaultRef
+                : "branch-name"
           }
           value={
             githubActionsDefaultRef == null
@@ -288,24 +288,33 @@ export const GithubActionsDeployHookEditableFields: React.FunctionComponent<
             as the inputs to the workflow. It needs to be either empty or a
             valid JSON object.
           </p>
-          <p>
-            GitHub will merge these values over top of any defaults the workflow
-            provides to form the{" "}
-            <a
-              href="https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-inputs-context"
-              target="_blank"
-              rel="noreferrer"
-              className="underline decoration-color-link-underline"
-            >
-              inputs context
-            </a>{" "}
-            that's available inside the workflow. Beehive doesn't make much of
-            an attempt to validate this field, so beware.
+          <p className="mb-2">
+            Here's an example: suppose your workflow has a boolean input called
+            "debug-log" and it defaults to false. If this box is empty, when
+            Beehive calls the workflow, the workflow will use that default of
+            false. If you were to put in{" "}
+            <span className="font-mono">&#123;"debug-log": true&#125;</span> in
+            the box here, the workflow would use true instead.
+          </p>
+          <p className="mb-2">
+            You can only override inputs that the workflow file itself defines
+            (under the workflow_dispatch trigger specifically). You might find
+            that you have to post-process the inputs if your workflow can be
+            triggered other ways, too (You'll only have access to the
+            workflow_dispatch inputs if the github.event_name is
+            'workflow_dispatch').
+          </p>
+          <p className="mb-2">
+            If the workflow doesn't define a parameter but you put a value for
+            it in the box here, GitHub will error when Beehive tries to run the
+            workflow. If you don't want to override any inputs, you can leave
+            this box blank (or set it to an empty JSON object:{" "}
+            <span className="font-mono">&#123;&#125;</span>).
           </p>
           <TextAreaField
             name="githubActionsWorkflowInputs"
             className="font-mono"
-            placeholder={`{"some-string-input": "value", "some-boolean-input": true}`}
+            placeholder="{}"
             defaultValue={
               existing?.githubActionsWorkflowInputs
                 ? JSON.stringify(
