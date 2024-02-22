@@ -22,6 +22,7 @@ import { runGha } from "~/features/github/run-gha";
 import { EnvironmentEditableFields } from "~/features/sherlock/environments/edit/environment-editable-fields";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import { EnvironmentHelpCopy } from "~/features/sherlock/environments/environment-help-copy";
+import { makeEnvironmentSorter } from "~/features/sherlock/environments/list/environment-sorter";
 import { DuplicateBeeWarning } from "~/features/sherlock/environments/new/duplicate-bee-warning";
 import { EnvironmentAdvancedCreatableFields } from "~/features/sherlock/environments/new/environment-advanced-creatable-fields";
 import { EnvironmentCreatableFields } from "~/features/sherlock/environments/new/environment-creatable-fields";
@@ -190,9 +191,9 @@ export default function Route() {
             setSidebar={setSidebar}
             setSidebarFilterText={setSidebarFilterText}
             environment={errorInfo?.formState}
-            templateEnvironments={environments.filter(
-              (environment) => environment.lifecycle === "template",
-            )}
+            templateEnvironments={environments
+              .filter((environment) => environment.lifecycle === "template")
+              .sort(makeEnvironmentSorter("swatomation", null))}
             lifecycle={lifecycle}
             setLifecycle={setLifecycle}
             templateEnvironment={templateEnvironment}

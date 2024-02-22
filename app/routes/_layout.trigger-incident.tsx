@@ -14,7 +14,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
-import { environmentSorter } from "../features/sherlock/environments/list/environment-sorter";
+import { makeEnvironmentSorter } from "../features/sherlock/environments/list/environment-sorter";
 import { matchEnvironment } from "../features/sherlock/environments/list/match-environment";
 
 export const handle = {
@@ -34,7 +34,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       (environments) =>
         environments
           .filter((environment) => environment.pagerdutyIntegration)
-          .sort(environmentSorter),
+          .sort(makeEnvironmentSorter("prod", null)),
       errorResponseThrower,
     );
 }

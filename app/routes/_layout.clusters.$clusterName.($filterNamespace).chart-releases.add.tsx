@@ -21,11 +21,12 @@ import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import { chartSorter } from "~/features/sherlock/charts/list/chart-sorter";
-import { environmentSorter } from "~/features/sherlock/environments/list/environment-sorter";
+import { makeEnvironmentSorter } from "~/features/sherlock/environments/list/environment-sorter";
 import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
+import { getUserEmail } from "~/helpers/get-user-email.server";
 import { useClusterContext } from "~/routes/_layout.clusters.$clusterName";
 
 export const handle = {
@@ -43,6 +44,7 @@ export const meta: MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const selfUserEmail = getUserEmail(request);
   return Promise.all([
     new ChartsApi(SherlockConfiguration)
       .apiChartsV3Get({}, handleIAP(request))
@@ -53,7 +55,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     new EnvironmentsApi(SherlockConfiguration)
       .apiEnvironmentsV3Get({}, handleIAP(request))
       .then(
-        (environments) => environments.sort(environmentSorter),
+        (environments) =>
+          environments.sort(makeEnvironmentSorter(null, selfUserEmail)),
         errorResponseThrower,
       ),
   ]);
