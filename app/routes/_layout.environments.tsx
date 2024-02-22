@@ -18,13 +18,14 @@ import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
+import { makeEnvironmentSorter } from "~/features/sherlock/environments/list/environment-sorter";
 import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
+import { getUserEmail } from "~/helpers/get-user-email.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
-import { environmentSorter } from "../features/sherlock/environments/list/environment-sorter";
 import { ListEnvironmentButtonText } from "../features/sherlock/environments/list/list-environment-button-text";
 import { matchEnvironment } from "../features/sherlock/environments/list/match-environment";
 
@@ -39,10 +40,12 @@ export const meta: MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const selfUserEmail = getUserEmail(request);
   return new EnvironmentsApi(SherlockConfiguration)
     .apiEnvironmentsV3Get({}, handleIAP(request))
     .then(
-      (environments) => environments.sort(environmentSorter),
+      (environments) =>
+        environments.sort(makeEnvironmentSorter(null, selfUserEmail)),
       errorResponseThrower,
     );
 }

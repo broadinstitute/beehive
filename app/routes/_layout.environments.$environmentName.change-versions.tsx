@@ -22,11 +22,13 @@ import { ActionBox } from "~/components/panel-structures/action-box";
 import { ChartReleaseColors } from "~/features/sherlock/chart-releases/chart-release-colors";
 import { SidebarSelectMultipleChartReleases } from "~/features/sherlock/chart-releases/set/sidebar-select-multiple-chart-releases";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
+import { makeEnvironmentSorter } from "~/features/sherlock/environments/list/environment-sorter";
 import { SidebarSelectEnvironment } from "~/features/sherlock/environments/set/sidebar-select-environment";
 import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
+import { getUserEmail } from "~/helpers/get-user-email.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { FormErrorDisplay } from "../errors/components/form-error-display";
@@ -36,7 +38,6 @@ import {
   makeErrorResponseReturner,
 } from "../errors/helpers/error-response-handlers";
 import { chartReleaseSorter } from "../features/sherlock/chart-releases/list/chart-release-sorter";
-import { environmentSorter } from "../features/sherlock/environments/list/environment-sorter";
 import { getValidSession } from "../helpers/get-valid-session.server";
 import { useEnvironmentContext } from "./_layout.environments.$environmentName";
 
@@ -53,13 +54,15 @@ export const meta: MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  const selfUserEmail = getUserEmail(request);
   const url = new URL(request.url);
   const preconfiguredOtherEnvironment = url.searchParams.get("from");
   return Promise.all([
     new EnvironmentsApi(SherlockConfiguration)
       .apiEnvironmentsV3Get({}, handleIAP(request))
       .then(
-        (environments) => environments.sort(environmentSorter),
+        (environments) =>
+          environments.sort(makeEnvironmentSorter(null, selfUserEmail)),
         errorResponseThrower,
       ),
     new ChartReleasesApi(SherlockConfiguration)
@@ -134,7 +137,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const [otherEnvironments, chartReleases, preconfiguredOtherEnvironment] =
+  const [environments, chartReleases, preconfiguredOtherEnvironment] =
     useLoaderData<typeof loader>();
   const preconfigured = Boolean(preconfiguredOtherEnvironment);
   const { environment } = useEnvironmentContext();
@@ -162,6 +165,10 @@ export default function Route() {
   );
   const [includedCharts, setIncludedCharts] = useState<Map<string, boolean>>(
     new Map(defaultIncludedCharts),
+  );
+
+  const otherEnvironments = environments.filter(
+    (e) => e.name !== environment.name,
   );
 
   const {
