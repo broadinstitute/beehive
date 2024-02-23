@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-vault read -format json secret/suitable/beehive/local/github-oauth | 
-  jq -r  '.data | to_entries[] | "GITHUB_\(.key | ascii_upcase)=\(.value)"' > .env
+gcloud secrets versions access latest --project dsp-tools-k8s --secret beehive-github-oauth-local |
+  jq -r  'to_entries[] | "GITHUB_\(.key | ascii_upcase)=\(.value)"' > .env
 
 # Pact credentials & configurations
 echo "PACT_PASSWORD=$(vault read -format json 'secret/dsp/pact-broker/users/readwrite' | jq -r .data.basic_auth_password)" >> .env
