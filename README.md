@@ -10,11 +10,13 @@
 
 2. Clone this repo
 
-3. Run `./setup-env.bash` to pull down the info needed to do local GitHub auth
+3. Run `./scripts/setup`
 
-4. Run `npm install` to download dependencies and `npm run dev` to spin up the development server
+You can use `./scripts/run` or `npm run start` to run Beehive, the former just calls the latter.
 
 You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up. You may want to dump a copy of Sherlock's database into your local one to have some data to play with.
+
+Below there's some notes on some Visual Studio Code plugins that are really helpful to install.
 
 > **Note**
 >
