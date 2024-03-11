@@ -12,7 +12,7 @@
 
 3. Run `./scripts/setup`
 
-You can use `./scripts/run` or `npm run start` to run Beehive, the former just calls the latter.
+You can use `./scripts/run` or `npm run dev` to run Beehive, the former just calls the latter.
 
 You'll probably want a local instance of Sherlock running -- `make local-up` from inside Sherlock's repo will get you set up. You may want to dump a copy of Sherlock's database into your local one to have some data to play with.
 
