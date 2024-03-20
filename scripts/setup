@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
+npm install
 
 gcloud secrets versions access latest --project dsp-tools-k8s --secret beehive-github-oauth-local |
   jq -r  'to_entries[] | "GITHUB_\(.key | ascii_upcase)=\(.value)"' > .env
 
-# Pact credentials & configurations
 echo "PACT_PASSWORD=$(vault read -format json 'secret/dsp/pact-broker/users/readwrite' | jq -r .data.basic_auth_password)" >> .env
 echo "PACT_USERNAME=$(vault read -format json 'secret/dsp/pact-broker/users/readwrite' | jq -r .data.basic_auth_username)" >> .env
 echo "PACT_BASE_URL=https://pact-broker.dsp-eng-tools.broadinstitute.org" >> .env
