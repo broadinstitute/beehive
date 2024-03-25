@@ -21,7 +21,7 @@
     "@remix-run/node": "^v2.7.2",
     "@remix-run/react": "^v2.7.2",
     "@remix-run/serve": "^v2.7.2",
-    "@sherlock-js-client/sherlock": "^1.3.4",
+    "@sherlock-js-client/sherlock": "^1.3.10",
     "lucide-react": "^0.340.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
