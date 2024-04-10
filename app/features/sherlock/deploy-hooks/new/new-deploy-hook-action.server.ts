@@ -38,6 +38,7 @@ export async function newDeployHookAction(
     const slackDeployHookRequest: SherlockSlackDeployHookV3Create = {
       ...formDataToObject(formData, true),
       ...partialTriggerConfig,
+      mentionPeople: formData.get("mentionPeople") === "true",
       onSuccess: formData.get("onSuccess") === "true",
       onFailure: formData.get("onFailure") === "true",
     };
