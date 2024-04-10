@@ -125,7 +125,7 @@ export const ChartReleaseDetails: React.FunctionComponent<
               </a>
             )}
           <a
-            href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications/ap-argocd/${chartRelease.name}`}
+            href={`https://argocd.dsp-devops-prod.broadinstitute.org/applications/argocd/${chartRelease.name}`}
             target="_blank"
             className="underline decoration-color-link-underline w-fit"
             rel="noreferrer"

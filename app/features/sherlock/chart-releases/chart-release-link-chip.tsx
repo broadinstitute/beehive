@@ -23,7 +23,7 @@ export const ChartReleaseLinkChip: React.FunctionComponent<{
 export const ArgoLinkChip: React.FunctionComponent<{
   chartRelease: string;
 }> = ({ chartRelease }) => {
-  const href = `https://ap-argocd.dsp-devops.broadinstitute.org/applications/ap-argocd/${chartRelease}`;
+  const href = `https://argocd.dsp-devops-prod.broadinstitute.org/applications/argocd/${chartRelease}`;
   const [errored, setErrored] = useState(false);
   const [controller, setController] = useState<AbortController | null>(null);
   useEffect(() => () => controller?.abort(), []);

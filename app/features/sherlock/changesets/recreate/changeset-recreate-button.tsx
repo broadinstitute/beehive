@@ -65,7 +65,7 @@ export const ChangsetRecreateButton: React.FunctionComponent<{
           If you're wanting to inspect, restart, or otherwise fiddle with the
           actual deployment, head over to{" "}
           <a
-            href={`https://ap-argocd.dsp-devops.broadinstitute.org/applications/ap-argocd/${changeset.chartRelease}`}
+            href={`https://argocd.dsp-devops-prod.broadinstitute.org/applications/argocd/${changeset.chartRelease}`}
             target="_blank"
             className="underline decoration-color-link-underline"
             rel="noreferrer"

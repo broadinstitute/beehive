@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return fetch(
     `${
       process.env.ARGOCD_BASE_URL ||
-      "https://ap-argocd.dsp-devops.broadinstitute.org"
+      "https://argocd.dsp-devops-prod.broadinstitute.org"
     }/api/badge?name=${new URL(request.url).searchParams.get("name")}`,
     {
       ...handleIAP(request),
