@@ -240,6 +240,32 @@ const CiRunResourceLoadedWidget: React.FunctionComponent<{
   asChip: boolean;
 }> = ({ ciRuns, loadMore, moreToLoad, asChip }) => {
   const [open, onOpenChange] = useState(false);
+  const ciRunToShowOnButton =
+    ciRuns.find((ciRun, index, array) => {
+      if (ciRun.status != "success") {
+        // Check runs earlier in the list (which would have been *later*, more recent in time) to see if
+        // this workflow has succeeded since this non-success.
+        for (let i = 0; i < index; i++) {
+          if (
+            array[i].githubActionsOwner == ciRun.githubActionsOwner &&
+            array[i].githubActionsRepo == ciRun.githubActionsRepo &&
+            array[i].githubActionsWorkflowPath ==
+              ciRun.githubActionsWorkflowPath &&
+            array[i].status == "success"
+          ) {
+            return false;
+          }
+        }
+
+        // If we didn't find a success earlier in the list, this is a current/un-retried non-success,
+        // so we show this as the CiRun on the button.
+        return true;
+      } else {
+        // For a plain success here, we never select it at this step. Only if we go through the whole
+        // list with no non-successes do we show the most recent success, via the || ciRuns[0] below.
+        return false;
+      }
+    }) || ciRuns[0];
 
   return (
     <Popover
@@ -247,7 +273,7 @@ const CiRunResourceLoadedWidget: React.FunctionComponent<{
       onOpenChange={onOpenChange}
       openButton={(ref, props) => (
         <CiRunResourceWidgetButton
-          ciRun={ciRuns[0]}
+          ciRun={ciRunToShowOnButton}
           isOpen={open}
           asChip={asChip}
           ref={ref}
