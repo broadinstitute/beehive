@@ -19,13 +19,13 @@ npm run dev
 If you'd like to run against Sherlock's dev instance, you can use Thelma:
 
 ```bash
-IAP_TOKEN="$(thelma auth iap --echo)" SHERLOCK_BASE_URL='https://sherlock-dev.dsp-devops.broadinstitute.org' npm run dev
+IAP_TOKEN="$(thelma auth iap --project dsp-tools-k8s --echo)" SHERLOCK_BASE_URL='https://sherlock-dev.dsp-devops.broadinstitute.org' npm run dev
 ```
 
 If you'd like to run against Sherlock's production instance, you can use Thelma here too:
 
 ```bash
-IAP_TOKEN="$(thelma auth iap --echo)" SHERLOCK_BASE_URL='https://sherlock.dsp-devops.broadinstitute.org' npm run dev
+IAP_TOKEN="$(thelma auth iap --echo)" SHERLOCK_BASE_URL='https://sherlock.dsp-devops-prod.broadinstitute.org' npm run dev
 ```
 
 ## Testing
