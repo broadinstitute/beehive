@@ -25,7 +25,7 @@ export const EnvironmentScheduleFields: React.FunctionComponent<{
   const [offlineScheduleEndEnabled, setOfflineScheduleEndEnabled] = useState(
     initialOfflineScheduleEndEnabled != null
       ? initialOfflineScheduleEndEnabled.toString()
-      : "true",
+      : "false",
   );
   const [offlineScheduleEndWeekends, setOfflineScheduleEndWeekends] = useState(
     initialOfflineScheduleEndWeekends != null

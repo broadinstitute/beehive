@@ -202,9 +202,11 @@ export default function Route() {
           {lifecycle === "dynamic" && (
             <>
               <p className="pt-4">
-                By default, BEEs are set to go offline automatically at night to
-                save on cloud costs. You can change the schedule later if you're
-                not sure now.
+                <b>
+                  By default, your BEE will shut down each night and you'll need
+                  to come here to turn it on when you want to use it.
+                </b>{" "}
+                You can change this behavior below.
               </p>
               <details>
                 <summary className="cursor-pointer">

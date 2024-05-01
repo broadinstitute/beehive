@@ -130,11 +130,7 @@ export const EnvironmentCreatableFields: React.FunctionComponent<
             lifecycle === "dynamic"
               ? "A unique name will be generated if you leave this blank."
               : ""
-          }`}</p>
-          <b>
-            The name should be all lowercase with hyphen separators ie:
-            my-new-environment
-          </b>
+          } The name should be all lowercase with hyphen separators, like "my-new-environment".`}</p>
           <TextField
             name="name"
             placeholder={
