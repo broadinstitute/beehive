@@ -1,0 +1,21 @@
+name: "Ticket Check"
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  ticket-present:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Ticket Present in PR Title"
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "Checking for ticket in PR title..."
+          if [[ "$PR_TITLE" =~ [A-Z]{2,}-[0-9]+ ]]; then
+            echo "Ticket found in PR title!"
+            exit 0
+          else
+            echo "No ticket found in PR title!"
+            exit 1
+          fi
