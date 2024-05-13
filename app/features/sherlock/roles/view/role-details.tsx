@@ -62,14 +62,14 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
           )}
         </div>
       ) : (
-        <p>Assignments in this role can be granted by Sherlock super admins.</p>
+        <p>Assignments in this role are granted by Sherlock super admins.</p>
       )}
       <h2 className="font-light text-2xl text-color-header-text">
         Azure Group
       </h2>
       {role.grantsDevAzureGroup ? (
         <p>
-          Users in this role will be automatically added to the{" "}
+          Users in this role will be added to the{" "}
           <span className="font-medium">{role.grantsDevAzureGroup}</span> Azure
           group.
         </p>
@@ -83,7 +83,7 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
       </h2>
       {role.grantsDevFirecloudGroup ? (
         <p>
-          Users in this role will be automatically added to the{" "}
+          Users in this role will be added to the{" "}
           <span className="font-medium">{role.grantsDevFirecloudGroup}</span>{" "}
           Google group.
         </p>
@@ -97,7 +97,7 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
       </h2>
       {role.suspendNonSuitableUsers ? (
         <p>
-          Users in this role who lose suitability will be{" "}
+          Unsuitable users in this role will be{" "}
           <span className="font-medium">automatically suspended</span>.
         </p>
       ) : (

@@ -1,8 +1,9 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type { SherlockRoleV3 } from "@sherlock-js-client/sherlock";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
+import { formDataToObject } from "~/helpers/form-data-to-object.server";
 import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { RoleColors } from "../role-colors";
 import { SidebarSelectRole } from "../set/sidebar-select-role";
@@ -15,6 +16,20 @@ export interface RoleEditableFieldsProps {
     React.SetStateAction<SerializeFrom<SherlockRoleV3> | undefined>
   >;
 }
+
+export const roleEditableFormDataToObject = function (
+  formData: FormData,
+): SherlockRoleV3 {
+  return {
+    ...formDataToObject(formData, true),
+    grantsSherlockSuperAdmin:
+      formData.get("grantsSherlockSuperAdmin") === "true",
+    suspendNonSuitableUsers: formData.get("suspendNonSuitableUsers") === "true",
+    canBeGlassBrokenByRole:
+      parseInt(formData.get("canBeGlassBrokenByRole")?.toString() || "") ||
+      undefined,
+  };
+};
 
 export const RoleEditableFields: React.FunctionComponent<
   RoleEditableFieldsProps & SetsSidebarProps
@@ -46,6 +61,15 @@ export const RoleEditableFields: React.FunctionComponent<
       ? role?.suspendNonSuitableUsers.toString()
       : "false",
   );
+
+  const breakGlassRoleInputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    breakGlassRoleInputRef.current?.setCustomValidity(
+      breakGlassEnabled && roles.find((r) => r.name === breakGlassRoleInputText)
+        ? ""
+        : "A valid break-glass role is required",
+    );
+  }, [breakGlassRoleInputText]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -93,20 +117,17 @@ export const RoleEditableFields: React.FunctionComponent<
           </p>
           <TextField
             name="canBeGlassBrokenByRoleName"
+            ref={breakGlassRoleInputRef}
             placeholder="Search..."
             required={breakGlassEnabled === "true"}
             value={breakGlassRoleInputText}
             onChange={(e) => {
               setBreakGlassRoleInputText(e.currentTarget.value);
               setSidebarFilterText(e.currentTarget.value);
-
-              const matchingRole = roles.find((r) => r.name === name);
-              setBreakGlassRole(matchingRole);
-              e.currentTarget.setCustomValidity(
-                e.currentTarget.value && !matchingRole
-                  ? "Role does not exist"
-                  : "",
+              const matchingRole = roles.find(
+                (r) => r.name === e.currentTarget.value,
               );
+              setBreakGlassRole(matchingRole);
             }}
             onFocus={() => {
               setSidebar(({ filterText }) => (
@@ -115,6 +136,7 @@ export const RoleEditableFields: React.FunctionComponent<
                   fieldValue={filterText}
                   setFieldValue={(role) => {
                     setBreakGlassRole(role);
+                    setBreakGlassRoleInputText(role?.name || "");
                     setSidebar();
                   }}
                   title="Select Role"
@@ -167,7 +189,10 @@ export const RoleEditableFields: React.FunctionComponent<
         <h2 className="font-light text-2xl text-color-header-text">
           Grants Sherlock super admin?
         </h2>
-        <p>TODO</p>
+        <p>
+          Assignments in this role grant Sherlock super admin privileges,
+          including the ability to edit roles and assignments.
+        </p>
         <EnumInputSelect
           name="grantsSherlockSuperAdmin"
           className="grid grid-cols-2 mt-2"
@@ -184,7 +209,7 @@ export const RoleEditableFields: React.FunctionComponent<
         <h2 className="font-light text-2xl text-color-header-text">
           Suspend non-suitable users?
         </h2>
-        <p>TODO</p>
+        <p>Users that are not suitable will be suspended from the role.</p>
         <EnumInputSelect
           name="suspendNonSuitableUsers"
           className="grid grid-cols-2 mt-2"

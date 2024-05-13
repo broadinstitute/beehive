@@ -11,8 +11,7 @@ import {
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { RolesApi } from "@sherlock-js-client/sherlock";
-import assert from "assert";
+import { RolesApi, SherlockRoleV3 } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { getFakeRoleByName } from "~/features/sherlock/roles/fake/fake-data";
@@ -24,6 +23,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
+import { useRolesContext } from "./_layout.roles";
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
     <NavLink to={`/role/${params.roleName}`}>{params.roleName}</NavLink>
@@ -37,21 +37,34 @@ export const meta: MetaFunction = ({ params }) => [
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return { role: getFakeRoleByName(params.roleName || "") };
 
-  // TODO - OK to use role name in URL params? not sure what kind of
-  // server-side validation is in place, it does seem more user-friendly
-  // than IDs
   return defer({
     role: await new RolesApi(SherlockConfiguration)
       .apiRolesV3Get({ name: params.roleName || "" }, handleIAP(request))
       .catch(errorResponseThrower)
-      .then((roles) => assert(roles.at(0))),
+      .then(getOneRoleOrError),
   });
 }
+
+export const getOneRoleOrError = function (
+  roles: Array<SherlockRoleV3 | SerializeFrom<SherlockRoleV3>>,
+): SherlockRoleV3 | SerializeFrom<SherlockRoleV3> {
+  const r = roles.at(0);
+  if (r === undefined) {
+    throw new Error("role not found");
+  }
+  if (roles.length > 1) {
+    throw new Error(
+      "role name matched more than one role in the database; this is probably a bug",
+    );
+  }
+  return r;
+};
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const { role } = useLoaderData<typeof loader>();
+  const { roles } = useRolesContext();
 
   return (
     <>
@@ -70,11 +83,13 @@ export default function Route() {
           />
         </ItemDetails>
       </OutsetPanel>
-      <Outlet context={{ role }} />
+      <Outlet context={{ role, roles }} />
     </>
   );
 }
 
-export const useRoleContext = useOutletContext<{
-  role: SerializeFrom<typeof loader>["role"];
-}>;
+export const useRoleContext = useOutletContext<
+  {
+    role: SerializeFrom<typeof loader>["role"];
+  } & ReturnType<typeof useRolesContext>
+>;
