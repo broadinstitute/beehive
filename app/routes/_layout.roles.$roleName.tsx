@@ -11,7 +11,7 @@ import {
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { RolesApi, SherlockRoleV3 } from "@sherlock-js-client/sherlock";
+import { RolesApi } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
@@ -36,26 +36,13 @@ export const meta: MetaFunction = ({ params }) => [
 export async function loader({ request, params }: LoaderFunctionArgs) {
   return defer({
     role: await new RolesApi(SherlockConfiguration)
-      .apiRolesV3Get({ name: params.roleName || "" }, handleIAP(request))
-      .catch(errorResponseThrower)
-      .then(getOneRoleOrError),
+      .apiRolesV3SelectorGet(
+        { selector: params.roleName || "" },
+        handleIAP(request),
+      )
+      .catch(errorResponseThrower),
   });
 }
-
-export const getOneRoleOrError = function (
-  roles: Array<SherlockRoleV3 | SerializeFrom<SherlockRoleV3>>,
-): SherlockRoleV3 | SerializeFrom<SherlockRoleV3> {
-  const r = roles.at(0);
-  if (r === undefined) {
-    throw new Error("role not found");
-  }
-  if (roles.length > 1) {
-    throw new Error(
-      "role name matched more than one role in the database; this is probably a bug",
-    );
-  }
-  return r;
-};
 
 export const ErrorBoundary = PanelErrorBoundary;
 

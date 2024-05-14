@@ -125,8 +125,8 @@ export const RoleEditableFields: React.FunctionComponent<
             required={breakGlassEnabled === "true"}
             value={breakGlassRoleInputText}
             onChange={(e) => {
-              setBreakGlassRoleInputText(e.currentTarget.value);
-              setSidebarFilterText(e.currentTarget.value);
+              setBreakGlassRoleInputText(e.currentTarget.value || "");
+              setSidebarFilterText(e.currentTarget.value || "");
               const matchingRole = roles.find(
                 (r) => r.name === e.currentTarget.value,
               );
@@ -150,7 +150,7 @@ export const RoleEditableFields: React.FunctionComponent<
           <input
             type="hidden"
             name="canBeGlassBrokenByRole"
-            value={breakGlassRole?.id}
+            value={breakGlassRole?.id?.toString() || ""}
           />
         </label>
       )}

@@ -37,15 +37,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   const formData = await request.formData();
-  const roleId = parseInt(formData.get("roleId")?.toString() || "");
-  if (!roleId) {
-    throw new Error("invalid role ID received from client");
-  }
   const role = roleEditableFormDataToObject(formData);
 
   return new RolesApi(SherlockConfiguration)
-    .apiRolesV3IdPatch({
-      id: roleId,
+    .apiRolesV3SelectorPatch({
+      selector: params.roleName || "",
       role: role,
     })
     .then(
@@ -88,7 +84,6 @@ export default function Route() {
             setSidebar={setSidebar}
             setSidebarFilterText={setSidebarFilterText}
           />
-          <input type="hidden" name="roleId" value={role.id} />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>

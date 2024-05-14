@@ -49,12 +49,8 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
           <h3 className="font-light text-xl text-color-header-text mt-2">
             Default Breakglass Duration
           </h3>
-          {breakGlassRole.defaultGlassBreakDuration ? (
-            <p>
-              <span className="font-medium">
-                {breakGlassRole.defaultGlassBreakDuration}
-              </span>
-            </p>
+          {role.defaultGlassBreakDuration ? (
+            <p>{role.defaultGlassBreakDuration}</p>
           ) : (
             <p>
               <span className="font-extralight">None</span>
