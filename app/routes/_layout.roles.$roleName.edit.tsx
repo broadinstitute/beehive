@@ -61,7 +61,8 @@ export default function Route() {
   const errorInfo = useActionData<typeof action>();
 
   const [breakGlassRole, setBreakGlassRole] = useState(
-    roles.find((r) => r.id === errorInfo?.formState?.canBeGlassBrokenByRole),
+    roles.find((r) => r.id === errorInfo?.formState?.canBeGlassBrokenByRole) ||
+      roles.find((r) => r.id === role.canBeGlassBrokenByRole),
   );
 
   const {

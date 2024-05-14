@@ -29,12 +29,12 @@ export const RoleDeleteDescription: React.FunctionComponent<
             the {role.grantsDevAzureGroup} Azure group{` `}
           </span>
         )}
-        {(role.grantsDevAzureGroup || role.grantsDevFirecloudGroup) && (
-          <span>or{` `}</span>
+        {role.grantsDevAzureGroup && role.grantsDevFirecloudGroup && (
+          <span>and{` `}</span>
         )}
         {role.grantsDevFirecloudGroup && (
           <span>
-            the {role.grantsDevFirecloudGroup} Firecloud group{` `}
+            the {role.grantsDevFirecloudGroup} firecloud.org Google group{` `}
           </span>
         )}
         will be removed.

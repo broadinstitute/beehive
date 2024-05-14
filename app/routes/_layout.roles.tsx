@@ -17,7 +17,6 @@ import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { MemoryFilteredList } from "~/components/logic/memory-filtered-list";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
-import { getFakeRoles } from "~/features/sherlock/roles/fake/fake-data";
 import { ListRoleButtonText } from "~/features/sherlock/roles/list/list-role-button-text";
 import { matchRole } from "~/features/sherlock/roles/list/match-role";
 import { roleSorter } from "~/features/sherlock/roles/list/role-sorter";
@@ -40,9 +39,6 @@ export const meta: MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return getFakeRoles();
-
-  // TODO - for use when API is ready
   return new RolesApi(SherlockConfiguration)
     .apiRolesV3Get({}, handleIAP(request))
     .then((roles) => roles.sort(roleSorter), errorResponseThrower);

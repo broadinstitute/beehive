@@ -28,6 +28,9 @@ export const roleEditableFormDataToObject = function (
     canBeGlassBrokenByRole:
       parseInt(formData.get("canBeGlassBrokenByRole")?.toString() || "") ||
       undefined,
+    grantsDevAzureGroup: formData.get("grantsDevAzureGroup")?.toString() || "",
+    grantsDevFirecloudGroup:
+      formData.get("grantsDevFirecloudGroup")?.toString() || "",
   };
 };
 
@@ -158,8 +161,10 @@ export const RoleEditableFields: React.FunctionComponent<
           </h2>
           <p>Default duration for a break glass assignment in this role.</p>
           <TextField
-            name="defaultBreakGlassDuration"
+            name="defaultGlassBreakDuration"
             defaultValue={role?.defaultGlassBreakDuration || "8h0m"}
+            required={breakGlassEnabled === "true"}
+            pattern="(\d+h)?(\d+m)?(\d+s)?"
           />
         </label>
       )}

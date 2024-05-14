@@ -14,7 +14,6 @@ import {
 import { RolesApi, SherlockRoleV3 } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
-import { getFakeRoleByName } from "~/features/sherlock/roles/fake/fake-data";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
 import { RoleDetails } from "~/features/sherlock/roles/view/role-details";
 import {
@@ -26,7 +25,7 @@ import { errorResponseThrower } from "../errors/helpers/error-response-handlers"
 import { useRolesContext } from "./_layout.roles";
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/role/${params.roleName}`}>{params.roleName}</NavLink>
+    <NavLink to={`/roles/${params.roleName}`}>{params.roleName}</NavLink>
   ),
 };
 
@@ -35,8 +34,6 @@ export const meta: MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  return { role: getFakeRoleByName(params.roleName || "") };
-
   return defer({
     role: await new RolesApi(SherlockConfiguration)
       .apiRolesV3Get({ name: params.roleName || "" }, handleIAP(request))
