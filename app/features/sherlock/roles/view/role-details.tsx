@@ -1,7 +1,6 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type { SherlockRoleV3 } from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
-import { ChartReleaseColors } from "../../chart-releases/chart-release-colors";
 import { MutateControls } from "../../mutate-controls";
 import { RoleColors } from "../role-colors";
 
@@ -25,7 +24,7 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
   return (
     <div className="flex flex-col space-y-4">
       {toAssignments && (
-        <NavButton to={toAssignments} {...ChartReleaseColors}>
+        <NavButton to={toAssignments} {...RoleColors}>
           <h2>View Assignments in This Role</h2>
         </NavButton>
       )}

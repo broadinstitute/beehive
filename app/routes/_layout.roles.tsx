@@ -10,7 +10,11 @@ import {
   useOutletContext,
   useParams,
 } from "@remix-run/react";
-import { RolesApi } from "@sherlock-js-client/sherlock";
+import {
+  RoleAssignmentsApi,
+  RolesApi,
+  UsersApi,
+} from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
@@ -39,15 +43,48 @@ export const meta: MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return new RolesApi(SherlockConfiguration)
-    .apiRolesV3Get({}, handleIAP(request))
-    .then((roles) => roles.sort(roleSorter), errorResponseThrower);
+  const [roles, selfUser] = await Promise.all([
+    new RolesApi(SherlockConfiguration)
+      .apiRolesV3Get({}, handleIAP(request))
+      .then((roles) => roles.sort(roleSorter), errorResponseThrower),
+    new UsersApi(SherlockConfiguration)
+      .apiUsersV3SelectorGet({ selector: "self" }, handleIAP(request))
+      .catch(errorResponseThrower),
+  ]);
+
+  const superAdminRoles = roles.filter((r) => r.grantsSherlockSuperAdmin);
+
+  const selfUserIsSuperAdmin = await Promise.all(
+    superAdminRoles.map((r) => {
+      return new RoleAssignmentsApi(SherlockConfiguration)
+        .apiRoleAssignmentsV3RoleSelectorUserSelectorGet(
+          {
+            roleSelector: (r.id || -1).toString(),
+            userSelector: (selfUser.id || -1).toString(),
+          },
+          handleIAP(request),
+        )
+        .then(() => {
+          return true;
+        })
+        .catch(() => {
+          return false;
+        });
+    }),
+  );
+
+  return {
+    roles: roles,
+    selfUser: selfUser,
+    selfUserIsSuperAdmin: selfUserIsSuperAdmin.some((r) => r),
+  };
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const roles = useLoaderData<typeof loader>();
+  const context = useLoaderData<typeof loader>();
+  const roles = context.roles;
   const { roleName: currentPathRole } = useParams();
   const [filterText, setFilterText] = useState("");
   return (
@@ -77,11 +114,9 @@ export default function Route() {
           </MemoryFilteredList>
         </InteractiveList>
       </InsetPanel>
-      <Outlet context={{ roles }} />
+      <Outlet context={context} />
     </>
   );
 }
 
-export const useRolesContext = useOutletContext<{
-  roles: SerializeFrom<typeof loader>;
-}>;
+export const useRolesContext = useOutletContext<SerializeFrom<typeof loader>>;

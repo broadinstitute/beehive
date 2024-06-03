@@ -8,29 +8,35 @@ import {
   NavLink,
   Outlet,
   defer,
-  useLoaderData,
   useOutletContext,
+  useParams,
 } from "@remix-run/react";
-import { RolesApi } from "@sherlock-js-client/sherlock";
+import {
+  RolesApi,
+  SherlockRoleAssignmentV3,
+  SherlockUserV3,
+} from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
+import { RoleAssignmentDetails } from "~/features/sherlock/role-assignments/view/role-assignment-details";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
-import { RoleDetails } from "~/features/sherlock/roles/view/role-details";
 import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
-import { useRolesContext } from "./_layout.roles";
+import { useRoleContext } from "./_layout.roles.$roleName";
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/roles/${params.roleName}`}>{params.roleName}</NavLink>
+    <NavLink to={`/roles/${params.roleName}/assignments/${params.userEmail}`}>
+      {params.userEmail}
+    </NavLink>
   ),
 };
 
 export const meta: MetaFunction = ({ params }) => [
-  { title: `${params.roleName} - Role` },
+  { title: `${params.userEmail} - Role Assignment` },
 ];
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -47,33 +53,48 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const { role } = useLoaderData<typeof loader>();
-  const context = useRolesContext();
+  const params = useParams();
+  const context = useRoleContext();
+  const { role, roles } = context;
+
+  const assignment = (role.assignments || []).find(
+    (a) => (a.userInfo as SherlockUserV3).email == params.userEmail,
+  );
+  if (assignment === undefined) {
+    throw new Error(
+      "Could not find assignment for user " +
+        params.userEmail +
+        " in role " +
+        role.name,
+    );
+  }
+  const user = assignment.userInfo as SherlockUserV3;
 
   return (
     <>
       <OutsetPanel {...RoleColors}>
         <ItemDetails
           subtitle={`${
-            role?.canBeGlassBrokenByRole ? "Break-glass" : "Manually assigned"
-          } role`}
-          title={role?.name || ""}
+            assignment.expiresAt ? "Break-glass" : "Permanent"
+          } Assignment`}
+          title={user.name || user.email?.split("@")[0] || ""}
         >
-          <RoleDetails
+          <RoleAssignmentDetails
             role={role}
-            toAssignments="./assignments"
+            assignment={assignment}
             toEdit="./edit"
             toDelete={"./delete"}
           />
         </ItemDetails>
       </OutsetPanel>
-      <Outlet context={{ role, ...context }} />
+      <Outlet context={{ user, assignment, ...context }} />
     </>
   );
 }
 
-export const useRoleContext = useOutletContext<
+export const useRoleAssignmentContext = useOutletContext<
   {
-    role: SerializeFrom<typeof loader>["role"];
-  } & ReturnType<typeof useRolesContext>
+    user: SerializeFrom<SherlockUserV3>;
+    assignment: SerializeFrom<SherlockRoleAssignmentV3>;
+  } & ReturnType<typeof useRoleContext>
 >;
