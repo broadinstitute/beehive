@@ -76,7 +76,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {
     roles: roles,
     selfUser: selfUser,
-    selfUserIsSuperAdmin: false, //selfUserInSuperAdminGroups.some((r) => r),
+    selfUserIsSuperAdmin: selfUserInSuperAdminGroups.some((r) => r),
   };
 }
 
