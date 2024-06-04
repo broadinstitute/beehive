@@ -63,7 +63,7 @@ export default function Route() {
             user={user}
             assignment={assignment}
           />
-          <DeletionGuard name={user.email + " assignment"} />
+          <DeletionGuard name={"assignment"} />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>

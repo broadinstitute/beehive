@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function Route() {
   const context = useRoleContext();
-  const role = context.role;
+  const { role, roleAssignableBySelfUser } = context;
 
   const params = useParams();
   const [filterText, setFilterText] = useState("");
@@ -60,8 +60,8 @@ export default function Route() {
         >
           <ListControls
             setFilterText={setFilterText}
-            toCreate="./new"
-            toCreateText="Add New"
+            toCreate={roleAssignableBySelfUser ? "./new" : undefined}
+            toCreateText={roleAssignableBySelfUser ? "Add New" : undefined}
             {...RoleColors}
           />
           <MemoryFilteredList

@@ -77,6 +77,10 @@ export default function Route() {
           Users
         </NavLink>
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
+        <NavLink to="/roles" prefetch="intent">
+          Roles
+        </NavLink>
+        <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/pagerduty-integrations" prefetch="intent">
           PagerDuty
         </NavLink>

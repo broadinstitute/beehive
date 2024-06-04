@@ -6,7 +6,9 @@ import type {
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
+import { PrettyPrintTime } from "~/components/logic/pretty-print-time";
 import { RoleColors } from "../../roles/role-colors";
+import { isRoleAssignmentExpired } from "../list/is-expired-or-suspended";
 
 export interface RoleAssignmentEditableFieldsProps {
   role: SherlockRoleV3 | SerializeFrom<SherlockRoleV3>;
@@ -14,6 +16,7 @@ export interface RoleAssignmentEditableFieldsProps {
     | SherlockRoleAssignmentV3
     | SerializeFrom<SherlockRoleAssignmentV3>;
   selfUserIsSuperAdmin: boolean;
+  creating?: boolean;
 }
 
 export const roleAssignmentEditableFormDataToObject = function (
@@ -22,25 +25,25 @@ export const roleAssignmentEditableFormDataToObject = function (
   return {
     suspended: formData.get("suspended") === "true",
     expiresIn:
-      formData.get("expires") === "true"
-        ? formData.get("expiresIn")?.toString()
-        : undefined,
+      formData.get("expires") === "false"
+        ? undefined
+        : formData.get("newExpiresIn")?.toString() || undefined,
   };
 };
 
 export const RoleAssignmentEditableFields: React.FunctionComponent<
   RoleAssignmentEditableFieldsProps
-> = ({ role, assignment, selfUserIsSuperAdmin }) => {
+> = ({ role, assignment, selfUserIsSuperAdmin, creating }) => {
   const [roleAssignmentSuspended, setRoleAssignmentSuspended] = useState(
     assignment.suspended ? "true" : "false",
   );
 
   const [roleAssignmentExpires, setRoleAssignmentExpires] = useState(
-    assignment.expiresIn ? "true" : "false",
+    selfUserIsSuperAdmin ? (assignment.expiresIn ? "true" : "false") : "true",
   );
 
-  const [roleAssignmentExpiresIn, setRoleAssignmentExpiresIn] = useState(
-    assignment.expiresIn || role.defaultGlassBreakDuration || "",
+  const [roleAssignmentNewExpiresIn, setRoleAssignmentNewExpiresIn] = useState(
+    creating ? role.defaultGlassBreakDuration || "" : "",
   );
 
   return (
@@ -50,7 +53,7 @@ export const RoleAssignmentEditableFields: React.FunctionComponent<
           <h2 className="font-light text-2xl text-color-header-text">
             Suspended
           </h2>
-          <p>Configure whether the assigment is suspended.</p>
+          <p>Configure whether the assignment is suspended.</p>
           <EnumInputSelect
             name="suspended"
             className="grid grid-cols-2 mt-2"
@@ -84,19 +87,29 @@ export const RoleAssignmentEditableFields: React.FunctionComponent<
       {roleAssignmentExpires === "true" && (
         <label>
           <h2 className="font-light text-2xl text-color-header-text">
-            Duration
+            Set Expiration
           </h2>
-          <p>
-            Configure a time period after which this role assignment will
-            expire.
-          </p>
+          {assignment.expiresAt && (
+            <div className="flex flex-col space-y-2">
+              <p>
+                This assignment{` `}
+                <span className="font-medium">
+                  {isRoleAssignmentExpired(assignment)
+                    ? "expired"
+                    : "will expire"}
+                </span>
+                {` `}on <PrettyPrintTime time={assignment.expiresAt} />.
+              </p>
+              <p>You can optionally change the expiration period here:</p>
+            </div>
+          )}
           <TextField
-            name="expiresIn"
-            value={roleAssignmentExpiresIn}
+            name="newExpiresIn"
+            value={roleAssignmentNewExpiresIn}
             placeholder="eg. 8h0m"
-            required={roleAssignmentExpires === "true"}
+            required={roleAssignmentExpires === "true" && !assignment.expiresAt}
             onChange={(e) => {
-              setRoleAssignmentExpiresIn(e.currentTarget.value);
+              setRoleAssignmentNewExpiresIn(e.currentTarget.value);
             }}
           />
         </label>

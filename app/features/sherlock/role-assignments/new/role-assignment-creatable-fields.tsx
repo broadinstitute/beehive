@@ -28,29 +28,36 @@ export const RoleAssignmentCreatableFields: React.FunctionComponent<
     <div className="flex flex-col space-y-4">
       <label>
         <h2 className="font-light text-2xl text-color-header-text">User</h2>
-        <TextField
-          name="user"
-          disabled={!selfUserIsSuperAdmin}
-          placeholder="Search..."
-          value={user || ""}
-          onChange={(e) => {
-            setUser(e.currentTarget.value);
-            setSidebarFilterText(e.currentTarget.value);
-          }}
-          onFocus={() => {
-            setSidebar(({ filterText }) => (
-              <SidebarSelectUser
-                users={users}
-                fieldValue={filterText}
-                selfEmail={selfUserEmail || ""}
-                setFieldValue={(value) => {
-                  setUser(value);
-                  setSidebar();
-                }}
-              />
-            ));
-          }}
-        />
+        {selfUserIsSuperAdmin ? (
+          <TextField
+            name="user"
+            disabled={!selfUserIsSuperAdmin}
+            placeholder="Search..."
+            value={user || ""}
+            onChange={(e) => {
+              setUser(e.currentTarget.value);
+              setSidebarFilterText(e.currentTarget.value);
+            }}
+            onFocus={() => {
+              setSidebar(({ filterText }) => (
+                <SidebarSelectUser
+                  users={users}
+                  fieldValue={filterText}
+                  selfEmail={selfUserEmail || ""}
+                  setFieldValue={(value) => {
+                    setUser(value);
+                    setSidebar();
+                  }}
+                />
+              ));
+            }}
+          />
+        ) : (
+          <>
+            <span className="pt-2 text-lg">{selfUserEmail}</span>
+            <input name="user" type="hidden" value={selfUserEmail} />
+          </>
+        )}
       </label>
     </div>
   );

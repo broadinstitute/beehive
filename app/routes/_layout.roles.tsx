@@ -54,7 +54,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const superAdminRoles = roles.filter((r) => r.grantsSherlockSuperAdmin);
 
-  const selfUserIsSuperAdmin = await Promise.all(
+  const selfUserInSuperAdminGroups = await Promise.all(
     superAdminRoles.map((r) => {
       return new RoleAssignmentsApi(SherlockConfiguration)
         .apiRoleAssignmentsV3RoleSelectorUserSelectorGet(
@@ -76,7 +76,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {
     roles: roles,
     selfUser: selfUser,
-    selfUserIsSuperAdmin: selfUserIsSuperAdmin.some((r) => r),
+    selfUserIsSuperAdmin: false, //selfUserInSuperAdminGroups.some((r) => r),
   };
 }
 
@@ -84,7 +84,7 @@ export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const context = useLoaderData<typeof loader>();
-  const roles = context.roles;
+  const { roles, selfUserIsSuperAdmin } = context;
   const { roleName: currentPathRole } = useParams();
   const [filterText, setFilterText] = useState("");
   return (
@@ -93,7 +93,7 @@ export default function Route() {
         <InteractiveList title="Roles" {...RoleColors}>
           <ListControls
             setFilterText={setFilterText}
-            toCreate="./new"
+            toCreate={selfUserIsSuperAdmin ? "./new" : undefined}
             {...RoleColors}
           />
           <MemoryFilteredList

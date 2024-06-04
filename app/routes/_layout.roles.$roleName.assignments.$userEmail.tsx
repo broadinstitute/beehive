@@ -55,7 +55,7 @@ export const ErrorBoundary = PanelErrorBoundary;
 export default function Route() {
   const params = useParams();
   const context = useRoleContext();
-  const { role, roles } = context;
+  const { role, selfUser, selfUserIsSuperAdmin } = context;
 
   const assignment = (role.assignments || []).find(
     (a) => (a.userInfo as SherlockUserV3).email == params.userEmail,
@@ -70,6 +70,10 @@ export default function Route() {
   }
   const user = assignment.userInfo as SherlockUserV3;
 
+  const assignmentEditableBySelfUser =
+    selfUserIsSuperAdmin ||
+    (user.email === selfUser.email && !!role.canBeGlassBrokenByRole);
+
   return (
     <>
       <OutsetPanel {...RoleColors}>
@@ -82,12 +86,15 @@ export default function Route() {
           <RoleAssignmentDetails
             role={role}
             assignment={assignment}
-            toEdit="./edit"
+            assignmentEditableBySelfUser={assignmentEditableBySelfUser}
+            toEdit={"./edit"}
             toDelete={"./delete"}
           />
         </ItemDetails>
       </OutsetPanel>
-      <Outlet context={{ user, assignment, ...context }} />
+      <Outlet
+        context={{ user, assignment, assignmentEditableBySelfUser, ...context }}
+      />
     </>
   );
 }
@@ -96,5 +103,6 @@ export const useRoleAssignmentContext = useOutletContext<
   {
     user: SerializeFrom<SherlockUserV3>;
     assignment: SerializeFrom<SherlockRoleAssignmentV3>;
+    assignmentEditableBySelfUser: boolean;
   } & ReturnType<typeof useRoleContext>
 >;

@@ -14,6 +14,7 @@ import {
 import { RolesApi } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
+import { selfUserCanBreakGlassIntoRole } from "~/features/sherlock/roles/list/self-user-can-break-glass-into-role";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
 import { RoleDetails } from "~/features/sherlock/roles/view/role-details";
 import {
@@ -49,6 +50,11 @@ export const ErrorBoundary = PanelErrorBoundary;
 export default function Route() {
   const { role } = useLoaderData<typeof loader>();
   const context = useRolesContext();
+  const { roles, selfUser, selfUserIsSuperAdmin } = context;
+
+  const roleAssignableBySelfUser =
+    selfUserIsSuperAdmin ||
+    selfUserCanBreakGlassIntoRole(selfUser.email || "", role, roles);
 
   return (
     <>
@@ -62,12 +68,12 @@ export default function Route() {
           <RoleDetails
             role={role}
             toAssignments="./assignments"
-            toEdit="./edit"
-            toDelete={"./delete"}
+            toEdit={selfUserIsSuperAdmin ? "./edit" : undefined}
+            toDelete={selfUserIsSuperAdmin ? "./delete" : undefined}
           />
         </ItemDetails>
       </OutsetPanel>
-      <Outlet context={{ role, ...context }} />
+      <Outlet context={{ role, roleAssignableBySelfUser, ...context }} />
     </>
   );
 }
@@ -75,5 +81,6 @@ export default function Route() {
 export const useRoleContext = useOutletContext<
   {
     role: SerializeFrom<typeof loader>["role"];
+    roleAssignableBySelfUser: boolean;
   } & ReturnType<typeof useRolesContext>
 >;

@@ -4,6 +4,7 @@ import type {
   SherlockRoleV3,
   SherlockUserV3,
 } from "@sherlock-js-client/sherlock";
+import { isRoleAssignmentExpired } from "../list/is-expired-or-suspended";
 
 export interface RoleAssignmentDeleteDescriptionProps {
   role: SherlockRoleV3 | SerializeFrom<SherlockRoleV3>;
@@ -21,23 +22,29 @@ export const RoleAssignmentDeleteDescription: React.FunctionComponent<
       Are you sure you want to delete this role assignment?
     </h2>
     <p>
-      This will delete the {assignment.suspended ? "suspended" : "active"}{" "}
-      {role.name} role assignment for {user.email}.
+      This will delete the{" "}
+      {assignment.suspended
+        ? "suspended"
+        : isRoleAssignmentExpired(assignment)
+          ? "expired"
+          : "active"}{" "}
+      {role.name} role assignment for{" "}
+      <span className="font-medium">{user.email}</span>.
     </p>
     {(role.grantsDevAzureGroup || role.grantsDevFirecloudGroup) && (
       <p>
-        User will be removed from{` `}
+        User will be removed from
         {role.grantsDevAzureGroup && (
           <span>
-            the {role.grantsDevAzureGroup} Azure group{` `}
+            {` `}the {role.grantsDevAzureGroup} Azure group
           </span>
         )}
         {role.grantsDevAzureGroup && role.grantsDevFirecloudGroup && (
-          <span>and{` `}</span>
+          <span>{` `}and</span>
         )}
         {role.grantsDevFirecloudGroup && (
           <span>
-            the {role.grantsDevFirecloudGroup} firecloud.org Google group{` `}
+            {` `}the {role.grantsDevFirecloudGroup} firecloud.org Google group
           </span>
         )}
         .
