@@ -37,3 +37,5 @@ All testing here is manual. It's not ideal but it's the reality of how this code
 ## Submitting Changes
 
 PRs require a ticket in the title with CLIA risk and security impact description filled. The description must include a summary of the changes, an explanation of what testing was done (screenshots recommended), and a note on the risk of the change.
+
+PRs require two approvals; dependabot PRs only require one (GitHub Actions will automatically lend one approval to make this work with branch protection rules).
