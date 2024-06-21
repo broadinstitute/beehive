@@ -49,7 +49,7 @@ export const GithubActionsDeployHookEditPanel: React.FunctionComponent<{
           belowComponent={
             <>
               <NavButton
-                to="./test"
+                to="./test-run"
                 onClick={() => setSidebar()}
                 {...DeployHookColors}
               >

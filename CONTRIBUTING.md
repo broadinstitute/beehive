@@ -30,7 +30,9 @@ IAP_TOKEN="$(thelma auth iap --echo)" SHERLOCK_BASE_URL='https://sherlock.dsp-de
 
 ## Testing
 
-All testing here is manual. It's not ideal but it's the reality of how this codebase was delivered on time: so far, this approach has helped velocity here, not hurt it. [`DESIGN.md`](./DESIGN.md) has more information on some of the choices made to lower the blast radius of changes and make this work.
+Currently, Beehive's automated testing is only for it's most critical logic -- forwarding IAP identity to Sherlock and CSRF protection. This should be some of Beehive's only logic: any business logic should exist in Sherlock, not here.
+
+Testing of UI behavior is manual. [`DESIGN.md`](./DESIGN.md) has more information on some of the choices made to lower the blast radius of changes and make this work.
 
 > If you're feeling like there's something in the UI you can't confidently test manually, in the past that's meant that the functionality needed to be moved to Sherlock.
 
