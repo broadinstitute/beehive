@@ -156,8 +156,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
   }
 
-  // Start GitHub OAuth
-  if (!session.has(sessionFields.githubAccessToken)) {
+  // Start GitHub OAuth, assuming X-Beehive-Ignore-Github isn't set
+  if (
+    !session.has(sessionFields.githubAccessToken) &&
+    !request.headers.has("X-Beehive-Ignore-Github")
+  ) {
     session.set(sessionFields.githubOAuthState, generateNonce());
     const githubAuthorizeURL = new URL(
       "https://github.com/login/oauth/authorize",
