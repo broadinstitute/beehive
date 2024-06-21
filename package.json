@@ -17,7 +17,7 @@
     "@floating-ui/react": "^0.26.17",
     "@googleapis/calendar": "^9.7.5",
     "@octokit/rest": "^21.0.0",
-    "@react-hook/resize-observer": "^1.2.6",
+    "@react-hook/resize-observer": "^2.0.1",
     "@remix-run/node": "^v2.9.2",
     "@remix-run/react": "^v2.9.2",
     "@remix-run/serve": "^v2.9.2",
