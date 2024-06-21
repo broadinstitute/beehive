@@ -50,12 +50,17 @@ export const scrollDivID: string = "scroll-control";
 const LayoutRoute: React.FunctionComponent = () => {
   const scrollControlRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef<HTMLDivElement>(null);
-  useResizeObserver(scrolledRef, (entry) => {
-    scrollControlRef.current?.scrollTo({
-      behavior: "smooth",
-      left: entry.contentBoxSize[0].inlineSize,
+  if (typeof window !== "undefined") {
+    // We *do* want to run this hook conditionally because we only want it to run client-side!
+    // This accesses window so we can't let it run server-side.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useResizeObserver(scrolledRef, (entry) => {
+      scrollControlRef.current?.scrollTo({
+        behavior: "smooth",
+        left: entry.contentBoxSize[0].inlineSize,
+      });
     });
-  });
+  }
 
   const { flashNotifications, selfUser } = useLoaderData<typeof loader>();
   const [notifications, setNotifications] = useState(
