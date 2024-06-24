@@ -6,6 +6,7 @@ Sherlock is thoroughly tested and carefully designed. To be blunt, the standards
 
 -   Beehive doesn't include any significant business logic: if we care about the behavior, we write it in Sherlock
 -   Beehive doesn't handle authentication or authorization: it runs behind Identity Aware Proxy and passes that through to Sherlock
+    -   This behavior is actually one of the only areas where we currently have automated tests for Beehive
 -   Beehive doesn't define models or many types at all: we rely on Sherlock's TypeScript client library
 -   Beehive doesn't manage state, routing, or data loading: we use Remix
 -   Beehive doesn't have custom CSS wherever possible: we use Tailwind

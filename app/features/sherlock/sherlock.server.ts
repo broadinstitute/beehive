@@ -42,7 +42,7 @@ export const SherlockConfiguration = new Configuration({
   },
 });
 
-const IapJwtHeader = "x-goog-iap-jwt-assertion";
+export const IapJwtHeader = "x-goog-iap-jwt-assertion";
 
 export function handleIAP(request: Request): RequestInit {
   if (request.headers.has(IapJwtHeader)) {
