@@ -37,7 +37,10 @@ export default function Route() {
         <h1 className="text-4xl tablet:text-5xl laptop:text-7xl desktop:text-8xl font-extralight laptop:font-thin shrink-0 text-center text-color-header-text min-h-0 mt-4">
           Welcome to Beehive
         </h1>
-        <span className="text-lg text-center">
+        <span
+          className="text-lg text-center"
+          title="The cookies are all mandatory, and they're all chocolate chip."
+        >
           Let this be your legally-mandated warning that Beehive uses cookies
         </span>
       </div>
