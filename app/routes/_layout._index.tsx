@@ -40,6 +40,9 @@ export default function Route() {
         <span
           className="text-lg text-center"
           title="The cookies are all mandatory, and they're all chocolate chip."
+          // This cookie warning is technically not necessary and can be removed at some later point.
+          // See P4 on https://docs.google.com/document/d/1CJENOqKMj5Qy37s93YogeCx_9nBfnSUh7ok_0FHVjH4/edit,
+          // this banner is not required there.
         >
           Let this be your legally-mandated warning that Beehive uses cookies
         </span>
