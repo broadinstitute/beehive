@@ -38,7 +38,7 @@ export default function Route() {
           Welcome to Beehive
         </h1>
         <span className="text-lg text-center">
-          You can now test and dry-run deploy hooks!
+          Let this be your legally-mandated warning that Beehive uses cookies
         </span>
       </div>
       <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">
