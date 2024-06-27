@@ -12,7 +12,10 @@ import { FormErrorDisplay } from "~/errors/components/form-error-display";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import { RoleAssignmentDeleteDescription } from "~/features/sherlock/role-assignments/delete/role-assignment-delete-description";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
-import { SherlockConfiguration } from "~/features/sherlock/sherlock.server";
+import {
+  SherlockConfiguration,
+  handleIAP,
+} from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useRoleAssignmentContext } from "./_layout.roles.$roleName.assignments.$userEmail";
 
@@ -27,17 +30,22 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => [
-  { title: `${params.userEmail} - Assignmnet - Delete` },
+  {
+    title: `${params.userEmail} - ${params.roleName} - Role Assignment - Delete`,
+  },
 ];
 
 export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   return new RoleAssignmentsApi(SherlockConfiguration)
-    .apiRoleAssignmentsV3RoleSelectorUserSelectorDelete({
-      userSelector: params.userEmail || "",
-      roleSelector: params.roleName || "",
-    })
+    .apiRoleAssignmentsV3RoleSelectorUserSelectorDelete(
+      {
+        userSelector: params.userEmail || "",
+        roleSelector: params.roleName || "",
+      },
+      handleIAP(request),
+    )
     .then(
       () => redirect(`/roles/${params.roleName}/assignments`),
       makeErrorResponseReturner(),

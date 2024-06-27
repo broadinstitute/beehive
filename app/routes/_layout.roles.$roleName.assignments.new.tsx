@@ -4,12 +4,10 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import type { Params } from "@remix-run/react";
 import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
-import {
-  RoleAssignmentsApi,
-  SherlockUserV3,
-  UsersApi,
-} from "@sherlock-js-client/sherlock";
+import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
+import { RoleAssignmentsApi, UsersApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
@@ -37,12 +35,14 @@ import { useSidebar } from "~/hooks/use-sidebar";
 import { useRoleContext } from "./_layout.roles.$roleName";
 
 export const handle = {
-  breadcrumb: () => <NavLink to="/roles/new">New</NavLink>,
+  breadcrumb: (params: Readonly<Params<string>>) => (
+    <NavLink to={`/roles/${params.RoleName}/assignments/new`}>New</NavLink>
+  ),
 };
 
 export const meta: MetaFunction = () => [
   {
-    title: "New Role",
+    title: "New Role Assignment",
   },
 ];
 
@@ -61,11 +61,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const userEmail = formData.get("user")?.toString();
 
   return new RoleAssignmentsApi(SherlockConfiguration)
-    .apiRoleAssignmentsV3RoleSelectorUserSelectorPost({
-      userSelector: userEmail || "",
-      roleSelector: params.roleName || "",
-      roleAssignment: roleAssignmentRequest,
-    })
+    .apiRoleAssignmentsV3RoleSelectorUserSelectorPost(
+      {
+        userSelector: userEmail || "",
+        roleSelector: params.roleName || "",
+        roleAssignment: roleAssignmentRequest,
+      },
+      handleIAP(request),
+    )
     .then(
       () => redirect(`/roles/${params.roleName}/assignments/${userEmail}`),
       makeErrorResponseReturner(roleAssignmentRequest),

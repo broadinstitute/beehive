@@ -11,11 +11,11 @@ import {
   useOutletContext,
   useParams,
 } from "@remix-run/react";
-import {
-  RolesApi,
+import type {
   SherlockRoleAssignmentV3,
   SherlockUserV3,
 } from "@sherlock-js-client/sherlock";
+import { RolesApi } from "@sherlock-js-client/sherlock";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { RoleAssignmentDetails } from "~/features/sherlock/role-assignments/view/role-assignment-details";
@@ -36,7 +36,7 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => [
-  { title: `${params.userEmail} - Role Assignment` },
+  { title: `${params.userEmail} - ${params.roleName} - Role Assignment` },
 ];
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
