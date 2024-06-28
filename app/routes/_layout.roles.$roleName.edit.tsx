@@ -18,7 +18,10 @@ import {
 } from "~/features/sherlock/roles/edit/role-editable-fields";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
 import { RoleHelpCopy } from "~/features/sherlock/roles/role-help-copy";
-import { SherlockConfiguration } from "~/features/sherlock/sherlock.server";
+import {
+  SherlockConfiguration,
+  handleIAP,
+} from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { useRoleContext } from "./_layout.roles.$roleName";
@@ -40,10 +43,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const role = roleEditableFormDataToObject(formData);
 
   return new RolesApi(SherlockConfiguration)
-    .apiRolesV3SelectorPatch({
-      selector: params.roleName || "",
-      role: role,
-    })
+    .apiRolesV3SelectorPatch(
+      {
+        selector: params.roleName || "",
+        role: role,
+      },
+      handleIAP(request),
+    )
     .then(
       (role) => redirect(`/roles/${role.name}`),
       makeErrorResponseReturner(role),

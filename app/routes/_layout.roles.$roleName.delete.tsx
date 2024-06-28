@@ -12,7 +12,10 @@ import { FormErrorDisplay } from "~/errors/components/form-error-display";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
 import { RoleDeleteDescription } from "~/features/sherlock/roles/delete/role-delete-description";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
-import { SherlockConfiguration } from "~/features/sherlock/sherlock.server";
+import {
+  SherlockConfiguration,
+  handleIAP,
+} from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useRoleContext } from "./_layout.roles.$roleName";
 
@@ -30,9 +33,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   await getValidSession(request);
 
   return new RolesApi(SherlockConfiguration)
-    .apiRolesV3SelectorDelete({
-      selector: params.roleName || "",
-    })
+    .apiRolesV3SelectorDelete(
+      {
+        selector: params.roleName || "",
+      },
+      handleIAP(request),
+    )
     .then(() => redirect("/roles"), makeErrorResponseReturner());
 }
 

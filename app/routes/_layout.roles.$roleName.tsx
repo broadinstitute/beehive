@@ -7,7 +7,6 @@ import type { Params } from "@remix-run/react";
 import {
   NavLink,
   Outlet,
-  defer,
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
@@ -35,14 +34,14 @@ export const meta: MetaFunction = ({ params }) => [
 ];
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  return defer({
+  return {
     role: await new RolesApi(SherlockConfiguration)
       .apiRolesV3SelectorGet(
         { selector: params.roleName || "" },
         handleIAP(request),
       )
       .catch(errorResponseThrower),
-  });
+  };
 }
 
 export const ErrorBoundary = PanelErrorBoundary;

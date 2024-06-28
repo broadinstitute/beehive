@@ -14,7 +14,10 @@ import {
   roleAssignmentEditableFormDataToObject,
 } from "~/features/sherlock/role-assignments/edit/role-assignment-editable-fields";
 import { RoleColors } from "~/features/sherlock/roles/role-colors";
-import { SherlockConfiguration } from "~/features/sherlock/sherlock.server";
+import {
+  SherlockConfiguration,
+  handleIAP,
+} from "~/features/sherlock/sherlock.server";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useRoleAssignmentContext } from "./_layout.roles.$roleName.assignments.$userEmail";
 
@@ -29,7 +32,9 @@ export const handle = {
 };
 
 export const meta: MetaFunction = ({ params }) => [
-  { title: `${params.userEmail} - Role Assignment - Edit` },
+  {
+    title: `${params.userEmail} - ${params.roleName} - Role Assignment - Edit`,
+  },
 ];
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -39,11 +44,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const assignment = roleAssignmentEditableFormDataToObject(formData);
 
   return new RoleAssignmentsApi(SherlockConfiguration)
-    .apiRoleAssignmentsV3RoleSelectorUserSelectorPatch({
-      userSelector: params.userEmail || "",
-      roleSelector: params.roleName || "",
-      roleAssignment: assignment,
-    })
+    .apiRoleAssignmentsV3RoleSelectorUserSelectorPatch(
+      {
+        userSelector: params.userEmail || "",
+        roleSelector: params.roleName || "",
+        roleAssignment: assignment,
+      },
+      handleIAP(request),
+    )
     .then(
       () =>
         redirect(`/roles/${params.roleName}/assignments/${params.userEmail}`),
@@ -54,8 +62,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const { role, user, selfUserIsSuperAdmin, assignment } =
-    useRoleAssignmentContext();
+  const { role, selfUserIsSuperAdmin, assignment } = useRoleAssignmentContext();
   const errorInfo = useActionData<typeof action>();
 
   return (

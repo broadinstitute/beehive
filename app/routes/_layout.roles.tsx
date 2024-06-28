@@ -10,11 +10,8 @@ import {
   useOutletContext,
   useParams,
 } from "@remix-run/react";
-import {
-  RoleAssignmentsApi,
-  RolesApi,
-  UsersApi,
-} from "@sherlock-js-client/sherlock";
+import type { SherlockRoleV3 } from "@sherlock-js-client/sherlock";
+import { RolesApi, UsersApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
@@ -52,31 +49,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .catch(errorResponseThrower),
   ]);
 
-  const superAdminRoles = roles.filter((r) => r.grantsSherlockSuperAdmin);
-
-  const selfUserInSuperAdminGroups = await Promise.all(
-    superAdminRoles.map((r) => {
-      return new RoleAssignmentsApi(SherlockConfiguration)
-        .apiRoleAssignmentsV3RoleSelectorUserSelectorGet(
-          {
-            roleSelector: (r.id || -1).toString(),
-            userSelector: (selfUser.id || -1).toString(),
-          },
-          handleIAP(request),
-        )
-        .then(() => {
-          return true;
-        })
-        .catch(() => {
-          return false;
-        });
-    }),
-  );
-
   return {
     roles: roles,
     selfUser: selfUser,
-    selfUserIsSuperAdmin: selfUserInSuperAdminGroups.some((r) => r),
+    selfUserIsSuperAdmin: selfUser.assignments?.some(
+      (assignment) =>
+        (assignment?.roleInfo as SherlockRoleV3)?.grantsSherlockSuperAdmin ||
+        false,
+    ),
   };
 }
 
