@@ -72,7 +72,7 @@ export const RoleEditableFields: React.FunctionComponent<
         ? ""
         : "A valid break-glass role is required",
     );
-  }, [breakGlassRoleInputText]);
+  }, [breakGlassEnabled, roles, breakGlassRoleInputText]);
 
   return (
     <div className="flex flex-col space-y-4">
