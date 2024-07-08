@@ -68,12 +68,6 @@ export const RoleAssignmentEditableFields: React.FunctionComponent<
                 Sherlock automatically controls suspension state based on the
                 user's suitability.
               </p>
-              {!creating && (
-                <p className="mt-2">
-                  The user is currently{" "}
-                  {assignment.suspended ? "suspended" : "not suspended"}.
-                </p>
-              )}
             </>
           ) : (
             <>
