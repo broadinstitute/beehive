@@ -93,7 +93,7 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
       {role.suspendNonSuitableUsers ? (
         <p>
           Unsuitable users in this role will be{" "}
-          <span className="font-medium">automatically suspended</span>.
+          <span className="font-semibold">automatically suspended</span>.
         </p>
       ) : (
         <p>Suitability does not impact assignments in this role.</p>
