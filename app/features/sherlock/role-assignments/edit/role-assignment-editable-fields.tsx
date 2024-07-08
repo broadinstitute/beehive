@@ -23,7 +23,14 @@ export const roleAssignmentEditableFormDataToObject = function (
   formData: FormData,
 ): SherlockRoleAssignmentV3 {
   return {
-    suspended: formData.get("suspended") === "true",
+    // If not included in the form, don't send at all so we rely on Sherlock's
+    // default calculations.
+    suspended:
+      formData.get("suspended") === "false"
+        ? false
+        : formData.get("suspended") === "true"
+          ? true
+          : undefined,
     expiresIn:
       formData.get("expires") === "false"
         ? undefined
@@ -50,21 +57,43 @@ export const RoleAssignmentEditableFields: React.FunctionComponent<
     <div className="flex flex-col space-y-4">
       {selfUserIsSuperAdmin && (
         <div>
-          <h2 className="font-light text-2xl text-color-header-text">
-            Suspended
-          </h2>
-          <p>Configure whether the assignment is suspended.</p>
-          <EnumInputSelect
-            name="suspended"
-            className="grid grid-cols-2 mt-2"
-            fieldValue={roleAssignmentSuspended}
-            setFieldValue={setRoleAssignmentSuspended}
-            enums={[
-              ["Yes", "true"],
-              ["No", "false"],
-            ]}
-            {...RoleColors}
-          />
+          {role.suspendNonSuitableUsers ? (
+            // If the role suspends non-suitable users, then we don't show suspension as a
+            // normally editable field.
+            <>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Suspension
+              </h2>
+              <p>
+                Sherlock automatically controls suspension state based on the
+                user's suitability.
+              </p>
+              {!creating && (
+                <p className="mt-2">
+                  The user is currently{" "}
+                  {assignment.suspended ? "suspended" : "not suspended"}.
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <h2 className="font-light text-2xl text-color-header-text">
+                Suspended
+              </h2>
+              <p>Configure whether the assignment is suspended.</p>
+              <EnumInputSelect
+                name="suspended"
+                className="grid grid-cols-2 mt-2"
+                fieldValue={roleAssignmentSuspended}
+                setFieldValue={setRoleAssignmentSuspended}
+                enums={[
+                  ["Yes", "true"],
+                  ["No", "false"],
+                ]}
+                {...RoleColors}
+              />
+            </>
+          )}
         </div>
       )}
       {selfUserIsSuperAdmin && (
