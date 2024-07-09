@@ -72,7 +72,7 @@ export const RoleEditableFields: React.FunctionComponent<
         ? ""
         : "A valid break-glass role is required",
     );
-  }, [breakGlassRoleInputText]);
+  }, [breakGlassEnabled, roles, breakGlassRoleInputText]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -214,7 +214,12 @@ export const RoleEditableFields: React.FunctionComponent<
         <h2 className="font-light text-2xl text-color-header-text">
           Suspend non-suitable users?
         </h2>
-        <p>Users that are not suitable will be suspended from the role.</p>
+        <p>
+          Users that are not suitable can be automatically suspended from the
+          role. When this is true, the suspension status of each role assignment
+          won't be a directly editable field, since it will be controlled by
+          Sherlock.
+        </p>
         <EnumInputSelect
           name="suspendNonSuitableUsers"
           className="grid grid-cols-2 mt-2"

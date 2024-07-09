@@ -1,7 +1,7 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type { SherlockUserV3 } from "@sherlock-js-client/sherlock";
 import { TextField } from "~/components/interactivity/text-field";
-import { SetsSidebarProps } from "~/hooks/use-sidebar";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectUser } from "../../users/set/sidebar-select-user";
 
 export interface RoleAssignmentCreatableFieldsProps {
