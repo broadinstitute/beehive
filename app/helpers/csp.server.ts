@@ -24,7 +24,6 @@ export function getContentSecurityPolicy(nonce?: string | undefined): string {
     `connect-src ${connectSrc}; ` +
     `media-src ${self}; ` +
     "object-src 'none'; " +
-    `prefetch-src ${self}; ` +
     `child-src ${self}; ` +
     `frame-src ${self}; ` +
     `worker-src ${self} blob:; ` +
