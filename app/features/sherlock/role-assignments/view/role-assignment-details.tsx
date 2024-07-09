@@ -21,7 +21,7 @@ export interface RoleAssignmentDetailsProps {
 
 export const RoleAssignmentDetails: React.FunctionComponent<
   RoleAssignmentDetailsProps
-> = ({ assignment, assignmentEditableBySelfUser, toEdit, toDelete }) => {
+> = ({ assignment, role, assignmentEditableBySelfUser, toEdit, toDelete }) => {
   const isExpired = isRoleAssignmentExpired(assignment);
   return (
     <div className="flex flex-col space-y-4">
@@ -42,10 +42,14 @@ export const RoleAssignmentDetails: React.FunctionComponent<
         <p>
           This assignment has been{" "}
           <span className="font-medium">suspended</span>.
-          {assignmentEditableBySelfUser && (
+          {assignmentEditableBySelfUser &&
+            role.suspendNonSuitableUsers === false && (
+              <span>{` `}Click "Edit Metadata" to enable user.</span>
+            )}
+          {role.suspendNonSuitableUsers === true && (
             <span>
-              {` `}Check user suitability or click "Edit Metadata" to enable
-              user.
+              {` `}Suspension is automatically set based on the user's
+              suitability.
             </span>
           )}
         </p>

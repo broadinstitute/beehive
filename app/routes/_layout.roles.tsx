@@ -52,11 +52,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return {
     roles: roles,
     selfUser: selfUser,
-    selfUserIsSuperAdmin: selfUser.assignments?.some(
-      (assignment) =>
-        (assignment?.roleInfo as SherlockRoleV3)?.grantsSherlockSuperAdmin ||
-        false,
-    ),
+    selfUserIsSuperAdmin:
+      selfUser.assignments?.some(
+        (assignment) =>
+          (assignment?.roleInfo as SherlockRoleV3)?.grantsSherlockSuperAdmin,
+      ) || false,
   };
 }
 
