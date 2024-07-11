@@ -25,6 +25,7 @@ export const roleEditableFormDataToObject = function (
     grantsSherlockSuperAdmin:
       formData.get("grantsSherlockSuperAdmin") === "true",
     suspendNonSuitableUsers: formData.get("suspendNonSuitableUsers") === "true",
+    autoAssignAllUsers: formData.get("autoAssignAllUsers") === "true",
     canBeGlassBrokenByRole:
       parseInt(formData.get("canBeGlassBrokenByRole")?.toString() || "") ||
       undefined,
@@ -63,6 +64,10 @@ export const RoleEditableFields: React.FunctionComponent<
     role?.suspendNonSuitableUsers
       ? role?.suspendNonSuitableUsers.toString()
       : "false",
+  );
+
+  const [autoAssignAllUsers, setAutoAssignAllUsers] = useState(
+    role?.autoAssignAllUsers ? role?.autoAssignAllUsers.toString() : "false",
   );
 
   const breakGlassRoleInputRef = useRef<HTMLInputElement | null>(null);
@@ -225,6 +230,31 @@ export const RoleEditableFields: React.FunctionComponent<
           className="grid grid-cols-2 mt-2"
           fieldValue={suspendNonSuitableUsers}
           setFieldValue={setSuspendNonSuitableUsers}
+          enums={[
+            ["Yes", "true"],
+            ["No", "false"],
+          ]}
+          {...RoleColors}
+        />
+      </div>
+      <div>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Automatically add all users?
+        </h2>
+        <p>
+          When true, Sherlock will automatically add all users it knows about to
+          this role. It will respect the automatic non-suitable suspension above
+          if that's enabled.
+        </p>
+        <p className="mt-2">
+          This should be used very sparingly, since we shouldn't need many roles
+          with literally every single user in them.
+        </p>
+        <EnumInputSelect
+          name="autoAssignAllUsers"
+          className="grid grid-cols-2 mt-2"
+          fieldValue={autoAssignAllUsers}
+          setFieldValue={setAutoAssignAllUsers}
           enums={[
             ["Yes", "true"],
             ["No", "false"],
