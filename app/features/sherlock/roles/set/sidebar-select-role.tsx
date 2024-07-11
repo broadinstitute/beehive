@@ -1,5 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
-import { SherlockRoleV3 } from "@sherlock-js-client/sherlock";
+import type { SherlockRoleV3 } from "@sherlock-js-client/sherlock";
 import { SidebarFilterControlledList } from "~/components/panel-structures/sidebar-filter-controlled-list";
 import { ListRoleButtonText } from "../list/list-role-button-text";
 import { matchRole } from "../list/match-role";

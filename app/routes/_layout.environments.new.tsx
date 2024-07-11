@@ -9,6 +9,7 @@ import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import {
   ClustersApi,
   EnvironmentsApi,
+  RolesApi,
   UsersApi,
 } from "@sherlock-js-client/sherlock";
 import { useMemo, useState } from "react";
@@ -72,6 +73,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
         (users) => users.sort(makeUserSorter(selfUserEmail)),
         errorResponseThrower,
       ),
+    new RolesApi(SherlockConfiguration)
+      .apiRolesV3Get({}, handleIAP(request))
+      .catch(errorResponseThrower),
     preconfiguredLifecycle,
   ]);
 }
@@ -144,7 +148,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const [userEmail, clusters, users, preconfiguredLifecycle] =
+  const [userEmail, clusters, users, roles, preconfiguredLifecycle] =
     useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const { environments } = useEnvironmentsContext();
@@ -326,6 +330,7 @@ export default function Route() {
                 setSidebarFilterText={setSidebarFilterText}
                 clusters={clusters}
                 users={users}
+                roles={roles}
                 environment={errorInfo?.formState}
                 creating={true}
                 templateInUse={lifecycle === "dynamic"}
