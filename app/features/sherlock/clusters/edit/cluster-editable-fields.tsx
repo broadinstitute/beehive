@@ -1,19 +1,28 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { SherlockClusterV3 } from "@sherlock-js-client/sherlock";
+import type {
+  SherlockClusterV3,
+  SherlockRoleV3,
+} from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
+import type { SetsSidebarProps } from "~/hooks/use-sidebar";
+import { SidebarSelectRole } from "../../roles/set/sidebar-select-role";
 import { ClusterColors } from "../cluster-colors";
 
 export interface ClusterEditableFieldsProps {
   cluster?: SherlockClusterV3 | SerializeFrom<SherlockClusterV3>;
+  roles: SerializeFrom<SherlockRoleV3[]>;
 }
 
 export const ClusterEditableFields: React.FunctionComponent<
-  ClusterEditableFieldsProps
-> = ({ cluster }) => {
+  ClusterEditableFieldsProps & SetsSidebarProps
+> = ({ setSidebarFilterText, setSidebar, cluster, roles }) => {
   const [requiresSuitability, setRequiresSuitability] = useState(
     cluster?.requiresSuitability === true ? "true" : "false",
+  );
+  const [requiredRole, setRequiredRole] = useState(
+    cluster?.requiredRole != null ? cluster.requiredRole : "",
   );
   return (
     <div className="flex flex-col space-y-4">
@@ -95,6 +104,37 @@ export const ClusterEditableFields: React.FunctionComponent<
             ["No", "false"],
           ]}
           {...ClusterColors}
+        />
+      </div>
+      <div>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Require Role?
+        </h2>
+        <p>
+          DevOps's systems can require active membership in a specific role to{" "}
+          <b className="font-semibold">modify</b> this cluster (doesn't affect
+          access).
+        </p>
+        <TextField
+          name="requiredRole"
+          placeholder="Search..."
+          value={requiredRole}
+          onChange={(e) => {
+            setRequiredRole(e.currentTarget.value);
+            setSidebarFilterText(e.currentTarget.value);
+          }}
+          onFocus={() => {
+            setSidebar(({ filterText }) => (
+              <SidebarSelectRole
+                roles={roles}
+                fieldValue={filterText}
+                setFieldValue={(value) => {
+                  setRequiredRole(value?.name || "");
+                  setSidebar();
+                }}
+              />
+            ));
+          }}
         />
       </div>
       <label>

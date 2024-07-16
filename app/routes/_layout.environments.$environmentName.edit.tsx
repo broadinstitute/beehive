@@ -10,6 +10,7 @@ import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import {
   ClustersApi,
   EnvironmentsApi,
+  RolesApi,
   UsersApi,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -59,6 +60,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
         (users) => users.sort(makeUserSorter(getUserEmail(request))),
         errorResponseThrower,
       ),
+    new RolesApi(SherlockConfiguration)
+      .apiRolesV3Get({}, handleIAP(request))
+      .catch(errorResponseThrower),
   ]);
 }
 
@@ -90,7 +94,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const [clusters, users] = useLoaderData<typeof loader>();
+  const [clusters, users, roles] = useLoaderData<typeof loader>();
   const errorInfo = useActionData<typeof action>();
   const { environment } = useEnvironmentContext();
 
@@ -118,6 +122,7 @@ export default function Route() {
             setSidebarFilterText={setSidebarFilterText}
             clusters={clusters}
             users={users}
+            roles={roles}
             environment={errorInfo?.formState || environment}
             defaultCluster={defaultCluster}
             setDefaultCluster={setDefaultCluster}

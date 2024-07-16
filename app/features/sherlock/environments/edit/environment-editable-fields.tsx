@@ -2,6 +2,7 @@ import type { SerializeFrom } from "@remix-run/node";
 import type {
   SherlockClusterV3,
   SherlockEnvironmentV3,
+  SherlockRoleV3,
   SherlockUserV3,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -11,6 +12,7 @@ import { TextField } from "~/components/interactivity/text-field";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { SidebarSelectCluster } from "../../clusters/set/sidebar-select-cluster";
+import { SidebarSelectRole } from "../../roles/set/sidebar-select-role";
 import { SidebarSelectUser } from "../../users/set/sidebar-select-user";
 import { EnvironmentColors } from "../environment-colors";
 
@@ -18,6 +20,7 @@ export interface EnvironmentEditableFieldsProps {
   environment?: SherlockEnvironmentV3 | SerializeFrom<SherlockEnvironmentV3>;
   clusters: SerializeFrom<SherlockClusterV3[]>;
   users: SerializeFrom<SherlockUserV3[]>;
+  roles: SerializeFrom<SherlockRoleV3[]>;
   // When we're creating an environment, we don't want to try to replicate Sherlock's
   // advanced template-default behavior, so this flag tells us to let the user pass
   // empty values for fields where we might otherwise block it.
@@ -39,6 +42,7 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   environment,
   clusters,
   users,
+  roles,
   creating,
   templateInUse,
   defaultCluster,
@@ -49,6 +53,9 @@ export const EnvironmentEditableFields: React.FunctionComponent<
     environment?.requiresSuitability != null
       ? environment.requiresSuitability.toString()
       : "false",
+  );
+  const [requiredRole, setRequiredRole] = useState(
+    environment?.requiredRole != null ? environment.requiredRole : "",
   );
   const [owner, setOwner] = useState(environment?.owner || selfEmail || "");
   const [namePrefixesDomain, setNamePrefixesDomain] = useState(
@@ -85,6 +92,37 @@ export const EnvironmentEditableFields: React.FunctionComponent<
             ["No", "false"],
           ]}
           {...EnvironmentColors}
+        />
+      </div>
+      <div>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Require Role?
+        </h2>
+        <p>
+          DevOps's systems can require active membership in a specific role to{" "}
+          <b className="font-semibold">modify</b> this environment (doesn't
+          affect access).
+        </p>
+        <TextField
+          name="requiredRole"
+          placeholder="Search..."
+          value={requiredRole}
+          onChange={(e) => {
+            setRequiredRole(e.currentTarget.value);
+            setSidebarFilterText(e.currentTarget.value);
+          }}
+          onFocus={() => {
+            setSidebar(({ filterText }) => (
+              <SidebarSelectRole
+                roles={roles}
+                fieldValue={filterText}
+                setFieldValue={(value) => {
+                  setRequiredRole(value?.name || "");
+                  setSidebar();
+                }}
+              />
+            ));
+          }}
         />
       </div>
       <label>
