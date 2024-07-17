@@ -19,7 +19,7 @@
     "@googleapis/calendar": "^9.7.6",
     "@octokit/rest": "^21.0.0",
     "@react-hook/resize-observer": "^2.0.1",
-    "@remix-run/node": "^v2.9.2",
+    "@remix-run/node": "^v2.10.3",
     "@remix-run/react": "^v2.9.2",
     "@remix-run/serve": "^v2.9.2",
     "@sherlock-js-client/sherlock": "^1.5.20",
