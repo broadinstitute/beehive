@@ -49,6 +49,16 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   setDefaultCluster,
   selfEmail,
 }) => {
+  const [enableJanitor, setEnableJanitor] = useState(
+    environment?.enableJanitor != null
+      ? environment.enableJanitor.toString()
+      : // Technically the API does a more complex default operation here if we didn't pass a value
+        // (false for static, true for templates, copy template for BEEs) but we optimize for the
+        // 99% case here by having UI-created anything default to true. If this component queried
+        // the template or something then we could recreate the API's behavior but that's more
+        // effort than we need right now.
+        "true",
+  );
   const [requiresSuitability, setRequiresSuitability] = useState(
     environment?.requiresSuitability != null
       ? environment.requiresSuitability.toString()
@@ -73,6 +83,37 @@ export const EnvironmentEditableFields: React.FunctionComponent<
   );
   return (
     <div className="flex flex-col space-y-4">
+      {environment?.name?.includes("prod") || (
+        <div>
+          <h2 className="font-light text-2xl text-color-header-text">
+            Enable Janitor?
+          </h2>
+          <p>
+            The Janitor service helps reduce internal cloud costs in our
+            non-production environments by cleaning up resources after a set
+            period of time. Chart-level configuration may ignore this field,
+            especially for live environments.
+          </p>
+          {creating || (
+            <p className="mt-2">
+              Editing this field for an existing environment may not take effect
+              immediately or evenly; the entire environment and the generator
+              will need to be synced. Feel free to reach out to DevOps for help.
+            </p>
+          )}
+          <EnumInputSelect
+            name="enableJanitor"
+            className="grid grid-cols-2 mt-2"
+            fieldValue={enableJanitor}
+            setFieldValue={setEnableJanitor}
+            enums={[
+              ["Yes", "true"],
+              ["No", "false"],
+            ]}
+            {...EnvironmentColors}
+          />
+        </div>
+      )}
       <div>
         <h2 className="font-light text-2xl text-color-header-text">
           Require Suitability?

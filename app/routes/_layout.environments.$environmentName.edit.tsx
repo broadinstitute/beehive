@@ -75,6 +75,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
     preventDeletion: formData.get("preventDeletion") === "true",
+    enableJanitor: formData.get("enableJanitor") === "true",
   };
 
   return new EnvironmentsApi(SherlockConfiguration)
