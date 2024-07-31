@@ -54,7 +54,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const clusterRequest: SherlockClusterV3 = {
     ...formDataToObject(formData, false),
-    requiresSuitability: formData.get("requiresSuitability") === "true",
   };
 
   return new ClustersApi(SherlockConfiguration)

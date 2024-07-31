@@ -18,9 +18,6 @@ export interface ClusterEditableFieldsProps {
 export const ClusterEditableFields: React.FunctionComponent<
   ClusterEditableFieldsProps & SetsSidebarProps
 > = ({ setSidebarFilterText, setSidebar, cluster, roles }) => {
-  const [requiresSuitability, setRequiresSuitability] = useState(
-    cluster?.requiresSuitability === true ? "true" : "false",
-  );
   const [requiredRole, setRequiredRole] = useState(
     cluster?.requiredRole != null ? cluster.requiredRole : "",
   );
@@ -86,26 +83,6 @@ export const ClusterEditableFields: React.FunctionComponent<
           defaultValue={cluster?.location}
         />
       </label>
-      <div>
-        <h2 className="font-light text-2xl text-color-header-text">
-          Require Suitability?
-        </h2>
-        <p>
-          DevOps's systems can require production-suitability to <b>modify</b>{" "}
-          this cluster (doesn't affect access or cloud provider permissions).
-        </p>
-        <EnumInputSelect
-          name="requiresSuitability"
-          className="grid grid-cols-2 mt-2"
-          fieldValue={requiresSuitability}
-          setFieldValue={setRequiresSuitability}
-          enums={[
-            ["Yes", "true"],
-            ["No", "false"],
-          ]}
-          {...ClusterColors}
-        />
-      </div>
       <div>
         <h2 className="font-light text-2xl text-color-header-text">
           Require Role?

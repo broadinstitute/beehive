@@ -59,11 +59,6 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         // effort than we need right now.
         "true",
   );
-  const [requiresSuitability, setRequiresSuitability] = useState(
-    environment?.requiresSuitability != null
-      ? environment.requiresSuitability.toString()
-      : "false",
-  );
   const [requiredRole, setRequiredRole] = useState(
     environment?.requiredRole != null ? environment.requiredRole : "",
   );
@@ -114,27 +109,6 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           />
         </div>
       )}
-      <div>
-        <h2 className="font-light text-2xl text-color-header-text">
-          Require Suitability?
-        </h2>
-        <p>
-          DevOps's systems can require production-suitability to{" "}
-          <b className="font-semibold">modify</b> this environment (doesn't
-          affect access).
-        </p>
-        <EnumInputSelect
-          name="requiresSuitability"
-          className="grid grid-cols-2 mt-2"
-          fieldValue={requiresSuitability}
-          setFieldValue={setRequiresSuitability}
-          enums={[
-            ["Yes", "true"],
-            ["No", "false"],
-          ]}
-          {...EnvironmentColors}
-        />
-      </div>
       <div>
         <h2 className="font-light text-2xl text-color-header-text">
           Require Role?
