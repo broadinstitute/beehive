@@ -91,7 +91,6 @@ export async function action({ request }: ActionFunctionArgs) {
     ...formDataToObject(formData, true),
     autoPopulateChartReleases:
       formData.get("autoPopulateChartReleases") === "true",
-    requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
     preventDeletion: formData.get("preventDeletion") === "true",
     enableJanitor: formData.get("enableJanitor") === "true",

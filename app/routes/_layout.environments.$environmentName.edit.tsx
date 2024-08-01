@@ -72,7 +72,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const environmentRequest: SherlockEnvironmentV3 = {
     ...formDataToObject(formData, false),
-    requiresSuitability: formData.get("requiresSuitability") === "true",
     namePrefixesDomain: formData.get("namePrefixesDomain") === "true",
     preventDeletion: formData.get("preventDeletion") === "true",
     enableJanitor: formData.get("enableJanitor") === "true",
