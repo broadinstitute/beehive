@@ -202,8 +202,8 @@ export default function Route() {
             </p>
             <p>
               For example, if you wanted your BEE to have the same versions as
-              terra-prod, you could enter that here when you hit calculate below
-              our systems will figure it out.
+              terra-prod, you could enter that here and when you hit calculate
+              below our systems will figure it out.
             </p>
             {preconfigured && (
               <p className="mt-2 font-medium">
