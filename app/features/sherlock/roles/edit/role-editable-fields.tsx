@@ -3,7 +3,7 @@ import type { SherlockRoleV3 } from "@sherlock-js-client/sherlock";
 import { useEffect, useRef, useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import type { SetsSidebarProps } from "~/hooks/use-sidebar";
 import { RoleColors } from "../role-colors";
 import { SidebarSelectRole } from "../set/sidebar-select-role";

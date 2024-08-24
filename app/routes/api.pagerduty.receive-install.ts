@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { PagerdutyIntegrationsApi } from "@sherlock-js-client/sherlock";
-import { verifySessionPagerdutyToken } from "~/components/logic/pagerduty-token";
+import { verifySessionPagerdutyToken } from "~/components/logic/pagerduty-token.server";
 import {
   SherlockConfiguration,
   handleIAP,

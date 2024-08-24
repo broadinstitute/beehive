@@ -7,7 +7,7 @@ import type {
 import { DeployHooksApi } from "@sherlock-js-client/sherlock";
 import type { ReturnedErrorInfo } from "~/errors/helpers/error-response-handlers";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { SherlockConfiguration, handleIAP } from "../../sherlock.server";
 

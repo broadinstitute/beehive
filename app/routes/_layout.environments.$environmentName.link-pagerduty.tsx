@@ -11,13 +11,13 @@ import {
   EnvironmentsApi,
   PagerdutyIntegrationsApi,
 } from "@sherlock-js-client/sherlock";
-import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token";
+import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token.server";
 import { EnvironmentColors } from "~/features/sherlock/environments/environment-colors";
 import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
 import {
   errorResponseThrower,

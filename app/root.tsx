@@ -7,7 +7,6 @@ import { json, redirect } from "@remix-run/node";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -29,8 +28,8 @@ import {
 } from "./features/sherlock/sherlock.server";
 import { generateNonce } from "./helpers/nonce.server";
 import { commitSession, getSession, sessionFields } from "./session.server";
-import beehiveLoadingStyles from "./styles/beehive-loading.css";
-import tailwindStyles from "./styles/tailwind.css";
+import beehiveLoadingStyles from "./styles/beehive-loading.css?url";
+import tailwindStyles from "./styles/tailwind.css?url";
 
 export const meta: MetaFunction = () => [
   {
@@ -244,7 +243,6 @@ export const App: React.FunctionComponent = () => {
             <LoadScroller nonce={cspScriptNonce} />
             <ScrollRestoration nonce={cspScriptNonce} />
             <Scripts nonce={cspScriptNonce} />
-            <LiveReload nonce={cspScriptNonce} />
           </body>
         </html>
       </PagerdutyTokenContext.Provider>

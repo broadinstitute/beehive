@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import type { SherlockSlackDeployHookV3Edit } from "@sherlock-js-client/sherlock";
 import { DeployHooksApi } from "@sherlock-js-client/sherlock";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { SherlockConfiguration, handleIAP } from "../../sherlock.server";
 

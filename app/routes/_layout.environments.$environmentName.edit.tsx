@@ -26,7 +26,7 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { getUserEmail } from "~/helpers/get-user-email.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";

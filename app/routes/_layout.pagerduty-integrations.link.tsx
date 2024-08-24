@@ -2,10 +2,8 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { NavLink, useLoaderData } from "@remix-run/react";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
-import {
-  PagerdutyInstallLink,
-  getPdAppIdFromEnv,
-} from "~/components/logic/pagerduty-token";
+import { PagerdutyInstallLink } from "~/components/logic/pagerduty-token";
+import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token.server";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PagerdutyIntegrationGeneralLinkDescription } from "~/features/sherlock/pagerduty-integrations/link-pagerduty/pagerduty-integration-general-link-description";
 import { PagerdutyIntegrationColors } from "~/features/sherlock/pagerduty-integrations/pagerduty-integration-colors";
