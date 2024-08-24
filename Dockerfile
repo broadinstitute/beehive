@@ -1,4 +1,4 @@
-ARG NODE_VERSION='18'
+ARG NODE_VERSION='20'
 ARG DISTRO='alpine'
 
 # base node image

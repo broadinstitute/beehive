@@ -55,7 +55,7 @@
     "typescript": "^5.5.4"
   },
   "engines": {
-    "node": ">=18.12.0"
+    "node": ">=20.17.0"
   },
   "overrides": {
     "@remix-run/node": "$@remix-run/node",
