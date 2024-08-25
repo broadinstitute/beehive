@@ -51,17 +51,17 @@ export default function Route() {
         <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">
           <IndexNavButton
             to="/environments"
-            title="Update BEEs"
+            title="Environments"
             className="border-color-environment-border h-52"
           >
-            + Other Environments
+            Manage BEEs, Monolith Releases
           </IndexNavButton>
           <IndexNavButton
-            to="/apps"
-            title="Deploy to Prod"
+            to="/services"
+            title="Services"
             className="border-color-chart-border h-52"
           >
-            + Alpha and Staging
+            Independent Releases
           </IndexNavButton>
         </div>
         <div className="flex flex-wrap justify-center w-full max-w-7xl m-auto min-h-0 items-center">
