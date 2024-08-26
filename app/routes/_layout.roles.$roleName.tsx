@@ -60,8 +60,8 @@ export default function Route() {
       <OutsetPanel {...RoleColors}>
         <ItemDetails
           subtitle={`${
-            role?.canBeGlassBrokenByRole ? "Break-glass" : "Manually assigned"
-          } role`}
+            role?.canBeGlassBrokenByRole ? "Break-Glass" : "Manually Assigned"
+          } Role`}
           title={role?.name || ""}
         >
           <RoleDetails

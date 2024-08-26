@@ -21,7 +21,7 @@ export const roleEditableFormDataToObject = function (
   formData: FormData,
 ): SherlockRoleV3 {
   return {
-    ...formDataToObject(formData, true),
+    ...formDataToObject(formData, false),
     grantsSherlockSuperAdmin:
       formData.get("grantsSherlockSuperAdmin") === "true",
     suspendNonSuitableUsers: formData.get("suspendNonSuitableUsers") === "true",
@@ -29,9 +29,6 @@ export const roleEditableFormDataToObject = function (
     canBeGlassBrokenByRole:
       parseInt(formData.get("canBeGlassBrokenByRole")?.toString() || "") ||
       undefined,
-    grantsDevAzureGroup: formData.get("grantsDevAzureGroup")?.toString() || "",
-    grantsDevFirecloudGroup:
-      formData.get("grantsDevFirecloudGroup")?.toString() || "",
   };
 };
 
@@ -175,9 +172,25 @@ export const RoleEditableFields: React.FunctionComponent<
       )}
       <label>
         <h2 className="font-light text-2xl text-color-header-text">
-          Azure Group
+          Broad Institute Group
         </h2>
-        <p>Grants users in this role access to the named Azure group.</p>
+        <p>
+          Grants users in this role access to the given @broadinstitute group
+          (specify by group email).
+        </p>
+        <TextField
+          name="grantsBroadInstituteGroup"
+          defaultValue={role?.grantsBroadInstituteGroup}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Dev Azure Group
+        </h2>
+        <p>
+          Grants users in this role access to the given azure.dev.envs-terra.bio
+          Azure group (specify by UUID).
+        </p>
         <TextField
           name="grantsDevAzureGroup"
           defaultValue={role?.grantsDevAzureGroup}
@@ -185,14 +198,54 @@ export const RoleEditableFields: React.FunctionComponent<
       </label>
       <label>
         <h2 className="font-light text-2xl text-color-header-text">
-          Firecloud Group
+          Prod Azure Group
         </h2>
         <p>
-          Grants users in this role access to the named firecloud.org group.
+          Grants users in this role access to the given firecloud.org Azure
+          group (specify by UUID).
+        </p>
+        <TextField
+          name="grantsProdAzureGroup"
+          defaultValue={role?.grantsProdAzureGroup}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Dev Firecloud Group
+        </h2>
+        <p>
+          Grants users in this role access to the given @test.firecloud.org
+          group (specify by group email).
         </p>
         <TextField
           name="grantsDevFirecloudGroup"
           defaultValue={role?.grantsDevFirecloudGroup}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          QA Firecloud Group
+        </h2>
+        <p>
+          Grants users in this role access to the given @quality.firecloud.org
+          group (specify by group email).
+        </p>
+        <TextField
+          name="grantsQaFirecloudGroup"
+          defaultValue={role?.grantsQaFirecloudGroup}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Prod Firecloud Group
+        </h2>
+        <p>
+          Grants users in this role access to the given @firecloud.org group
+          (specify by group email).
+        </p>
+        <TextField
+          name="grantsProdFirecloudGroup"
+          defaultValue={role?.grantsProdFirecloudGroup}
         />
       </label>
       <div>
@@ -200,8 +253,8 @@ export const RoleEditableFields: React.FunctionComponent<
           Grants Sherlock super admin?
         </h2>
         <p>
-          Assignments in this role grant Sherlock super admin privileges,
-          including the ability to edit roles and assignments.
+          Grants users in this role full access to all Sherlock APIs, including
+          the ability to change all role and role assignments.
         </p>
         <EnumInputSelect
           name="grantsSherlockSuperAdmin"

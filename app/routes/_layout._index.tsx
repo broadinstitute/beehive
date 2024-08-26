@@ -1,5 +1,12 @@
-import { NavLink } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { NavLink, useLoaderData } from "@remix-run/react";
 import { ThemeDropdown } from "~/components/logic/theme";
+import { ProdAccessWidget } from "~/features/sherlock/role-assignments/prod-access-widget";
+import {
+  getProdAccessConfig,
+  handleProdAccessRequest,
+} from "~/features/sherlock/role-assignments/prod-access-widget.server";
+import { getValidSession } from "~/helpers/get-valid-session.server";
 
 interface IndexNavButtonProps {
   to: string;
@@ -30,7 +37,16 @@ const IndexNavButton: React.FunctionComponent<IndexNavButtonProps> = ({
   </NavLink>
 );
 
+export async function loader(_: LoaderFunctionArgs) {
+  return getProdAccessConfig();
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  return handleProdAccessRequest(request);
+}
+
 export default function Route() {
+  const prodAccessConfig = useLoaderData<typeof loader>();
   return (
     <div className="text-color-body-text flex flex-col w-fit laptop:w-full min-h-full h-fit justify-center items-center space-y-8 py-4">
       <div className="flex flex-col justify-center items-center space-y-6">
@@ -68,13 +84,18 @@ export default function Route() {
           <IndexNavButton
             to="/trigger-incident/prod"
             title="Trigger Incident"
-            className="border-color-neutral-soft-border h-36"
+            className="border-color-misc-heavy-border h-36"
           >
             Page the On-Call Engineer
           </IndexNavButton>
+          <ProdAccessWidget config={prodAccessConfig} />
         </div>
       </div>
       <div className="flex flex-col items-center laptop:flex-row gap-2 justify-center font-light">
+        <NavLink to="/charts" prefetch="intent">
+          Charts
+        </NavLink>
+        <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/clusters" prefetch="intent">
           Clusters
         </NavLink>
@@ -85,14 +106,6 @@ export default function Route() {
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/roles" prefetch="intent">
           Roles
-        </NavLink>
-        <span className="hidden laptop:inline laptop:last:hidden">•</span>
-        <NavLink to="/pagerduty-integrations" prefetch="intent">
-          PagerDuty
-        </NavLink>
-        <span className="hidden laptop:inline laptop:last:hidden">•</span>
-        <NavLink to="/charts" prefetch="intent">
-          Charts
         </NavLink>
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/r" prefetch="intent">

@@ -35,10 +35,10 @@
     --color-app-version-border: 209 77 65; /* re-2 */
     --color-chart-version-bg: 230 228 217; /* ui */
     --color-chart-version-border: 139 126 200; /* pu-2 */
-    --color-ci-bg: 230 228 217; /* ui */
-    --color-ci-border: 111 110 105; /* ui-3 */
-    --color-misc-type-bg: 230 228 217; /* ui */
-    --color-misc-type-border: 183 181 172; /* tx-3 */
+    --color-misc-heavy-bg: 230 228 217; /* ui */
+    --color-misc-heavy-border: 111 110 105; /* ui-3 */
+    --color-misc-light-bg: 230 228 217; /* ui */
+    --color-misc-light-border: 183 181 172; /* tx-3 */
 
     --color-error-bg: 242 240 229; /* bg-2 */
     --color-error-border: 175 48 41; /* re */
@@ -85,10 +85,10 @@
     --color-app-version-border: 174 48 41; /* re-2 */
     --color-chart-version-bg: 40 39 38; /* ui */
     --color-chart-version-border: 94 64 157; /* pu-2 */
-    --color-ci-bg: 40 39 38; /* ui */
-    --color-ci-border: 64 62 60; /* ui-3 */
-    --color-misc-type-bg: 40 39 38; /* ui */
-    --color-misc-type-border: 87 86 83; /* tx-3 */
+    --color-misc-heavy-bg: 40 39 38; /* ui */
+    --color-misc-heavy-border: 64 62 60; /* ui-3 */
+    --color-misc-light-bg: 40 39 38; /* ui */
+    --color-misc-light-border: 87 86 83; /* tx-3 */
 
     --color-error-bg: 28 27 26; /* bg-2 */
     --color-error-border: 209 77 65; /* re */

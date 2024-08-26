@@ -35,10 +35,10 @@
     --color-app-version-border: 253 186 116; /* orange-300 */
     --color-chart-version-bg: 255 247 237; /* orange-50 */
     --color-chart-version-border: 253 186 116; /* orange-300 */
-    --color-ci-bg: 244 244 245; /* zinc-100 */
-    --color-ci-border: 63 63 70; /* zinc-700 */
-    --color-misc-type-bg: 236 236 238; /* zinc-150ish */
-    --color-misc-type-border: 212 212 216; /* zinc-300 */
+    --color-misc-heavy-bg: 244 244 245; /* zinc-100 */
+    --color-misc-heavy-border: 63 63 70; /* zinc-700 */
+    --color-misc-light-bg: 236 236 238; /* zinc-150ish */
+    --color-misc-light-border: 212 212 216; /* zinc-300 */
 
     --color-error-bg: 254 242 242; /* red-50 */
     --color-error-border: 239 68 68; /* red-500 */
@@ -85,10 +85,10 @@
     --color-app-version-border: 249 115 22; /* orange-500 */
     --color-chart-version-bg: 124 45 18; /* orange-900 */
     --color-chart-version-border: 249 115 22; /* orange-500 */
-    --color-ci-bg: 24 24 27; /* zinc-900 */
-    --color-ci-border: 212 212 216; /* zinc-300 */
-    --color-misc-type-bg: 63 63 70; /* zinc-700 */
-    --color-misc-type-border: 113 113 122; /* zinc-500 */
+    --color-misc-heavy-bg: 24 24 27; /* zinc-900 */
+    --color-misc-heavy-border: 212 212 216; /* zinc-300 */
+    --color-misc-light-bg: 63 63 70; /* zinc-700 */
+    --color-misc-light-border: 113 113 122; /* zinc-500 */
 
     --color-error-bg: 127 29 29; /* red-900 */
     --color-error-button: 153 27 27; /* red-800 */

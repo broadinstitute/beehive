@@ -299,7 +299,7 @@ const CiRunResourceLoadedWidget: React.FunctionComponent<{
         {ciRuns.map((ciRun) => (
           <span
             key={ciRun.id}
-            className="flex flex-row gap-3 items-center odd:bg-color-ci-bg p-3"
+            className="flex flex-row gap-3 items-center odd:bg-color-misc-heavy-bg p-3"
           >
             <CiRunStatusIcon ciRun={ciRun} />
             <span className="flex flex-col">
