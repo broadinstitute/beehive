@@ -1,15 +1,14 @@
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
-import { NavLink, useActionData } from "@remix-run/react";
+import { NavLink } from "@remix-run/react";
 import { ChartsApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
 import { buildNotifications } from "~/components/logic/notification";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
-import { FormErrorDisplay } from "~/errors/components/form-error-display";
-import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
+import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
 import { ChartColors } from "~/features/sherlock/charts/chart-colors";
 import {
   SherlockConfiguration,
@@ -21,7 +20,7 @@ import { commitSession, sessionFields } from "~/session.server";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/charts/${params.chartName}/contract-Testing`}>
+    <NavLink to={`/charts/${params.chartName}/contract-testing`}>
       Contract Testing
     </NavLink>
   ),
@@ -34,40 +33,55 @@ export const meta: MetaFunction = ({ params }) => [
 export async function action({ request, params }: ActionFunctionArgs) {
   const session = await getValidSession(request);
 
-  const formData = await request.formData();
-  const repo = formData.get("repo");
-  const mainbranch = formData.get("mainbranch");
-  console.log(process.env.PACT_BASE_URL);
-  if (typeof repo !== "string") {
-    throw new Error(
-      `Repo name must be of type 'string'. Instead it's ${typeof repo}`,
-    );
+  if (!process.env.PACT_BASE_URL) {
+    throw new Error("Beehive didn't have PACT_BASE_URL set");
   }
-  if (typeof mainbranch !== "string") {
-    throw new Error(
-      `Git main branch name must be of type 'string'. Instead it's ${typeof mainbranch}`,
-    );
+  if (!process.env.PACT_USERNAME) {
+    throw new Error("Beehive didn't have PACT_USERNAME set");
   }
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/hal+json",
-      Authorization:
-        "Basic " +
-        Buffer.from(
-          process.env.PACT_USERNAME + ":" + process.env.PACT_PASSWORD,
-        ).toString("base64"),
-    },
-    body: JSON.stringify({
-      name: params.chartName,
-      displayName: params.chartName,
-      repositoryUrl: "https://github.com/" + repo,
-      mainBranch: mainbranch,
-      repositoryName: repo,
-    }),
-  };
-  return fetch(process.env.PACT_BASE_URL + "/pacticipants", requestOptions)
+  if (!process.env.PACT_PASSWORD) {
+    throw new Error("Beehive didn't have PACT_PASSWORD set");
+  }
+
+  // First, get the chart from Sherlock
+  return await new ChartsApi(SherlockConfiguration)
+    .apiChartsV3SelectorGet(
+      {
+        selector: params.chartName ?? "",
+      },
+      handleIAP(request),
+    )
+    .then(async (chart) => {
+      if (!chart.appImageGitRepo || !chart.appImageGitRepo.includes("/")) {
+        throw new Error(
+          "The chart must have a GitHub repo configured for Pact to be enabled",
+        );
+      }
+      if (!chart.appImageGitMainBranch) {
+        throw new Error(
+          "The chart must have a main branch configured for Pact to be enabled",
+        );
+      }
+      // Second, add it to Pact as a "pacticipant" (not "participant", hello hour-of-debugging)
+      return fetch(`${process.env.PACT_BASE_URL}/pacticipants`, {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Accept: "application/hal+json",
+          Authorization: `Basic ${Buffer.from(
+            process.env.PACT_USERNAME + ":" + process.env.PACT_PASSWORD,
+          ).toString("base64")}`,
+        }),
+        body: JSON.stringify({
+          name: chart.name,
+          displayName: chart.name,
+          repositoryUrl: `https://github.com/${chart.appImageGitRepo}`,
+          mainBranch: chart.appImageGitMainBranch,
+          repositoryName: chart.appImageGitRepo.split("/")[0],
+          repositoryNamespace: chart.appImageGitRepo.split("/")[1],
+        }),
+      });
+    }, errorResponseThrower)
     .then(async (response) => {
       if (response.status != 201) {
         throw new Error(
@@ -76,53 +90,43 @@ export async function action({ request, params }: ActionFunctionArgs) {
           }, ${await response.text()}`,
         );
       }
-    })
-    .then(() => {
-      return new ChartsApi(SherlockConfiguration)
-        .apiChartsV3SelectorPatch(
-          {
-            selector: params.chartName || "",
-            chart: { pactParticipant: true },
-          },
-          handleIAP(request),
-        )
-        .then(() =>
-          session.flash(
-            sessionFields.flashNotifications,
-            buildNotifications({
-              type: "contract-test",
-              text: `To see it in Pact Broker`,
-              url:
-                process.env.PACT_BASE_URL + "/pacticipants/" + params.chartName,
-            }),
-          ),
-        )
-        .then(
-          async () =>
-            redirect(`/charts/${params.chartName || ""}`, {
-              headers: {
-                "Set-Cookie": await commitSession(session),
-              },
-            }),
-          makeErrorResponseReturner(),
-        );
-    })
-    .catch((reason) => {
-      throw new Error(reason);
-    });
+      // Third, tell Sherlock that Pact is enabled for this chart
+      return new ChartsApi(SherlockConfiguration).apiChartsV3SelectorPatch(
+        {
+          selector: params.chartName || "",
+          chart: { pactParticipant: true },
+        },
+        handleIAP(request),
+      );
+    }, errorResponseThrower)
+    .then(async (chart) => {
+      // Finally, show a notification to the user when we redirect
+      session.flash(
+        sessionFields.flashNotifications,
+        buildNotifications({
+          type: "contract-test",
+          text: "To see it in Pact Broker",
+          url: `${process.env.PACT_BASE_URL}/pacticipants/${chart.name}`,
+        }),
+      );
+      return redirect(`/charts/${chart.name}`, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }, errorResponseThrower);
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const { chart } = useChartContext();
-  const errorInfo = useActionData<typeof action>();
   return (
     <>
       <OutsetPanel>
         <ActionBox
           title={`Contract Testing for ${chart.name}`}
-          submitText={`Click to Enable Contract Testing`}
+          submitText="Enable Contract Testing"
           hideButton={
             chart.pactParticipant ||
             !chart.appImageGitRepo ||
@@ -131,8 +135,7 @@ export default function Route() {
           {...ChartColors}
         >
           <h1 className="text-color-header-text text-3xl font-medium">
-            {" "}
-            Enable Contract Tests{" "}
+            Enable Contract Tests
           </h1>
           <p>
             Enabling contract testing allows the Pact Broker to know which
@@ -158,25 +161,6 @@ export default function Route() {
             </a>
           </p>
           {chart.pactParticipant && "Contract testing is already enabled."}
-          {chart.appImageGitRepo ? (
-            <input
-              type="hidden"
-              name="repo"
-              value={chart.appImageGitRepo}
-            ></input>
-          ) : (
-            "The chart must have an app image git repo on it to enable contract testing. "
-          )}
-          {chart.appImageGitMainBranch ? (
-            <input
-              type="hidden"
-              name="mainbranch"
-              value={chart.appImageGitMainBranch}
-            ></input>
-          ) : (
-            "The chart must have a git main branch for the app image to enable contract testing."
-          )}
-          {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
       <OutsetFiller />

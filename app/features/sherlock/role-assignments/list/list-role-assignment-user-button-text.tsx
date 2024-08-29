@@ -3,15 +3,12 @@ import type {
   SherlockRoleAssignmentV3,
   SherlockUserV3,
 } from "@sherlock-js-client/sherlock";
+import { ListUserButtonText } from "../../users/list/list-user-button-text";
 
 export const ListRoleAssignmentUserButtonText: React.FunctionComponent<{
   roleAssn: SerializeFrom<SherlockRoleAssignmentV3>;
 }> = ({ roleAssn }) => {
-  const userInfo = roleAssn.userInfo as SherlockUserV3;
+  const userInfo = roleAssn.userInfo as SerializeFrom<SherlockUserV3>;
 
-  return (
-    <h2 className="font-light">
-      <span className="font-medium">{userInfo.email}</span>
-    </h2>
-  );
+  return ListUserButtonText({ user: userInfo });
 };

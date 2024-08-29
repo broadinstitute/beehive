@@ -1,3 +1,4 @@
+import { expect, test } from "vitest";
 import { IapJwtHeader, handleIAP } from "./sherlock.server";
 
 test("handleIAP should forward the normal IAP header", () => {

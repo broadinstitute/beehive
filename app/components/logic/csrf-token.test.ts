@@ -1,6 +1,8 @@
 import { createSession } from "@remix-run/node";
 import { sessionFields } from "~/session.server";
-import { csrfTokenInputName, verifySessionCsrfToken } from "./csrf-token";
+import { csrfTokenInputName } from "./csrf-token";
+import { verifySessionCsrfToken } from "./csrf-token.server";
+import { expect, test } from "vitest";
 
 test("verifySessionCsrfToken should error if body can't be read", async () => {
   let formData = new FormData();

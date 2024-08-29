@@ -26,7 +26,7 @@ export async function action({ request }: ActionFunctionArgs) {
     .apiChangesetsProceduresV3PlanPost(
       {
         changesetPlanRequest: changesetRequest,
-        verboseOutput: false,
+        verboseOutput: true, // Needs to be true so that chart release names are returned
       },
       handleIAP(request),
     )

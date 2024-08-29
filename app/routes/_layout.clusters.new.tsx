@@ -25,7 +25,7 @@ import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 

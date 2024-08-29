@@ -38,15 +38,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const forwardedIAP = handleIAP(request);
   const chartReleasesApi = new ChartReleasesApi(SherlockConfiguration);
   return promiseHash({
-    inDev: chartReleasesApi
-      .apiChartReleasesV3SelectorGet(
-        { selector: `dev/${params.chartName}` },
-        forwardedIAP,
-      )
-      .catch(() => null),
     inStaging: chartReleasesApi
       .apiChartReleasesV3SelectorGet(
         { selector: `staging/${params.chartName}` },
+        forwardedIAP,
+      )
+      .catch(() => null),
+    inProd: chartReleasesApi
+      .apiChartReleasesV3SelectorGet(
+        { selector: `prod/${params.chartName}` },
         forwardedIAP,
       )
       .catch(() => null),
@@ -56,8 +56,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         SherlockConfiguration,
       ).apiAppVersionsProceduresV3ChangelogGetRaw(
         {
-          parent: chartReleases.inStaging?.appVersionReference ?? "",
-          child: chartReleases.inDev?.appVersionReference ?? "",
+          parent: chartReleases.inProd?.appVersionReference ?? "",
+          child: chartReleases.inStaging?.appVersionReference ?? "",
         },
         forwardedIAP,
       ),
@@ -65,8 +65,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         SherlockConfiguration,
       ).apiChartVersionsProceduresV3ChangelogGetRaw(
         {
-          parent: chartReleases.inStaging?.chartVersionReference ?? "",
-          child: chartReleases.inDev?.chartVersionReference ?? "",
+          parent: chartReleases.inProd?.chartVersionReference ?? "",
+          child: chartReleases.inStaging?.chartVersionReference ?? "",
         },
         forwardedIAP,
       ),
@@ -91,7 +91,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
                 environmentName,
               ): SherlockChangesetV3PlanRequestChartReleaseEntry => ({
                 chartRelease: `${environmentName}/${params.chartName}`,
-                useExactVersionsFromOtherChartRelease: `dev/${params.chartName}`,
+                useExactVersionsFromOtherChartRelease: `staging/${params.chartName}`,
               }),
             ),
         },
@@ -105,7 +105,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
           ? redirect(
               `/review-changesets?${[
                 ...changesets.map((c) => `changeset=${c.id}`),
-                `return=${encodeURIComponent(`/apps/${params.chartName}`)}`,
+                `return=${encodeURIComponent(`/services/${params.chartName}`)}`,
               ].join("&")}`,
             )
           : json({}),
@@ -132,7 +132,7 @@ export default function Route() {
           title={
             <>
               <span className="whitespace-nowrap">Promotion Preview:</span>{" "}
-              <span className="whitespace-nowrap">dev to staging</span>
+              <span className="whitespace-nowrap">staging to prod</span>
             </>
           }
           size="one-fourth"
@@ -161,7 +161,7 @@ export default function Route() {
           )}
           <Form method="post">
             <CsrfTokenInput />
-            <input type="hidden" name="environment" value="staging" />
+            <input type="hidden" name="environment" value="prod" />
             <ActionButton
               size="fill"
               beforeBorderClassName={EnvironmentColors.beforeBorderClassName}

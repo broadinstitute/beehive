@@ -35,14 +35,15 @@ import { transitionView } from "~/helpers/transition-view";
 import type { loader as parentLoader } from "~/routes/_layout.apps";
 import { AppInstanceEntry } from "../features/sherlock/chart-releases/view/app-instance-entry";
 import { AppInstanceEntryInfo } from "../features/sherlock/chart-releases/view/app-instance-entry-info";
+
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
-    <NavLink to={`/apps/${params.chartName}`}>{params.chartName}</NavLink>
+    <NavLink to={`/services/${params.chartName}`}>{params.chartName}</NavLink>
   ),
 };
 
 export const meta: MetaFunction = ({ params }) => [
-  { title: `${params.chartName} - App` },
+  { title: `${params.chartName} - Service` },
 ];
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

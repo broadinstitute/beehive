@@ -25,7 +25,7 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
     <div className="flex flex-col space-y-4">
       {toAssignments && (
         <NavButton to={toAssignments} {...RoleColors}>
-          <h2>View Assignments in This Role</h2>
+          <h2>View User Assignments in This Role</h2>
         </NavButton>
       )}
       <h2 className="font-light text-2xl text-color-header-text">
@@ -51,44 +51,14 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
           {role.defaultGlassBreakDuration ? (
             <p>{role.defaultGlassBreakDuration}</p>
           ) : (
-            <p>
-              <span className="font-extralight">None</span>
-            </p>
+            <p>None.</p>
           )}
         </div>
       ) : (
         <p>Assignments in this role are granted by Sherlock super admins.</p>
       )}
       <h2 className="font-light text-2xl text-color-header-text">
-        Azure Group
-      </h2>
-      {role.grantsDevAzureGroup ? (
-        <p>
-          Users in this role will be added to the{" "}
-          <span className="font-medium">{role.grantsDevAzureGroup}</span> Azure
-          group.
-        </p>
-      ) : (
-        <p>
-          <span className="font-extralight">None</span>
-        </p>
-      )}
-      <h2 className="font-light text-2xl text-color-header-text">
-        Firecloud Group
-      </h2>
-      {role.grantsDevFirecloudGroup ? (
-        <p>
-          Users in this role will be added to the{" "}
-          <span className="font-medium">{role.grantsDevFirecloudGroup}</span>{" "}
-          Google group.
-        </p>
-      ) : (
-        <p>
-          <span className="font-extralight">None</span>
-        </p>
-      )}
-      <h2 className="font-light text-2xl text-color-header-text">
-        Suitability
+        Suitability and Suspensions
       </h2>
       {role.suspendNonSuitableUsers ? (
         <p>
@@ -96,7 +66,78 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
           <span className="font-semibold">automatically suspended</span>.
         </p>
       ) : (
-        <p>Suitability does not impact assignments in this role.</p>
+        <p>
+          Suitability does not directly impact assignments in this role.
+          Suspensions are done manually by Sherlock super admins.
+        </p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Broad Institute Group
+      </h2>
+      {role.grantsBroadInstituteGroup ? (
+        <p>
+          Users in this role will be added to{" "}
+          <span className="font-medium">{role.grantsBroadInstituteGroup}</span>.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Dev Azure Group
+      </h2>
+      {role.grantsDevAzureGroup ? (
+        <p>
+          Users in this role will be added to{" "}
+          <span className="font-medium">{role.grantsDevAzureGroup}</span> in the
+          azure.dev.envs-terra.bio Azure tenant.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Prod Azure Group
+      </h2>
+      {role.grantsProdAzureGroup ? (
+        <p>
+          Users in this role will be added to{" "}
+          <span className="font-medium">{role.grantsProdAzureGroup}</span> in
+          the firecloud.org Azure tenant.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Dev Firecloud Group
+      </h2>
+      {role.grantsDevFirecloudGroup ? (
+        <p>
+          Users in this role will be added to{" "}
+          <span className="font-medium">{role.grantsDevFirecloudGroup}</span>.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        QA Firecloud Group
+      </h2>
+      {role.grantsQaFirecloudGroup ? (
+        <p>
+          Users in this role will be added to{" "}
+          <span className="font-medium">{role.grantsQaFirecloudGroup}</span>.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Prod Firecloud Group
+      </h2>
+      {role.grantsProdFirecloudGroup ? (
+        <p>
+          Users in this role will be added to{" "}
+          <span className="font-medium">{role.grantsProdFirecloudGroup}</span>.
+        </p>
+      ) : (
+        <p>None.</p>
       )}
       <h2 className="font-light text-2xl text-color-header-text">
         Sherlock Super Admin

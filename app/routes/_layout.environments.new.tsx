@@ -34,7 +34,7 @@ import {
 } from "~/features/sherlock/sherlock.server";
 import { makeUserSorter } from "~/features/sherlock/users/list/user-sorter";
 import { dateWithCustomISOString } from "~/helpers/date";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { getUserEmail } from "~/helpers/get-user-email.server";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { commitSession } from "~/session.server";

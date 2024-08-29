@@ -24,7 +24,7 @@ export const handle = {
     <NavLink
       to={`/clusters/${params.clusterName}/chart-releases/${params.namespace}/${params.chartName}/deploy-hooks/github-actions/${params.id}`}
     >
-      Slack Hook
+      GitHub Actions Hook
     </NavLink>
   ),
 };

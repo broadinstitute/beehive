@@ -5,7 +5,7 @@ import { FillerText } from "~/components/panel-structures/filler-text";
 export default function Route() {
   return (
     <InsetPanel largeScreenOnly size="fill">
-      <FillerText title="Apps">
+      <FillerText title="Services">
         <p>
           This section is specifically geared towards independent releases in
           live environments.

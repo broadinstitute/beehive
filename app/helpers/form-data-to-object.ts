@@ -1,6 +1,6 @@
 export function formDataToObject(
   formData: FormData,
-  omitEmptyFields: boolean = true
+  omitEmptyFields: boolean = true,
 ): { [key: string]: string } {
   const ret: { [key: string]: string } = {};
   for (const [key, value] of formData.entries()) {

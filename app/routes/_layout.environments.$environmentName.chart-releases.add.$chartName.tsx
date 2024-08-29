@@ -24,7 +24,7 @@ import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { useSidebar } from "~/hooks/use-sidebar";
 import { commitSession } from "~/session.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";

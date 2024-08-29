@@ -20,12 +20,12 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 export const handle = {
-  breadcrumb: () => <NavLink to="/apps">Apps</NavLink>,
+  breadcrumb: () => <NavLink to="/services">Services</NavLink>,
 };
 
 export const meta: MetaFunction = () => [
   {
-    title: "Apps",
+    title: "Services",
   },
 ];
 
@@ -60,7 +60,7 @@ export default function Route() {
   return (
     <>
       <InsetPanel alwaysShowScrollbar size="one-fourth">
-        <InteractiveList title="Apps" size="one-fourth" {...ChartColors}>
+        <InteractiveList title="Services" size="one-fourth" {...ChartColors}>
           <ListControls
             setFilterText={setFilterText}
             size="one-fourth"

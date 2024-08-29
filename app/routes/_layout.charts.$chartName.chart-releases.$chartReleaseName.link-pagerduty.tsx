@@ -11,7 +11,7 @@ import {
   ChartReleasesApi,
   PagerdutyIntegrationsApi,
 } from "@sherlock-js-client/sherlock";
-import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token";
+import { getPdAppIdFromEnv } from "~/components/logic/pagerduty-token.server";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import {
   errorResponseThrower,
@@ -23,7 +23,7 @@ import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
-import { formDataToObject } from "~/helpers/form-data-to-object.server";
+import { formDataToObject } from "~/helpers/form-data-to-object";
 import { getValidSession } from "~/helpers/get-valid-session.server";
 import { useChartChartReleaseContext } from "~/routes/_layout.charts.$chartName.chart-releases.$chartReleaseName";
 

@@ -1,4 +1,4 @@
-ARG NODE_VERSION='18'
+ARG NODE_VERSION='20'
 ARG DISTRO='alpine'
 
 # base node image
@@ -48,8 +48,8 @@ ENV PORT=80
 
 COPY --chown=node:node --from=production-deps /app/node_modules /app/node_modules
 
-COPY --chown=node:node --from=build /app/build /app/build
-COPY --chown=node:node --from=build /app/public /app/public
+COPY --chown=node:node --from=build /app/build/server /app/build/server
+COPY --chown=node:node --from=build /app/build/client /app/build/client
 ADD --chown=node:node . .
 
 USER node

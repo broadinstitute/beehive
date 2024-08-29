@@ -1,9 +1,8 @@
 import type { ColorProps } from "../../color-class-names";
 
-// TODO - pick colors
 export const RoleColors: ColorProps = {
-  borderClassName: "border-color-misc-border",
-  borderElementBackgroundClassName: "bg-color-misc-border",
-  beforeBorderClassName: "before:border-color-misc-border",
-  backgroundClassName: "bg-color-misc-bg",
+  borderClassName: "border-color-misc-heavy-border",
+  borderElementBackgroundClassName: "bg-color-misc-heavy-border",
+  beforeBorderClassName: "before:border-color-misc-heavy-border",
+  backgroundClassName: "bg-color-misc-heavy-bg",
 };

@@ -1,16 +1,4 @@
-/* 
-We use `@import` over `@tailwind` for base/components/utilities because
-we have other things to import too.
-https://tailwindcss.com/docs/using-with-preprocessors#build-time-imports
-
-`@import-glob` *can* be mixed with `@import` because the former gets
-resolved to the latter.
-https://github.com/dimitrinicolas/postcss-import-ext-glob#example
-*/
-
-@import "tailwindcss/base";
-@import-glob "../themes/*.css";
-
-@import "tailwindcss/components";
-
-@import "tailwindcss/utilities";
+@import-glob "../themes/*.tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -26,7 +26,7 @@ export const SherlockConfiguration = new Configuration({
       // we're not connecting to something on the open internet--we're presumably
       // connecting to something in the cluster, where we will be using in-cluster
       // hostnames that don't match the TLS certificates we'll be receiving. Here
-      // we reach down into node-fetch and tell it to ignore the certificate
+      // we reach down into Node's fetch and tell it to ignore the certificate
       // validation error from the hostnames not matching. The alternatives here
       // are to allow HTTP connections to Sherlock (plainly worse) or to install
       // self-signed certificates onto both Sherlock and Beehive (extremely
