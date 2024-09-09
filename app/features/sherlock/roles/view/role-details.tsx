@@ -77,53 +77,7 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
       {role.grantsBroadInstituteGroup ? (
         <p>
           Users in this role will be added to{" "}
-          <span className="font-medium">{role.grantsBroadInstituteGroup}</span>.
-        </p>
-      ) : (
-        <p>None.</p>
-      )}
-      <h2 className="font-light text-2xl text-color-header-text">
-        Dev Azure Group
-      </h2>
-      {role.grantsDevAzureGroup ? (
-        <p>
-          Users in this role will be added to{" "}
-          <span className="font-medium">{role.grantsDevAzureGroup}</span> in the
-          azure.dev.envs-terra.bio Azure tenant.
-        </p>
-      ) : (
-        <p>None.</p>
-      )}
-      <h2 className="font-light text-2xl text-color-header-text">
-        Prod Azure Group
-      </h2>
-      {role.grantsProdAzureGroup ? (
-        <p>
-          Users in this role will be added to{" "}
-          <span className="font-medium">{role.grantsProdAzureGroup}</span> in
-          the firecloud.org Azure tenant.
-        </p>
-      ) : (
-        <p>None.</p>
-      )}
-      <h2 className="font-light text-2xl text-color-header-text">
-        Dev Firecloud Group
-      </h2>
-      {role.grantsDevFirecloudGroup ? (
-        <p>
-          Users in this role will be added to{" "}
-          <span className="font-medium">{role.grantsDevFirecloudGroup}</span>.
-        </p>
-      ) : (
-        <p>None.</p>
-      )}
-      <h2 className="font-light text-2xl text-color-header-text">
-        QA Firecloud Group
-      </h2>
-      {role.grantsQaFirecloudGroup ? (
-        <p>
-          Users in this role will be added to{" "}
-          <span className="font-medium">{role.grantsQaFirecloudGroup}</span>.
+          <GrantText grant={role.grantsBroadInstituteGroup} />.
         </p>
       ) : (
         <p>None.</p>
@@ -133,8 +87,90 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
       </h2>
       {role.grantsProdFirecloudGroup ? (
         <p>
-          Users in this role will be added to{" "}
-          <span className="font-medium">{role.grantsProdFirecloudGroup}</span>.
+          Users in this role will have their firecloud.org accounts added to{" "}
+          <GrantText grant={role.grantsProdFirecloudGroup} />.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        QA Firecloud Group
+      </h2>
+      {role.grantsQaFirecloudGroup ? (
+        <p>
+          Users in this role will have their quality.firecloud.org accounts
+          added to <GrantText grant={role.grantsQaFirecloudGroup} />.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Dev Firecloud Group
+      </h2>
+      {role.grantsDevFirecloudGroup ? (
+        <p>
+          Users in this role will have their test.firecloud.org accounts added
+          to <GrantText grant={role.grantsDevFirecloudGroup} />.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Prod Firecloud Folder Owner
+      </h2>
+      {role.grantsProdFirecloudFolderOwner ? (
+        <p>
+          Users in this role will have their firecloud.org accounts granted the
+          Owner role on{" "}
+          <GrantText grant={role.grantsProdFirecloudFolderOwner} />.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        QA Firecloud Folder Owner
+      </h2>
+      {role.grantsQaFirecloudFolderOwner ? (
+        <p>
+          Users in this role will have their quality.firecloud.org accounts
+          granted the Owner role on{" "}
+          <GrantText grant={role.grantsQaFirecloudFolderOwner} />.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Dev Firecloud Folder Owner
+      </h2>
+      {role.grantsDevFirecloudFolderOwner ? (
+        <p>
+          Users in this role will have their test.firecloud.org accounts granted
+          the Owner role on{" "}
+          <GrantText grant={role.grantsDevFirecloudFolderOwner} />.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Prod Azure Group
+      </h2>
+      {role.grantsProdAzureGroup ? (
+        <p>
+          Users in this role will have their Microsoft firecloud.org accounts
+          added to <GrantText grant={role.grantsProdAzureGroup} /> in the
+          firecloud.org Azure tenant.
+        </p>
+      ) : (
+        <p>None.</p>
+      )}
+      <h2 className="font-light text-2xl text-color-header-text">
+        Dev Azure Group
+      </h2>
+      {role.grantsDevAzureGroup ? (
+        <p>
+          Users in this role will have their Microsoft test.firecloud.org
+          accounts added to <GrantText grant={role.grantsDevAzureGroup} /> in
+          the azure.dev.envs-terra.bio Azure tenant.
         </p>
       ) : (
         <p>None.</p>
@@ -161,3 +197,21 @@ export const RoleDetails: React.FunctionComponent<RoleDetailsProps> = ({
     </div>
   );
 };
+
+const GrantText: React.FunctionComponent<{ grant?: string }> = ({ grant }) =>
+  grant.split(",").reduce(
+    (acc, curr, index, array) => [
+      ...acc,
+      <span key={index * 2} className="font-medium">
+        {curr.trim()}
+      </span>,
+      <span key={index * 2 + 1}>
+        {index === array.length - 1
+          ? ""
+          : index === array.length - 2
+            ? " and "
+            : ", "}
+      </span>,
+    ],
+    [] as Array<React.ReactNode>,
+  );

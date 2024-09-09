@@ -175,8 +175,9 @@ export const RoleEditableFields: React.FunctionComponent<
           Broad Institute Group
         </h2>
         <p>
-          Grants users in this role access to the given @broadinstitute group
-          (specify by group email).
+          Grants users in this role access to the given @broadinstitute groups.
+          Specify by group email. Comma-separate multiple values; blank space
+          will be ignored.
         </p>
         <TextField
           name="grantsBroadInstituteGroup"
@@ -185,41 +186,16 @@ export const RoleEditableFields: React.FunctionComponent<
       </label>
       <label>
         <h2 className="font-light text-2xl text-color-header-text">
-          Dev Azure Group
+          Prod Firecloud Group
         </h2>
         <p>
-          Grants users in this role access to the given azure.dev.envs-terra.bio
-          Azure group (specify by UUID).
+          Grants users in this role access to the given @firecloud.org groups.
+          Specify by group email. Comma-separate multiple values; blank space
+          will be ignored.
         </p>
         <TextField
-          name="grantsDevAzureGroup"
-          defaultValue={role?.grantsDevAzureGroup}
-        />
-      </label>
-      <label>
-        <h2 className="font-light text-2xl text-color-header-text">
-          Prod Azure Group
-        </h2>
-        <p>
-          Grants users in this role access to the given firecloud.org Azure
-          group (specify by UUID).
-        </p>
-        <TextField
-          name="grantsProdAzureGroup"
-          defaultValue={role?.grantsProdAzureGroup}
-        />
-      </label>
-      <label>
-        <h2 className="font-light text-2xl text-color-header-text">
-          Dev Firecloud Group
-        </h2>
-        <p>
-          Grants users in this role access to the given @test.firecloud.org
-          group (specify by group email).
-        </p>
-        <TextField
-          name="grantsDevFirecloudGroup"
-          defaultValue={role?.grantsDevFirecloudGroup}
+          name="grantsProdFirecloudGroup"
+          defaultValue={role?.grantsProdFirecloudGroup}
         />
       </label>
       <label>
@@ -228,7 +204,8 @@ export const RoleEditableFields: React.FunctionComponent<
         </h2>
         <p>
           Grants users in this role access to the given @quality.firecloud.org
-          group (specify by group email).
+          groups. Specify by group email. Comma-separate multiple values; blank
+          space will be ignored.
         </p>
         <TextField
           name="grantsQaFirecloudGroup"
@@ -237,15 +214,89 @@ export const RoleEditableFields: React.FunctionComponent<
       </label>
       <label>
         <h2 className="font-light text-2xl text-color-header-text">
-          Prod Firecloud Group
+          Dev Firecloud Group
         </h2>
         <p>
-          Grants users in this role access to the given @firecloud.org group
-          (specify by group email).
+          Grants users in this role access to the given @test.firecloud.org
+          groups. Specify by group email. Comma-separate multiple values; blank
+          space will be ignored.
         </p>
         <TextField
-          name="grantsProdFirecloudGroup"
-          defaultValue={role?.grantsProdFirecloudGroup}
+          name="grantsDevFirecloudGroup"
+          defaultValue={role?.grantsDevFirecloudGroup}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Prod Firecloud Folder Owner
+        </h2>
+        <p>
+          Grants users in this role access Owner-level access to the given
+          folders with their @firecloud.org accounts. Specify by folder resource
+          name, e.g. folders/a1b2c3. Comma-separate multiple values; blank space
+          will be ignored.
+        </p>
+        <TextField
+          name="grantsProdFirecloudFolderOwner"
+          defaultValue={role?.grantsProdFirecloudFolderOwner}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          QA Firecloud Folder Owner
+        </h2>
+        <p>
+          Grants users in this role access Owner-level access to the given
+          folders with their @quality.firecloud.org accounts. Specify by folder
+          resource name, e.g. folders/a1b2c3. Comma-separate multiple values;
+          blank space will be ignored.
+        </p>
+        <TextField
+          name="grantsQaFirecloudFolderOwner"
+          defaultValue={role?.grantsQaFirecloudFolderOwner}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Dev Firecloud Folder Owner
+        </h2>
+        <p>
+          Grants users in this role access Owner-level access to the given
+          folders with their @test.firecloud.org accounts. Specify by folder
+          resource name, e.g. folders/a1b2c3. Comma-separate multiple values;
+          blank space will be ignored.
+        </p>
+        <TextField
+          name="grantsDevFirecloudFolderOwner"
+          defaultValue={role?.grantsDevFirecloudFolderOwner}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Prod Azure Group
+        </h2>
+        <p>
+          Grants users in this role access to the given firecloud.org Azure
+          groups. Specify by UUID. Comma-separate multiple values; blank space
+          will be ignored.
+        </p>
+        <TextField
+          name="grantsProdAzureGroup"
+          defaultValue={role?.grantsProdAzureGroup}
+        />
+      </label>
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Dev Azure Group
+        </h2>
+        <p>
+          Grants users in this role access to the given azure.dev.envs-terra.bio
+          Azure groups. Specify by UUID. Comma-separate multiple values; blank
+          space will be ignored.
+        </p>
+        <TextField
+          name="grantsDevAzureGroup"
+          defaultValue={role?.grantsDevAzureGroup}
         />
       </label>
       <div>
