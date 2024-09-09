@@ -71,7 +71,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           # Don't push, just build and load locally.
           context: .
@@ -106,7 +106,7 @@ jobs:
           password: ${{ steps.auth.outputs.access_token }}
 
       - name: Push image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           # "Build" (instant, via local cache from earlier) and push images;
           # we do have to repeat the earlier parameters here for the cache to work.
