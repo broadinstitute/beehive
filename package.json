@@ -58,6 +58,7 @@
     "node": ">=20.17.0"
   },
   "overrides": {
+    "cookie": "^0.7.0",
     "@remix-run/node": "$@remix-run/node",
     "@remix-run/react": "$@remix-run/react",
     "@remix-run/serve": "$@remix-run/serve",
