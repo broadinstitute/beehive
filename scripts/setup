@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
 npm install
 
-gcloud secrets versions access latest --project dsp-tools-k8s --secret beehive-github-oauth-local |
-  jq -r  'to_entries[] | "GITHUB_\(.key | ascii_upcase)=\(.value)"' > .env
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+ENV_FILE="${REPO_ROOT}/.env"
 
-echo "PACT_PASSWORD=$(vault read -format json 'secret/dsp/pact-broker/users/readwrite' | jq -r .data.basic_auth_password)" >> .env
-echo "PACT_USERNAME=$(vault read -format json 'secret/dsp/pact-broker/users/readwrite' | jq -r .data.basic_auth_username)" >> .env
-echo "PACT_BASE_URL=https://pact-broker.dsp-eng-tools.broadinstitute.org" >> .env
+{
+  gcloud secrets versions access latest --project dsp-tools-k8s --secret beehive-github-oauth-local --quiet |
+    jq -r  'to_entries[] | "GITHUB_\(.key | ascii_upcase)=\(.value)"'
 
-echo "COOKIE_SIGNING_SECRET=$(echo $RANDOM | md5sum | head -c 20)" >> .env
+  echo PACT_PASSWORD=$(
+    gcloud secrets versions access latest --project dsp-tools-k8s --secret pact-broker-users-read-write --quiet |
+      jq -r .basic_auth_password
+  )
+  echo PACT_USERNAME=$(
+    gcloud secrets versions access latest --project dsp-tools-k8s --secret pact-broker-users-read-write --quiet |
+      jq -r .basic_auth_username
+  )
+  echo "PACT_BASE_URL=https://pact-broker.dsp-eng-tools.broadinstitute.org"
 
-echo "PAGERDUTY_APP_ID=P2DQ0G3" >> .env
-echo "SLACK_WORKSPACE_ID=T0CMFS7GX" >> .env
-echo "RELEASE_PROTECTION_CALENDAR_ID=broadinstitute.org_fk0c1oa4bnkcmk9q2j69egm29c@group.calendar.google.com" >> .env
+  echo "COOKIE_SIGNING_SECRET=$(echo $RANDOM | md5sum | head -c 20)"
+
+  echo "PAGERDUTY_APP_ID=P2DQ0G3"
+  echo "SLACK_WORKSPACE_ID=T0CMFS7GX"
+  echo "RELEASE_PROTECTION_CALENDAR_ID=broadinstitute.org_fk0c1oa4bnkcmk9q2j69egm29c@group.calendar.google.com"
+} > "${ENV_FILE}"
