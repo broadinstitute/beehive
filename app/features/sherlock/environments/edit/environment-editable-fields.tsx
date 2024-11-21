@@ -325,10 +325,8 @@ export const EnvironmentEditableFields: React.FunctionComponent<
         <TextField
           name="serviceBannerBucket"
           placeholder={
-            creating
-              ? templateInUse
-                ? "(defaults to template's value)"
-                : "(can be left empty)"
+            creating && templateInUse
+              ? "(defaults to template's value)"
               : "(can be left empty)"
           }
           defaultValue={creating ? undefined : environment?.serviceBannerBucket}
