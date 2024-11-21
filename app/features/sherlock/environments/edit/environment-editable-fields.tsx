@@ -314,6 +314,26 @@ export const EnvironmentEditableFields: React.FunctionComponent<
           />
         </div>
       )}
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Service Banner Bucket
+        </h2>
+        <p>
+          The GCS bucket containing the Terra UI banner files. If empty, the
+          banner cannot be set.
+        </p>
+        <TextField
+          name="serviceBannerBucket"
+          placeholder={
+            creating
+              ? templateInUse
+                ? "(defaults to template's value)"
+                : "(can be left empty)"
+              : "(can be left empty)"
+          }
+          defaultValue={creating ? undefined : environment?.serviceBannerBucket}
+        />
+      </label>
     </div>
   );
 };
