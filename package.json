@@ -14,7 +14,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.26.23",
+    "@floating-ui/react": "^0.26.28",
     "@googleapis/calendar": "^9.7.9",
     "@octokit/rest": "^21.0.2",
     "@react-hook/resize-observer": "^2.0.2",
