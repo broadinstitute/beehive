@@ -25,7 +25,7 @@ export interface EnvironmentDetailsProps {
   selfLinkChip?: boolean;
   linkChipArrows?: boolean;
   toTerraUI?: string | null;
-  toDataRepo?: string | null;
+  toDataRepoUI?: string | null;
   toChartReleases?: string;
   toChangeVersions?: string;
   toEdit?: string;
@@ -44,7 +44,7 @@ export const EnvironmentDetails: React.FunctionComponent<
   selfLinkChip,
   linkChipArrows,
   toTerraUI,
-  toDataRepo,
+  toDataRepoUI,
   toChartReleases,
   toChangeVersions,
   toEdit,
@@ -107,10 +107,10 @@ export const EnvironmentDetails: React.FunctionComponent<
           <h2>View Charts in This Environment</h2>
         </NavButton>
       )}
-      {toDataRepo && environment.offline !== true && (
+      {toDataRepoUI && environment.offline !== true && (
         <ExternalNavButton
           icon={<DatarepoIcon className="h-[1.75rem]" />}
-          to={toDataRepo}
+          to={toDataRepoUI}
           beforeBorderClassName="before:border-[#00788f]"
           target="_blank"
         >
