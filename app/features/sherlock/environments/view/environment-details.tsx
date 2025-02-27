@@ -111,7 +111,7 @@ export const EnvironmentDetails: React.FunctionComponent<
         <ExternalNavButton
           icon={<DatarepoIcon className="h-[1.75rem]" />}
           to={toDataRepoUI}
-          beforeBorderClassName="before:border-[#00788f]"
+          beforeBorderClassName="before:border-[#00d3ef]"
           target="_blank"
         >
           <h2>Visit Terra Data Repo ↗</h2>
