@@ -2,6 +2,7 @@ import type { SerializeFrom } from "@remix-run/node";
 import type { SherlockEnvironmentV3 } from "@sherlock-js-client/sherlock";
 import { TerraIcon } from "~/components/assets/terra-icon";
 import { DatarepoIcon } from "~/components/assets/datarepo-icon";
+import { DuosIcon } from "~/components/assets/duos-icon";
 import { ExternalNavButton } from "~/components/interactivity/external-nav-button";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
@@ -26,6 +27,7 @@ export interface EnvironmentDetailsProps {
   linkChipArrows?: boolean;
   toTerraUI?: string | null;
   toDataRepoUI?: string | null;
+  toDuos?: string | null;
   toChartReleases?: string;
   toChangeVersions?: string;
   toEdit?: string;
@@ -45,6 +47,7 @@ export const EnvironmentDetails: React.FunctionComponent<
   linkChipArrows,
   toTerraUI,
   toDataRepoUI,
+  toDuos,
   toChartReleases,
   toChangeVersions,
   toEdit,
@@ -106,6 +109,16 @@ export const EnvironmentDetails: React.FunctionComponent<
         <NavButton to={toChartReleases} {...ChartReleaseColors}>
           <h2>View Charts in This Environment</h2>
         </NavButton>
+      )}
+      {toDuos && environment.offline !== true && (
+        <ExternalNavButton
+          icon={<DuosIcon className="h-[1.75rem]" />}
+          to={toDuos}
+          beforeBorderClassName="before:border-[#11a272]"
+          target="_blank"
+        >
+          <h2>Visit DUOS ↗</h2>
+        </ExternalNavButton>
       )}
       {toDataRepoUI && environment.offline !== true && (
         <ExternalNavButton

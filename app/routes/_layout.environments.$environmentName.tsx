@@ -75,6 +75,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           handleIAP(request),
         )
         .catch(() => null),
+      duosInstance: new ChartReleasesApi(SherlockConfiguration)
+        .apiChartReleasesV3SelectorGet(
+          { selector: `${params.environmentName}/duos` },
+          handleIAP(request),
+        )
+        .catch(() => null),
     })),
   });
 }
@@ -82,8 +88,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const { environment, terrauiInstance, terraDatarepouiInstance, ciRuns } =
-    useLoaderData<typeof loader>();
+  const {
+    environment,
+    terrauiInstance,
+    terraDatarepouiInstance,
+    duosInstance,
+    ciRuns,
+  } = useLoaderData<typeof loader>();
   return (
     <ProdFlag prod={environment.name === "prod"}>
       <OutsetPanel {...EnvironmentColors}>
@@ -112,6 +123,7 @@ export default function Route() {
             initialCiRuns={ciRuns}
             toTerraUI={chartReleaseUrl(terrauiInstance)}
             toDataRepoUI={chartReleaseUrl(terraDatarepouiInstance)}
+            toDuos={chartReleaseUrl(duosInstance)}
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
             toEdit="./edit"
