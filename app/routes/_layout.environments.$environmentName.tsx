@@ -69,6 +69,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           handleIAP(request),
         )
         .catch(() => null),
+      terraDatarepouiInstance: new ChartReleasesApi(SherlockConfiguration)
+        .apiChartReleasesV3SelectorGet(
+          { selector: `${params.environmentName}/datarepo-ui` },
+          handleIAP(request),
+        )
+        .catch(() => null),
     })),
   });
 }
@@ -76,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const { environment, terrauiInstance, ciRuns } =
+  const { environment, terrauiInstance, terraDatarepouiInstance, ciRuns } =
     useLoaderData<typeof loader>();
   return (
     <ProdFlag prod={environment.name === "prod"}>
@@ -105,6 +111,7 @@ export default function Route() {
             environment={environment}
             initialCiRuns={ciRuns}
             toTerraUI={chartReleaseUrl(terrauiInstance)}
+            toDataRepoUI={chartReleaseUrl(terraDatarepouiInstance)}
             toChartReleases="./chart-releases"
             toChangeVersions="./change-versions"
             toEdit="./edit"
