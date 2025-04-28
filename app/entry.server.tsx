@@ -32,7 +32,7 @@ export default function handleRequest(
           );
 
           responseHeaders.set("Content-Type", "text/html");
-          responseHeaders.set("Cache-Control", "no-cache");
+          responseHeaders.set("Cache-Control", "no-store");
 
           resolve(
             new Response(createReadableStreamFromReadable(body), {
@@ -59,6 +59,6 @@ export default function handleRequest(
 }
 
 export const handleDataRequest: HandleDataRequestFunction = (response) => {
-  response.headers.set("Cache-Control", "no-cache");
+  response.headers.set("Cache-Control", "no-store");
   return response;
 };
