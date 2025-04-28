@@ -4,7 +4,6 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=broadinstitute_beehive&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=broadinstitute_beehive)
 [![Bump, Tag, and Publish](https://github.com/broadinstitute/beehive/actions/workflows/build.yaml/badge.svg)](https://github.com/broadinstitute/beehive/actions/workflows/build.yaml)
 
-
 ## Getting set up
 
 1. Grab [Node 18](https://nodejs.org/en/download)

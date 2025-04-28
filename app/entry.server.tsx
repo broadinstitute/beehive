@@ -62,3 +62,4 @@ export const handleDataRequest: HandleDataRequestFunction = (response) => {
   response.headers.set("Cache-Control", "no-cache");
   return response;
 };
+
