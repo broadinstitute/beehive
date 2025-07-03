@@ -1,7 +1,7 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type {
-  SherlockServiceAlertV3EditableFields,
-  SherlockServiceAlertV3EditableFieldsSeverityEnum,
+  SherlockServiceAlertV3Create,
+  SherlockServiceAlertV3CreateSeverityEnum,
 } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
@@ -9,15 +9,15 @@ import { TextField } from "~/components/interactivity/text-field";
 import { formDataToObject } from "~/helpers/form-data-to-object";
 import { ServiceAlertColors } from "../service-alert-colors";
 
-export interface ServiceAlertEditableFieldsProps {
+export interface ServiceAlertCreatableFieldsProps {
   serviceAlert?:
-    | SherlockServiceAlertV3EditableFields
-    | SerializeFrom<SherlockServiceAlertV3EditableFields>;
+    | SherlockServiceAlertV3Create
+    | SerializeFrom<SherlockServiceAlertV3Create>;
 }
 
-export const serviceAlertEditableFormDataToObject = function (
+export const serviceAlertCreatableFormDataToObject = function (
   formData: FormData,
-): SherlockServiceAlertV3EditableFields {
+): SherlockServiceAlertV3Create {
   return {
     ...formDataToObject(formData, false),
     title: formData.get("title")?.toString(),
@@ -25,12 +25,13 @@ export const serviceAlertEditableFormDataToObject = function (
     link: formData.get("link")?.toString(),
     severity: formData
       .get("severity")
-      ?.toString() as SherlockServiceAlertV3EditableFieldsSeverityEnum,
+      ?.toString() as SherlockServiceAlertV3CreateSeverityEnum,
+    onEnvironment: formData.get("onEnvironment")?.toString(),
   };
 };
 
-export const ServiceAlertEditableFields: React.FunctionComponent<
-  ServiceAlertEditableFieldsProps
+export const ServiceAlertCreatableFields: React.FunctionComponent<
+  ServiceAlertCreatableFieldsProps
 > = ({ serviceAlert }) => {
   const [title, setTitle] = useState(serviceAlert?.title || "");
   const [message, setMessage] = useState(serviceAlert?.message || "");
@@ -38,12 +39,17 @@ export const ServiceAlertEditableFields: React.FunctionComponent<
   const [severity, setSeverity] = useState<string>(
     serviceAlert?.severity || " minor",
   );
+  const [onEnvironment, setOnEnvironment] = useState(
+    serviceAlert?.onEnvironment || "",
+  );
 
   return (
     <div className="flex flex-col space-y-4">
       <label>
         <h2 className="font-light text-2xl text-color-header-text">Title</h2>
-        <p>The title of the service alert.</p>
+        <p>
+          The title of the service alert that will be displayed prominently.
+        </p>
         <TextField
           name="title"
           value={title}
@@ -51,12 +57,13 @@ export const ServiceAlertEditableFields: React.FunctionComponent<
             setTitle(e.currentTarget.value);
           }}
           required={true}
+          placeholder="e.g., Scheduled Maintenance"
         />
       </label>
 
       <label>
         <h2 className="font-light text-2xl text-color-header-text">Message</h2>
-        <p>The main message content of the service alert.</p>
+        <p>The detailed message content explaining the service alert.</p>
         <textarea
           name="message"
           value={message}
@@ -65,26 +72,16 @@ export const ServiceAlertEditableFields: React.FunctionComponent<
           }}
           rows={4}
           className="w-full shadow-md rounded-2xl border border-color-text-box-border focus-visible:outline focus-visible:outline-color-focused-element focus-visible:invalid:outline-color-error-border p-4 mt-2 bg-color-nearest-bg placeholder:text-color-placeholder-text invalid:border-dashed invalid:border-color-error-border resize-vertical"
-        />
-      </label>
-
-      <label>
-        <h2 className="font-light text-2xl text-color-header-text">Link</h2>
-        <p>Optional link for more information about the alert.</p>
-        <TextField
-          name="link"
-          value={link}
-          onChange={(e) => {
-            setLink(e.currentTarget.value);
-          }}
-          type="url"
-          placeholder=""
+          placeholder="Provide details about the service alert..."
         />
       </label>
 
       <div>
         <h2 className="font-light text-2xl text-color-header-text">Severity</h2>
-        <p>The severity level of the service alert.</p>
+        <p>
+          The severity level of the service alert that determines its visual
+          prominence.
+        </p>
         <EnumInputSelect
           name="severity"
           className="grid grid-cols-3 mt-2"
@@ -98,6 +95,40 @@ export const ServiceAlertEditableFields: React.FunctionComponent<
           {...ServiceAlertColors}
         />
       </div>
+
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">
+          Environment
+        </h2>
+        <p>
+          The Terra environment where this alert should be displayed (optional).
+        </p>
+        <TextField
+          name="onEnvironment"
+          value={onEnvironment}
+          onChange={(e) => {
+            setOnEnvironment(e.currentTarget.value);
+          }}
+          placeholder="e.g., dev, staging, prod"
+        />
+      </label>
+
+      <label>
+        <h2 className="font-light text-2xl text-color-header-text">Link</h2>
+        <p>
+          Optional link for more information about the alert (e.g., status page,
+          documentation).
+        </p>
+        <TextField
+          name="link"
+          value={link}
+          onChange={(e) => {
+            setLink(e.currentTarget.value);
+          }}
+          type="url"
+          placeholder="https://..."
+        />
+      </label>
     </div>
   );
 };
