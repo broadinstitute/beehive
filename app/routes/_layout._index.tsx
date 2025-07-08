@@ -6,7 +6,6 @@ import {
   getProdAccessConfig,
   handleProdAccessRequest,
 } from "~/features/sherlock/role-assignments/prod-access-widget.server";
-import { getValidSession } from "~/helpers/get-valid-session.server";
 
 interface IndexNavButtonProps {
   to: string;
@@ -106,6 +105,10 @@ export default function Route() {
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/roles" prefetch="intent">
           Roles
+        </NavLink>
+        <span className="hidden laptop:inline laptop:last:hidden">•</span>
+        <NavLink to="/service-alerts" prefetch="intent">
+          Service Alerts
         </NavLink>
         <span className="hidden laptop:inline laptop:last:hidden">•</span>
         <NavLink to="/r" prefetch="intent">

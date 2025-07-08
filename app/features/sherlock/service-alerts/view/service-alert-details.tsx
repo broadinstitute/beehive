@@ -1,6 +1,5 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type { SherlockServiceAlertV3 } from "@sherlock-js-client/sherlock";
-import { ExternalNavButton } from "~/components/interactivity/external-nav-button";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { MutateControls } from "../../mutate-controls";
@@ -75,9 +74,9 @@ export const ServiceAlertDetails: React.FunctionComponent<
         {serviceAlert.link && (
           <div className="flex flex-col space-y-2">
             <h3 className="text-xl font-medium">Link</h3>
-            <ExternalNavButton to={serviceAlert.link} {...ServiceAlertColors}>
-              View Details
-            </ExternalNavButton>
+            <p className="text-color-body-text break-words">
+              {serviceAlert.link}
+            </p>
           </div>
         )}
 
