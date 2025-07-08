@@ -10,7 +10,6 @@ import { FillerText } from "~/components/panel-structures/filler-text";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
 import { makeErrorResponseReturner } from "~/errors/helpers/error-response-handlers";
-import { ServiceAlertEditableFields } from "~/features/sherlock/service-alerts/edit/service-alert-editable-fields";
 import {
   ServiceAlertCreatableFields,
   serviceAlertCreatableFormDataToObject,
@@ -63,8 +62,6 @@ export default function Route() {
           {...ServiceAlertColors}
         >
           <ServiceAlertCreatableFields serviceAlert={errorInfo?.formState} />
-          <p className="py-4">Fields below this point can be edited later.</p>
-          <ServiceAlertEditableFields serviceAlert={errorInfo?.formState} />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>

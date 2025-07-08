@@ -88,30 +88,34 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
           fieldValue={severity}
           setFieldValue={setSeverity}
           enums={[
-            ["Minor", " minor"],
-            ["Critical", " critical"],
+            ["Minor", "minor"],
+            ["Critical", "critical"],
             ["Blocker", "blocker"],
           ]}
           {...ServiceAlertColors}
         />
       </div>
 
-      <label>
+      <div>
         <h2 className="font-light text-2xl text-color-header-text">
           Environment
         </h2>
         <p>
           The Terra environment where this alert should be displayed (optional).
         </p>
-        <TextField
+        <EnumInputSelect
           name="onEnvironment"
-          value={onEnvironment}
-          onChange={(e) => {
-            setOnEnvironment(e.currentTarget.value);
-          }}
-          placeholder="e.g., dev, staging, prod"
+          className="grid grid-cols-3 mt-2"
+          fieldValue={onEnvironment}
+          setFieldValue={setOnEnvironment}
+          enums={[
+            ["Dev", "dev"],
+            ["Staging", "staging"],
+            ["Prod", "prod"],
+          ]}
+          {...ServiceAlertColors}
         />
-      </label>
+      </div>
 
       <label>
         <h2 className="font-light text-2xl text-color-header-text">Link</h2>
