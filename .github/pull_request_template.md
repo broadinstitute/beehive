@@ -11,3 +11,9 @@ If you need more than a paragraph, add it in a separate section called Backgroun
 
 Describe how the changes have been tested.
 Include screenshots where applicable to assist reviewers.
+
+## Risk Assessment [recommended]
+
+What are the risks associated with deploying this change(if any)?
+Can it be easily reverted in the event of unanticipated problems?
+If not, what alternative solutions are there?
