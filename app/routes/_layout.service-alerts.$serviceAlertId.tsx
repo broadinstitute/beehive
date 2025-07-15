@@ -16,12 +16,14 @@ import { OutsetPanel } from "~/components/layout/outset-panel";
 import { ItemDetails } from "~/components/panel-structures/item-details";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { errorResponseThrower } from "~/errors/helpers/error-response-handlers";
+import { getEnvironmentName } from "~/features/sherlock/service-alerts/get-environment-name";
 import { ServiceAlertColors } from "~/features/sherlock/service-alerts/service-alert-colors";
 import { ServiceAlertDetails } from "~/features/sherlock/service-alerts/view/service-alert-details";
 import {
   SherlockConfiguration,
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
+import { useServiceAlertsContext } from "~/routes/_layout.service-alerts";
 
 export const handle = {
   breadcrumb: (params: Readonly<Params<string>>) => (
@@ -53,15 +55,23 @@ export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const { serviceAlert } = useLoaderData<typeof loader>();
+  const parentContext = useServiceAlertsContext();
+  const { environments = [] } = parentContext || {};
+  const environmentName = getEnvironmentName(
+    serviceAlert.onEnvironment,
+    environments,
+  );
+
   return (
     <>
       <OutsetPanel {...ServiceAlertColors}>
         <ItemDetails
-          subtitle={`Service Alert for ${serviceAlert.onEnvironment || "Unknown Environment"}`}
+          subtitle={`Service Alert for ${environmentName || "Unknown Environment"}`}
           title={serviceAlert.title || `Service Alert ${serviceAlert.id}`}
         >
           <ServiceAlertDetails
             serviceAlert={serviceAlert}
+            environments={environments}
             toEdit="./edit"
             toDelete="./delete"
           />

@@ -10,7 +10,7 @@ import {
   useOutletContext,
   useParams,
 } from "@remix-run/react";
-import { ServiceAlertApi } from "@sherlock-js-client/sherlock";
+import { EnvironmentsApi, ServiceAlertApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
@@ -26,7 +26,6 @@ import {
   handleIAP,
 } from "~/features/sherlock/sherlock.server";
 import { PanelErrorBoundary } from "../errors/components/error-boundary";
-import { errorResponseThrower } from "../errors/helpers/error-response-handlers";
 
 export const handle = {
   breadcrumb: () => <NavLink to="/service-alerts">Service Alerts</NavLink>,
@@ -39,18 +38,33 @@ export const meta: MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return new ServiceAlertApi(SherlockConfiguration)
-    .apiServiceAlertsV3Get({}, handleIAP(request))
-    .then(
-      (serviceAlerts) => serviceAlerts.sort(serviceAlertSorter),
-      errorResponseThrower,
-    );
+  try {
+    const serviceAlerts = await new ServiceAlertApi(SherlockConfiguration)
+      .apiServiceAlertsV3Get({}, handleIAP(request))
+      .then(
+        (serviceAlerts) => (serviceAlerts || []).sort(serviceAlertSorter),
+        () => [],
+      );
+
+    const environments = await new EnvironmentsApi(SherlockConfiguration)
+      .apiEnvironmentsV3Get({}, handleIAP(request))
+      .catch(() => []);
+
+    return {
+      serviceAlerts: serviceAlerts || [],
+      environments: environments || [],
+    };
+  } catch (error) {
+    console.error("Service alerts loader error:", error);
+    return { serviceAlerts: [], environments: [] };
+  }
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const serviceAlerts = useLoaderData<typeof loader>();
+  const loaderData = useLoaderData<typeof loader>();
+  const { serviceAlerts = [], environments = [] } = loaderData || {};
   const { serviceAlertId: currentPathServiceAlert } = useParams();
   const [filterText, setFilterText] = useState("");
 
@@ -66,7 +80,9 @@ export default function Route() {
           <MemoryFilteredList
             entries={serviceAlerts}
             filterText={filterText}
-            filter={matchServiceAlert}
+            filter={(serviceAlert, matchText) =>
+              matchServiceAlert(serviceAlert, matchText, environments)
+            }
           >
             {(serviceAlert, index) => (
               <NavButton
@@ -77,19 +93,28 @@ export default function Route() {
                 }
                 {...ServiceAlertColors}
               >
-                <ListServiceAlertButtonText serviceAlert={serviceAlert} />
+                <ListServiceAlertButtonText
+                  serviceAlert={serviceAlert}
+                  environments={environments}
+                />
               </NavButton>
             )}
           </MemoryFilteredList>
         </InteractiveList>
       </InsetPanel>
-      <Outlet context={{ serviceAlerts }} />
+      <Outlet
+        context={{
+          serviceAlerts: serviceAlerts || [],
+          environments: environments || [],
+        }}
+      />
     </>
   );
 }
 
 export function useServiceAlertsContext() {
   return useOutletContext<{
-    serviceAlerts: SerializeFrom<typeof loader>;
+    serviceAlerts: SerializeFrom<typeof loader>["serviceAlerts"];
+    environments: SerializeFrom<typeof loader>["environments"];
   }>();
 }

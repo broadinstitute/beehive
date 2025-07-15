@@ -15,6 +15,7 @@ import {
   serviceAlertCreatableFormDataToObject,
 } from "~/features/sherlock/service-alerts/new/service-alert-creatable-fields";
 import { ServiceAlertColors } from "~/features/sherlock/service-alerts/service-alert-colors";
+import { syncServiceAlerts } from "~/features/sherlock/service-alerts/sync-service-alerts.server";
 import {
   SherlockConfiguration,
   handleIAP,
@@ -38,15 +39,23 @@ export async function action({ request }: ActionFunctionArgs) {
   const serviceAlertRequest: SherlockServiceAlertV3Create =
     serviceAlertCreatableFormDataToObject(formData);
 
-  return new ServiceAlertApi(SherlockConfiguration)
-    .apiServiceAlertsV3Post(
+  try {
+    const serviceAlert = await new ServiceAlertApi(
+      SherlockConfiguration,
+    ).apiServiceAlertsV3Post(
       { serviceAlert: serviceAlertRequest },
       handleIAP(request),
-    )
-    .then(
-      (serviceAlert) => redirect(`/service-alerts/${serviceAlert.id}`),
-      makeErrorResponseReturner(serviceAlertRequest),
     );
+
+    // Sync service alerts after creation
+    if (serviceAlert.onEnvironment) {
+      await syncServiceAlerts(request, serviceAlert.onEnvironment);
+    }
+
+    return redirect(`/service-alerts/${serviceAlert.id}`);
+  } catch (error) {
+    return makeErrorResponseReturner(serviceAlertRequest)(error);
+  }
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
