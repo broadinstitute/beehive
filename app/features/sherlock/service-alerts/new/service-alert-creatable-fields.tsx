@@ -101,7 +101,7 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
           Environment
         </h2>
         <p>
-          The Terra environment where this alert should be displayed (optional).
+          The Terra environment where this alert should be displayed (required).
         </p>
         <EnumInputSelect
           name="onEnvironment"
