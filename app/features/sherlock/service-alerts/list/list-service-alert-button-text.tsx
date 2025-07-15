@@ -1,9 +1,16 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { SherlockServiceAlertV3 } from "@sherlock-js-client/sherlock";
+import type {
+  SherlockEnvironmentV3,
+  SherlockServiceAlertV3,
+} from "@sherlock-js-client/sherlock";
+import { getEnvironmentName } from "../get-environment-name";
 
 export const ListServiceAlertButtonText: React.FunctionComponent<{
   serviceAlert: SerializeFrom<SherlockServiceAlertV3>;
-}> = ({ serviceAlert }) => (
+  environments?:
+    | SerializeFrom<SherlockEnvironmentV3>[]
+    | SherlockEnvironmentV3[];
+}> = ({ serviceAlert, environments = [] }) => (
   <div className="flex flex-col space-y-1">
     <h2 className="font-light">
       <span className="font-medium">
@@ -24,7 +31,9 @@ export const ListServiceAlertButtonText: React.FunctionComponent<{
           serviceAlert.severity?.trim().slice(1) || "Minor"}
       </span>
       {serviceAlert.onEnvironment && (
-        <span className="ml-2">• {serviceAlert.onEnvironment}</span>
+        <span className="ml-2">
+          • {getEnvironmentName(serviceAlert.onEnvironment, environments)}
+        </span>
       )}
     </div>
   </div>
