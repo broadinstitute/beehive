@@ -1,20 +1,27 @@
 import type { SerializeFrom } from "@remix-run/node";
-import type { SherlockServiceAlertV3 } from "@sherlock-js-client/sherlock";
+import type {
+  SherlockEnvironmentV3,
+  SherlockServiceAlertV3,
+} from "@sherlock-js-client/sherlock";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { MutateControls } from "../../mutate-controls";
 import { ProdWarning } from "../../prod-warning";
+import { getEnvironmentName } from "../get-environment-name";
 import { ServiceAlertColors } from "../service-alert-colors";
 
 export interface ServiceAlertDetailsProps {
   serviceAlert: SherlockServiceAlertV3 | SerializeFrom<SherlockServiceAlertV3>;
+  environments?:
+    | SerializeFrom<SherlockEnvironmentV3>[]
+    | SherlockEnvironmentV3[];
   toEdit?: string;
   toDelete?: string;
 }
 
 export const ServiceAlertDetails: React.FunctionComponent<
   ServiceAlertDetailsProps
-> = ({ serviceAlert, toEdit, toDelete }) => (
+> = ({ serviceAlert, environments = [], toEdit, toDelete }) => (
   <div className="flex flex-col space-y-4">
     <div className="flex flex-col space-y-10">
       <div className="flex flex-row items-center flex-wrap gap-4">
@@ -83,7 +90,9 @@ export const ServiceAlertDetails: React.FunctionComponent<
         {serviceAlert.onEnvironment && (
           <div className="flex flex-col space-y-2">
             <h3 className="text-xl font-medium">Environment</h3>
-            <p className="text-color-body-text">{serviceAlert.onEnvironment}</p>
+            <p className="text-color-body-text">
+              {getEnvironmentName(serviceAlert.onEnvironment, environments)}
+            </p>
           </div>
         )}
 
