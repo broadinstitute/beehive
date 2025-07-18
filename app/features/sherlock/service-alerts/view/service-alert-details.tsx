@@ -6,7 +6,6 @@ import type {
 import { NavButton } from "~/components/interactivity/nav-button";
 import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
 import { MutateControls } from "../../mutate-controls";
-import { ProdWarning } from "../../prod-warning";
 import { getEnvironmentName } from "../get-environment-name";
 import { ServiceAlertColors } from "../service-alert-colors";
 
@@ -39,8 +38,6 @@ export const ServiceAlertDetails: React.FunctionComponent<
           </NavButton>
         )}
       </div>
-
-      <ProdWarning name={serviceAlert.title} />
 
       <div className="flex flex-col space-y-4">
         <div className="flex flex-col space-y-2">

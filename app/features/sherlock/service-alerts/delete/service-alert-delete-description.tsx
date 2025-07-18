@@ -11,7 +11,7 @@ export const ServiceAlertDeleteDescription: React.FunctionComponent<
   ServiceAlertDeleteDescriptionProps
 > = ({ serviceAlert, showEnvironmentWarning = false }) => (
   <div className="flex flex-col space-y-4">
-    {showEnvironmentWarning && <ProdWarning name="service alerts" />}
+    {showEnvironmentWarning === true && <ProdWarning name="service alerts" />}
 
     <h2 className="text-2xl font-light">
       Are you sure you want to delete this service alert?

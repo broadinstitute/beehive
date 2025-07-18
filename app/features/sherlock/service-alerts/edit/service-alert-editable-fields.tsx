@@ -43,7 +43,7 @@ export const ServiceAlertEditableFields: React.FunctionComponent<
 
   return (
     <div className="flex flex-col space-y-4">
-      {showEnvironmentWarning && <ProdWarning name="service alerts" />}
+      {showEnvironmentWarning === true && <ProdWarning name="service alerts" />}
 
       <label>
         <h2 className="font-light text-2xl text-color-header-text">Title</h2>
