@@ -3,8 +3,10 @@ import { redirect } from "@remix-run/node";
 import { NavLink, useActionData } from "@remix-run/react";
 import type { SherlockServiceAlertV3Create } from "@sherlock-js-client/sherlock";
 import { ServiceAlertApi } from "@sherlock-js-client/sherlock";
+import { useState } from "react";
 import { InsetPanel } from "~/components/layout/inset-panel";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { ProdFlag } from "~/components/layout/prod-flag";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { FillerText } from "~/components/panel-structures/filler-text";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
@@ -62,15 +64,22 @@ export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const errorInfo = useActionData<typeof action>();
+  const [isProd, setIsProd] = useState(
+    errorInfo?.formState?.onEnvironment === "prod",
+  );
+
   return (
-    <>
+    <ProdFlag prod={isProd}>
       <OutsetPanel {...ServiceAlertColors}>
         <ActionBox
           title="Now Creating New Service Alert"
           submitText="Click to Create"
           {...ServiceAlertColors}
         >
-          <ServiceAlertCreatableFields serviceAlert={errorInfo?.formState} />
+          <ServiceAlertCreatableFields
+            serviceAlert={errorInfo?.formState}
+            onEnvironmentChange={setIsProd}
+          />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
@@ -90,6 +99,6 @@ export default function Route() {
           </p>
         </FillerText>
       </InsetPanel>
-    </>
+    </ProdFlag>
   );
 }

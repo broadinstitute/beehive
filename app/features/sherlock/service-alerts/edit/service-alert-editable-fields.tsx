@@ -6,6 +6,7 @@ import type {
 import { useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
+import { ProdWarning } from "~/features/sherlock/prod-warning";
 import { formDataToObject } from "~/helpers/form-data-to-object";
 import { ServiceAlertColors } from "../service-alert-colors";
 
@@ -13,6 +14,7 @@ export interface ServiceAlertEditableFieldsProps {
   serviceAlert?:
     | SherlockServiceAlertV3EditableFields
     | SerializeFrom<SherlockServiceAlertV3EditableFields>;
+  showEnvironmentWarning?: boolean;
 }
 
 export const serviceAlertEditableFormDataToObject = function (
@@ -31,16 +33,18 @@ export const serviceAlertEditableFormDataToObject = function (
 
 export const ServiceAlertEditableFields: React.FunctionComponent<
   ServiceAlertEditableFieldsProps
-> = ({ serviceAlert }) => {
+> = ({ serviceAlert, showEnvironmentWarning = false }) => {
   const [title, setTitle] = useState(serviceAlert?.title || "");
   const [message, setMessage] = useState(serviceAlert?.message || "");
   const [link, setLink] = useState(serviceAlert?.link || "");
   const [severity, setSeverity] = useState<string>(
-    serviceAlert?.severity || " minor",
+    serviceAlert?.severity || "minor",
   );
 
   return (
     <div className="flex flex-col space-y-4">
+      {showEnvironmentWarning && <ProdWarning name="service alerts" />}
+
       <label>
         <h2 className="font-light text-2xl text-color-header-text">Title</h2>
         <p>The title of the service alert.</p>
@@ -91,8 +95,8 @@ export const ServiceAlertEditableFields: React.FunctionComponent<
           fieldValue={severity}
           setFieldValue={setSeverity}
           enums={[
-            ["Minor", " minor"],
-            ["Critical", " critical"],
+            ["Minor", "minor"],
+            ["Critical", "critical"],
             ["Blocker", "blocker"],
           ]}
           {...ServiceAlertColors}

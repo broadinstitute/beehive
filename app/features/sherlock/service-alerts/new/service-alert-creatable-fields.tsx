@@ -3,9 +3,10 @@ import type {
   SherlockServiceAlertV3Create,
   SherlockServiceAlertV3CreateSeverityEnum,
 } from "@sherlock-js-client/sherlock";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
+import { ProdWarning } from "~/features/sherlock/prod-warning";
 import { formDataToObject } from "~/helpers/form-data-to-object";
 import { ServiceAlertColors } from "../service-alert-colors";
 
@@ -13,6 +14,7 @@ export interface ServiceAlertCreatableFieldsProps {
   serviceAlert?:
     | SherlockServiceAlertV3Create
     | SerializeFrom<SherlockServiceAlertV3Create>;
+  onEnvironmentChange?: (isProd: boolean) => void;
 }
 
 export const serviceAlertCreatableFormDataToObject = function (
@@ -32,16 +34,21 @@ export const serviceAlertCreatableFormDataToObject = function (
 
 export const ServiceAlertCreatableFields: React.FunctionComponent<
   ServiceAlertCreatableFieldsProps
-> = ({ serviceAlert }) => {
+> = ({ serviceAlert, onEnvironmentChange }) => {
   const [title, setTitle] = useState(serviceAlert?.title || "");
   const [message, setMessage] = useState(serviceAlert?.message || "");
   const [link, setLink] = useState(serviceAlert?.link || "");
   const [severity, setSeverity] = useState<string>(
-    serviceAlert?.severity || " minor",
+    serviceAlert?.severity || "minor",
   );
   const [onEnvironment, setOnEnvironment] = useState(
     serviceAlert?.onEnvironment || "",
   );
+
+  // Notify parent component when environment changes or on initial load
+  useEffect(() => {
+    onEnvironmentChange?.(onEnvironment === "prod");
+  }, [onEnvironment, onEnvironmentChange]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -107,7 +114,10 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
           name="onEnvironment"
           className="grid grid-cols-3 mt-2"
           fieldValue={onEnvironment}
-          setFieldValue={setOnEnvironment}
+          setFieldValue={(value) => {
+            setOnEnvironment(value);
+            onEnvironmentChange?.(value === "prod");
+          }}
           enums={[
             ["Dev", "dev"],
             ["Staging", "staging"],
@@ -115,6 +125,11 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
           ]}
           {...ServiceAlertColors}
         />
+        {onEnvironment === "prod" && (
+          <div className="mt-4">
+            <ProdWarning name="service alerts" />
+          </div>
+        )}
       </div>
 
       <label>

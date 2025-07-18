@@ -6,6 +6,7 @@ import type { SherlockServiceAlertV3EditableFields } from "@sherlock-js-client/s
 import { ServiceAlertApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { ProdFlag } from "~/components/layout/prod-flag";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
@@ -71,8 +72,10 @@ export const ErrorBoundary = PanelErrorBoundary;
 export default function Route() {
   const { serviceAlert } = useServiceAlertContext();
   const errorInfo = useActionData<typeof action>();
+  const isProd = serviceAlert.onEnvironment === "prod";
+
   return (
-    <>
+    <ProdFlag prod={isProd}>
       <OutsetPanel>
         <ActionBox
           title={`Now Editing ${serviceAlert.title || `Service Alert ${serviceAlert.id}`}`}
@@ -81,11 +84,12 @@ export default function Route() {
         >
           <ServiceAlertEditableFields
             serviceAlert={errorInfo?.formState ?? serviceAlert}
+            showEnvironmentWarning={isProd}
           />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
       <OutsetFiller />
-    </>
+    </ProdFlag>
   );
 }

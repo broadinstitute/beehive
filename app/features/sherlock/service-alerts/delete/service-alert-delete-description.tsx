@@ -1,14 +1,18 @@
 import type { SerializeFrom } from "@remix-run/node";
 import type { SherlockServiceAlertV3 } from "@sherlock-js-client/sherlock";
+import { ProdWarning } from "~/features/sherlock/prod-warning";
 
 export interface ServiceAlertDeleteDescriptionProps {
   serviceAlert: SherlockServiceAlertV3 | SerializeFrom<SherlockServiceAlertV3>;
+  showEnvironmentWarning?: boolean;
 }
 
 export const ServiceAlertDeleteDescription: React.FunctionComponent<
   ServiceAlertDeleteDescriptionProps
-> = ({ serviceAlert }) => (
+> = ({ serviceAlert, showEnvironmentWarning = false }) => (
   <div className="flex flex-col space-y-4">
+    {showEnvironmentWarning && <ProdWarning name="service alerts" />}
+
     <h2 className="text-2xl font-light">
       Are you sure you want to delete this service alert?
     </h2>

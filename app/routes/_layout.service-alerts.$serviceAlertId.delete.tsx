@@ -5,6 +5,7 @@ import { NavLink, useActionData } from "@remix-run/react";
 import { ServiceAlertApi } from "@sherlock-js-client/sherlock";
 import { OutsetFiller } from "~/components/layout/outset-filler";
 import { OutsetPanel } from "~/components/layout/outset-panel";
+import { ProdFlag } from "~/components/layout/prod-flag";
 import { ActionBox } from "~/components/panel-structures/action-box";
 import { PanelErrorBoundary } from "~/errors/components/error-boundary";
 import { FormErrorDisplay } from "~/errors/components/form-error-display";
@@ -103,19 +104,24 @@ export const ErrorBoundary = PanelErrorBoundary;
 export default function Route() {
   const { serviceAlert } = useServiceAlertContext();
   const errorInfo = useActionData<typeof action>();
+  const isProd = serviceAlert.onEnvironment === "prod";
+
   return (
-    <>
+    <ProdFlag prod={isProd}>
       <OutsetPanel>
         <ActionBox
           title={`Now Deleting ${serviceAlert.title || `Service Alert ${serviceAlert.id}`}`}
           submitText="Click to Delete"
           {...ServiceAlertColors}
         >
-          <ServiceAlertDeleteDescription serviceAlert={serviceAlert} />
+          <ServiceAlertDeleteDescription
+            serviceAlert={serviceAlert}
+            showEnvironmentWarning={isProd}
+          />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}
         </ActionBox>
       </OutsetPanel>
       <OutsetFiller />
-    </>
+    </ProdFlag>
   );
 }
