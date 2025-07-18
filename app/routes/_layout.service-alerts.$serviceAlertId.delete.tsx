@@ -104,7 +104,9 @@ export const ErrorBoundary = PanelErrorBoundary;
 export default function Route() {
   const { serviceAlert } = useServiceAlertContext();
   const errorInfo = useActionData<typeof action>();
-  const isProd = serviceAlert.onEnvironment === "prod";
+  const isProd = Boolean(
+    serviceAlert.onEnvironment?.trim()?.toLowerCase() === "prod",
+  );
 
   return (
     <ProdFlag prod={isProd}>
