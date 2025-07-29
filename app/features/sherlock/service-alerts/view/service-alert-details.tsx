@@ -103,10 +103,19 @@ export const ServiceAlertDetails: React.FunctionComponent<
                 Created: {new Date(serviceAlert.createdAt).toLocaleString()}
               </p>
             )}
+            {serviceAlert.createdBy && (
+              <p>Created By: {serviceAlert.createdBy}</p>
+            )}
             {serviceAlert.updatedAt && (
               <p>
                 Updated: {new Date(serviceAlert.updatedAt).toLocaleString()}
               </p>
+            )}
+            {serviceAlert.updatedBy && (
+              <p>Updated By: {serviceAlert.updatedBy}</p>
+            )}
+            {serviceAlert.deletedBy && (
+              <p>Deleted By: {serviceAlert.deletedBy}</p>
             )}
           </div>
         </div>
