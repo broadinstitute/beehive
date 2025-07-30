@@ -1,6 +1,10 @@
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { NavLink, useActionData } from "@remix-run/react";
+import { NavLink, useActionData, useLoaderData } from "@remix-run/react";
 import type { SherlockServiceAlertV3Create } from "@sherlock-js-client/sherlock";
 import { ServiceAlertApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
@@ -34,6 +38,15 @@ export const meta: MetaFunction = () => [
   },
 ];
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const environment = url.searchParams.get("environment");
+
+  return {
+    preselectedEnvironment: environment,
+  };
+}
+
 export async function action({ request }: ActionFunctionArgs) {
   await getValidSession(request);
 
@@ -64,9 +77,22 @@ export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
   const errorInfo = useActionData<typeof action>();
+  const { preselectedEnvironment } = useLoaderData<typeof loader>();
+
+  // Initialize isProd based on error state or preselected environment
   const [isProd, setIsProd] = useState(
-    errorInfo?.formState?.onEnvironment === "prod",
+    errorInfo?.formState?.onEnvironment === "prod" ||
+      preselectedEnvironment === "prod",
   );
+
+  // Create initial service alert data with preselected environment
+  const initialServiceAlert =
+    errorInfo?.formState ||
+    (preselectedEnvironment
+      ? {
+          onEnvironment: preselectedEnvironment,
+        }
+      : undefined);
 
   return (
     <ProdFlag prod={isProd}>
@@ -77,7 +103,7 @@ export default function Route() {
           {...ServiceAlertColors}
         >
           <ServiceAlertCreatableFields
-            serviceAlert={errorInfo?.formState}
+            serviceAlert={initialServiceAlert}
             onEnvironmentChange={setIsProd}
           />
           {errorInfo && <FormErrorDisplay {...errorInfo.errorSummary} />}

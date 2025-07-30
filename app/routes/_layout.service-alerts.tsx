@@ -162,7 +162,7 @@ export default function Route() {
         <InteractiveList title="Service Alerts" {...ServiceAlertColors}>
           <ListControls
             setFilterText={setFilterText}
-            toCreate="./new"
+            toCreate={`./new${environmentFilter !== "all" ? `?environment=${environmentFilter}` : ""}`}
             {...ServiceAlertColors}
           />
           <EnvironmentFilterButtons />

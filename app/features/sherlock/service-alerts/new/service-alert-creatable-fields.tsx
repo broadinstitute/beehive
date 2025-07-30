@@ -59,12 +59,11 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         </p>
         <TextField
           name="title"
-          value={title}
+          value="Service Incident"
           onChange={(e) => {
             setTitle(e.currentTarget.value);
           }}
           required={true}
-          placeholder="e.g., Scheduled Maintenance"
         />
       </label>
 
@@ -73,13 +72,13 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         <p>The detailed message content explaining the service alert.</p>
         <textarea
           name="message"
-          value={message}
+          value="We are currently investigating an issue impacting the platform. More details will be provided as soon as possible."
           onChange={(e) => {
             setMessage(e.currentTarget.value);
           }}
           rows={4}
           className="w-full shadow-md rounded-2xl border border-color-text-box-border focus-visible:outline focus-visible:outline-color-focused-element focus-visible:invalid:outline-color-error-border p-4 mt-2 bg-color-nearest-bg placeholder:text-color-placeholder-text invalid:border-dashed invalid:border-color-error-border resize-vertical"
-          placeholder="Provide details about the service alert..."
+          placeholder="We are currently investigating an issue impacting the platform. More details will be provided as soon as possible."
         />
       </label>
 
@@ -140,12 +139,12 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         </p>
         <TextField
           name="link"
-          value={link}
+          value="https://support.terra.bio/hc/en-us/sections/4415104213787"
           onChange={(e) => {
             setLink(e.currentTarget.value);
           }}
           type="url"
-          placeholder="https://..."
+          placeholder="https://support.terra.bio/hc/en-us/sections/4415104213787"
         />
       </label>
     </div>
