@@ -7,14 +7,17 @@ import {
   NavLink,
   Outlet,
   useLoaderData,
+  useNavigate,
   useOutletContext,
   useParams,
+  useSearchParams,
 } from "@remix-run/react";
 import { EnvironmentsApi, ServiceAlertApi } from "@sherlock-js-client/sherlock";
 import { useState } from "react";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
 import { InsetPanel } from "~/components/layout/inset-panel";
+import { ProdFlag } from "~/components/layout/prod-flag";
 import { InteractiveList } from "~/components/panel-structures/interactive-list";
 import { getEnvironmentName } from "~/features/sherlock/service-alerts/get-environment-name";
 import { ListServiceAlertButtonText } from "~/features/sherlock/service-alerts/list/list-service-alert-button-text";
@@ -39,8 +42,11 @@ export const meta: MetaFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
+    const url = new URL(request.url);
+    const includeDeleted = url.searchParams.get("include-deleted") === "true";
+
     const serviceAlerts = await new ServiceAlertApi(SherlockConfiguration)
-      .apiServiceAlertsV3Get({}, handleIAP(request))
+      .apiServiceAlertsV3Get({ includeDeleted }, handleIAP(request))
       .then(
         (serviceAlerts) => (serviceAlerts || []).sort(serviceAlertSorter),
         () => [],
@@ -68,6 +74,35 @@ export default function Route() {
   const { serviceAlertId: currentPathServiceAlert } = useParams();
   const [filterText, setFilterText] = useState("");
   const [environmentFilter, setEnvironmentFilter] = useState<string>("all");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  // Get show deleted state from URL params
+  const showDeleted = searchParams.get("include-deleted") === "true";
+
+  // Determine if prod environment filter is active for theme switching
+  const isProdFilterActive = environmentFilter === "prod";
+
+  // Handler for show deleted toggle
+  const handleShowDeletedChange = (value: string) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (value === "true") {
+      newSearchParams.set("include-deleted", "true");
+    } else {
+      newSearchParams.delete("include-deleted");
+    }
+
+    // If we're currently viewing a specific service alert, navigate back to the list
+    // to avoid potential 404 errors when the filter changes
+    if (currentPathServiceAlert) {
+      const searchString = newSearchParams.toString();
+      navigate(`/service-alerts${searchString ? `?${searchString}` : ""}`, {
+        replace: true,
+      });
+    } else {
+      setSearchParams(newSearchParams);
+    }
+  };
 
   // Create environment filter buttons component
   const EnvironmentFilterButtons = () => (
@@ -122,7 +157,7 @@ export default function Route() {
   });
 
   return (
-    <>
+    <ProdFlag prod={isProdFilterActive}>
       <InsetPanel>
         <InteractiveList title="Service Alerts" {...ServiceAlertColors}>
           <ListControls
@@ -131,23 +166,63 @@ export default function Route() {
             {...ServiceAlertColors}
           />
           <EnvironmentFilterButtons />
+          <div className="mb-4">
+            <label className="flex items-center space-x-3 cursor-pointer">
+              <span className="text-sm font-medium text-color-header-text">
+                Include Deleted Alerts
+              </span>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={showDeleted}
+                  onChange={(e) =>
+                    handleShowDeletedChange(e.target.checked ? "true" : "false")
+                  }
+                  className="sr-only"
+                />
+                <div
+                  className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-200 ease-in-out ${
+                    showDeleted
+                      ? `${ServiceAlertColors.borderClassName.replace("border-", "bg-")}`
+                      : "bg-gray-300"
+                  }`}
+                >
+                  <div
+                    className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ease-in-out ${
+                      showDeleted ? "transform translate-x-5" : ""
+                    }`}
+                  />
+                </div>
+              </div>
+            </label>
+          </div>
           <div className="flex flex-col space-y-4">
             {filteredServiceAlerts.length > 0 ? (
-              filteredServiceAlerts.map((serviceAlert, index) => (
-                <NavButton
-                  to={`./${serviceAlert.id}`}
-                  key={index.toString()}
-                  forceActive={
-                    currentPathServiceAlert === serviceAlert.id?.toString()
-                  }
-                  {...ServiceAlertColors}
-                >
-                  <ListServiceAlertButtonText
-                    serviceAlert={serviceAlert}
-                    environments={environments}
-                  />
-                </NavButton>
-              ))
+              filteredServiceAlerts.map((serviceAlert, index) => {
+                const isDeleted = Boolean(serviceAlert.deletedBy);
+                return (
+                  <NavButton
+                    to={`./${serviceAlert.id}${showDeleted ? "?include-deleted=true" : ""}`}
+                    key={index.toString()}
+                    forceActive={
+                      currentPathServiceAlert === serviceAlert.id?.toString()
+                    }
+                    {...(isDeleted
+                      ? {
+                          borderClassName: "border-gray-300",
+                          beforeBorderClassName: "before:border-gray-300",
+                          backgroundClassName: "bg-gray-50",
+                          hoverClassName: "hover:bg-gray-100",
+                        }
+                      : ServiceAlertColors)}
+                  >
+                    <ListServiceAlertButtonText
+                      serviceAlert={serviceAlert}
+                      environments={environments}
+                    />
+                  </NavButton>
+                );
+              })
             ) : (
               <div className="text-center text-color-placeholder-text py-8">
                 {environmentFilter === "all" && filterText
@@ -168,7 +243,7 @@ export default function Route() {
           environments: environments || [],
         }}
       />
-    </>
+    </ProdFlag>
   );
 }
 

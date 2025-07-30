@@ -44,23 +44,32 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw new Response("Service Alert ID is required", { status: 400 });
   }
 
+  const url = new URL(request.url);
+  const includeDeleted = url.searchParams.get("include-deleted") === "true";
+
   return defer({
     serviceAlert: await new ServiceAlertApi(SherlockConfiguration)
-      .apiServiceAlertsV3SelectorGet({ selector }, handleIAP(request))
+      .apiServiceAlertsV3SelectorGet(
+        { selector, includeDeleted },
+        handleIAP(request),
+      )
       .catch(errorResponseThrower),
+    includeDeleted,
   });
 }
 
 export const ErrorBoundary = PanelErrorBoundary;
 
 export default function Route() {
-  const { serviceAlert } = useLoaderData<typeof loader>();
+  const { serviceAlert, includeDeleted } = useLoaderData<typeof loader>();
   const parentContext = useServiceAlertsContext();
   const { environments = [] } = parentContext || {};
   const environmentName = getEnvironmentName(
     serviceAlert.onEnvironment,
     environments,
   );
+
+  const searchParams = includeDeleted ? "?include-deleted=true" : "";
 
   return (
     <>
@@ -72,8 +81,8 @@ export default function Route() {
           <ServiceAlertDetails
             serviceAlert={serviceAlert}
             environments={environments}
-            toEdit="./edit"
-            toDelete="./delete"
+            toEdit={serviceAlert.deletedBy ? undefined : "./edit"}
+            toDelete={serviceAlert.deletedBy ? undefined : "./delete"}
           />
         </ItemDetails>
       </OutsetPanel>
