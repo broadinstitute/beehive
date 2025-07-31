@@ -3,6 +3,7 @@ import type {
   SherlockServiceAlertV3Create,
   SherlockServiceAlertV3CreateSeverityEnum,
 } from "@sherlock-js-client/sherlock";
+import { Info } from "lucide-react";
 import { useEffect, useState } from "react";
 import { EnumInputSelect } from "~/components/interactivity/enum-select";
 import { TextField } from "~/components/interactivity/text-field";
@@ -32,7 +33,7 @@ const severityOptions = [
   },
 ];
 
-// Custom Severity Selector Component with Tooltips
+// Custom Severity Selector Component with Info Icon Tooltips
 const SeveritySelector: React.FunctionComponent<{
   value: string;
   onChange: (value: string) => void;
@@ -41,12 +42,12 @@ const SeveritySelector: React.FunctionComponent<{
 }> = ({ value, onChange, name, colors }) => {
   return (
     <div className="grid grid-cols-3 mt-2 gap-2">
-      {severityOptions.map((option) => (
-        <div key={option.value} className="relative group">
+      {severityOptions.map((option, index) => (
+        <div key={option.value} className="relative">
           <label
             className={`
             flex flex-col items-center justify-center p-3 rounded-2xl cursor-pointer
-            shadow-md hover:shadow-lg transition-all duration-200
+            shadow-md hover:shadow-lg transition-all duration-200 relative
             ${
               value === option.value
                 ? `${colors.borderClassName} ${colors.backgroundClassName} border-4 font-medium`
@@ -66,20 +67,36 @@ const SeveritySelector: React.FunctionComponent<{
             <span className="text-color-header-text text-center">
               {option.label}
             </span>
-          </label>
 
-          {/* Tooltip */}
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-            <div className="bg-color-body-bg border border-color-divider-line rounded-lg shadow-lg p-3 max-w-xs">
-              <div className="text-sm text-color-body-text text-center">
-                {option.tooltip}
-              </div>
-              {/* Tooltip arrow */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2">
-                <div className="border-4 border-transparent border-t-color-body-bg"></div>
+            {/* Info Icon */}
+            <div className="group absolute top-2 right-2">
+              <Info
+                size={16}
+                className="text-color-body-text hover:text-color-header-text transition-colors cursor-help"
+              />
+
+              {/* Dynamic Tooltip Positioning */}
+              <div
+                className={`absolute bottom-full mb-2 hidden group-hover:block z-50 ${
+                  index === 0 ? "left-0" : "right-0"
+                }`}
+              >
+                <div className="bg-gray-900 text-white border border-gray-700 rounded-lg shadow-xl p-3 w-80">
+                  <div className="text-sm text-left leading-relaxed">
+                    {option.tooltip}
+                  </div>
+                  {/* Dynamic Tooltip Arrow */}
+                  <div
+                    className={`absolute top-full transform ${
+                      index === 0 ? "left-4" : "right-4"
+                    }`}
+                  >
+                    <div className="border-4 border-transparent border-t-gray-900"></div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </label>
         </div>
       ))}
     </div>
