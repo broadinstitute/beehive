@@ -10,6 +10,79 @@ import { ProdWarning } from "~/features/sherlock/prod-warning";
 import { formDataToObject } from "~/helpers/form-data-to-object";
 import { ServiceAlertColors } from "../service-alert-colors";
 
+// Severity options with detailed tooltip descriptions
+const severityOptions = [
+  {
+    value: "minor",
+    label: "Minor",
+    tooltip: ".",
+  },
+  {
+    value: "critical",
+    label: "Critical",
+    tooltip: ".",
+  },
+  {
+    value: "blocker",
+    label: "Blocker",
+    tooltip: ".",
+  },
+];
+
+// Custom Severity Selector Component with Tooltips
+const SeveritySelector: React.FunctionComponent<{
+  value: string;
+  onChange: (value: string) => void;
+  name: string;
+  colors: any;
+}> = ({ value, onChange, name, colors }) => {
+  return (
+    <div className="grid grid-cols-3 mt-2 gap-2">
+      {severityOptions.map((option) => (
+        <div key={option.value} className="relative group">
+          <label
+            className={`
+            flex flex-col items-center justify-center p-3 rounded-2xl cursor-pointer
+            shadow-md hover:shadow-lg transition-all duration-200
+            ${
+              value === option.value
+                ? `${colors.borderClassName} ${colors.backgroundClassName} border-4 font-medium`
+                : "border-2 border-color-text-box-border bg-color-nearest-bg/50 hover:border-4"
+            }
+            focus-within:outline focus-within:outline-color-focused-element
+          `}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              checked={value === option.value}
+              onChange={(e) => onChange(e.target.value)}
+              className="sr-only"
+            />
+            <span className="text-color-header-text text-center">
+              {option.label}
+            </span>
+          </label>
+
+          {/* Tooltip */}
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
+            <div className="bg-color-body-bg border border-color-divider-line rounded-lg shadow-lg p-3 max-w-xs">
+              <div className="text-sm text-color-body-text text-center">
+                {option.tooltip}
+              </div>
+              {/* Tooltip arrow */}
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2">
+                <div className="border-4 border-transparent border-t-color-body-bg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export interface ServiceAlertCreatableFieldsProps {
   serviceAlert?:
     | SherlockServiceAlertV3Create
@@ -86,19 +159,13 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         <h2 className="font-light text-2xl text-color-header-text">Severity</h2>
         <p>
           The severity level of the service alert that determines its visual
-          prominence.
+          prominence. Hover over each option for more details.
         </p>
-        <EnumInputSelect
+        <SeveritySelector
           name="severity"
-          className="grid grid-cols-3 mt-2"
-          fieldValue={severity}
-          setFieldValue={setSeverity}
-          enums={[
-            ["Minor", "minor"],
-            ["Critical", "critical"],
-            ["Blocker", "blocker"],
-          ]}
-          {...ServiceAlertColors}
+          value={severity}
+          onChange={setSeverity}
+          colors={ServiceAlertColors}
         />
       </div>
 
