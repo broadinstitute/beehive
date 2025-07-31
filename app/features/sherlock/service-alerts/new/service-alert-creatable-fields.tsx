@@ -17,19 +17,19 @@ const severityOptions = [
     value: "minor",
     label: "Minor",
     tooltip:
-      "A minor function or feature is failing in rare or difficult to reproduce scenarios.",
+      "A minor function or feature is failing in rare or difficult to reproduce scenarios. This alert will be visible within the bell icon in Terra but will need to be expanded to view the actual content.",
   },
   {
     value: "critical",
     label: "Critical",
     tooltip:
-      "A major functional component is not working as expected. A workaround is available.",
+      "A major functional component is not working as expected. A workaround is available. This alert will be visible within the bell icon in Terra but will need to be expanded to view the actual content.",
   },
   {
     value: "blocker",
     label: "Blocker",
     tooltip:
-      "Major failure that affects the entire system or key modules of the system. This failure prevents clinical labs from providing CLIA certified results, or causes loss of data, money or both.",
+      "Major failure that affects the entire system or key modules of the system. This failure prevents clinical labs from providing CLIA certified results, or causes loss of data, money or both. This alert will be placed at the top of the page within Terra and will be visible to everyone without expanding the bell icon.",
   },
 ];
 
