@@ -15,17 +15,20 @@ const severityOptions = [
   {
     value: "minor",
     label: "Minor",
-    tooltip: ".",
+    tooltip:
+      "A minor function or feature is failing in rare or difficult to reproduce scenarios.",
   },
   {
     value: "critical",
     label: "Critical",
-    tooltip: ".",
+    tooltip:
+      "A major functional component is not working as expected. A workaround is available.",
   },
   {
     value: "blocker",
     label: "Blocker",
-    tooltip: ".",
+    tooltip:
+      "Major failure that affects the entire system or key modules of the system. This failure prevents clinical labs from providing CLIA certified results, or causes loss of data, money or both.",
   },
 ];
 
