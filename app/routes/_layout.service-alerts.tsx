@@ -13,6 +13,7 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import { EnvironmentsApi, ServiceAlertApi } from "@sherlock-js-client/sherlock";
+import { Info } from "lucide-react";
 import { useState } from "react";
 import { ListControls } from "~/components/interactivity/list-controls";
 import { NavButton } from "~/components/interactivity/nav-button";
@@ -82,6 +83,43 @@ export default function Route() {
 
   // Determine if prod environment filter is active for theme switching
   const isProdFilterActive = environmentFilter === "prod";
+
+  // Service Alerts Header with Tooltip Component
+  const ServiceAlertsHeader = () => (
+    <div className="flex items-center gap-2">
+      <span>Service Alerts</span>
+      <div className="group relative">
+        <Info
+          size={20}
+          className="text-color-body-text hover:text-color-header-text transition-colors cursor-help"
+        />
+
+        {/* Tooltip */}
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden group-hover:block z-50">
+          <div className="bg-gray-900 text-white border border-gray-700 rounded-lg shadow-xl p-3 w-80">
+            <div className="text-sm text-left leading-relaxed">
+              Service alerts notify Terra users of system issues, maintenance,
+              or important updates.
+              <br />
+              <br />
+              <a
+                href="https://broadinstitute.github.io/checklists.github.io/incident_response_checklist.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-300 hover:text-blue-100 underline transition-colors"
+              >
+                Incident response checklist →
+              </a>
+            </div>
+            {/* Tooltip arrow */}
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2">
+              <div className="border-4 border-transparent border-b-gray-900"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   // Handler for show deleted toggle
   const handleShowDeletedChange = (value: string) => {
@@ -159,7 +197,10 @@ export default function Route() {
   return (
     <ProdFlag prod={isProdFilterActive}>
       <InsetPanel>
-        <InteractiveList title="Service Alerts" {...ServiceAlertColors}>
+        <InteractiveList
+          title={<ServiceAlertsHeader />}
+          {...ServiceAlertColors}
+        >
           <ListControls
             setFilterText={setFilterText}
             toCreate={`./new${environmentFilter !== "all" ? `?environment=${environmentFilter}` : ""}`}
