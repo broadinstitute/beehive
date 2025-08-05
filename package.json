@@ -20,7 +20,7 @@
     "@react-hook/resize-observer": "^2.0.2",
     "@remix-run/node": "^v2.12.0",
     "@remix-run/react": "^v2.12.0",
-    "@remix-run/serve": "^v2.12.0",
+    "@remix-run/serve": "^v2.16.5",
     "@sherlock-js-client/sherlock": "^1.6.15",
     "lucide-react": "^0.439.0",
     "react": "^18.3.1",
