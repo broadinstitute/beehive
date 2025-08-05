@@ -147,7 +147,6 @@ export default function Route() {
     <div className="flex flex-row gap-2 mb-4">
       <div className="min-h-[3rem] w-full gap-2 grid grid-cols-4">
         {[
-          ["All", "all"],
           ["Dev", "dev"],
           ["Staging", "staging"],
           ["Prod", "prod"],
@@ -158,7 +157,7 @@ export default function Route() {
               className={`p-2 w-full h-full shadow-md hover:shadow-lg flex flex-col items-center justify-center ${
                 index === 0 ? "rounded-l-2xl before:rounded-l-2xl" : ""
               } ${
-                index === 3 ? "rounded-r-2xl before:rounded-r-2xl" : ""
+                index === 2 ? "rounded-r-2xl before:rounded-r-2xl" : ""
               } focus-visible:outline focus-visible:outline-color-focused-element
                 before:w-full before:h-full before:block before:absolute ${ServiceAlertColors.beforeBorderClassName} ${
                   valueToSet === environmentFilter
