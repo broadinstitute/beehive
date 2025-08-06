@@ -1,4 +1,3 @@
-import type { SerializeFrom } from "@remix-run/node";
 import type {
   SherlockServiceAlertV3Create,
   SherlockServiceAlertV3CreateSeverityEnum,
@@ -104,9 +103,7 @@ const SeveritySelector: React.FunctionComponent<{
 };
 
 export interface ServiceAlertCreatableFieldsProps {
-  serviceAlert?:
-    | SherlockServiceAlertV3Create
-    | SerializeFrom<SherlockServiceAlertV3Create>;
+  serviceAlert?: SherlockServiceAlertV3Create;
   onEnvironmentChange?: (isProd: boolean) => void;
 }
 
@@ -151,7 +148,7 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
           The title of the service alert that will be displayed prominently.
         </p>
         <TextField
-          name="title"
+          name={title}
           value="Service Incident"
           onChange={(e) => {
             setTitle(e.currentTarget.value);
@@ -165,7 +162,7 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         <p>The detailed message content explaining the service alert.</p>
         <textarea
           name="message"
-          value="We are currently investigating an issue impacting the platform. More details will be provided as soon as possible."
+          value={message}
           onChange={(e) => {
             setMessage(e.currentTarget.value);
           }}
@@ -226,7 +223,7 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         </p>
         <TextField
           name="link"
-          value="https://support.terra.bio/hc/en-us/sections/4415104213787"
+          value={link}
           onChange={(e) => {
             setLink(e.currentTarget.value);
           }}
