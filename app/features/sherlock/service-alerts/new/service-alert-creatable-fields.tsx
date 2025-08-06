@@ -125,14 +125,20 @@ export const serviceAlertCreatableFormDataToObject = function (
 export const ServiceAlertCreatableFields: React.FunctionComponent<
   ServiceAlertCreatableFieldsProps
 > = ({ serviceAlert, onEnvironmentChange }) => {
-  const [title, setTitle] = useState(serviceAlert?.title || "");
-  const [message, setMessage] = useState(serviceAlert?.message || "");
-  const [link, setLink] = useState(serviceAlert?.link || "");
+  const [title, setTitle] = useState(serviceAlert?.title || "Service Incident");
+  const [message, setMessage] = useState(
+    serviceAlert?.message ||
+      "We are currently investigating an issue impacting the platform. More details will be provided as soon as possible.",
+  );
+  const [link, setLink] = useState(
+    serviceAlert?.link ||
+      "https://support.terra.bio/hc/en-us/sections/4415104213787",
+  );
   const [severity, setSeverity] = useState<string>(
     serviceAlert?.severity || "minor",
   );
   const [onEnvironment, setOnEnvironment] = useState(
-    serviceAlert?.onEnvironment || "",
+    serviceAlert?.onEnvironment,
   );
 
   // Notify parent component when environment changes or on initial load
@@ -154,7 +160,6 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
             setTitle(e.currentTarget.value);
           }}
           placeholder="Service Incident"
-          required={true}
         />
       </label>
 
