@@ -148,11 +148,12 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
           The title of the service alert that will be displayed prominently.
         </p>
         <TextField
-          name={title}
-          value="Service Incident"
+          name="title"
+          value={title}
           onChange={(e) => {
             setTitle(e.currentTarget.value);
           }}
+          placeholder="Service Incident"
           required={true}
         />
       </label>
