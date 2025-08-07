@@ -1,4 +1,3 @@
-import type { SerializeFrom } from "@remix-run/node";
 import type {
   SherlockServiceAlertV3Create,
   SherlockServiceAlertV3CreateSeverityEnum,
@@ -104,9 +103,7 @@ const SeveritySelector: React.FunctionComponent<{
 };
 
 export interface ServiceAlertCreatableFieldsProps {
-  serviceAlert?:
-    | SherlockServiceAlertV3Create
-    | SerializeFrom<SherlockServiceAlertV3Create>;
+  serviceAlert?: SherlockServiceAlertV3Create;
   onEnvironmentChange?: (isProd: boolean) => void;
 }
 
@@ -128,14 +125,20 @@ export const serviceAlertCreatableFormDataToObject = function (
 export const ServiceAlertCreatableFields: React.FunctionComponent<
   ServiceAlertCreatableFieldsProps
 > = ({ serviceAlert, onEnvironmentChange }) => {
-  const [title, setTitle] = useState(serviceAlert?.title || "");
-  const [message, setMessage] = useState(serviceAlert?.message || "");
-  const [link, setLink] = useState(serviceAlert?.link || "");
+  const [title, setTitle] = useState(serviceAlert?.title || "Service Incident");
+  const [message, setMessage] = useState(
+    serviceAlert?.message ||
+      "We are currently investigating an issue impacting the platform. More details will be provided as soon as possible.",
+  );
+  const [link, setLink] = useState(
+    serviceAlert?.link ||
+      "https://support.terra.bio/hc/en-us/sections/4415104213787",
+  );
   const [severity, setSeverity] = useState<string>(
     serviceAlert?.severity || "minor",
   );
   const [onEnvironment, setOnEnvironment] = useState(
-    serviceAlert?.onEnvironment || "",
+    serviceAlert?.onEnvironment,
   );
 
   // Notify parent component when environment changes or on initial load
@@ -152,11 +155,11 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         </p>
         <TextField
           name="title"
-          value="Service Incident"
+          value={title}
           onChange={(e) => {
             setTitle(e.currentTarget.value);
           }}
-          required={true}
+          placeholder="Service Incident"
         />
       </label>
 
@@ -165,7 +168,7 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         <p>The detailed message content explaining the service alert.</p>
         <textarea
           name="message"
-          value="We are currently investigating an issue impacting the platform. More details will be provided as soon as possible."
+          value={message}
           onChange={(e) => {
             setMessage(e.currentTarget.value);
           }}
@@ -226,7 +229,7 @@ export const ServiceAlertCreatableFields: React.FunctionComponent<
         </p>
         <TextField
           name="link"
-          value="https://support.terra.bio/hc/en-us/sections/4415104213787"
+          value={link}
           onChange={(e) => {
             setLink(e.currentTarget.value);
           }}
