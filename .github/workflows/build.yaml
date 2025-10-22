@@ -130,8 +130,8 @@ jobs:
             Published image from ${{ github.event.pull_request.head.sha }} (merge ${{ github.sha }}):
 
             ```
-            us-central1-docker.pkg.dev/dsp-artifact-registry/sherlock/sherlock:${{ steps.tag.outputs.tag }}
-            us-central1-docker.pkg.dev/dsp-devops-super-prod/sherlock/sherlock:${{ steps.tag.outputs.tag }}
+            us-central1-docker.pkg.dev/dsp-artifact-registry/beehive/beehive:${{ steps.tag.outputs.tag }}
+            us-central1-docker.pkg.dev/dsp-devops-super-prod/beehive/beehive:${{ steps.tag.outputs.tag }}
             ```
 
   report-to-sherlock:
