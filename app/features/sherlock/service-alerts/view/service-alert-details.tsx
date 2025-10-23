@@ -1,0 +1,132 @@
+import type { SerializeFrom } from "@remix-run/node";
+import type {
+  SherlockEnvironmentV3,
+  SherlockServiceAlertV3,
+} from "@sherlock-js-client/sherlock";
+import { NavButton } from "~/components/interactivity/nav-button";
+import { PrettyPrintDescription } from "~/components/logic/pretty-print-description";
+import { MutateControls } from "../../mutate-controls";
+import { getEnvironmentName } from "../get-environment-name";
+import { ServiceAlertColors } from "../service-alert-colors";
+
+export interface ServiceAlertDetailsProps {
+  serviceAlert: SherlockServiceAlertV3 | SerializeFrom<SherlockServiceAlertV3>;
+  environments?:
+    | SerializeFrom<SherlockEnvironmentV3>[]
+    | SherlockEnvironmentV3[];
+  toEdit?: string;
+  toDelete?: string;
+}
+
+export const ServiceAlertDetails: React.FunctionComponent<
+  ServiceAlertDetailsProps
+> = ({ serviceAlert, environments = [], toEdit, toDelete }) => (
+  <div className="flex flex-col space-y-4">
+    <div className="flex flex-col space-y-10">
+      <div className="flex flex-row items-center flex-wrap gap-4">
+        <h2 className="text-2xl font-light">
+          Service Alert {serviceAlert.uuid || serviceAlert.id}
+        </h2>
+        {toEdit && (
+          <NavButton to={toEdit} {...ServiceAlertColors}>
+            Edit
+          </NavButton>
+        )}
+        {toDelete && (
+          <NavButton to={toDelete} {...ServiceAlertColors}>
+            Delete
+          </NavButton>
+        )}
+      </div>
+
+      <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-2">
+          <h3 className="text-xl font-medium">Title</h3>
+          <p className="text-color-body-text">
+            {serviceAlert.title || "No title specified"}
+          </p>
+        </div>
+
+        {serviceAlert.message && (
+          <div className="flex flex-col space-y-2">
+            <h3 className="text-xl font-medium">Message</h3>
+            <PrettyPrintDescription
+              description={serviceAlert.message}
+              className="text-color-body-text"
+            />
+          </div>
+        )}
+
+        <div className="flex flex-col space-y-2">
+          <h3 className="text-xl font-medium">Severity</h3>
+          <p className="text-color-body-text">
+            <span
+              className={`px-3 py-1 rounded-full text-sm font-medium ${
+                serviceAlert.severity === "blocker"
+                  ? "bg-red-100 text-red-800"
+                  : serviceAlert.severity === " critical"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : "bg-green-100 text-green-800"
+              }`}
+            >
+              {serviceAlert.severity?.trim().charAt(0).toUpperCase() +
+                serviceAlert.severity?.trim().slice(1) || "Minor"}
+            </span>
+          </p>
+        </div>
+
+        {serviceAlert.link && (
+          <div className="flex flex-col space-y-2">
+            <h3 className="text-xl font-medium">Link</h3>
+            <p className="text-color-body-text break-words">
+              {serviceAlert.link}
+            </p>
+          </div>
+        )}
+
+        {serviceAlert.onEnvironment && (
+          <div className="flex flex-col space-y-2">
+            <h3 className="text-xl font-medium">Environment</h3>
+            <p className="text-color-body-text">
+              {getEnvironmentName(serviceAlert.onEnvironment, environments)}
+            </p>
+          </div>
+        )}
+
+        <div className="flex flex-col space-y-2">
+          <h3 className="text-xl font-medium">Metadata</h3>
+          <div className="text-color-body-text space-y-1">
+            {serviceAlert.id && <p>ID: {serviceAlert.id}</p>}
+            {serviceAlert.uuid && <p>UUID: {serviceAlert.uuid}</p>}
+            {serviceAlert.createdAt && (
+              <p>
+                Created: {new Date(serviceAlert.createdAt).toLocaleString()}
+              </p>
+            )}
+            {serviceAlert.createdBy && (
+              <p>Created By: {serviceAlert.createdBy}</p>
+            )}
+            {serviceAlert.updatedAt && (
+              <p>
+                Updated: {new Date(serviceAlert.updatedAt).toLocaleString()}
+              </p>
+            )}
+            {serviceAlert.updatedBy && (
+              <p>Updated By: {serviceAlert.updatedBy}</p>
+            )}
+            {serviceAlert.deletedBy && (
+              <p>Deleted By: {serviceAlert.deletedBy}</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <MutateControls
+      name={serviceAlert.title || `Service Alert ${serviceAlert.id}`}
+      colors={ServiceAlertColors}
+      toEdit={toEdit}
+      toDelete={toDelete}
+    />
+  </div>
+);
