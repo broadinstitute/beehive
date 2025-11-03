@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",
-    "@googleapis/calendar": "^9.7.9",
+    "@googleapis/calendar": "^12.0.0",
     "@octokit/rest": "^21.0.2",
     "@react-hook/resize-observer": "^2.0.2",
     "@remix-run/node": "^v2.12.0",
