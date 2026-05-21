@@ -59,6 +59,8 @@
   },
   "overrides": {
     "cookie": "^0.7.0",
+    "jws": "^4.0.1",
+    "qs": "^6.14.2",
     "@remix-run/node": "$@remix-run/node",
     "@remix-run/react": "$@remix-run/react",
     "@remix-run/serve": "$@remix-run/serve",
