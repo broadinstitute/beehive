@@ -6,7 +6,7 @@
 
 ## Getting set up
 
-1. Grab [Node 18](https://nodejs.org/en/download)
+1. Grab [Node 24](https://nodejs.org/en/download) (see `engines` in `package.json`)
 
 2. Clone this repo
 

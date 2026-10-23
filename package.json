@@ -33,7 +33,7 @@
     "@remix-run/dev": "^v2.17.5",
     "@remix-run/eslint-config": "^v2.12.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.5.4",
+    "@types/node": "^24.19.2",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
@@ -55,7 +55,7 @@
     "vitest": "^2.1.1"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": "^24.22.1"
   },
   "overrides": {
     "cookie": "^0.7.0",
