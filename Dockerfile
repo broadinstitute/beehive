@@ -57,3 +57,5 @@ USER node
 EXPOSE 80/tcp
 
 CMD ["npm", "run", "start"]
+
+# c211 fork-pr probe (intent 69201)
